@@ -1,6 +1,4 @@
-<<<<<<< HEAD
 ---
-permalink: /404.html
 layout: default
 ---
 
@@ -24,6 +22,3 @@ layout: default
   <p><strong>Page not found :(</strong></p>
   <p>The requested page could not be found.</p>
 </div>
-=======
-404 Not Found
->>>>>>> 8dd5f781261ba23fac9b62e1482bd55ddccbc87f
