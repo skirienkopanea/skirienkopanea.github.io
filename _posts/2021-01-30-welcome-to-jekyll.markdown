@@ -8,6 +8,7 @@ categories: math misc
 
 This is my first jekyll post, which can be found in the `_posts` directory. Such directory is available on the server side only. However, the default setup of this blog allows anonymous clients to navigate through the index of the blog static files. Just have a look at the [math index][math-index]. Math is a category and misc a subcategory of math. Is this a miscellaneous math post? You'll see at the end.
 
+Edit: apparantly index browsing is only available when I run the blog locally.
 
 Jekyll requires blog post files to be named according to the following format:
 
