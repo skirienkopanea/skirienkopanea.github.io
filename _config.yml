@@ -22,7 +22,7 @@ title: Sergio's Blog
 email: s.kirienkopanea@student.tudelft.nl
 description: >- # this means to ignore newlines until "baseurl:"
   Computer Science Student @ TU Delft
-baseurl: "/" # the subpath of your site, e.g. /blog
+baseurl: "" # the subpath of your site, e.g. /blog
 url: "https://skirienkopanea.github.io/" # the base hostname & protocol for your site, e.g. http://example.com
 linkedin_username: sergio-kirienko
 github_username:  skirienkopanea
