@@ -1,1 +1,0 @@
-# skirienkopanea.github.io
