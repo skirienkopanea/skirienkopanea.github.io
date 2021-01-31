@@ -1,13 +1,14 @@
 ---
 layout: page
-title: Node
-permalink: /node/
+title: Categories
+permalink: /categories/
 ---
 
 <ul>
   {% for post in site.posts %}
     <li>
       <a href="{{ post.url }}">{{ post.title }}</a>
+      {{ post.excerpt }}
     </li>
   {% endfor %}
 </ul>

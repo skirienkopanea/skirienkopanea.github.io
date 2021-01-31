@@ -4,7 +4,15 @@ title: About
 permalink: /about/
 ---
 
-I am Sergio Kirienko, currently studying computer science at TU Delft, in [the Netherlands](https://en.wikipedia.org/wiki/Netherlands)
+<img src="https://avatars.githubusercontent.com/u/75941968?s=460&u=85c31eb8f6627921076c63b88c848ea074fb40ff&v=4" width="40%" style="float: left;
+ padding: 0 2% 0 0;"> 
+I'm a Computer Science and Engineering student at TU Delft, located in [the Netherlands](https://en.wikipedia.org/wiki/Netherlands).
+
+In this blog I share some notes and side projects related to my studies.
+
+If you've noticed a mistake, have a suggestion or simply just want to say "hi", do not hesitate to write me an email to [s.kirienkopanea@student.tudelft.nl](mailto:s.kirienkopanea@student.tudelft.nl).
+
+You can also connect with me via [Linkedin](https://www.linkedin.com/in/sergio-kirienko).
 
 This blog has been made with [jekyll][jekyll-organization] and [minima](https://github.com/jekyll/minima).
 
