@@ -26,7 +26,7 @@ Below you can find some of my study notes and useful external links. My notes ma
 
 [CSE1300]:{{ site.url }}/downloads/CSE1300_(propositional_logic-predicate_logic-arguments-sets-proofs).pdf
 [CSE1305_algorithms-data_structures]:{{ site.url }}/downloads/CSE1305_algorithms-data_structures.pdf
-[CSE1500_db0]:{{ site.url }}/downloads/CSE1500_db(midterm_summary).pdf
-[CSE1500_db1]:{{ site.url }}/downloads/CSE1500_db_LogicalRelationalSchemalExamples.pdf
-[CSE1500_db2]:{{ site.url }}/downloads/CSE1500_db(crowsfoot-vs-chen).pdf
-[CSE1500_web]:{{ site.url }}/downloads/CSE1500_web(http-html-js-nodejs-css-ejs-cookies-sessions-authentication-security).pdf
+[CSE1500_db0]:{{ site.url }}downloads/CSE1500_db(midterm_summary).pdf
+[CSE1500_db1]:{{ site.url }}downloads/CSE1500_db_LogicalRelationalSchemalExamples.pdf
+[CSE1500_db2]:{{ site.url }}downloads/CSE1500_db(crowsfoot-vs-chen).pdf
+[CSE1500_web]:{{ site.url }}downloads/CSE1500_web(http-html-js-nodejs-css-ejs-cookies-sessions-authentication-security).pdf
