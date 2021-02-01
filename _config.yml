@@ -30,7 +30,6 @@ port: 3000
 
 # Build settings
 theme: minima
-skin: dark
 show_excerpts: true
 excerpt_separator: <!--more-->
 header_pages:
@@ -38,8 +37,6 @@ header_pages:
   - downloads.md
   - postindex.md
   - cv.md
-
-
 
 plugins:
   - jekyll-feed

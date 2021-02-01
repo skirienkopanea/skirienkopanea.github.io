@@ -1,7 +1,7 @@
 ---
 layout: page
 title: Downloads
-permalink: /Downloads/
+permalink: /downloads/
 ---
 Below you can find some of my study notes and useful external links. My notes may contain some mistakes and some content might be copied directly from the book/slides, credits are implicitly given to all of the authors that contributed to the literature/materials provided in the course (CSE####). If you'd like my notes to cite your work more explicitly, if you would like me to take some of my notes down, and/or if you have noticed a broken link/have a comment, please send me an e-mail to [skirienkopanea@student.tudelft.nl](mailto:skirienkopanea@student.tudelft.nl).
 
