@@ -8,4 +8,4 @@ Check my [LinkedIn](https://www.linkedin.com/in/sergio-kirienko/)
 
 Check my [Github](https://github.com/skirienkopanea)
 
-Download my [1-page-CV-Sergio.pdf]("todo")
+[//]: # Download my [1-page-CV-Sergio.pdf]("todo")
