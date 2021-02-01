@@ -13,7 +13,7 @@ Below you can find some of my study notes and useful external links. My notes ma
 * [JUnit documentation (for CSE1100)](https://junit.org/junit5/docs/current/api/org.junit.jupiter.api/org/junit/jupiter/api/Assertions.html)
 * [Ben Eater (for CSE1400)](https://eater.net/)
 
-## Y2Q2
+## Y1Q2
 
 * [CSE1305_algorithms-data_structures.pdf][CSE1305_algorithms-data_structures]
 * [CSE1500_db(midterm_summary).pdf][CSE1500_db0]
