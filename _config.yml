@@ -35,8 +35,9 @@ show_excerpts: true
 excerpt_separator: <!--more-->
 header_pages:
   - about.markdown
-  - cv.md
+  - downloads.md
   - postindex.md
+  - cv.md
 
 
 
