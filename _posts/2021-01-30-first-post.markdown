@@ -70,6 +70,10 @@ In-line equation: $\sum_{i=0}^{n}\frac{1}{2^n} = (\frac{1}{2^0})\cdot \frac{1}{1
 
  Using the raw liquid tag to ensure Markdown parsers do not interfere with MathJax syntax.
 
+ ![Computer Science has always been about math][math-meme]
+ *Insert image test*
+
 That was the end of the post, below you won't see anything else, but in the markdown file I can see an additional line (with a proper line break before) with "\[math-index\]: /blog/announcement", which allows me to use `_[announcement-index]` as a variable with an assigned hyperlink. If I use one without a value assignment then I get this for instance: [Jekyll Talk][jekyll-talk].
 
 [math-index]: /math
+[math-meme]:{{ site.url }}/images/cs_is_math.png
