@@ -21,7 +21,7 @@ h3:first-letter {
 
 
 </style>
-<div id ="container" data-windowHeight="100px">
+<div id ="container">
 <div id ="categories">
 <h2>Categories</h2>
 {% for category in site.categories %}
