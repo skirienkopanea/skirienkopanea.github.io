@@ -23,6 +23,7 @@ Below you can find some of my study notes and useful external links. My notes ma
 * [CSE1200_(wiskundeB-calculus).pdf][CSE1200_summary]
 * [Multivariate calculus \| Khan Academy (for CSE1200)](https://www.khanacademy.org/math/multivariable-calculus)
 * [CSE1305_algorithms-data_structures.pdf][CSE1305_algorithms-data_structures]
+* [Data structures (for CSE1305)](https://fa20.datastructur.es/)
 * [CSE1500_db(midterm_summary).pdf][CSE1500_db0]
 * [CSE1500_db_LogicalRelationalSchemalExamples.pdf][CSE1500_db1]
 * [CSE1500_db(crowsfoot-vs-chen).pdf][CSE1500_db2] 
