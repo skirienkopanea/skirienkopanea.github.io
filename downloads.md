@@ -13,7 +13,7 @@ Below you can find some of my study notes and useful external links. My notes ma
 
 * [CSE1300_(propositional_logic-predicate_logic-arguments-sets-proofs).pdf][CSE1300]
 * [Book of proof (for CSE1300)](https://www.people.vcu.edu/~rhammack/BookOfProof/)
-* [CSE1100_(lectures-tutorials-assignments).pdf][CSE1100]
+* [CSE1100_(java_oop-lectures-tutorials-assignments).pdf][CSE1100]
 * [Java documentation (for CSE1100)](https://docs.oracle.com/en/java/javase/11/docs/api/index.html)
 * [JUnit documentation (for CSE1100)](https://junit.org/junit5/docs/current/api/org.junit.jupiter.api/org/junit/jupiter/api/Assertions.html)
 * [Diet plan manager (for CSE1100)](https://github.com/skirienkopanea/diet)
@@ -45,7 +45,7 @@ Below you can find some of my study notes and useful external links. My notes ma
 [//]: # Link variables
 
 [CSE1300]:{{ site.url }}/downloads/CSE1300_(propositional_logic-predicate_logic-arguments-sets-proofs).pdf
-[CSE1100]:{{ site.url }}/downloads/CSE1100_(lectures-tutorials-assignments).pdf
+[CSE1100]:{{ site.url }}/downloads/CSE1100_(java_oop-lectures-tutorials-assignments).pdf
 [CSE1400]:{{ site.url }}/downloads/CSE1400_(history-logic_circuits-data_representation-isa-assembly-cpu-io-memory-pipelining).pdf
 [CSE1200_summary]:{{ site.url }}/downloads/CSE1200_(wiskundeB-calculus).pdf
 [CSE1305_algorithms-data_structures]:{{ site.url }}/downloads/CSE1305_algorithms-data_structures.pdf
