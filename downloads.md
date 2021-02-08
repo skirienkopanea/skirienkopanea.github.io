@@ -36,6 +36,7 @@ Below you can find some of my study notes and useful external links. My notes ma
 
 
 * [Gilbert Strang lectures on Linear Algebra (MIT) (for CSE1205)](https://www.youtube.com/playlist?list=PL49CF3715CB9EF31D)
+* [Learn Git (for CSE1105)](https://learngitbranching.js.org/)
 
 </div>
 
