@@ -6,9 +6,15 @@ categories: linux
 tags: terminal
 ---
 <!--more-->
+Legend: [optional field], &lt;mandatory field&gt;
 
 * Print directory
 ```console
 $ pwd
+```
+* Change directory
+  * No folder sends you to home (~) directory
+```console
+$ cd [folder]
 ```
 * To do...
