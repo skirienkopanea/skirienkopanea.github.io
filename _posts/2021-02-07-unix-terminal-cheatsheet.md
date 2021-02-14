@@ -231,3 +231,8 @@ $ find -name '*name*'
 $ xdg-open <filepath>
 ```
 
+* Update last modified time / create new file
+```console
+$ touch <filepath>
+```
+
