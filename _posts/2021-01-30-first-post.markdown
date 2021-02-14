@@ -75,5 +75,18 @@ In-line equation: $\sum_{i=0}^{n}\frac{1}{2^n} = (\frac{1}{2^0})\cdot \frac{1}{1
 
 That was the end of the post, below you won't see anything else, but in the markdown file I can see an additional line (with a proper line break before) with "\[math-index\]: /blog/announcement", which allows me to use `_[announcement-index]` as a variable with an assigned hyperlink. If I use one without a value assignment then I get this for instance: [Jekyll Talk][jekyll-talk].
 
+Edit, just wanted to add a table:
+
+To add a table, use three or more hyphens (---) to create each column’s header, and use pipes (\|) to separate each column. You can optionally add pipes on either end of the table.
+
+| Syntax      | Description |
+| ----------- | ----------- |
+| Lorem       | Ipsum       |
+| Paragraph   | Text        |
+| Paragraph   | Text        |
+| Paragraph   | Text        |
+
+You can use pipes | To have a 2 column block of text
+
 [math-index]: /math
 [math-meme]:{{ site.url }}/images/cs_is_math.png
