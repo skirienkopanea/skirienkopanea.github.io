@@ -32,6 +32,9 @@ kbd {
 <!--more-->
 Legend for some commands (do not include the brackets) : [optional field], &lt;mandatory field&gt; #comments.
 The dollar sign indicates that you are not running the command as 'root' user (user that can change "kernel" components i.e. brightness, firewall, hardware stuff...).
+
+Source: [The Missing Semester of Your CS Education](https://missing.csail.mit.edu/2020/course-shell/)
+
 * Print argument on screen
 ```console
 $ echo hi
@@ -75,6 +78,7 @@ $ pwd
 $ echo $PATH #among other paths in a : separated list.
 /usr/bin/ 
 ```
+A path that starts with / is called an absolute path. Any other path is a relative path. Relative paths are relative to the current working directory, which we can see with the pwd command and change with the cd command. In a path, . refers to the current directory, and .. to its parent directory.
 
 * Print path of the program
 ```console
@@ -226,3 +230,4 @@ $ find -name '*name*'
 ```console
 $ xdg-open <filepath>
 ```
+
