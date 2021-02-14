@@ -235,4 +235,3 @@ $ xdg-open <filepath>
 ```console
 $ touch <filepath>
 ```
-
