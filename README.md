@@ -11,3 +11,4 @@ My personal blog made with Jekyll
 * make a python cheat sheet
 * Make a cheatshet of all the courses in post format (plaintext good for SEO)
 * change dark highlight for blue code snippet words (i.e. flags in console)
+* Make dark mode for the mobile phone nav menu
