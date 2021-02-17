@@ -66,6 +66,37 @@ And now the moment of truth... This is a math post because I decided to include 
 $$\sum_{i=0}^{n}\frac{1}{2^n} = 2$$
 
 In-line equation: $\sum_{i=0}^{n}\frac{1}{2^n} = (\frac{1}{2^0})\cdot \frac{1}{1-\frac{1}{2}} = 2$
+
+An arbitrary matrix:
+
+$$
+\begin{bmatrix}
+    x_{11}       & x_{12} & x_{13} & \dots & x_{1n} \\
+    x_{21}       & x_{22} & x_{23} & \dots & x_{2n} \\
+    \cdots & \cdots & \cdots & \cdots & \cdots \\
+    x_{d1}       & x_{d2} & x_{d3} & \dots & x_{dn}
+\end{bmatrix}
+=
+\begin{bmatrix}
+    x_{11} & x_{12} & x_{13} & \dots  & x_{1n} \\
+    x_{21} & x_{22} & x_{23} & \dots  & x_{2n} \\
+    \vdots & \vdots & \vdots & \ddots & \vdots \\
+    x_{d1} & x_{d2} & x_{d3} & \dots  & x_{dn}
+\end{bmatrix}
+$$
+
+A vector
+
+$$
+\begin{pmatrix}
+    x_{1} \\
+    x_{2}  \\
+    \cdots  \\
+    x_{d} 
+\end{pmatrix}
+$$
+
+
  {% endraw %}
 
  Using the raw liquid tag to ensure Markdown parsers do not interfere with MathJax syntax.
