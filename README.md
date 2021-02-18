@@ -4,6 +4,7 @@ My personal blog made with Jekyll
 [Link](https://skirienkopanea.github.io/)
 
 ## Backlog
+* CSS media query for printing that hides the header and the footer
 * Move math js script to header and use if tag = math then run script
 * Finish bash scripts cheat sheet
 * Make a git cheat sheet
