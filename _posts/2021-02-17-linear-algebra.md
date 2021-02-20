@@ -32,6 +32,11 @@ tags: math
       - [A**x**](#ax)
       - [All true XOR All false](#all-true-xor-all-false)
   - [Solution sets and linear independence](#solution-sets-and-linear-independence)
+    - [Linear dependence](#linear-dependence)
+    - [Homogeneous Linear Systems](#homogeneous-linear-systems)
+      - [Solution sets and dependence](#solution-sets-and-dependence)
+    - [Parametric Vector Equation](#parametric-vector-equation)
+    - [Nonhomogeneous Linear Systems](#nonhomogeneous-linear-systems)
 
 ## Systems of Linear Equations
 ### Linear equation
@@ -190,7 +195,11 @@ $\qquad x_2 +x_3 \ \ = 4$
 
 $\qquad \qquad \quad \ 0 = 0$
 
-Which equals the parametric description (of the solution set):
+Which equals the parametric description (of the solution set) below...
+
+### Parametric description of solution sets
+
+...example follow up:
 
 $$
 \begin{cases}
@@ -202,8 +211,8 @@ $$
 
 $x_3$ is free means that you are free to choose any value for $x_3$ (also called **paramater**) and each different choice of $x_3$ determines a (different) solution of the system.
 
-### Parametric description of solution sets
-Solving a system amounts to finding a parametric description of the solution set or determining that the solution set is empty:
+
+Solving a system amounts to finding a parametric description of the solution set (such as the system of equations above or such as the [Parametric Vector Equation](#parametric-vector-equation)) or determining that the solution set is empty:
 * If a system contains an equation of the form 0 = b, then it is inconsistent, else, consistent.
 * If the system is consistent and has free variables, then it has $\infty$ solutions.
 * If the system is consistent and has no free variables, then it has 1 solution.
@@ -260,7 +269,8 @@ $$x_1\begin{bmatrix}   a_{11} \\ a_{12} \\   \vdots \\ a_{1n} \end{bmatrix} + x_
 
 #### A**x**
 
-* This represents the multiplication of a matrix A by an ordered list of numberx in x
+* This represents the multiplication of a matrix A by an ordered list of numbers in x.
+  * This is defined iff the number of entries in x is the same as the number of columns in A.
 
 $$
 Ax = 
@@ -300,4 +310,68 @@ Let A be an m x n matrix, these statements are either all true or all false.
 * A has a pivot position in every row
 
 ## Solution sets and linear independence
-To do...
+### Linear dependence
+
+* A set of two vectors {$a_1$, $a_2$} is linearly dependent **iff** at least one of the vectors is a multiple of the other.
+* A set of 2 or more vectors is linearly dependent **iff** at least one of the vectors is within the span of another vector(s) other than itself. That is, if a vector can be expressed as a linear combination of other vectors in the set.
+* A set of 1 vector is always independent except for the **0** vector.
+  * This is because $x_10=0$ has $\infty$ nontrivial solutions.
+* If a set of vectors has more vectors than vector entries, then there will be at least a vector within the span of another vector(s), making the set linear dependent.
+  * If a matrix has more columns than rows, then there will be free variables, therefore making the matrix dependent.
+* If a set contains the zero vector, the set is linearly dependent
+  * If a matrix has an all-zeros column, the matrix columns are linearly dependent.
+
+### Homogeneous Linear Systems
+* Systems that have the form A**x** = **0**
+* Always have at least x = **0** solution (aka **trivial solution**)
+* **Nontrivial solution** is a **non-zero vector x** that satisfies A**x** = **0**
+* **Ax = 0 has a nontrivial solution iff the system has at least one free variable**
+  * You can then use there an arbitrary non-zero number in the solution which makes $x \neq 0$
+  * Each of these infinityely many nontrivial solutions of **Ax** = **0** are called **linear dependence relation** among $a_1$, $a_2$, ..., $a_n$.
+  
+#### Solution sets and dependence
+* The solution set of an homogenous system (A**x**=**0**) can always be expressed as:
+  * If it has only trivial, the solution set equals Span{**0**}
+    * Which is the (0,...,0) coordinate 
+    * Which also means that the column vectors of A are **[linear independent](#linear-dependence)**
+  * If it has nontrivial, the solution set equals Span{$v_1 \cdots v_n$} (which is not necessarily $\Bbb R^n$, think of $v_1$[1,0,0], $v_2$[0,1,0], $v_3$[1,1,0] -assume vertical notation-, it spans a plane in $\Bbb R^3$, not the whole $\Bbb R^3$)
+    * Only 1 free variable Span{$v_1$} means the solution is a line through the origin. (i.e. the x-axis)
+    * 2 free variables Span{$v_1,v_2$} can yield a plane (or a line if $v_1$ and $v_2$ are **[linear dependent](#linear-dependence)**) through the origin. (i.e. the x-y plane)
+    * It also means that there is a [parametric Vector Equation](#parametric-vector-equation) where there exists weights other than 0 for x that make A**x**=**0** true
+* Therefore, when they ask you, is {$a_1,a_2,\cdots,a_n$} a dependent or an independent set of vectors, they're actually asking...
+  * **Dependent: Does Ax=0 have at least a nontrivial solution?**
+    - Check if it has at least 1 **free variable.**
+  * **Independent:  Does Ax=0 have only the trivial x=0 solution?**
+    - Check if there are **pivots in every row of the echelon reduced matrix.**
+
+### Parametric Vector Equation
+The parametric description of a (homogenous) solution set can be expressed in a single equation:
+
+$$x = x_1v_1 + x_2v_2 + x_3v_3 \cdots$$
+
+in CSE1205 $x = sv_1 + tv_2 + uv_3 $
+
+### Nonhomogeneous Linear Systems
+When these systems have $Ax \neq 0$ the system is translated by a vector constant **p** from the origin:
+
+$$x = p + x_1v_1 + x_2v_2 + x_3v_3 \cdots$$
+
+* The vector **$p$** itself is just one **particular** solution of A**x** = **b** corresponding to $x_1 \cdots x_n = 0$
+  * $xv$ is the **general** solution of A**x**=**0**
+* When there is only 1 parameter vector (v) this equation is also called "**the equation of the line through p parallel to v**"
+* The solution set of A**x** = **b** is:
+  - empty if it has no solution
+  - a translate of the (parametric) solution for A**x**=**0**
+* The parametric system of equations of the previous example: 
+
+$$
+\begin{cases}
+               x_1 = 1 + 5x_3\\
+               x_2 = 4 - x_3\\
+               x_3\ is\ free\ (x_3 = 0 + x_3)
+            \end{cases}
+$$
+
+Is represented as the parametric vector equation:
+
+$$x = \begin{bmatrix}   1 \\ 4 \\ 0 \end{bmatrix} + x_3\begin{bmatrix} 5 \\ -1 \\ 1 \end{bmatrix}$$
