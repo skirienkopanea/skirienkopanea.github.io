@@ -7,6 +7,9 @@ tags: math
 ---
 {% include math.html %}
 <!--more-->
+
+Disclaimer: sometimes I use n x m, sometimes m x n. Therefore do not assume the meaning of n nor m to always be either the number of entries or the number columns. Always pay attention to how the matrix is defined. The convention is rows x columns.
+
 # Table of Contents
 - [Table of Contents](#table-of-contents)
   - [Systems of Linear Equations](#systems-of-linear-equations)
@@ -37,6 +40,11 @@ tags: math
       - [Solution sets and dependence](#solution-sets-and-dependence)
     - [Parametric Vector Equation](#parametric-vector-equation)
     - [Nonhomogeneous Linear Systems](#nonhomogeneous-linear-systems)
+  - [Linear transformations](#linear-transformations)
+    - [Matrix transformations](#matrix-transformations)
+- [\end{bmatrix}](#endbmatrix)
+- [\end{bmatrix}](#endbmatrix-1)
+    - [Linear Transformations](#linear-transformations-1)
 
 ## Systems of Linear Equations
 ### Linear equation
@@ -375,3 +383,90 @@ $$
 Is represented as the parametric vector equation:
 
 $$x = \begin{bmatrix}   1 \\ 4 \\ 0 \end{bmatrix} + x_3\begin{bmatrix} 5 \\ -1 \\ 1 \end{bmatrix}$$
+
+## Linear transformations
+
+For an n x m matrix, the columns are vectors in $R^n\ {or}\ R^{rows}$. A**x**=**b** would only be defined when the entries in x are the same as the number of columns (m), therefore x is in $R^m$, but the output b has the same number of entries as A has rows, therefore in $R^n$.
+
+The correspondence from **x** to **Ax** is a **function** or a **transformation** or a **mapping** from one set of vectors in $R^m$ to another in $R^n$. Formally denoted as $f: R^m \rightarrow R^n$, where '$f$' just happens to be the arbitrary name that we gave
+to the function (or transformation, mapping, or even relation, see CSE1300).
+
+The "dimension" of the **inputs** is called the **domain** of '$f$', in this case $R^m$, and the "dimension" of the **output** (formally kown as "image" or vagely written as *f(x)*) is called the **co-domain**, in this case $R^n$. However, this does not necessarily mean that all "dimensions" within the co-domain are "used", as a possible transformation to a co-domain in $R^3$ could deliberatly have z = 0 for all outputs. The **range** of $f$ (the function/transformation/mapping), is the **set of all outputs**, 
+which happens to be the Span of each of the vector columns of A.
+
+ In the example used where z is always 0, we would have a plane as a **range**, but still inside the 3D dimension (it would still have 3 coordinates, even if the 3rd is the same for all outputs). Since we know by the definition of this particular function that the co-domain is in the 3D dimension, we can already deduce that in the case of a
+ $f(x)= A\mathbf{x}$ function, the column vectors of A have to be in the same $R^n$ as the co-domain, $R^3$ in this case.
+
+### Matrix transformations
+
+In this context, $T(x)$ is reserved for $T(x) = A\mathbf{x}$. This matrix transformation is also denoted as
+$x \mapsto A\mathbf{x}$.
+
+When the transformation maps an input to an output in the same dimension, it is called a **shear transformation**:
+
+$$
+Let\ u = 
+\begin{bmatrix}
+0\\
+2
+\end{bmatrix}
+\ and \ A =
+\begin{bmatrix}
+1 & 3\\
+0 & 1
+\end{bmatrix}
+$$
+
+$$
+Then\ T(u) = 
+\begin{bmatrix}
+1 & 3\\
+0 & 1
+\end{bmatrix}
+\begin{bmatrix}
+0\\
+2
+\end{bmatrix}
+=
+\begin{bmatrix}
+6\\
+2
+\end{bmatrix}
+$$
+
+When a transformation goes from a higher dimension to a lower one we can say that $x \mapsto A\mathbf{x}$ **projects** points in
+$R^k$ onto $R^{k-1}$.
+
+$$
+\begin{bmatrix}
+x_1\\
+x_2\\
+x_3
+\end{bmatrix}
+\mapsto
+\begin{bmatrix}
+1 & 0 & 0 \\
+0 & 1 & 0 \\
+0 & 0 & 0
+\end{bmatrix}
+\begin{bmatrix}
+x_1\\
+x_2\\
+x_3
+\end{bmatrix}
+=
+\begin{bmatrix}
+x_1\\
+x_2\\
+0
+\end{bmatrix}
+$$
+
+### Linear Transformations
+All matrix transformations are **linear** functions, but not al linear functions are matrix transformations (i.e f(x)=3x+5).
+A **matrix** linear transformation T must has the same properties as a Matrix-Vector Product A**x**:
+
+$$(A(\mathbf{u} + \mathbf{v}) = A\mathbf{u} + A\mathbf{v}) \leftrightarrow (T(\mathbf{u} + \mathbf{v}) = T\mathbf{u} + T\mathbf{v})$$
+
+$$(A(c\mathbf{u}) = c(A\mathbf{u})) \leftrightarrow (T(c\mathbf{u}) = c(T\mathbf{u}))$$
+
