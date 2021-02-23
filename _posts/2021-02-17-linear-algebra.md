@@ -42,9 +42,23 @@ Disclaimer: sometimes I use n x m, sometimes m x n. Therefore do not assume the 
     - [Nonhomogeneous Linear Systems](#nonhomogeneous-linear-systems)
   - [Linear transformations](#linear-transformations)
     - [Matrix transformations](#matrix-transformations)
-- [\end{bmatrix}](#endbmatrix)
-- [\end{bmatrix}](#endbmatrix-1)
-    - [Linear Transformations](#linear-transformations-1)
+    - [The Matrix of a Linear transformation](#the-matrix-of-a-linear-transformation)
+      - [Identity matrix](#identity-matrix)
+  - [2D Transformations](#2d-transformations)
+    - [90° rotation (counter clockwise)](#90-rotation-counter-clockwise)
+    - [Reflection through the x-axis](#reflection-through-the-x-axis)
+    - [Reflection through the y-axis](#reflection-through-the-y-axis)
+    - [Reflection through the line y=x](#reflection-through-the-line-yx)
+    - [Reflection through the origin](#reflection-through-the-origin)
+    - [Reflection through the line y = -x](#reflection-through-the-line-y---x)
+    - [Horizontal contraction and expansion](#horizontal-contraction-and-expansion)
+    - [Vertical contraction and expansion](#vertical-contraction-and-expansion)
+    - [Horizontal shear](#horizontal-shear)
+    - [Vertical shear](#vertical-shear)
+    - [i and j are dependent](#i-and-j-are-dependent)
+    - [Projection onto the x-axis](#projection-onto-the-x-axis)
+    - [Projection onto the y-axis](#projection-onto-the-y-axis)
+    - [Surjective (onto) and injective (one-to-one) mappings](#surjective-onto-and-injective-one-to-one-mappings)
 
 ## Systems of Linear Equations
 ### Linear equation
@@ -385,6 +399,13 @@ Is represented as the parametric vector equation:
 $$x = \begin{bmatrix}   1 \\ 4 \\ 0 \end{bmatrix} + x_3\begin{bmatrix} 5 \\ -1 \\ 1 \end{bmatrix}$$
 
 ## Linear transformations
+All matrix transformations are **linear** functions, but not al linear functions are matrix transformations (i.e f(x)=3x+5).
+A **matrix** linear transformation T must have the same properties as a Matrix-Vector Product A**x**:
+
+$$(A(\mathbf{u} + \mathbf{v}) = A\mathbf{u} + A\mathbf{v}) \leftrightarrow (T(\mathbf{u} + \mathbf{v}) = T\mathbf{u} + T\mathbf{v})$$
+
+$$(A(c\mathbf{u}) = c(A\mathbf{u})) \leftrightarrow (T(c\mathbf{u}) = c(T\mathbf{u}))$$
+
 
 For an n x m matrix, the columns are vectors in $R^n\ {or}\ R^{rows}$. A**x**=**b** would only be defined when the entries in x are the same as the number of columns (m), therefore x is in $R^m$, but the output b has the same number of entries as A has rows, therefore in $R^n$.
 
@@ -404,41 +425,24 @@ $x \mapsto A\mathbf{x}$.
 
 When the transformation maps an input to an output in the same dimension, it is called a **shear transformation**:
 
-$$
-Let\ u = 
-\begin{bmatrix}
-0\\
-2
-\end{bmatrix}
-\ and \ A =
-\begin{bmatrix}
-1 & 3\\
-0 & 1
-\end{bmatrix}
-$$
 
-$$
-Then\ T(u) = 
+$$Let\ u = \begin{bmatrix} 0\\ 2 \end{bmatrix} and \ A = \begin{bmatrix} 1 & 3\\ 0 & 1 \end{bmatrix}$$
+
+$$Then\ T(u) = 
 \begin{bmatrix}
 1 & 3\\
-0 & 1
-\end{bmatrix}
+0 & 1 \end{bmatrix}
 \begin{bmatrix}
 0\\
-2
-\end{bmatrix}
-=
+2 \end{bmatrix} =
 \begin{bmatrix}
 6\\
-2
-\end{bmatrix}
-$$
+2 \end{bmatrix}$$
 
 When a transformation goes from a higher dimension to a lower one we can say that $x \mapsto A\mathbf{x}$ **projects** points in
 $R^k$ onto $R^{k-1}$.
 
-$$
-\begin{bmatrix}
+$$\begin{bmatrix}
 x_1\\
 x_2\\
 x_3
@@ -447,26 +451,177 @@ x_3
 \begin{bmatrix}
 1 & 0 & 0 \\
 0 & 1 & 0 \\
-0 & 0 & 0
-\end{bmatrix}
+0 & 0 & 0 \end{bmatrix}
 \begin{bmatrix}
 x_1\\
 x_2\\
-x_3
-\end{bmatrix}
-=
-\begin{bmatrix}
+x_3 \end{bmatrix} = \begin{bmatrix}
 x_1\\
 x_2\\
+0 \end{bmatrix}$$
+
+### The Matrix of a Linear transformation
+#### Identity matrix
+The identity matrix with size n x n, also denoted as $I_n$, is the matrix of a T(x) transformation such as T(x) = x.
+The identity matrix returns the input in the same form since each of it's columns (n) contains only a 1 in the nth entry:
+
+$$I_2 = \begin{bmatrix}
+1 & 0 \\
+0 & 1
+\end{bmatrix}$$
+
+$$Let\ T(x) = I_2\mathbf{x}$$
+
+$$T(
+\begin{bmatrix}
+5\\
+3
+\end{bmatrix}) = \begin{bmatrix}
+1 & 0 \\
+0 & 1
+\end{bmatrix}\begin{bmatrix}
+5\\
+3
+\end{bmatrix}$$
+
+
+$$=5\begin{bmatrix}
+1\\
 0
 \end{bmatrix}
+3
+\begin{bmatrix}
+0\\
+1
+\end{bmatrix}=
+\begin{bmatrix}
+5\\
+0
+\end{bmatrix}
++
+\begin{bmatrix}
+0\\
+3
+\end{bmatrix}=
+\begin{bmatrix}
+5\\
+3
+\end{bmatrix}=\mathbf{x}$$
+
+The columns of $I_n$ are formally referred to as $\mathbf{e_n}$. For a 2x2 A matrix we may express the first and second column vectors as $\vec{i}$ and $\vec{j}$.
+
+In the same way that in a 'f(x) = ax + b' linear function we can draw the line from just 2 points, Since T(x) is also a linear function, that means that knowing the output of 2 inputs is enough information to deduce the matrix used for the Matrix-vector product. The matrix used for the Matrix-vector product is called the **standard matrix for the linear transformation**.
+
+## 2D Transformations
+To easily see what the 2x2 A matrix does to a vector, analyze the difference between the default values for $\color{green}{\vec{i}}$ and $\color{red}{\vec{j}}$, vs their new values defined by A. The default values are:
+
+$$
+\color{red}{\vec{j} = \begin{bmatrix}0\\1\end{bmatrix}} and\ \color{green}{\vec{i} = \begin{bmatrix}1\\0\end{bmatrix}} = \color{red}{\uparrow}\color{green}{\rightarrow}
 $$
 
-### Linear Transformations
-All matrix transformations are **linear** functions, but not al linear functions are matrix transformations (i.e f(x)=3x+5).
-A **matrix** linear transformation T must has the same properties as a Matrix-Vector Product A**x**:
+<iframe src="https://www.geogebra.org/classic/hxwycrkp?embed" width="800" height="600" allowfullscreen style="border: 1px solid #e4e4e4;border-radius: 4px;" frameborder="0"></iframe>
 
-$$(A(\mathbf{u} + \mathbf{v}) = A\mathbf{u} + A\mathbf{v}) \leftrightarrow (T(\mathbf{u} + \mathbf{v}) = T\mathbf{u} + T\mathbf{v})$$
+### 90° rotation (counter clockwise)
 
-$$(A(c\mathbf{u}) = c(A\mathbf{u})) \leftrightarrow (T(c\mathbf{u}) = c(T\mathbf{u}))$$
+To do so the green arrow would have to point to (0,1) and the red arrow would have to point to (-1,0). The new values for $\color{green}{\vec{i}}$ and $\color{red}{\vec{j}}$ would be :
 
+$$\vec{i}=\begin{bmatrix}0\\1\end{bmatrix} and\ \vec{j}=\begin{bmatrix}-1\\0\end{bmatrix}$$
+
+Resulting in:
+
+$$T(x)=\begin{bmatrix}0 & -1\\1 & 0\end{bmatrix}\begin{bmatrix}x_1\\x_2\end{bmatrix}$$
+
+### Reflection through the x-axis
+
+Here $\color{green}{\vec{i}}$ and $\color{red}{\vec{j}}$ would have to go from $\color{red}{\uparrow}\color{green}{\rightarrow}$ to $\color{red}{\downarrow}\color{green}{\rightarrow}$. That means that only $\color{red}{\vec{j}}$ is changed:
+
+$$\vec{j_{old}}=\begin{bmatrix}0\\1\end{bmatrix} \longrightarrow \vec{j_{new}}=\begin{bmatrix}0\\-1\end{bmatrix} \longrightarrow A=\begin{bmatrix}1 & 0\\0 & -1\end{bmatrix}$$ 
+
+### Reflection through the y-axis
+
+Here $\color{green}{\vec{i}}$ and $\color{red}{\vec{j}}$ would have to go from $\color{red}{\uparrow}\color{green}{\rightarrow}$ to $\color{green}{\leftarrow}\color{red}{\uparrow}$. That means that only $\color{green}{\vec{i}}$ is changed:
+
+$$\vec{i_{old}}=\begin{bmatrix}1\\0\end{bmatrix} \longrightarrow \vec{i_{new}}=\begin{bmatrix}-1\\0\end{bmatrix} \longrightarrow A=\begin{bmatrix}-1 & 0\\0 & 1\end{bmatrix}$$ 
+
+### Reflection through the line y=x
+
+This is also known as the inverse of a function. We simply have to swipe the values between $\color{green}{\vec{i}}$ and $\color{red}{\vec{j}}$, resulting in:
+
+$$A=\begin{bmatrix}0 & 1\\1 & 0\end{bmatrix}$$ 
+
+This could also be achieved with:
+* rotation of 90° counter clockwise followed by a reflection in the y-axis
+* reflextion in the x-axis followed by rotation of  90° counter clockwise
+
+### Reflection through the origin
+
+This is simply a 180° rotation, where we scale both $\color{green}{\vec{i}}$ and $\color{red}{\vec{j}}$ by -1, resulting in:
+
+$$A=\begin{bmatrix}-1 & 0\\0 & -1\end{bmatrix}$$ 
+
+You should have noticed that a reflection scales vectors by -1, whereas rotation swaps 0 for 1s. The reflection through the line (the inverse) combines both.
+
+### Reflection through the line y = -x
+
+This combines a reflection through the origin with an inverse.
+
+$$Inverse = \begin{bmatrix} 0 & 1\\ 1 & 0 \end{bmatrix} \longrightarrow Reflection_{origin} = \begin{bmatrix} 0 & -1\\ -1 & 0 \end{bmatrix}
+$$
+
+### Horizontal contraction and expansion
+
+$$A = \begin{bmatrix} k & 0 \\ 0 & 1\end{bmatrix}$$
+
+If k > 1, then the image is stretched out. If 0 < k < 1, then the image is squeezed. If k < 0 the image is mirrored on the y-axis.
+
+### Vertical contraction and expansion
+
+$$A = \begin{bmatrix} 1 & 0 \\ 0 & k\end{bmatrix}$$
+
+If k > 1, then the image is stretched out. If 0 < k < 1, then the image is squeezed. If k < 0 the image is mirrored on the x-axis.
+
+### Horizontal shear
+
+$$A = \begin{bmatrix} 1 & k \\ 0 & 1\end{bmatrix}$$
+
+Here $\color{red}{\vec{j}}$ is tranformed from $\color{red}{\uparrow}$ to $\color{red}{\nearrow}$ with k slope.
+
+Which means that as we move up, the image is stretched horizontally by k units.
+
+### Vertical shear
+
+$$A = \begin{bmatrix} 1 & 0 \\ k & 1\end{bmatrix}$$
+
+Here $\color{green}{\vec{i}}$ is tranformed from $\color{green}{\rightarrow}$ to $\color{green}{\nearrow}$ with k slope.
+
+Which means that as we move right, the image is stretched vertically by k units.
+
+### i and j are dependent
+
+If both $\color{green}{\vec{i}}$ and $\color{red}{\vec{j}}$ are dependent (they can be expressed as a linear combination of the other, in this case as a scalar of the other), such as in the matrix with all 1's, we would endup with $\color{red}{\nearrow}\color{green}{\nearrow}$. It means that both $\color{green}{\vec{i}}$ and $\color{red}{\vec{j}}$ "collapse" into each other making the image of the transformation get completly squeezed in the line that goes through both $\color{green}{\vec{i}}$ and $\color{red}{\vec{j}}$.
+
+
+### Projection onto the x-axis
+
+The transformed image only has x-values (y remains constant 0).
+
+$$A=\begin{bmatrix} 1 & 0 \\ 0 & 0\end{bmatrix}$$
+
+### Projection onto the y-axis
+
+The transformed image only has y-values (x remains constant 0).
+
+$$A=\begin{bmatrix} 0 & 0 \\ 0 & 1\end{bmatrix}$$
+
+### Surjective (onto) and injective (one-to-one) mappings
+
+* A mapping $T:A\rightarrow B$ is **surjective** (A is **onto** B) iff Range = Codomain.
+  * T(x) is surjective (onto) **iff** the **columns of A span $R^{rows}$**
+    - A**x** = **b** has a solution for all **b**'s in $\Bbb R^m$
+    - All **b**'s in $\Bbb R^m$ are a linear combination of A
+    - A has a pivot position in every row
+* A mapping $T:A\rightarrow B$ is **injective** (A is **one-to-one** with B) iff every input gets a unique output.
+  * **T(x) is injective (onte-to-one) iff T(X) = 0 only has the trivial solution** (not being injective doesn't have to make you surjective and viceversa)
+    - A has a pivot position in every row (no free variable)
+    - The **columns of A are linearly independent**
+* A mapping is bijective if it is both, surjective and injective.
