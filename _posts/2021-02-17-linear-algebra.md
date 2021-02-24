@@ -46,6 +46,7 @@ Disclaimer: sometimes I use n x m, sometimes m x n. Therefore do not assume the 
       - [Identity matrix](#identity-matrix)
   - [2D Transformations](#2d-transformations)
     - [90° rotation (counter clockwise)](#90-rotation-counter-clockwise)
+    - [α rotation (in rad)](#α-rotation-in-rad)
     - [Reflection through the x-axis](#reflection-through-the-x-axis)
     - [Reflection through the y-axis](#reflection-through-the-y-axis)
     - [Reflection through the line y=x](#reflection-through-the-line-yx)
@@ -59,6 +60,17 @@ Disclaimer: sometimes I use n x m, sometimes m x n. Therefore do not assume the 
     - [Projection onto the x-axis](#projection-onto-the-x-axis)
     - [Projection onto the y-axis](#projection-onto-the-y-axis)
     - [Surjective (onto) and injective (one-to-one) mappings](#surjective-onto-and-injective-one-to-one-mappings)
+    - [Composition of 2 transformations](#composition-of-2-transformations)
+  - [Matrix operations](#matrix-operations)
+    - [Matrix rules](#matrix-rules)
+    - [Matrix multiplication](#matrix-multiplication)
+      - [Zero matrix](#zero-matrix)
+      - [Square matrix](#square-matrix)
+      - [Identity matrix](#identity-matrix-1)
+      - [Lower/upper triangular matrix](#lowerupper-triangular-matrix)
+    - [Matrix sum](#matrix-sum)
+    - [Scalar multiplication](#scalar-multiplication)
+    - [Transposing](#transposing)
 
 ## Systems of Linear Equations
 ### Linear equation
@@ -264,18 +276,19 @@ $$a\cdot\begin{bmatrix}   u_1 \\    u_2 \end{bmatrix} = \begin{bmatrix}   a\cdot
 ### Linear Combinations
 Let the vector **b** be defined by
 
-$$ b = x_1\begin{bmatrix}   a_{11} \\ a_{12} \\   \vdots \\ a_{1n} \end{bmatrix} + x_2\begin{bmatrix}   a_{21} \\ a_{22} \\   \vdots \\ a_{2n} \end{bmatrix} + \cdots $$
+$$ b = x_1\begin{bmatrix}   a_{11} \\ a_{21} \\   \vdots \\ a_{m1} \end{bmatrix} + x_2\begin{bmatrix}   a_{21} \\ a_{22} \\   \vdots \\ a_{m2} \end{bmatrix} + \cdots $$
 
-* **$b$** is a linear combination of **$a_1$**, **$a_2$** ... with **weights** (scalars) $x_1$, $x_2$, ...
+* **$b$** is a linear combination of **$a_1$**, **$a_2$**... with **weights** (scalars) $x_1$, $x_2$, ...
+  - observe that while the columns are **$a_1$**, **$a_2$**..., when we combine rows with columns, the row index is placed before the column index.
 * The vector equation above has the same solution set as the linear system whose augmented matrix is:
 
 $$
 \begin{bmatrix}
-    a_{11} & a_{21} & \cdots & a_{n1} & | & b_1 \\
-    a_{12} & a_{22} & \cdots & a_{n2} & | & b_2 \\
-    a_{13} & a_{23} & \cdots & a_{n3} & | & b_3 \\
+    a_{11} & a_{12} & \cdots & a_{1n} & | & b_1 \\
+    a_{21} & a_{22} & \cdots & a_{2n} & | & b_2 \\
+    a_{31} & a_{32} & \cdots & a_{3n} & | & b_3 \\
     \vdots & \vdots & \cdots & \vdots & | & \vdots \\
-    a_{1d} & a_{2d} & \cdots & a_{nd} & | & b_{nd} \\
+    a_{m1} & a_{m2} & \cdots & a_{mn} & | & b_{mn} \\
 \end{bmatrix}
 $$
 
@@ -283,7 +296,7 @@ $$
 * The set of all possible linear combinations of a list of vectors $a_1$, $a_2$, ... $a_n$ is denoted as Span{$a_1$, $a_2$, ... $a_n$}
   * That is, all the b's such that
   
-$$x_1\begin{bmatrix}   a_{11} \\ a_{12} \\   \vdots \\ a_{1n} \end{bmatrix} + x_2\begin{bmatrix}   a_{21} \\ a_{22} \\   \vdots \\ a_{2n} \end{bmatrix} + \cdots = b$$
+$$x_1\begin{bmatrix}   a_{11} \\ a_{21} \\   \vdots \\ a_{m1} \end{bmatrix} + x_2\begin{bmatrix}   a_{21} \\ a_{22} \\   \vdots \\ a_{m2} \end{bmatrix} + \cdots = b$$
   
   *  yields an augmented matrix with solution.
 
@@ -297,27 +310,27 @@ $$x_1\begin{bmatrix}   a_{11} \\ a_{12} \\   \vdots \\ a_{1n} \end{bmatrix} + x_
 $$
 Ax = 
 \begin{bmatrix}
-    a_{11} & a_{21} & \cdots & a_{n1}  \\
-    a_{12} & a_{22} & \cdots & a_{n2}  \\
-    a_{13} & a_{23} & \cdots & a_{n3}  \\
+    a_{11} & a_{12} & \cdots & a_{1n}  \\
+    a_{21} & a_{22} & \cdots & a_{2n}  \\
+    a_{31} & a_{32} & \cdots & a_{3n}  \\
     \vdots & \vdots & \cdots & \vdots  \\
-    a_{1d} & a_{2d} & \cdots & a_{nd}  \\
-\end{bmatrix} = x_1\begin{bmatrix}   a_{11} \\ a_{12} \\   \vdots \\ a_{1n} \end{bmatrix} + x_2\begin{bmatrix}   a_{21} \\ a_{22} \\   \vdots \\ a_{2n} \end{bmatrix} + \cdots
+    a_{m1} & a_{m2} & \cdots & a_{mn}  \\
+\end{bmatrix} = x_1\begin{bmatrix}   a_{11} \\ a_{21} \\   \vdots \\ a_{m1} \end{bmatrix} + x_2\begin{bmatrix}   a_{12} \\ a_{22} \\   \vdots \\ a_{m2} \end{bmatrix} + \cdots
 $$
 
 * Ax = b has the same solution set as the vector equation:
 
-$$x_1\begin{bmatrix}   a_{11} \\ a_{12} \\   \vdots \\ a_{1n} \end{bmatrix} + x_2\begin{bmatrix}   a_{21} \\ a_{22} \\   \vdots \\ a_{2n} \end{bmatrix} + \cdots = b$$
+$$x_1\begin{bmatrix}   a_{11} \\ a_{21} \\   \vdots \\ a_{m1} \end{bmatrix} + x_2\begin{bmatrix}   a_{12} \\ a_{22} \\   \vdots \\ a_{m2} \end{bmatrix} + \cdots = b$$
 
 * which has the same solution set as the augmented matrix
 
 $$
 \begin{bmatrix}
-    a_{11} & a_{21} & \cdots & a_{n1} & | & b_1 \\
-    a_{12} & a_{22} & \cdots & a_{n2} & | & b_2 \\
-    a_{13} & a_{23} & \cdots & a_{n3} & | & b_3 \\
+    a_{11} & a_{12} & \cdots & a_{1n} & | & b_1 \\
+    a_{21} & a_{22} & \cdots & a_{2n} & | & b_2 \\
+    a_{31} & a_{32} & \cdots & a_{3n} & | & b_3 \\
     \vdots & \vdots & \cdots & \vdots & | & \vdots \\
-    a_{1d} & a_{2d} & \cdots & a_{nd} & | & b_{nd} \\
+    a_{m1} & a_{m2} & \cdots & a_{mn} & | & b_{m} \\
 \end{bmatrix}
 $$
 
@@ -531,6 +544,22 @@ Resulting in:
 
 $$T(x)=\begin{bmatrix}0 & -1\\1 & 0\end{bmatrix}\begin{bmatrix}x_1\\x_2\end{bmatrix}$$
 
+### α rotation (in rad)
+
+When prompted to calculate the standard matrix for a rotation by α rad, $\color{green}{\vec{i}}$ previous coordinates (1,0) will change in the same fashion as the unit circle:
+
+$$\color{green}{\vec{i}} = \begin{bmatrix}cos(\alpha)\\sin(\alpha)\end{bmatrix}$$
+
+The changes for $\color{red}{\vec{j}}$ will be the same, but with a $\frac{1}{2}\pi$ offset, as $\color{red}{\vec{j}}$ was already 90° counterclockwise from $\color{green}{\vec{i}}$:
+
+$$\color{red}{\vec{i}} = \begin{bmatrix}cos(\alpha + \frac{1}{2}\pi)\\sin(\alpha + \frac{1}{2}\pi)\end{bmatrix} = 
+\begin{bmatrix}sin(\frac{1}{2}\pi - \alpha - \frac{1}{2}\pi)\\cos(\frac{1}{2}\pi - \alpha - \frac{1}{2}\pi)\end{bmatrix} =
+\begin{bmatrix}sin(- \alpha)\\cos(- \alpha)\end{bmatrix} = \begin{bmatrix}-sin(\alpha)\\cos(\alpha)\end{bmatrix}
+$$
+
+
+
+
 ### Reflection through the x-axis
 
 Here $\color{green}{\vec{i}}$ and $\color{red}{\vec{j}}$ would have to go from $\color{red}{\uparrow}\color{green}{\rightarrow}$ to $\color{red}{\downarrow}\color{green}{\rightarrow}$. That means that only $\color{red}{\vec{j}}$ is changed:
@@ -625,3 +654,89 @@ $$A=\begin{bmatrix} 0 & 0 \\ 0 & 1\end{bmatrix}$$
     - A has a pivot position in every row (no free variable)
     - The **columns of A are linearly independent**
 * A mapping is bijective if it is both, surjective and injective.
+
+### Composition of 2 transformations
+
+Where $A_1$ and $A_2$ are the standard matrixes for the the 1st and the 2nd transformations respectively:
+
+$$T(\mathbf{x})=
+A_2\Big( A_1\begin{bmatrix}x \\ y\end{bmatrix}\Big)
+$$
+
+Which results in a matrix multiplication, explained in the chapter below.
+
+## Matrix operations
+
+### Matrix rules
+* **ORDER MATTERS:** $A_2\cdot A_1\neq A_1\cdot A_2$
+* cancellation laws do not apply in matrix algebra
+* **associative law**: $A(BC) = (AB)C$, becuase the order is the same! (always right to left).
+* **distributive law**:
+  - A(B+C) = AB + AC (keep A on the side where it was)
+  - (B+C)A = BA + CA
+* r(AB) = (rA)B = A(rB) for any scalar r
+* $I_nA=AI_n=A$
+* **A TRANSLATION IS NOT A LINEAR TRANSFORMATION**. In a transformation, the origin is always in the same spot. In a translation it is not.
+* $A^k = A\cdot A \dots A$ for k times.
+* $A^0 = I_n$
+
+### Matrix multiplication
+
+From the example above where the composition of 2 transformation was
+
+$$A_2\Big( A_1\begin{bmatrix}x \\ y\end{bmatrix}\Big)$$
+
+in which we can clearly see that first we compute the things inside the brackets, and then the things outside, matrix multiplications come from this concept, and **matrix products are therefore read from right to left**.
+
+Following up the example of 2 transformations. The matrix of the first transformation $A_1$ contains 2 columns, the updated versions of $\color{green}{\vec{i}}$ and $\color{red}{\vec{j}}$:
+
+$$A_1 = \begin{bmatrix} \color{green}{\vec{i_{A_1}}} & \color{red}{\vec{j_{A_1}}}
+\end{bmatrix}$$
+
+Then, to identify the new $\color{green}{\vec{i}}$ and $\color{red}{\vec{j}}$ for $A_2$, we'd have to apply a vector multiplication of $\color{green}{\vec{i_{A_1}}}$ and $\color{red}{\vec{j_{A_1}}}$ with $A_2$ respectively. It's easier to think about the transformation by focusing on just one vector at a time, so we apply 2 sequent transformations for $\color{green}{\vec{i}}$ and $\color{red}{\vec{j}}$ respectively, and once we're done, we join $\color{green}{\vec{i_{A_2}}}$ and $\color{red}{\vec{j_{A_2}}}$ into a single matrix $A_2$:
+
+$$\color{green}{\vec{i_{A_2\cdot A_1}}} = A_2\cdot\color{green}{\vec{i_{A_1}}}$$
+
+$$\color{red}{\vec{j_{A_2\cdot A_1}}} = A_2\cdot\color{red}{\vec{i_{j_1}}}$$
+
+$$A_2\cdot A_1 = \begin{bmatrix} \color{green}{\vec{i_{A_2\cdot A_1}}} & \color{red}{\vec{j_{A_2\cdot A_1}}}\end{bmatrix}$$
+
+The properties discussed here can be applied to larger matrixes.
+
+#### Zero matrix
+
+Expressed as 0, it's the equivalent of a m x n (size assumed by context), with all zeros.
+
+#### Square matrix
+
+m = n
+
+#### Identity matrix
+
+Expressed as $I_n$ It is a n x n **diagonal matrix** (all of the diagonal matrix are n x n), and as any diagonal matrix, it is a zero matrix besides for the **(main) diaogonal entries**, these happen to be all 1's and the property that it has is $A\cdot I_n = A$
+
+#### Lower/upper triangular matrix
+
+All entries above/below the main diagional are zeros.
+
+### Matrix sum
+
+Sum the columns, only defined when both matrixes have the exact same dimensions.
+
+### Scalar multiplication
+
+Scale every column. The scalar is only defined when it comes to the left of the matrix. The right side of the matrix should be reserved fo matrixes or vectors (which are just 1 column matrixes).
+
+### Transposing
+
+You sawp the columns for the rows (just like in excel). There are some properties:
+
+* $(A^T)^T=A$
+* $(A+B)^T=A^T+B^T$
+* For any scalar $r$: $(rA)^T = rA^T$
+* $(AB)^T = B^TA^T$
+
+
+
+
+
