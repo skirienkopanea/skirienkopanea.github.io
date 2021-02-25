@@ -748,6 +748,7 @@ You sawp the columns for the rows (just like in excel). There are some propertie
 * $(A+B)^T=A^T+B^T$
 * For any scalar $r$: $(rA)^T = rA^T$
 * $(AB)^T = B^TA^T$
+* If A is invertible: $T^{-1}(x) = A^{-1}x$
 
 ## Inverse matrices
 
@@ -817,4 +818,8 @@ For a square n x n A matrix, these are either all true or all false:
 * The columns of A span $R^n$
 * T(x) is $T: R^n \to R^n$
 * The transpose of A is also invertible
+
+This all true or all false apply only to square matrices.
+
+* For a n x n matrix biger than 2 x 2, the easiest way to check if it's invertible is to solve for A**x** = **0** and check if there's only the trivial solution (if there are infinite solutions then it is not invertible).
 
