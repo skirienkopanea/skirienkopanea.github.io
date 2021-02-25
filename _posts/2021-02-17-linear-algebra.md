@@ -64,6 +64,7 @@ Disclaimer: sometimes I use n x m, sometimes m x n. Therefore do not assume the 
   - [Matrix operations](#matrix-operations)
     - [Matrix rules](#matrix-rules)
     - [Matrix multiplication](#matrix-multiplication)
+      - [Row-column multiplication](#row-column-multiplication)
       - [Zero matrix](#zero-matrix)
       - [Square matrix](#square-matrix)
       - [Identity matrix](#identity-matrix-1)
@@ -71,6 +72,10 @@ Disclaimer: sometimes I use n x m, sometimes m x n. Therefore do not assume the 
     - [Matrix sum](#matrix-sum)
     - [Scalar multiplication](#scalar-multiplication)
     - [Transposing](#transposing)
+  - [Inverse matrices](#inverse-matrices)
+    - [Invert A column by column](#invert-a-column-by-column)
+    - [Invert A as a whole](#invert-a-as-a-whole)
+    - [Invertible matrix theorem](#invertible-matrix-theorem)
 
 ## Systems of Linear Equations
 ### Linear equation
@@ -655,6 +660,10 @@ $$A=\begin{bmatrix} 0 & 0 \\ 0 & 1\end{bmatrix}$$
     - The **columns of A are linearly independent**
 * A mapping is bijective if it is both, surjective and injective.
 
+Hint from the Book of Proof (Richard Hammack):
+
+ ![Injective vs surjective]({{ site.url }}/images/injective_vs_surjective_richard_hammack_book_of_proof.png)
+
 ### Composition of 2 transformations
 
 Where $A_1$ and $A_2$ are the standard matrixes for the the 1st and the 2nd transformations respectively:
@@ -701,6 +710,10 @@ $$\color{red}{\vec{j_{A_2\cdot A_1}}} = A_2\cdot\color{red}{\vec{i_{j_1}}}$$
 
 $$A_2\cdot A_1 = \begin{bmatrix} \color{green}{\vec{i_{A_2\cdot A_1}}} & \color{red}{\vec{j_{A_2\cdot A_1}}}\end{bmatrix}$$
 
+#### Row-column multiplication
+
+There's a shortcut formula to get the value of AB's i row and j column: assume i row is a vector and calculate the dot product of row i and column j.
+
 The properties discussed here can be applied to larger matrixes.
 
 #### Zero matrix
@@ -736,7 +749,72 @@ You sawp the columns for the rows (just like in excel). There are some propertie
 * For any scalar $r$: $(rA)^T = rA^T$
 * $(AB)^T = B^TA^T$
 
+## Inverse matrices
 
+Not all matrices have an inverse. The inverse of $A$ is $A^{-1}$ and it should hold that:
 
+$A^{-1}A=I$ and $AA^{-1} = I$
 
+A matrix that is not invertible is a **singula matrix** suchas the zero matrix, and an invertible matrix is called **nonsigular matrix**.
+
+Example of a **nonsingular matrix** would be a $T: R^2 \to R^2$, suchas a 90° rotation **counterclockwise**:
+
+$$A = \begin{bmatrix} 0 & -1\\ 1 & 0\end{bmatrix}$$
+
+The inverse of A would be to rotate 90° **clockwise**:
+
+$$A^{-1} = \begin{bmatrix} 0 & 1\\ -1 & 0\end{bmatrix}$$
+
+If we apply both transformation, intution says that $\color{green}{\vec{i}}$ and $\color{red}{\vec{j}}$ should return to their default values, and hence $A^{-1}A=I$ and $AA^{-1} = I$:
+
+$$A^{-1}A = \begin{bmatrix} 0 & 1\\ -1 & 0\end{bmatrix}\begin{bmatrix} 0 & -1\\ 1 & 0\end{bmatrix} =\begin{bmatrix} 1 & 0\\ 0 & 1\end{bmatrix} = I$$
+
+The same would apply to $AA^{-1}=I$. This was possible since $A$ has independent columns ($\color{green}{\vec{i}}$ and $\color{red}{\vec{j}}$ are not a linear combination of each other), and therefore there is only 1 solution to T(X) = 0. If we had multiple solutions for T(x) = 0, that wolud mean that T(X) is no longer a one-to-one mapping (injective), and when we try to come up with an inverse function, an input would have multiple possible outputs, which is not allowed in a function.
+
+Furthermore, if we apply the zero matrix transformation, it is impossible to restore the default values of $\color{green}{\vec{i}}$ and $\color{red}{\vec{j}}$ (for the identity matrix) when all you have is all zeros... So to analyze if the matrix is invertible, you can check if the domain and co-domain remain the same, if the matrix is dependent, and to visualize the transformation and think how to restore $\color{green}{\vec{i}}$ and $\color{red}{\vec{j}}$.
+
+There's also a formula to find the inverse of a 2x2 matrix:
+
+$$A = \begin{bmatrix} a & b\\c & d\end{bmatrix}\land ad - bc \neq 0 \rightarrow A^{-1} = \frac{1}{ad-bc}
+\begin{bmatrix} d & -b\\-c & a\end{bmatrix}$$
+
+$$ad-bc = 0 \rightarrow A\ is\ not\ invertible$$
+
+$ad-bc$ is formally known as the **determinant (det A)**, which for a $T: R^m \to R^n$  is the change in volume (3D), space (2D)... between $I$ and $A$.
+
+$A^{-1}$ exists iff the $det A \neq 0$
+
+Some properties for invertible matrices A nd B:
+
+* $(AB)^{-1} = B^{-1}A^{-1}$
+* $(A^T)^{-1} = (A^{-1})^T$
+* if A is an invertible n x n matrix, then for reach b in $R^n$ the equation Ax = b has the unique solution $x = A^{-1}b$
+
+### Invert A column by column
+
+If A is invertible, let $e_n$ be the nth column of $I$. Then for each of the rows of A (and columns of the inverse $a^{-1}_n$) find:
+
+$$Aa^{-1}_n=e_n$$
+
+Which in turn can be translated to an augmented Ax=b echelon matrix with the coefficent matrix of A and with b the nth column of $I$.
+The resulting vector is the nth column of $A^{-1}$.
+
+### Invert A as a whole
+
+If A is invertible, row reduce the augmented matrix $[A\ \ I]$ until it becomes $[I\ \ A^{-1}]$.
+
+### Invertible matrix theorem
+
+For a square n x n A matrix, these are either all true or all false:
+
+* A is an invertible matrix
+* A is row equivalent to the n x n identity matrix
+* A has n pivot positions
+* A**x** = **0** has only the trivial solution
+* The columns of A are independenet
+* T(x) is one-to-one
+* Ax = b has at least one solution for each b in $R^n$
+* The columns of A span $R^n$
+* T(x) is $T: R^n \to R^n$
+* The transpose of A is also invertible
 
