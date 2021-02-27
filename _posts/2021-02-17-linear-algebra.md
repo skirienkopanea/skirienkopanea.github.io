@@ -76,6 +76,13 @@ Disclaimer: sometimes I use n x m, sometimes m x n. Therefore do not assume the 
     - [Invert A column by column](#invert-a-column-by-column)
     - [Invert A as a whole](#invert-a-as-a-whole)
     - [Invertible matrix theorem](#invertible-matrix-theorem)
+  - [Subspaces of R^n](#subspaces-of-rn)
+    - [Column space (Col A)](#column-space-col-a)
+    - [Null space (Nul A)](#null-space-nul-a)
+    - [Zero subspace](#zero-subspace)
+    - [Basis subspace](#basis-subspace)
+  - [Coodinate systems](#coodinate-systems)
+  - [Dimension](#dimension)
 
 ## Systems of Linear Equations
 ### Linear equation
@@ -822,4 +829,60 @@ For a square n x n A matrix, these are either all true or all false:
 This all true or all false apply only to square matrices.
 
 * For a n x n matrix biger than 2 x 2, the easiest way to check if it's invertible is to solve for A**x** = **0** and check if there's only the trivial solution (if there are infinite solutions then it is not invertible).
+
+## Subspaces of R^n
+These sets of vectors provide useful information about the equation A**x**=**b**.
+
+A subspace of $\mathcal{R}^n$ is any set H in $\mathcal{R}^n$ that has:
+* zero vector $\in H$
+* all linear combinations of its initial vectors are $\in H$
+
+### Column space (Col A)
+* The **column space** of a matrix A is the set of all linear combinations of its vector columns, denoted as **Col A**
+* The **pivot columns** of a matrix A form a basis for the column space of A.
+  * YOU NEED THE ORIGINAL PIVOT COLUMNS OF A, NOT THE COLUMNS OF THE ECHELON FORM.
+* The column space of an m x n matrix is a subspace of $R^m$.
+
+### Null space (Nul A)
+* The **null space** of a matrix A is the set of all solutions to the equation Ax = 0, denoted as **Null A**.
+* The null space of an m x n matrix is a subspace of $R^n$ (in Ax=B the x vector has n entries)
+
+### Zero subspace
+
+Set {**0**}
+
+### Basis subspace
+* The smallest possible spanning set of linearly independent vectors that span H.
+
+## Coodinate systems
+
+The goal of a using the basis for a subspace H (rather than a Span set) is to have a minimal set of vectors that operate as "i, j... hat", from which we can define any point laying on H, as a linear combination of the basis vectors. Usually the basis for H is defined as $\mathcal{B} = \\{b_1,\dots,b_p\\}$.
+
+The **coordinate vector of x (relative to $\mathcal{B}$) or the B-coordinate vector of x** is defined as:
+
+$$[x]_{\mathcal{B}}=\begin{bmatrix}c_1\\\vdots\\c_p\end{bmatrix}$$
+
+Often H is a plane in $R^3$, the B-coordinate vectors are still $R^2$. The transformation $x\mapsto [x]_B$ is called "isomorphic" as H is isomorphic to $R^2$.
+
+## Dimension
+
+Because H is given with the minimal number of independent vectors, the dimension of a nonzero subspace H, denoted by *dim H*, is the number of
+vectors in any basis for H. The dimension of the zero subspace {**0**] is defined to be zero.
+
+* Technically the zero subspace has no basis because the zero vector itself forms a linearly dependent set.
+
+* The **rank** of a matrix is te dimension of the column space of A.
+
+If a matrix A has n columns, then some are free variables (dimNul(A)) and some are legit basis (pivots, which add to rank(A)), the sum of the pivot and the free variables = n, formally:
+
+$$rank(A) + dim(Nul(A)) = n$$
+
+For an n x n matrix, iff A is invertible, then:
+
+* The columns of A form a basis of $R^n$.
+* Col A = $R^n$
+* dim Col A = n
+* rank A = n
+* Nul A = \[**0**\]
+* dim Nul A = 0
 
