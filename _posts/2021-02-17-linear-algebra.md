@@ -83,6 +83,28 @@ Disclaimer: sometimes I use n x m, sometimes m x n. Therefore do not assume the 
     - [Basis subspace](#basis-subspace)
   - [Coodinate systems](#coodinate-systems)
   - [Dimension](#dimension)
+  - [Determinants](#determinants)
+    - [Property 1](#property-1)
+    - [Property 2](#property-2)
+    - [Property 3a](#property-3a)
+    - [Property 3b](#property-3b)
+    - [Propery 4](#propery-4)
+    - [Property 5](#property-5)
+    - [Property 6](#property-6)
+    - [Property 7](#property-7)
+    - [Property 8](#property-8)
+    - [Det A formula](#det-a-formula)
+    - [Property 9](#property-9)
+    - [Property 10](#property-10)
+    - [Algorithm for determinant 2 by 2](#algorithm-for-determinant-2-by-2)
+    - [Algorithm for determinant 3 by 3](#algorithm-for-determinant-3-by-3)
+    - [Big formula for determinant of n by n](#big-formula-for-determinant-of-n-by-n)
+      - [Co-factor algorithm with a 3 by 3](#co-factor-algorithm-with-a-3-by-3)
+    - [Cofactor formula](#cofactor-formula)
+      - [Cofactor for a 2 by 2](#cofactor-for-a-2-by-2)
+      - [Cofactor for a 4 by 4](#cofactor-for-a-4-by-4)
+    - [Co-factor of 3 by 3](#co-factor-of-3-by-3)
+    - [Determinant of n by n](#determinant-of-n-by-n)
 
 ## Systems of Linear Equations
 ### Linear equation
@@ -885,4 +907,477 @@ For an n x n matrix, iff A is invertible, then:
 * rank A = n
 * Nul A = \[**0**\]
 * dim Nul A = 0
+
+## Determinants
+
+* Determinants are closely linked to the eigenvalues.
+* The determinant (det A or \|A\|) is a number associated only with square matrixes
+* The square matrix is invertible when the determinant is not zero and single otherwise
+
+### Property 1
+* The determinant of the identity matrix I is 1.
+  * This is because A*I=A (a is scaled by 1)
+
+### Property 2
+* In a Permutation of A (that is an exchange of rows), if the number of exchanges is odd, the determinant is changed by scalar: -1
+* In a Permutation of A, if the number of exchanges is even: 1
+
+The determinant of a 2 by 2 matrix is:
+
+$$\begin{vmatrix}
+a & b \\
+c & d \end{vmatrix}
+= ad-bc
+$$
+
+These will be reused in any n by n matrix.
+
+### Property 3a
+* If we multiply the first row of a matrix A by a scalar t, the determinant becomes t * det A
+
+$$\begin{vmatrix}
+ta & tb \\
+c & d \end{vmatrix}
+= t\begin{vmatrix}
+a & b \\
+c & d \end{vmatrix}
+$$
+
+* $det2A = 2^ndetA$
+
+### Property 3b
+
+$$\begin{vmatrix}
+a+a' & b+b' \\
+c & d \end{vmatrix}
+= \begin{vmatrix}
+a & b \\
+c & d \end{vmatrix} + \begin{vmatrix}
+a' & b' \\
+c & d \end{vmatrix}
+$$
+
+If we add a' to all rows these can be row reduced. The property only applies when 1 row is incremented.
+
+If a' and b' are zero, then we would have det A - 0.
+
+### Propery 4
+* If two rows are equal, the determinant is zero.
+  * We already know that the Rank is less than n, and therefore it is not invertible. So the determinant is zero.
+  * But this also comes from property 2
+    * If we have 2 equal rows we can switch them, which should make the determinant of the opposite sign. However, the matrix still looks the same. The only number that is equal to it's opposite sign is 0.
+
+### Property 5
+
+* Determinant doesnt change from row addition of a multiple of another row.
+
+$$\begin{vmatrix}
+a & b \\
+c & d \end{vmatrix}
+= \begin{vmatrix}
+a & b \\
+c-la & d-lb \end{vmatrix}=
+\begin{vmatrix}
+a & b \\
+c & d \end{vmatrix}+
+\begin{vmatrix}
+a & b \\
+-la & -lb \end{vmatrix}=
+\begin{vmatrix}
+a & b \\
+c & d \end{vmatrix}-
+l\begin{vmatrix}
+a & b \\
+a & b \end{vmatrix}=
+\begin{vmatrix}
+a & b \\
+c & d \end{vmatrix}$$
+
+* We can use this property to achieve triangular matrices whose determinant is calculated by multiplying the elements in the main diagional.
+
+### Property 6
+* Row of zeros -> det A = 0
+
+### Property 7
+* The determinant of an echelon form matrix is equal to the product of the diagonal (product of pivots), and the sign depends on the number of row exchanges.
+
+$$ det \ U =
+\begin{vmatrix}
+    d_1 & * & \dots  & * \\
+    0 & d_2 & \vdots  & * \\
+    0 & 0 & \ddots & * \\
+    0 & 0 & \dots  & d_n 
+\end{vmatrix}
+= d_1d_2\cdots d_n\begin{vmatrix}
+    1 & 0 & \dots  & 0 \\
+    0 & 1 & \vdots  & 0 \\
+    0 & 0 & \ddots & 0 \\
+    0 & 0 & \dots  & 1 
+\end{vmatrix}
+= d_1d_2\cdots d_n
+$$
+
+### Property 8
+* det A = 0 when A is singular (not invertible)
+* det A != 0 when A is invertible
+
+### Det A formula
+
+* Bring matrix to echelon form and multiply the pivots
+
+Example:
+
+$$
+\begin{bmatrix}
+a & b \\
+c & d \end{bmatrix}
+\to
+\begin{bmatrix}
+a & b \\
+c-\frac{c}{a}a & d-\frac{c}{a}b \end{bmatrix}
+\to
+\begin{bmatrix}
+a & b \\
+0 & d-\frac{c}{a}b \end{bmatrix}
+\to det A = a(d-\frac{c}{a}b) = ad - cb
+$$
+
+### Property 9
+
+* det(AB) = det A * det A B
+* det $A^{-1} = 1/det A$
+* $det(A^2) = (detA)^2$
+* $det2A = 2^ndetA$ (property 3a)
+
+### Property 10
+
+* $detA^T=detA$
+  * Therefore all the things that applied to rows also apply to columns
+
+### Algorithm for determinant 2 by 2
+
+$$\begin{vmatrix}
+a & b \\
+c & d
+\end{vmatrix}=
+\begin{vmatrix}
+a & 0 \\
+c & d
+\end{vmatrix}+
+\begin{vmatrix}
+0 & b \\
+c & d
+\end{vmatrix}=$$
+
+$$
+\begin{vmatrix}
+a & 0 \\
+c & 0
+\end{vmatrix}+
+\begin{vmatrix}
+a & 0 \\
+0 & d
+\end{vmatrix}+
+\begin{vmatrix}
+0 & b \\
+c & 0
+\end{vmatrix}+
+\begin{vmatrix}
+0 & b \\
+0 & d
+\end{vmatrix}=$$
+
+$$
+0
++
+ad
++
+\begin{vmatrix}
+0 & b \\
+c & 0
+\end{vmatrix}+0=$$
+
+$$ad-bc$$
+
+### Algorithm for determinant 3 by 3
+
+$$\begin{vmatrix}
+a & b & c\\
+d & e & f\\
+g & h & i
+\end{vmatrix}=
+\begin{vmatrix}
+a & 0 & 0\\
+d & e & f\\
+g & h & i
+\end{vmatrix}+
+\begin{vmatrix}
+0 & b & 0\\
+d & e & f\\
+g & h & i
+\end{vmatrix}+
+\begin{vmatrix}
+0 & 0 & c\\
+d & e & f\\
+g & h & i
+\end{vmatrix}=$$
+
+$$
+\begin{vmatrix}
+a & 0 & 0\\
+d & 0 & 0\\
+g & h & i
+\end{vmatrix}+
+\begin{vmatrix}
+a & 0 & 0\\
+0 & e & 0\\
+g & h & i
+\end{vmatrix}+
+\begin{vmatrix}
+a & 0 & 0\\
+0 & 0 & f\\
+g & h & i
+\end{vmatrix}+
+\begin{vmatrix}
+0 & b & 0\\
+d & 0 & 0\\
+g & h & i
+\end{vmatrix}+
+\begin{vmatrix}
+0 & b & 0\\
+0 & e & 0\\
+g & h & i
+\end{vmatrix}+
+\begin{vmatrix}
+0 & b & 0\\
+0 & 0 & f\\
+g & h & i
+\end{vmatrix}+\dots=$$
+
+$$
+\dots = (3^3\ matrices) =
+$$
+
+$$
+\begin{vmatrix}
+a & 0 & 0\\
+0 & e & 0\\
+0 & 0 & i
+\end{vmatrix}+
+\begin{vmatrix}
+a & 0 & 0\\
+0 & 0 & f\\
+0 & h & 0
+\end{vmatrix}+
+\begin{vmatrix}
+0 & b & 0\\
+d & 0 & 0\\
+0 & 0 & i
+\end{vmatrix}+
+\begin{vmatrix}
+0 & b & 0\\
+0 & 0 & f\\
+g & 0 & 0
+\end{vmatrix}+
+\begin{vmatrix}
+0 & 0 & c\\
+d & 0 & 0\\
+0 & h & 0
+\end{vmatrix}+
+\begin{vmatrix}
+0 & 0 & c\\
+0 & e & 0\\
+g & 0 & 0
+\end{vmatrix}=$$
+
+
+$$
+aei - afh -bdi + bfg + cdh - ceg \\(3!\ terms)
+$$
+
+### Big formula for determinant of n by n
+
+$$det A = \sum_{n! terms}\pm a_{1\alpha}a_{2\beta}a_{3\gamma}\dots a_{n\omega}\\
+(\alpha,\beta,\gamma,\dots,\omega) = permutation\ of\ (1,2,3,\dots,n)
+$$
+
+#### Co-factor algorithm with a 3 by 3
+
+$$aei - afh -bdi + bfg + cdh - ceg =$$
+
+$$a(ei-fh) + b(fg-di) + c(dh-eg)$$
+
+This is one of the many ways you can refractor the 3 by 3 formula.
+
+Graphically, this is the same as picking an arbitrary row (or column, but let's just stick to rows for now), and calculating the sum of the "available 2 by 2 determinants" times a given element of the row. For the middle element the "available determenintant "wraps around"". See graphical examples below.
+
+$$\begin{vmatrix}
+a & b & c\\
+d & e & f\\
+g & h & i
+\end{vmatrix}=
+\begin{matrix}
+a & - & -\\
+| & e & f\\
+| & h & i
+\end{matrix}\ \ +\ \
+\begin{matrix}
+- & b & -\\
+d & | & f\\
+g & | & i
+\end{matrix}\ \ +\ \
+\begin{matrix}
+- & - & c\\
+d & e & |\\
+g & h & |
+\end{matrix}\ \ =
+a(ei-fh) + b(di-fg)*-1 + c(dh-eg)
+$$
+
+the second term is -1 because we had to flip the columns once. Going back to the 'Big Formula', you should have n! terms.
+
+Therefore, co-factor of $a_{ij} = C_{ij} =$
+
+$$
+\pm
+det \begin{pmatrix}
+n-1\ matrix \\
+without\ row_i,col_i
+\end{pmatrix}$$
+
+The sign of the determinant is determined by the parity of $a_{ij}$:
+
+Plus if i+j is even, minus if odd.
+
+$$
+\begin{matrix}
++ & - & +\\
+- & + & -\\
++ & - & +
+\end{matrix}
+$$
+
+Like a n x n chessboard with $a_{11}=+$
+
+### Cofactor formula
+
+$$detA = a_{11}C{11} + a_{12}C{12} + \dots +  a_{1n}C{1n}$$
+
+#### Cofactor for a 2 by 2
+
+$$\begin{vmatrix}
+a & b \\
+c & d \end{vmatrix}
+\to
+\begin{pmatrix}
++ & - \\
+- & + \end{pmatrix}
+\to
+\begin{matrix}
+a & - \\
+| & d \end{matrix}
++
+\begin{matrix}
+- & b \\
+c & | \end{matrix}
+\to
+ad-bc
+$$
+
+#### Cofactor for a 4 by 4
+
+$$\begin{vmatrix}
+a_{11} & a_{12} & a_{13} & a_{14}\\
+a_{21} & a_{22} & a_{23} & a_{24}\\
+a_{31} & a_{32} & a_{33} & a_{34} \\
+a_{41} & a_{42} & a_{43} & a_{44}
+\end{vmatrix}
+\to
+\begin{pmatrix}
++ & - & + & -\\
+- & + & - & +\\
++ & - & + & -\\
+- & + & - & +
+\end{pmatrix}
+$$
+
+$$
+\begin{vmatrix}
+a_{11} &  &  & \\
+ & a_{22} & a_{23} & a_{24}\\
+ & a_{32} & a_{33} & a_{34} \\
+ & a_{42} & a_{43} & a_{44}
+\end{vmatrix}
++
+\begin{vmatrix}
+  & a_{12} &  &  \\
+a_{21} &   & a_{23} & a_{24}\\
+a_{31} &   & a_{33} & a_{34} \\
+a_{41} &   & a_{43} & a_{44}
+\end{vmatrix}
++
+\begin{vmatrix}
+  &   & a_{13} &  \\
+a_{21} & a_{22} &  & a_{24}\\
+a_{31} & a_{32} &   & a_{34} \\
+a_{41} & a_{42} &   & a_{44}
+\end{vmatrix}
++
+\begin{vmatrix}
+  &  &   & a_{14}\\
+a_{21} & a_{22} & a_{23} &  \\
+a_{31} & a_{32} & a_{33} &   \\
+a_{41} & a_{42} & a_{43} &  
+\end{vmatrix}
+$$
+
+This can be solved recursively for any n by n matrix.
+
+### Co-factor of 3 by 3
+
+$$\begin{vmatrix}
+a_{11} & a_{12} & a_{13} \\
+a_{21} & a_{22} & a_{23} \\
+a_{31} & a_{32} & a_{33} \\
+\end{vmatrix}
+\to
+\begin{pmatrix}
++ & - & + \\
+- & + & - \\
++ & - & +
+\end{pmatrix}
+$$
+
+$$
+\begin{vmatrix}
+a_{11} &  & \\
+ & a_{22} & a_{23} \\
+ & a_{32} & a_{33} 
+\end{vmatrix}
++
+\begin{vmatrix}
+  & a_{12} &  \\
+a_{21} &   & a_{23} \\
+a_{31} &   & a_{33}
+\end{vmatrix}
++
+\begin{vmatrix}
+  &   & a_{13} \\
+a_{21} & a_{22} & \\
+a_{31} & a_{32} &   \\
+\end{vmatrix}=
+$$
+
+$$a_{11}(a_{22}a_{33}-a_{23}a_{32})
+-a_{12}(a_{21}a_{33}-a_{23}a_{31})
++a_{13}(a_{21}a_{32}-a_{22}a_{31})$$
+
+### Determinant of n by n
+* The strategy is to apply the Cofactor technique by strategly selecting rows or columns with the maximum amount of zeros (to reduce the number of calculations).
+  * * Because of property 10, you can also aim to create zeros vertically and use the entries of a column as Co-factors
+* We can increase the amount of zeros by adding a scaled row to another row, as this operation does not change the sign or value of the determinant.
+  * Remember that linear dependence is obvious when two
+columns or two rows are the same or a column or a row is zero. Which would then make the determinant 0.
+* Alternatively, we could also use row reduction to achieve an echelon matrix and calculate the determinant by multiplying all the pivots. Just remember how many row swaps you did (odd change the sign, even keep the sign of the determinant).
+  * Even if the echelon form (not necessarily in reduced form) is not unique, the product of the diagonal is!
 
