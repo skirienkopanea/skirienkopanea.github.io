@@ -8,8 +8,6 @@ tags: math
 {% include math.html %}
 <!--more-->
 
-Disclaimer: sometimes I use n x m, sometimes m x n. Therefore do not assume the meaning of n nor m to always be either the number of entries or the number columns. Always pay attention to how the matrix is defined. The convention is rows x columns.
-
 # Table of Contents
 - [Table of Contents](#table-of-contents)
   - [Systems of Linear Equations](#systems-of-linear-equations)
@@ -101,7 +99,6 @@ Disclaimer: sometimes I use n x m, sometimes m x n. Therefore do not assume the 
     - [Big formula for determinant of n by n](#big-formula-for-determinant-of-n-by-n)
       - [Co-factor algorithm with a 3 by 3](#co-factor-algorithm-with-a-3-by-3)
     - [Cofactor formula](#cofactor-formula)
-      - [Cofactor for a 2 by 2](#cofactor-for-a-2-by-2)
       - [Cofactor for a 4 by 4](#cofactor-for-a-4-by-4)
     - [Co-factor of 3 by 3](#co-factor-of-3-by-3)
     - [Determinant of n by n](#determinant-of-n-by-n)
@@ -281,8 +278,8 @@ $x_3$ is free means that you are free to choose any value for $x_3$ (also called
 
 
 Solving a system amounts to finding a parametric description of the solution set (such as the system of equations above or such as the [Parametric Vector Equation](#parametric-vector-equation)) or determining that the solution set is empty:
-* If a system contains an equation of the form 0 = b, then it is inconsistent, else, consistent.
-* If the system is consistent and has free variables, then it has $\infty$ solutions.
+* If a system contains an equation of the form 0 = b, where be is not zero, then it is inconsistent, else, consistent.
+* If the system is consistent and has free variables, then it has $\infty$ solutions. 
 * If the system is consistent and has no free variables, then it has 1 solution.
 * If a system is inconsistent, the solution set is empty, even if it has free variables.
 
@@ -372,10 +369,10 @@ $$
   * This make sense since A**x** = **b** is just the augmented matrix of a linear system where replacing the **x** coefficients for the solution **s** give you the linear combination on the left side of the equation such as it matches the right side vector (**b**) making the equation true.
 
 #### All true XOR All false
-Let A be an m x n matrix, these statements are either all true or all false.
-* A**x** = **b** has a solution for all **b**'s in $\Bbb R^m$
-* All **b**'s in $\Bbb R^m$ are a linear combination of A
-* Span{$a_1,a_2,\cdots,a_n$} = $\Bbb R^m$
+Let A be an n x m matrix, these statements are either all true or all false.
+* A**x** = **b** has a solution for all **b**'s in $\Bbb R^n$
+* All **b**'s in $\Bbb R^n$ are a linear combination of A
+* Span{$a_1,a_2,\cdots,a_m$} = $\Bbb R^n$
 * A has a pivot position in every row
 
 ## Solution sets and linear independence
@@ -404,7 +401,7 @@ Let A be an m x n matrix, these statements are either all true or all false.
     * Which is the (0,...,0) coordinate 
     * Which also means that the column vectors of A are **[linear independent](#linear-dependence)**
   * If it has nontrivial, the solution set equals Span{$v_1 \cdots v_n$} (which is not necessarily $\Bbb R^n$, think of $v_1$[1,0,0], $v_2$[0,1,0], $v_3$[1,1,0] -assume vertical notation-, it spans a plane in $\Bbb R^3$, not the whole $\Bbb R^3$)
-    * Only 1 free variable Span{$v_1$} means the solution is a line through the origin. (i.e. the x-axis)
+    * Only 1 free variable Span{$v_1$} means the solution is a line through the origin. (i.e. the z-axis in the 3D vectors above)
     * 2 free variables Span{$v_1,v_2$} can yield a plane (or a line if $v_1$ and $v_2$ are **[linear dependent](#linear-dependence)**) through the origin. (i.e. the x-y plane)
     * It also means that there is a [parametric Vector Equation](#parametric-vector-equation) where there exists weights other than 0 for x that make A**x**=**0** true
 * Therefore, when they ask you, is {$a_1,a_2,\cdots,a_n$} a dependent or an independent set of vectors, they're actually asking...
@@ -614,15 +611,13 @@ $$A=\begin{bmatrix}0 & 1\\1 & 0\end{bmatrix}$$
 
 This could also be achieved with:
 * rotation of 90° counter clockwise followed by a reflection in the y-axis
-* reflextion in the x-axis followed by rotation of  90° counter clockwise
+* or, reflextion in the x-axis followed by rotation of  90° counter clockwise
 
 ### Reflection through the origin
 
 This is simply a 180° rotation, where we scale both $\color{green}{\vec{i}}$ and $\color{red}{\vec{j}}$ by -1, resulting in:
 
 $$A=\begin{bmatrix}-1 & 0\\0 & -1\end{bmatrix}$$ 
-
-You should have noticed that a reflection scales vectors by -1, whereas rotation swaps 0 for 1s. The reflection through the line (the inverse) combines both.
 
 ### Reflection through the line y = -x
 
@@ -679,15 +674,17 @@ $$A=\begin{bmatrix} 0 & 0 \\ 0 & 1\end{bmatrix}$$
 ### Surjective (onto) and injective (one-to-one) mappings
 
 * A mapping $T:A\rightarrow B$ is **surjective** (A is **onto** B) iff Range = Codomain.
-  * T(x) is surjective (onto) **iff** the **columns of A span $R^{rows}$**
-    - A**x** = **b** has a solution for all **b**'s in $\Bbb R^m$
-    - All **b**'s in $\Bbb R^m$ are a linear combination of A
-    - A has a pivot position in every row
+  * A has a **pivot position in every row**
+    - A**x** = **b** has a solution for all **b**'s in $\Bbb R^n$
+      - All **b**'s in $\Bbb R^n$ are a linear combination of A
+    - The **columns of A span $R^{n}$**
 * A mapping $T:A\rightarrow B$ is **injective** (A is **one-to-one** with B) iff every input gets a unique output.
-  * **T(x) is injective (onte-to-one) iff T(X) = 0 only has the trivial solution** (not being injective doesn't have to make you surjective and viceversa)
-    - A has a pivot position in every row (no free variable)
-    - The **columns of A are linearly independent**
+  * The **columns of A are linearly independent**
+    - **T(x) is injective (onte-to-one) iff T(X) = 0 only has the trivial solution** (not being injective doesn't have to make you surjective and viceversa)
 * A mapping is bijective if it is both, surjective and injective.
+* $T:R^n \to R^{n+1}$ is at most injective (if columns are independent)
+* $T:R^n \to R^{n-1}$ is at most surjective (if every row has a pivot)
+* $T:R^n \to R^{n}$ is is either bijective or neither surjective nor injective
 
 Hint from the Book of Proof (Richard Hammack):
 
@@ -739,19 +736,24 @@ $$\color{red}{\vec{j_{A_2\cdot A_1}}} = A_2\cdot\color{red}{\vec{i_{j_1}}}$$
 
 $$A_2\cdot A_1 = \begin{bmatrix} \color{green}{\vec{i_{A_2\cdot A_1}}} & \color{red}{\vec{j_{A_2\cdot A_1}}}\end{bmatrix}$$
 
+Following the properties of the matrix-vector product, the matrix-matrix product (which is nothing but a transformation of a transformation), must have the number of columns in matrix A be equal to the number of rows in matrix B in AB, and AB size is $rows_A \times columns_B$.
+
+ ![Injective vs surjective]({{ site.url }}/images/matrix_multiplication_condition.png)
+
 #### Row-column multiplication
 
-There's a shortcut formula to get the value of AB's i row and j column: assume i row is a vector and calculate the dot product of row i and column j.
+There's a shortcut formula to get the value of AB's $a_{ij}$ where i is also A's i row and j is also B's j column: Take A's i row and transpose it to a vector, then calculate the dot product with B's j column:
 
-The properties discussed here can be applied to larger matrixes.
+ ![Injective vs surjective]({{ site.url }}/images/row_column_multiplication.png)
 
 #### Zero matrix
 
-Expressed as 0, it's the equivalent of a m x n (size assumed by context), with all zeros.
+Expressed as 0, it's the equivalent of a n x m (size assumed by context), with all zeros.
 
 #### Square matrix
 
-m = n
+* number of rows = number of columns
+* Therefore defined as n x n
 
 #### Identity matrix
 
@@ -767,11 +769,11 @@ Sum the columns, only defined when both matrixes have the exact same dimensions.
 
 ### Scalar multiplication
 
-Scale every column. The scalar is only defined when it comes to the left of the matrix. The right side of the matrix should be reserved fo matrixes or vectors (which are just 1 column matrixes).
+Scale every column. The scalar is only defined when it comes to the left of the matrix. The right side of the matrix should be reserved for matrixes or vectors (which are just 1 column matrixes).
 
 ### Transposing
 
-You sawp the columns for the rows (just like in excel). There are some properties:
+You sawp the columns for the rows (just like in excel), it's **not** a 90° rotation. There are some properties:
 
 * $(A^T)^T=A$
 * $(A+B)^T=A^T+B^T$
@@ -785,7 +787,7 @@ Not all matrices have an inverse. The inverse of $A$ is $A^{-1}$ and it should h
 
 $A^{-1}A=I$ and $AA^{-1} = I$
 
-A matrix that is not invertible is a **singula matrix** suchas the zero matrix, and an invertible matrix is called **nonsigular matrix**.
+A matrix that is not invertible is a **singular matrix** suchas the zero matrix, and an invertible matrix is called **nonsigular matrix**.
 
 Example of a **nonsingular matrix** would be a $T: R^2 \to R^2$, suchas a 90° rotation **counterclockwise**:
 
@@ -795,7 +797,7 @@ The inverse of A would be to rotate 90° **clockwise**:
 
 $$A^{-1} = \begin{bmatrix} 0 & 1\\ -1 & 0\end{bmatrix}$$
 
-If we apply both transformation, intution says that $\color{green}{\vec{i}}$ and $\color{red}{\vec{j}}$ should return to their default values, and hence $A^{-1}A=I$ and $AA^{-1} = I$:
+If we apply both transformations, intution says that $\color{green}{\vec{i}}$ and $\color{red}{\vec{j}}$ should return to their default values, and hence $A^{-1}A=I$ and $AA^{-1} = I$:
 
 $$A^{-1}A = \begin{bmatrix} 0 & 1\\ -1 & 0\end{bmatrix}\begin{bmatrix} 0 & -1\\ 1 & 0\end{bmatrix} =\begin{bmatrix} 1 & 0\\ 0 & 1\end{bmatrix} = I$$
 
@@ -810,7 +812,7 @@ $$A = \begin{bmatrix} a & b\\c & d\end{bmatrix}\land ad - bc \neq 0 \rightarrow 
 
 $$ad-bc = 0 \rightarrow A\ is\ not\ invertible$$
 
-$ad-bc$ is formally known as the **determinant (det A)**, which for a $T: R^m \to R^n$  is the change in volume (3D), space (2D)... between $I$ and $A$.
+$ad-bc$ is formally known as the **determinant (det A) for a 2 by 2 matrix A**, which for a $T: R^m \to R^n$  is the change in volume (3D), space (2D)... between $I$ and $A$.
 
 $A^{-1}$ exists iff the $det A \neq 0$
 
@@ -863,11 +865,11 @@ A subspace of $\mathcal{R}^n$ is any set H in $\mathcal{R}^n$ that has:
 * The **column space** of a matrix A is the set of all linear combinations of its vector columns, denoted as **Col A**
 * The **pivot columns** of a matrix A form a basis for the column space of A.
   * YOU NEED THE ORIGINAL PIVOT COLUMNS OF A, NOT THE COLUMNS OF THE ECHELON FORM.
-* The column space of an m x n matrix is a subspace of $R^m$.
+* The column space of an n x m matrix is a subspace of $R^n$.
 
 ### Null space (Nul A)
 * The **null space** of a matrix A is the set of all solutions to the equation Ax = 0, denoted as **Null A**.
-* The null space of an m x n matrix is a subspace of $R^n$ (in Ax=B the x vector has n entries)
+* The null space of an n x m matrix is a subspace of $R^m$ (in Ax=B the x vector has m entries)
 
 ### Zero subspace
 
@@ -884,18 +886,18 @@ The **coordinate vector of x (relative to $\mathcal{B}$) or the B-coordinate vec
 
 $$[x]_{\mathcal{B}}=\begin{bmatrix}c_1\\\vdots\\c_p\end{bmatrix}$$
 
-Often H is a plane in $R^3$, the B-coordinate vectors are still $R^2$. The transformation $x\mapsto [x]_B$ is called "isomorphic" as H is isomorphic to $R^2$.
+Often H is a plane in $R^3$, the B-coordinate vectors are still $R^3$. However, the transformation $x\mapsto [x]_B$ is called "isomorphic" as H is isomorphic to $R^2$.
 
 ## Dimension
 
 Because H is given with the minimal number of independent vectors, the dimension of a nonzero subspace H, denoted by *dim H*, is the number of
-vectors in any basis for H. The dimension of the zero subspace {**0**] is defined to be zero.
+vectors in any basis for H. The dimension of the zero subspace {**0**} is defined to be zero.
 
 * Technically the zero subspace has no basis because the zero vector itself forms a linearly dependent set.
 
 * The **rank** of a matrix is te dimension of the column space of A.
 
-If a matrix A has n columns, then some are free variables (dimNul(A)) and some are legit basis (pivots, which add to rank(A)), the sum of the pivot and the free variables = n, formally:
+If a matrix A has n columns, then some are free variables (dimNul(A)) and some are legit basis (pivots, which add to rank(A)), the sum of the numer of pivots and the number of free variables = n, formally:
 
 $$rank(A) + dim(Nul(A)) = n$$
 
@@ -930,8 +932,6 @@ c & d \end{vmatrix}
 = ad-bc
 $$
 
-These will be reused in any n by n matrix.
-
 ### Property 3a
 * If we multiply the first row of a matrix A by a scalar t, the determinant becomes t * det A
 
@@ -943,7 +943,7 @@ a & b \\
 c & d \end{vmatrix}
 $$
 
-* $det2A = 2^ndetA$
+* Similarly, we can factor out a scalar $t$ from a row
 
 ### Property 3b
 
@@ -957,9 +957,9 @@ a' & b' \\
 c & d \end{vmatrix}
 $$
 
-If we add a' to all rows these can be row reduced. The property only applies when 1 row is incremented.
-
-If a' and b' are zero, then we would have det A - 0.
+* If we add a' to all rows these can be row reduced. The property only applies when 1 row is incremented.
+* If a' and b' are zero, then we would have det A = det A + 0.
+* $det2A = det (A+A) = 2^ndetA$
 
 ### Propery 4
 * If two rows are equal, the determinant is zero.
@@ -993,13 +993,13 @@ a & b \end{vmatrix}=
 a & b \\
 c & d \end{vmatrix}$$
 
-* We can use this property to achieve triangular matrices whose determinant is calculated by multiplying the elements in the main diagional.
+* We can use this property to achieve triangular matrices whose determinant is calculated by multiplying the elements in the main diagional (technically we are using property 3 to factor out each of the scalars multiplying each of the rows of the identity matrix).
 
 ### Property 6
-* Row of zeros -> det A = 0
+* Row of zeros $\to$ det A = 0
 
 ### Property 7
-* The determinant of an echelon form matrix is equal to the product of the diagonal (product of pivots), and the sign depends on the number of row exchanges.
+* The determinant of an echelon form matrix is equal to the product of the diagonal (product of pivots), and the sign depends on the number of row exchanges we made to get into the desired triangular form (+ if even, - if odd).
 
 $$ det \ U =
 \begin{vmatrix}
@@ -1042,12 +1042,14 @@ a & b \\
 \to det A = a(d-\frac{c}{a}b) = ad - cb
 $$
 
+* The reason we don't care about the numbers above the pivot positions is because these can be turned into zeros with row reduction (without swapping rows).
+
 ### Property 9
 
-* det(AB) = det A * det A B
+* det(AB) = det A * det B
 * det $A^{-1} = 1/det A$
 * $det(A^2) = (detA)^2$
-* $det2A = 2^ndetA$ (property 3a)
+* $det2A = 2^ndetA$ (property 3)
 
 ### Property 10
 
@@ -1242,7 +1244,7 @@ $$
 \pm
 det \begin{pmatrix}
 n-1\ matrix \\
-without\ row_i,col_i
+without\ row_i,col_j
 \end{pmatrix}$$
 
 The sign of the determinant is determined by the parity of $a_{ij}$:
@@ -1260,29 +1262,13 @@ $$
 Like a n x n chessboard with $a_{11}=+$
 
 ### Cofactor formula
+* for rows (pick constant $i$):
 
-$$detA = a_{11}C{11} + a_{12}C{12} + \dots +  a_{1n}C{1n}$$
+$$detA = a_{i1}C_{i1} + a_{i2}C_{i2} + \dots +  a_{in}C_{in}$$
 
-#### Cofactor for a 2 by 2
+* for columns (pick constant $j$):
 
-$$\begin{vmatrix}
-a & b \\
-c & d \end{vmatrix}
-\to
-\begin{pmatrix}
-+ & - \\
-- & + \end{pmatrix}
-\to
-\begin{matrix}
-a & - \\
-| & d \end{matrix}
-+
-\begin{matrix}
-- & b \\
-c & | \end{matrix}
-\to
-ad-bc
-$$
+$$detA = a_{1j}C_{1j} + a_{2j}C_{2j} + \dots +  a_{nj}C_{nj}$$
 
 #### Cofactor for a 4 by 4
 
@@ -1331,7 +1317,7 @@ a_{41} & a_{42} & a_{43} &
 \end{vmatrix}
 $$
 
-This can be solved recursively for any n by n matrix.
+This can be solved recursively for any n by n matrix. But it would take too much time. It may be more efficient to row reduce a matrix and go for the product of the main diagonal (do not forget the sign changes from row swaps).
 
 ### Co-factor of 3 by 3
 
@@ -1378,6 +1364,6 @@ $$a_{11}(a_{22}a_{33}-a_{23}a_{32})
 * We can increase the amount of zeros by adding a scaled row to another row, as this operation does not change the sign or value of the determinant.
   * Remember that linear dependence is obvious when two
 columns or two rows are the same or a column or a row is zero. Which would then make the determinant 0.
-* Alternatively, we could also use row reduction to achieve an echelon matrix and calculate the determinant by multiplying all the pivots. Just remember how many row swaps you did (odd change the sign, even keep the sign of the determinant).
-  * Even if the echelon form (not necessarily in reduced form) is not unique, the product of the diagonal is!
+* Alternatively, we could also use row reduction to achieve an echelon matrix and calculate the determinant by multiplying all the pivots. Just remember how many row swaps you did (if odd $\to$ change the sign, else don't).
+  * Even if the not reduced echelon form is not unique, the product of the diagonal is!
 
