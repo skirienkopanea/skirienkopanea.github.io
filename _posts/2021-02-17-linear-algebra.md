@@ -959,7 +959,14 @@ $$
 
 * If we add a' to all rows these can be row reduced. The property only applies when 1 row is incremented.
 * If a' and b' are zero, then we would have det A = det A + 0.
-* $det2A = det (A+A) = 2^ndetA$
+* $det2A = 2^ndetA$:
+
+$$Let\ A\ be\ 2\times 2 \to |kA| = \begin{vmatrix}k\begin{bmatrix}
+a & b \\
+c & d\end{bmatrix}\end{vmatrix} = \begin{vmatrix}
+ka & kb \\
+kc & kd\end{vmatrix} = k^2ad- k^2bc = k^2(ad-bc) = k^2detA
+$$
 
 ### Propery 4
 * If two rows are equal, the determinant is zero.
