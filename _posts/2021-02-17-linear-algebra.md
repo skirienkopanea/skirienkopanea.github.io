@@ -888,6 +888,13 @@ $$[x]_{\mathcal{B}}=\begin{bmatrix}c_1\\\vdots\\c_p\end{bmatrix}$$
 
 Often H is a plane in $R^3$, the B-coordinate vectors are still $R^3$. However, the transformation $x\mapsto [x]_B$ is called "isomorphic" as H is isomorphic to $R^2$.
 
+$Let\ \mathcal{B} =${$b_1$,$b_2$,$b_3$}
+
+$$
+If\ \mathbf{x}\ is\ a\ vector\ in\ H\ with\ [x]_{\mathcal{B}}=\begin{bmatrix}c_1\\c_2\\c_3\end{bmatrix} \\
+then\ \mathbf{x} = c_1b_1+c_2b_2+c_3b_3
+$$
+
 ## Dimension
 
 Because H is given with the minimal number of independent vectors, the dimension of a nonzero subspace H, denoted by *dim H*, is the number of
