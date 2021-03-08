@@ -605,7 +605,7 @@ $$\vec{i_{old}}=\begin{bmatrix}1\\0\end{bmatrix} \longrightarrow \vec{i_{new}}=\
 
 ### Reflection through the line y=x
 
-This is also known as the inverse of a function. We simply have to swipe the values between $\color{green}{\vec{i}}$ and $\color{red}{\vec{j}}$, resulting in:
+This is also known as the inverse of a function. We simply have to **swipe ROWS**, resulting in:
 
 $$A=\begin{bmatrix}0 & 1\\1 & 0\end{bmatrix}$$ 
 
@@ -615,7 +615,7 @@ This could also be achieved with:
 
 ### Reflection through the origin
 
-This is simply a 180° rotation, where we scale both $\color{green}{\vec{i}}$ and $\color{red}{\vec{j}}$ by -1, resulting in:
+This is simply a 180° rotation, or alternatively scale both $\color{green}{\vec{i}}$ and $\color{red}{\vec{j}}$ by -1, resulting in:
 
 $$A=\begin{bmatrix}-1 & 0\\0 & -1\end{bmatrix}$$ 
 
