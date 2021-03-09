@@ -65,15 +65,23 @@
       @media print {
         .site-header, #table-of-contents, #table-of-contents + ul, iframe, .site-footer {
     visibility: collapse;
+    padding:0;
     height: 0;
+}
+.page-content{
+  padding:0;
 }
 .wrapper{
 margin:0;
+padding-top:0;
 padding-left:2cm;
 padding-right:2cm;
+padding-bottom: 0;
 width:100%;
 }
 body{
+  text-align: justify;
+  text-justify: inter-word;
   font-size: 13pt;
   line-height: 1.3;
 }
