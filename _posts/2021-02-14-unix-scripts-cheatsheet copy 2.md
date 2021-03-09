@@ -2,8 +2,8 @@
 layout: post
 title:  "Unix scripts cheat sheet"
 date:   2021-02-14 12:00:00 +0100
-categories: linux
-tags: terminal
+categories: terminal
+tags: unix linux
 ---
 <!--more-->
 

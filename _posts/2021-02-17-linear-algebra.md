@@ -2,8 +2,8 @@
 layout: post
 title:  "Linear Algebra Cheatsheet"
 date:   2021-02-16 12:00:00 +0100
-categories: "linear algebra"
-tags: math
+categories: math
+tags: CSE1205 linear-algebra
 ---
 {% include math.html %}
 <!--more-->
@@ -14,6 +14,7 @@ tags: math
     - [Linear equation](#linear-equation)
     - [Linear system](#linear-system)
     - [Matrix Notation](#matrix-notation)
+- [a_{m1} x_{1} + a_{m2} x_{2} + \cdots + a_{mn} x_{n} = k\\](#a_m1-x_1--a_m2-x_2--cdots--a_mn-x_n--k)
     - [(Reduced) Echelon Matrix](#reduced-echelon-matrix)
       - [Echelon Matrix](#echelon-matrix)
       - [Reduced Echelon Matrix](#reduced-echelon-matrix-1)
@@ -155,10 +156,15 @@ We can express the system below as a matrix
 $$
 a_{11} x_{1} + a_{12} x_{2} + \cdots + a_{1n} x_{n} = b \\
 a_{21} x_{1} + a_{22} x_{2} + \cdots + a_{2n} x_{n} = c\\
-\cdots\\
-a_{m1} x_{1} + a_{m2} x_{2} + \cdots + a_{mn} x_{n} = k\\
+\cdots
+$$
 
-=\\
+$$
+a_{m1} x_{1} + a_{m2} x_{2} + \cdots + a_{mn} x_{n} = k\\
+=
+$$
+
+$$
 \begin{bmatrix}
     a_{11} & a_{12} & \dots  & a_{1n} & | & b \\
     a_{21} & a_{22} & \dots  & a_{2n} & | & c \\
