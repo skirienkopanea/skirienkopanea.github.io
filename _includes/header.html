@@ -61,11 +61,20 @@
     }
     </script>
     <style>
+      /*Print css*/
+      @media print {
+        .site-header, #table-of-contents, #table-of-contents + ul, iframe, .site-footer {
+    visibility: collapse;
+    height: 0;
+}
+}
+      /*Center images*/
 img {
   display: block;
 margin-left: auto;
 margin-right: auto;
 }
+/*Night mode*/
 html,html[data-theme="light"] {
 --black-800:#242729;
 --white:white;
