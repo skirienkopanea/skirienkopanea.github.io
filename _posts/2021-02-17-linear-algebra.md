@@ -14,7 +14,6 @@ tags: CSE1205 linear-algebra
     - [Linear equation](#linear-equation)
     - [Linear system](#linear-system)
     - [Matrix Notation](#matrix-notation)
-- [a_{m1} x_{1} + a_{m2} x_{2} + \cdots + a_{mn} x_{n} = k\\](#a_m1-x_1--a_m2-x_2--cdots--a_mn-x_n--k)
     - [(Reduced) Echelon Matrix](#reduced-echelon-matrix)
       - [Echelon Matrix](#echelon-matrix)
       - [Reduced Echelon Matrix](#reduced-echelon-matrix-1)
@@ -160,9 +159,7 @@ a_{21} x_{1} + a_{22} x_{2} + \cdots + a_{2n} x_{n} = c\\
 $$
 
 $$
-a_{m1} x_{1} + a_{m2} x_{2} + \cdots + a_{mn} x_{n} = k\\
-=
-$$
+a_{m1} x_{1} + a_{m2} x_{2} + \cdots + a_{mn} x_{n} = k\\=$$
 
 $$
 \begin{bmatrix}
