@@ -61,8 +61,31 @@
     }
     </script>
     <style>
+      
+#container.grid {
+    display: grid;
+    grid-template-rows: repeat(1, 45vh); 
+    grid-template-columns: repeat(2, 48%);
+    column-gap: 4%;
+    overflow-y:auto;
+}
+#container.download{
+  height:50vh;
+  overflow-y:auto;
+}
+
+h3:first-letter {
+  text-transform: uppercase;
+}
+
       /*Print css*/
 @media print {
+  #container.download{
+    height:max-content;
+  }
+  #container.grid{
+    overflow-y:visible;
+  }
   .site-header, #table-of-contents, #table-of-contents + ul, iframe, .site-footer {
   visibility: collapse;
   padding:0;
@@ -219,7 +242,6 @@ kbd {
   #theme-toggle:hover{
     cursor:pointer;
   }
-
 }
 
 </style>

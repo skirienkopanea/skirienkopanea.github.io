@@ -7,7 +7,7 @@ Below you can find some of my study notes and useful external links. My notes ma
 
 *Course codes: CSE1300 (Reasoning and Logic), CSE110 (Object-Oriented Programing), CSE1100 (Computer Organisation), CSE1200 (Calculus), CSE1305 (Algorithms & Data Structures), CSE1500 (Database & Web Technology)*
 
-<div id ="container"  markdown="1"  style="height:50vh;overflow-y:auto;">
+<div id ="container"  markdown="1" class="download">
 
 ## Y1Q1
 
