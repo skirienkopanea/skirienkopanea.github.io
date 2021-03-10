@@ -3,7 +3,7 @@ layout: post
 title:  "First post"
 date:   2021-01-30 20:20:20 +0100
 categories: announcements
-tags: math
+tags: 
 ---
 {% include math.html %}
 
