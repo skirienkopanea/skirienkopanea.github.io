@@ -3,25 +3,7 @@ layout: page
 title: Index
 permalink: /index/
 ---
-<style>
-#container {
-    display: grid;
-    grid-template-rows: repeat(1, 45vh); 
-    grid-template-columns: repeat(2, 48%);
-    column-gap: 4%;
-}
-
-h3:first-letter {
-  text-transform: uppercase;
-}
-
-#tags, #categories {
-    overflow-y:auto;
-}
-
-
-</style>
-<div id ="container">
+<div id ="container" class="grid">
 <div id ="categories">
 <h2>Categories</h2>
 {% for category in site.categories %}
