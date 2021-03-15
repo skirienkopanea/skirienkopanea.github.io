@@ -102,6 +102,16 @@ tags: CSE1205 linear-algebra
       - [Cofactor for a 4 by 4](#cofactor-for-a-4-by-4)
     - [Co-factor of 3 by 3](#co-factor-of-3-by-3)
     - [Determinant of n by n](#determinant-of-n-by-n)
+  - [Eigenvectors and eigenvalues](#eigenvectors-and-eigenvalues)
+    - [3D rotation](#3d-rotation)
+    - [Calculate eigenvectors and eigenvalues](#calculate-eigenvectors-and-eigenvalues)
+      - [Step 1 - The characteristic equation](#step-1---the-characteristic-equation)
+      - [Step 2 - Null space of A](#step-2---null-space-of-a)
+    - [Example](#example)
+      - [Step 1](#step-1)
+      - [Step 2.1 (lambda = 2)](#step-21-lambda--2)
+      - [Step 2.2 (lambda = 3)](#step-22-lambda--3)
+    - [Possible eigen values](#possible-eigen-values)
 
 ## Systems of Linear Equations
 ### Linear equation
@@ -1383,4 +1393,146 @@ $$a_{11}(a_{22}a_{33}-a_{23}a_{32})
 columns or two rows are the same or a column or a row is zero. Which would then make the determinant 0.
 * Alternatively, we could also use row reduction to achieve an echelon matrix and calculate the determinant by multiplying all the pivots. Just remember how many row swaps you did (if odd $\to$ change the sign, else don't).
   * Even if the not reduced echelon form is not unique, the product of the diagonal is!
+
+## Eigenvectors and eigenvalues
+Going back to the [linear transformations](#2d-transformations), we find that for some standard matrices A of a transformation, there are vector inputs such that the output after the transformation is a scalar of themselves (aka, it is within their own span, it's "parallel"), such vector inputs are called eigenvectors, and the scalars are called eigenvalues. For instance, matrix A below has 2 eigenvectors (by definition an eigenvector must have 1 eigenvalue). One of the eigenvectors is X = (1,0), and since T = (3,0) we can see that the eigenvalue is 3, since 3 * X = T.
+
+ ![In span]({{ site.url }}/images/in_span_1.png)
+
+ The other eigenvector is X = (-1,1), which gives T = (-2,2), therefore the eigenvalue being 2.
+
+ ![In span]({{ site.url }}/images/in_span_2.png)
+
+ You can see an example of a non eigenvector below, as X = (1,1) does not produce an output within it's on spawn T = (4,2)
+
+ ![Not in span]({{ site.url }}/images/not_in_span.png)
+
+### 3D rotation
+
+* In a 3D rotation of an object the eigenvector is the rotation axis, and since we are only rotating the object the eigenvalue would be 1.
+
+
+### Calculate eigenvectors and eigenvalues
+
+According to the definition of an eigenvector and eigenvalue we have $A\vec{v} = \lambda \vec{v}$.
+Where A is the standard transformation matrix, $\vec{v}$ is the eigenvector and $\lambda$ is the eigenvalue (scalar).
+
+This is equivalent to $A\vec{v} = (\lambda I)\vec{v} \longrightarrow A\vec{v} - (\lambda I)\vec{v} = \vec{0}$
+
+$(A - \lambda I)\vec{v} = \vec{0}$
+
+The main take away from this formula is that besides **v** being the **0** vector (trivial solution), if we want to find another solution (eigenvector), that would mean that more than one input share the same output, which means the transformation is no longer injective. Since it is no longer injective, is no longer bijective, which means $(A - \lambda I)$ is not invertible (is singular) and must have determinant equal to zero.
+
+#### Step 1 - The characteristic equation
+All we need to do is to tweak the value of $\lambda$ such that $det(A - \lambda I) = 0$. This equation is known as the "characteristic equation" or the "eigenvalue equation".
+
+#### Step 2 - Null space of A
+Now that we know $\lambda$, we can actually compute  $(A - \lambda I)\vec{v} = \vec{0}$ and solve it with an augmented matrix.
+Esentially we are solving for the null space of A.
+
+### Example
+
+Using the same matrix A. Let's calculate the eigenvalue and eigenvector.
+
+#### Step 1
+
+$$det(A - \lambda I) = 0$$
+
+$$det\begin{pmatrix}
+\begin{bmatrix}
+3-\lambda & 1 \\
+0 & 2-\lambda \end{bmatrix}
+\end{pmatrix} = 0$$
+
+$$(3-\lambda)(2-\lambda)=0$$
+
+$$\lambda=3 \lor \lambda=2$$
+
+#### Step 2.1 (lambda = 2)
+
+$$(A - \lambda I)\vec{v} = \vec{0}$$
+
+$$(A - 2 I)\vec{v} = \vec{0}$$
+
+$$
+\begin{bmatrix}
+3-2 & 1 \\
+0 & 2-2 \end{bmatrix}\vec{v} = 0$$
+
+$$
+\begin{bmatrix}
+1 & 1 \\
+0 & 0 \end{bmatrix}\vec{v} = 0$$
+
+$$
+\begin{bmatrix}
+1 & 1 & 0\\
+0 & 0 & 0\end{bmatrix}$$
+
+
+$$
+\begin{matrix}
+v_1=-v_2 \\
+v_2=free\end{matrix}$$
+
+$$\vec{v}= \vec{0} + v_2\begin{bmatrix} -1 \\ 1 \end{bmatrix} = \begin{bmatrix} -1 \\ 1 \end{bmatrix}$$
+
+#### Step 2.2 (lambda = 3)
+
+$$
+\begin{bmatrix}
+3-3 & 1 \\
+0 & 2-3 \end{bmatrix}\vec{v} = 0$$
+
+$$
+\begin{bmatrix}
+0 & 1 \\
+0 & -1 \end{bmatrix}\vec{v} = 0$$
+
+$$
+\begin{bmatrix}
+0 & 1 & 0\\
+0 & -1 & 0\end{bmatrix}$$
+
+$$
+\begin{bmatrix}
+0 & 1 & 0\\
+0 & 0 & 0\end{bmatrix}$$
+
+
+$$
+\begin{matrix}
+v_1=free \\
+v_2=0\end{matrix}$$
+
+$$\vec{v}= \vec{0} + v_1\begin{bmatrix} 1 \\ 0 \end{bmatrix} = \begin{bmatrix} 1 \\ 0 \end{bmatrix}$$
+
+### Possible eigen values
+
+We see that from the determinant equation we end up with $(a-\lambda)(b-\lambda)$ and sometimes $\lambda^2=a$. In the first scenario, if a and b are different we get 2 eigenvalues, if they're the same we get 1 eigenvalue (and we would also say that such eigen value has a multiplicity of 2). In the second scenario, if a is positive we get 2 eigenvalues, if a is 0 we get no eigenvalue as by definition 0 cannot be an eigenvalue. If a is negative we get 0 eigenvalues (we actually get an imaginary number, which means we get a rotation for all inputs).
+
+* A single eigenvalue can be used by more than one eigenvector
+  * i.e. $A=2I$ has eigenvalue 2 and all vectors in $R^2$ are eigenvectors with eigenvalue 2
+  * If you compute the eigenvectors from the augmented matrix, you'll see that the augmented matrix only has free variables
+* If A matrix has an eigenvalue 0, that means that $Ax=0x\longrightarrow Ax=0$ has a nontrivial solution, which means A is not invertible (A is singular), and det A = 0.
+  * The eigenvectors with eigenvalue 0 are the vectors of the Null space of A (the nontrivial vectors that make A**x**=0).
+* If the eigenvalues refer only to one eigenvector each, then all eigenvectors are linearly independent
+* If two matrices have the same eigenvalues, with the same multiplicities, linked to the same eigenvectors, then these are "similar".
+  * "Similar" is not the same as row equivalent
+  * Adding kI to a matrix increases the eigenvalues by k but does not change its eigenvectors.
+  * Eigenvalues and eigen values are not linear, you can't conclude anything from adding A+B
+* A n by n matrix will have n eigen values (in practice some of them can be repeated)
+* The sum of the eigenvalues equals the sum of the main diagonal of A (this sum is also called the "trace")
+* The determinant is the product of the eigenvalues
+* A nonzero determinant does not guarantee an eigenvector
+  * The rotation matrix has determinant 1 but eigenvalues are the imaginary number i and -i but no eigenvectors.
+* n by n matrix does not guarantee n independent vectors
+
+
+
+
+
+
+
+
 
