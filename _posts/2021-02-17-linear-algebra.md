@@ -112,6 +112,12 @@ tags: CSE1205 linear-algebra
       - [Step 2.1 (lambda = 2)](#step-21-lambda--2)
       - [Step 2.2 (lambda = 3)](#step-22-lambda--3)
     - [Possible eigen values](#possible-eigen-values)
+  - [Diagonalization](#diagonalization)
+    - [Systems of differential equations](#systems-of-differential-equations)
+      - [1. Write u as a linear combination of eigenvectors](#1-write-u-as-a-linear-combination-of-eigenvectors)
+      - [1. Multiply by A](#1-multiply-by-a)
+    - [Fibonaci Example](#fibonaci-example)
+      - [Trick](#trick)
 
 ## Systems of Linear Equations
 ### Linear equation
@@ -1414,12 +1420,12 @@ Going back to the [linear transformations](#2d-transformations), we find that fo
 
 ### Calculate eigenvectors and eigenvalues
 
-According to the definition of an eigenvector and eigenvalue we have $A\vec{v} = \lambda \vec{v}$.
-Where A is the standard transformation matrix, $\vec{v}$ is the eigenvector and $\lambda$ is the eigenvalue (scalar).
+According to the definition of an eigenvector and eigenvalue we have $A\mathbf{x} = \lambda \mathbf{x}$.
+Where A is the standard transformation matrix, $\mathbf{x}$ is the eigenvector and $\lambda$ is the eigenvalue (scalar).
 
-This is equivalent to $A\vec{v} = (\lambda I)\vec{v} \longrightarrow A\vec{v} - (\lambda I)\vec{v} = \vec{0}$
+This is equivalent to $A\mathbf{x} = (\lambda I)\mathbf{x} \longrightarrow A\mathbf{x} - (\lambda I)\mathbf{x} = \mathbf{0}$
 
-$(A - \lambda I)\vec{v} = \vec{0}$
+$(A - \lambda I)\mathbf{x} = \mathbf{0}$
 
 The main take away from this formula is that besides **v** being the **0** vector (trivial solution), if we want to find another solution (eigenvector), that would mean that more than one input share the same output, which means the transformation is no longer injective. Since it is no longer injective, is no longer bijective, which means $(A - \lambda I)$ is not invertible (is singular) and must have determinant equal to zero.
 
@@ -1427,7 +1433,7 @@ The main take away from this formula is that besides **v** being the **0** vecto
 All we need to do is to tweak the value of $\lambda$ such that $det(A - \lambda I) = 0$. This equation is known as the "characteristic equation" or the "eigenvalue equation".
 
 #### Step 2 - Null space of A
-Now that we know $\lambda$, we can actually compute  $(A - \lambda I)\vec{v} = \vec{0}$ and solve it with an augmented matrix.
+Now that we know $\lambda$, we can actually compute  $(A - \lambda I)\mathbf{x} = \mathbf{0}$ and solve it with an augmented matrix.
 Esentially we are solving for the null space of A.
 
 ### Example
@@ -1450,19 +1456,19 @@ $$\lambda=3 \lor \lambda=2$$
 
 #### Step 2.1 (lambda = 2)
 
-$$(A - \lambda I)\vec{v} = \vec{0}$$
+$$(A - \lambda I)\mathbf{x} = \mathbf{0}$$
 
-$$(A - 2 I)\vec{v} = \vec{0}$$
+$$(A - 2 I)\mathbf{x} = \mathbf{0}$$
 
 $$
 \begin{bmatrix}
 3-2 & 1 \\
-0 & 2-2 \end{bmatrix}\vec{v} = 0$$
+0 & 2-2 \end{bmatrix}\mathbf{x} = 0$$
 
 $$
 \begin{bmatrix}
 1 & 1 \\
-0 & 0 \end{bmatrix}\vec{v} = 0$$
+0 & 0 \end{bmatrix}\mathbf{x} = 0$$
 
 $$
 \begin{bmatrix}
@@ -1475,19 +1481,19 @@ $$
 v_1=-v_2 \\
 v_2=free\end{matrix}$$
 
-$$\vec{v}= \vec{0} + v_2\begin{bmatrix} -1 \\ 1 \end{bmatrix} = \begin{bmatrix} -1 \\ 1 \end{bmatrix}$$
+$$\mathbf{x}= \mathbf{0} + v_2\begin{bmatrix} -1 \\ 1 \end{bmatrix} = \begin{bmatrix} -1 \\ 1 \end{bmatrix}$$
 
 #### Step 2.2 (lambda = 3)
 
 $$
 \begin{bmatrix}
 3-3 & 1 \\
-0 & 2-3 \end{bmatrix}\vec{v} = 0$$
+0 & 2-3 \end{bmatrix}\mathbf{x} = 0$$
 
 $$
 \begin{bmatrix}
 0 & 1 \\
-0 & -1 \end{bmatrix}\vec{v} = 0$$
+0 & -1 \end{bmatrix}\mathbf{x} = 0$$
 
 $$
 \begin{bmatrix}
@@ -1505,7 +1511,7 @@ $$
 v_1=free \\
 v_2=0\end{matrix}$$
 
-$$\vec{v}= \vec{0} + v_1\begin{bmatrix} 1 \\ 0 \end{bmatrix} = \begin{bmatrix} 1 \\ 0 \end{bmatrix}$$
+$$\mathbf{x}= \mathbf{0} + v_1\begin{bmatrix} 1 \\ 0 \end{bmatrix} = \begin{bmatrix} 1 \\ 0 \end{bmatrix}$$
 
 ### Possible eigen values
 
@@ -1527,6 +1533,151 @@ We see that from the determinant equation we end up with $(a-\lambda)(b-\lambda)
 * A nonzero determinant does not guarantee an eigenvector
   * The rotation matrix has determinant 1 but eigenvalues are the imaginary number i and -i but no eigenvectors.
 * n by n matrix does not guarantee n independent vectors
+
+## Diagonalization
+
+Let S be the matrix containing the eigenvectors of A and $S^{-1}$ is the inverse. For that we need n independent eigen vectors.
+
+By the definition of the eigenvector, when you multiply $As_1$ you're recreating $Ax=\lambda x$, therefore  $As_1=\lambda_1 s_1$ so $AS=\begin{bmatrix}\lambda_1 s_1 & \lambda_2 s_2 & \dots & \lambda_n s_n \end{bmatrix}$
+
+We can factor out the lambdas:
+
+$$AS=\begin{bmatrix}s_1 & s_2 & \dots s_n \end{bmatrix}
+\begin{bmatrix}
+\lambda_1 & 0 & \cdots & 0\\
+0 & \lambda_2 & 0 & 0\\
+0 & 0 & \ddots & \vdots\\
+0 & 0 & \dots & \lambda_n\end{bmatrix}=S\Lambda
+$$
+
+Where capital Lambda is the matrix with 0s and the eigenvalues across the main diagonal.
+
+From $AS=S\Lambda$ we also get:
+
+$$S^{-1}AS=\Lambda$$
+
+$$A=S\Lambda S^{-1}$$
+
+If $Ax=\lambda x$ then $A^2x=\lambda Ax=\lambda^2x$
+
+Similarly, we also have $A^2=S\Lambda S^{-1}S\Lambda S^{-1}=S\Lambda^2 S^{-1}$. So:
+
+$$A^k=S\Lambda^k S^{-1}$$
+
+The eigenvalues change by the power of k while the egenvectors remain the same.
+
+* If all absolute eigenvalues are smaller than 1, then $A^\infty = 0$ (given that all eigenvalues have multiplicity of 1)
+* A is sure to have n independent eigenvectors (and be diagonalizable) if all the eigenvalues are different.
+* A diagonal matrix has its eigenvalues sitting infront of you in the main diagonal
+
+### Systems of differential equations
+
+Assuming the appropiate properties of A, let $u_{k+1}=Au_k$ where this eventually leads to $u_k=A^ku_0$. This is used to solve difference equations.
+
+To solve:
+
+#### 1. Write u as a linear combination of eigenvectors
+
+$$u_0=\begin{bmatrix} r_1 \\ r_2 \\ \vdots \\ r_n \end{bmatrix} = c_1\begin{bmatrix} r_1 \\ 0 \\ \vdots \\ 0 \end{bmatrix}+c_2\begin{bmatrix} 0 \\ r_2 \\ 0 \\ \vdots \end{bmatrix} + \dots + c_n\begin{bmatrix} 0 \\ 0 \\ \vdots \\ r_n \end{bmatrix}=u_0=c_1x_1+c_2x_2 \dots + c_nx_n=Sc$$
+
+#### 1. Multiply by A
+
+Because each of the $x$ are eigenvectors going their own way, $Ax=\lambda x$. Since $c$ is just a scalar, $Acx=\lambda cx$). Therefore:
+
+$$Au_0=c_1\lambda_1x_1+c_2\lambda_2x_2+\dots+c_n\lambda_nx_n$$
+
+And since each of the terms are linearly independent:
+
+$$Au_0^{k}=c_1\lambda_1^{k}x_1+c_2\lambda_2^{k}x_2+\dots+c_n\lambda_n^{k}x_n=S\Lambda^kc$$
+
+### Fibonaci Example
+
+0, 1, 2, 3, 5, 8, 13,..$F_{k}=?$
+
+And how fast it grows?
+
+$$F_{k+2}=F_{k+1}+{F_k}$$
+
+But this is a single equation, not a system. And it's a second order (as there are 2 unkowns).
+
+#### Trick
+
+We artificially make the single equation into a system, then artificially make the 2 unkowns into a single unkown vector:
+
+${F_k}+F_{k+1}=F_{k+2}$
+
+$0 + F_{k+1}=F_{k+1}$
+
+So:
+
+$$A=\begin{bmatrix} 1 & 1\\ 0 & 1 \end{bmatrix}$$
+
+And:
+
+$$u_{k+1}=\begin{bmatrix} F_{k+2} \\ F_{k+1} \end{bmatrix} \longrightarrow u_{k}=\begin{bmatrix} F_{k+1} \\ F_{k} \end{bmatrix}$$
+
+So: 
+
+$$u_0=\begin{bmatrix} F_{1} \\ F_{0} \end{bmatrix}$$
+
+$$u_1= Au_0=\begin{bmatrix} 1 & 1\\ 0 & 1 \end{bmatrix}\begin{bmatrix} F_{1} \\ F_{0} \end{bmatrix}=\begin{bmatrix} F_{1} + F_0 \\ F_{0} \end{bmatrix}$$
+
+Wait... that doesnt correspond to the fibonacci sequence, the second entry should have been $F_{k+1}$, therefore make sure to adjust A.
+
+$F_{k+1}+{F_k}=F_{k+2}$
+
+$F_{k+1} + 0=F_{k+1}$
+
+Perhaps the artifical equation should have its variable placed to the left-most pivot. Just make sure to double check matrix A fits the logic that you expect.
+
+$$A=\begin{bmatrix} 1 & 1\\ 1 & 0 \end{bmatrix}$$
+
+$$u_1= Au_0=\begin{bmatrix} 1 & 1\\ 1 & 0 \end{bmatrix}\begin{bmatrix} F_{1} \\ F_{0} \end{bmatrix}=\begin{bmatrix} F_{1} + F_0 \\ F_{1} \end{bmatrix}$$
+
+Now it make sense. And from here:
+
+$$u_k=A^ku_0$$
+
+We can look for the eigenvalues and eigenvectors of A:
+
+$$\begin{vmatrix}A-\lambda I\end{vmatrix}= \begin{vmatrix} 1-\lambda & 1\\ 1 & -\lambda\end{vmatrix}=\lambda^2-\lambda-1=0$$
+
+$$\lambda_1=\frac{1}{2}(1+\sqrt{5})\approx 1.618 \ \ \lambda_2=\frac{1}{2}(1-\sqrt{5})\approx -0.618$$
+
+The eigenvalue controls the growth of the fibonacci sequence, namely the linear combination of them and the eigenvectors. Since the negative one is absoluteively (in the mathemetical \| \| sense) smaller than 1, it will approximate 0 as k goes to infinity. 
+
+$$F_{100}=c_1\lambda_1^{100}+c_2\lambda_2^{100}$$
+
+$$F_{100}\approx c_1\begin{pmatrix}\frac{1+\sqrt{5}}{2}\end{pmatrix}^{100}+0$$
+
+The eigenvectors associated to those eigenvalues are:
+
+For $\lambda_1$:
+
+$$(A-\phi I)x=0$$
+
+$$\begin{bmatrix} 1-\phi & 1\\ 1 & -\phi\end{bmatrix}x=0$$
+
+$$\begin{bmatrix} 1-\phi & 1\\ 1 & -\phi\end{bmatrix}\begin{bmatrix} \phi \\ 1 \end{bmatrix}=\begin{bmatrix} -(\phi^2 -\phi -1)\\ \phi-\phi\end{bmatrix}=0$$
+
+So we can see that the for
+
+$$u_k=\begin{bmatrix} F_{k+1} \\ F_{k} \end{bmatrix}$$
+
+the ratio (eigenvector) between the next (top entry) number and the current (bottom entry) number is the golden number:
+
+$$\begin{bmatrix} \phi \\ 1 \end{bmatrix}$$
+
+The other eigenvector is
+
+$$\begin{bmatrix} 1-\phi \\ 1 \end{bmatrix}$$
+
+
+
+
+
+
+
 
 
 
