@@ -1,6 +1,6 @@
 ---
 layout: post
-title:  "Linear Algebra Cheatsheet"
+title:  "Linear Algebra Summary"
 date:   2021-02-16 12:00:00 +0100
 categories: math
 tags: CSE1205 linear-algebra
@@ -102,6 +102,26 @@ tags: CSE1205 linear-algebra
       - [Cofactor for a 4 by 4](#cofactor-for-a-4-by-4)
     - [Co-factor of 3 by 3](#co-factor-of-3-by-3)
     - [Determinant of n by n](#determinant-of-n-by-n)
+  - [Eigenvectors and eigenvalues](#eigenvectors-and-eigenvalues)
+    - [3D rotation](#3d-rotation)
+    - [Calculate eigenvectors and eigenvalues](#calculate-eigenvectors-and-eigenvalues)
+      - [Step 1 - The characteristic equation](#step-1---the-characteristic-equation)
+      - [Step 2 - Null space of A](#step-2---null-space-of-a)
+    - [Example](#example)
+      - [Step 1](#step-1)
+      - [Step 2.1 (lambda = 2)](#step-21-lambda--2)
+      - [Step 2.2 (lambda = 3)](#step-22-lambda--3)
+    - [Shortcut equation for 2 by 2](#shortcut-equation-for-2-by-2)
+    - [Possible eigen values](#possible-eigen-values)
+    - [Eigenspace](#eigenspace)
+  - [Diagonalization](#diagonalization)
+    - [Similar matrix](#similar-matrix)
+    - [Systems of differential equations](#systems-of-differential-equations)
+      - [1. Write u as a linear combination of eigenvectors](#1-write-u-as-a-linear-combination-of-eigenvectors)
+      - [1. Multiply by A](#1-multiply-by-a)
+    - [Fibonaci Example](#fibonaci-example)
+      - [Trick](#trick)
+  - [Complex eigenvalues and eigenvectors](#complex-eigenvalues-and-eigenvectors)
 
 ## Systems of Linear Equations
 ### Linear equation
@@ -1383,4 +1403,332 @@ $$a_{11}(a_{22}a_{33}-a_{23}a_{32})
 columns or two rows are the same or a column or a row is zero. Which would then make the determinant 0.
 * Alternatively, we could also use row reduction to achieve an echelon matrix and calculate the determinant by multiplying all the pivots. Just remember how many row swaps you did (if odd $\to$ change the sign, else don't).
   * Even if the not reduced echelon form is not unique, the product of the diagonal is!
+
+## Eigenvectors and eigenvalues
+Going back to the [linear transformations](#2d-transformations), we find that for some standard matrices A of a transformation, there are vector inputs such that the output after the transformation is a scalar of themselves (aka, it is within their own span, it's "parallel"), such vector inputs are called eigenvectors, and the scalars are called eigenvalues. For instance, matrix A below has 2 eigenvectors (by definition an eigenvector must have 1 eigenvalue). One of the eigenvectors is X = (1,0), and since T = (3,0) we can see that the eigenvalue is 3, since 3 * X = T.
+
+ ![In span]({{ site.url }}/images/in_span_1.png)
+
+ The other eigenvector is X = (-1,1), which gives T = (-2,2), therefore the eigenvalue being 2.
+
+ ![In span]({{ site.url }}/images/in_span_2.png)
+
+ You can see an example of a non eigenvector below, as X = (1,1) does not produce an output within it's on spawn T = (4,2)
+
+ ![Not in span]({{ site.url }}/images/not_in_span.png)
+
+### 3D rotation
+
+* In a 3D rotation of an object the eigenvector is the rotation axis, and since we are only rotating the object the eigenvalue would be 1.
+
+
+### Calculate eigenvectors and eigenvalues
+
+According to the definition of an eigenvector and eigenvalue we have $A\mathbf{x} = \lambda \mathbf{x}$.
+Where A is the standard transformation matrix, $\mathbf{x}$ is the eigenvector and $\lambda$ is the eigenvalue (scalar).
+
+This is equivalent to $A\mathbf{x} = (\lambda I)\mathbf{x} \longrightarrow A\mathbf{x} - (\lambda I)\mathbf{x} = \mathbf{0}$
+
+$(A - \lambda I)\mathbf{x} = \mathbf{0}$
+
+The main take away from this formula is that besides **v** being the **0** vector (trivial solution), if we want to find another solution (eigenvector), that would mean that more than one input share the same output, which means the transformation is no longer injective. Since it is no longer injective, is no longer bijective, which means $(A - \lambda I)$ is not invertible (is singular) and must have determinant equal to zero.
+
+#### Step 1 - The characteristic equation
+All we need to do is to tweak the value of $\lambda$ such that $det(A - \lambda I) = 0$. This equation is known as the "characteristic equation" or the "eigenvalue equation".
+
+#### Step 2 - Null space of A
+Now that we know $\lambda$, we can actually compute  $(A - \lambda I)\mathbf{x} = \mathbf{0}$ and solve it with an augmented matrix.
+Esentially we are solving for the null space of A.
+
+### Example
+
+Using the same matrix A. Let's calculate the eigenvalue and eigenvector.
+
+#### Step 1
+
+$$det(A - \lambda I) = 0$$
+
+$$det\begin{pmatrix}
+\begin{bmatrix}
+3-\lambda & 1 \\
+0 & 2-\lambda \end{bmatrix}
+\end{pmatrix} = 0$$
+
+$$(3-\lambda)(2-\lambda)=0$$
+
+$$\lambda=3 \lor \lambda=2$$
+
+#### Step 2.1 (lambda = 2)
+
+$$(A - \lambda I)\mathbf{x} = \mathbf{0}$$
+
+$$(A - 2 I)\mathbf{x} = \mathbf{0}$$
+
+$$
+\begin{bmatrix}
+3-2 & 1 \\
+0 & 2-2 \end{bmatrix}\mathbf{x} = 0$$
+
+$$
+\begin{bmatrix}
+1 & 1 \\
+0 & 0 \end{bmatrix}\mathbf{x} = 0$$
+
+$$
+\begin{bmatrix}
+1 & 1 & 0\\
+0 & 0 & 0\end{bmatrix}$$
+
+
+$$
+\begin{matrix}
+v_1=-v_2 \\
+v_2=free\end{matrix}$$
+
+$$\mathbf{x}= \mathbf{0} + v_2\begin{bmatrix} -1 \\ 1 \end{bmatrix} = \begin{bmatrix} -1 \\ 1 \end{bmatrix}$$
+
+#### Step 2.2 (lambda = 3)
+
+$$
+\begin{bmatrix}
+3-3 & 1 \\
+0 & 2-3 \end{bmatrix}\mathbf{x} = 0$$
+
+$$
+\begin{bmatrix}
+0 & 1 \\
+0 & -1 \end{bmatrix}\mathbf{x} = 0$$
+
+$$
+\begin{bmatrix}
+0 & 1 & 0\\
+0 & -1 & 0\end{bmatrix}$$
+
+$$
+\begin{bmatrix}
+0 & 1 & 0\\
+0 & 0 & 0\end{bmatrix}$$
+
+
+$$
+\begin{matrix}
+v_1=free \\
+v_2=0\end{matrix}$$
+
+$$\mathbf{x}= \mathbf{0} + v_1\begin{bmatrix} 1 \\ 0 \end{bmatrix} = \begin{bmatrix} 1 \\ 0 \end{bmatrix}$$
+
+### Shortcut equation for 2 by 2
+
+$$\lambda^2 -trace\lambda + det(A)$$
+
+### Possible eigen values
+
+We see that from the determinant equation we end up with $(a-\lambda)(b-\lambda)$ and sometimes $\lambda^2=a$. In the first scenario, if a and b are different we get 2 eigenvalues, if they're the same we get 1 eigenvalue (and we would also say that such eigen value has a multiplicity of 2). In the second scenario, if a is positive we get 2 eigenvalues, if a is 0 we get no eigenvalue as by definition 0 cannot be an eigenvalue. If a is negative we get 0 eigenvalues (we actually get an imaginary number, which means we get a rotation for all inputs).
+
+* A single eigenvalue can be used by more than one eigenvector
+  * i.e. $A=2I$ has eigenvalue 2 and all vectors in $R^2$ are eigenvectors with eigenvalue 2
+  * If you compute the eigenvectors from the augmented matrix, you'll see that the augmented matrix only has free variables
+* If A matrix has an eigenvalue 0, that means that $Ax=0x\longrightarrow Ax=0$ has a nontrivial solution, which means A is not invertible (A is singular), and det A = 0.
+  * The eigenvectors with eigenvalue 0 (which is a legit eigenvalue) are the vectors of the Null space of A (the nontrivial vectors that make A**x**=0).
+* If the eigenvalues refer only to one eigenvector each, then all eigenvectors are linearly independent
+* If two matrices have the same eigenvalues, with the same multiplicities, linked to the same eigenvectors, then these are "similar".
+  * "Similar" is not the same as row equivalent
+  * Adding kI to a matrix increases the eigenvalues by k but does not change its eigenvectors.
+  * Eigenvalues and eigen values are not linear, you can't conclude anything from adding A+B
+  * Matrices A and B are similar if there is an invetrible matrix P such that $A=PBP^{-1}$.
+* A n by n matrix will have n eigen values (in practice some of them can be repeated)
+* The sum of the eigenvalues equals the sum of the main diagonal of A (this sum is also called the "trace")
+* The determinant is the product of the eigenvalues
+* A nonzero determinant does not guarantee an eigenvector
+  * The rotation matrix has determinant 1 but eigenvalues are the imaginary number i and -i but no eigenvectors.
+* n by n matrix does not guarantee n independent vectors
+* The geometric multiplicity of an eigen value is the dimension of the corresponding eigenvector.
+* The eigenvalues of a triangular matrix (regardless of whether it is upper or lower zeros) are the entries on its main diagonal
+* For A being a n by n matrix, A is invertible iff there is no eigenvalue 0
+
+### Eigenspace
+
+The eigen space $E_\lambda$ is the set of all eigenvectors and the zero vector. In other words, the set of all solutions to the equation:
+
+$$A\mathbf{x}=\lambda \mathbf{x}$$
+
+This is also known as $E_\lambda=Nul(A-\lambda I)$, which is a subspace of $R^n$.
+
+
+## Diagonalization
+
+* A matrix is said to be diagonalizable if it's square, with all 0's except in the main diagonal.
+* A matrix A is diagonalizable only if it has n linearly independent eigenvectors.
+* A matrix with n distinct eigenvalues has n linearly independent eigenvectors. But you may also get n linearly independent eigenvectors from just 1 shared eigenvalue (i.e $\lambda=1$ in $I$).
+* The dimension of the eigenspace (the number of linearly indepenent vectors in the set), is less than or equal to the multiplicity of the eigenvalue. So, if an eigenvalue appears twice, it has at most 2 eigenvectors
+* If zero is an eigenvalue of A then the matrix A is not invertible, but it can still be diagonazilable.
+* The sum of the dimensions of the eigenspaces must be equal to n in order for A to be a diagonaziable matrix.
+
+### Similar matrix
+
+* A is similar to B if there exists an invertible matrix P such that $A=PBP^{-1}$.
+* Similar matrices have same eigenvalues, multiplicities, and eigenvectors.
+* A matrix A is diagonazilable if it can be expressed as a similar matrix that is a diagonal matrix.
+  *  A must have n linearly independent vectors
+  *  Which form a basis for $R^n$
+  *  The algebraic multiplicity of the eigenvalue is equal to the geometric multiplicity of its eigenspace.
+
+Let S be the matrix containing the eigenvectors of A and $S^{-1}$ is the inverse. For that we need n independent eigen vectors.
+
+By the definition of the eigenvector, when you multiply $As_1$ you're recreating $Ax=\lambda x$, therefore  $As_1=\lambda_1 s_1$ so $AS=\begin{bmatrix}\lambda_1 s_1 & \lambda_2 s_2 & \dots & \lambda_n s_n \end{bmatrix}$
+
+We can factor out the lambdas:
+
+$$AS=\begin{bmatrix}s_1 & s_2 & \dots s_n \end{bmatrix}
+\begin{bmatrix}
+\lambda_1 & 0 & \cdots & 0\\
+0 & \lambda_2 & 0 & 0\\
+0 & 0 & \ddots & \vdots\\
+0 & 0 & \dots & \lambda_n\end{bmatrix}=S\Lambda
+$$
+
+Where capital Lambda is the matrix with 0s and the eigenvalues across the main diagonal.
+
+From $AS=S\Lambda$ we also get:
+
+$$S^{-1}AS=\Lambda$$
+
+$$A=S\Lambda S^{-1}$$
+
+If $Ax=\lambda x$ then $A^2x=\lambda Ax=\lambda^2x$
+
+Similarly, we also have $A^2=S\Lambda S^{-1}S\Lambda S^{-1}=S\Lambda^2 S^{-1}$. So:
+
+$$A^k=S\Lambda^k S^{-1}$$
+
+The eigenvalues change by the power of k while the egenvectors remain the same.
+
+* If all absolute eigenvalues are smaller than 1, then $A^\infty = 0$ (given that all eigenvalues have multiplicity of 1)
+* A is sure to have n independent eigenvectors (and be diagonalizable) if all the eigenvalues are different.
+* A diagonal matrix has its eigenvalues sitting infront of you in the main diagonal
+
+### Systems of differential equations
+
+Assuming the appropiate properties of A, let $u_{k+1}=Au_k$ where this eventually leads to $u_k=A^ku_0$. This is used to solve difference equations.
+
+To solve:
+
+#### 1. Write u as a linear combination of eigenvectors
+
+$$u_0=\begin{bmatrix} r_1 \\ r_2 \\ \vdots \\ r_n \end{bmatrix} = c_1\begin{bmatrix} r_1 \\ 0 \\ \vdots \\ 0 \end{bmatrix}+c_2\begin{bmatrix} 0 \\ r_2 \\ 0 \\ \vdots \end{bmatrix} + \dots + c_n\begin{bmatrix} 0 \\ 0 \\ \vdots \\ r_n \end{bmatrix}=u_0=c_1x_1+c_2x_2 \dots + c_nx_n=Sc$$
+
+#### 1. Multiply by A
+
+Because each of the $x$ are eigenvectors going their own way, $Ax=\lambda x$. Since $c$ is just a scalar, $Acx=\lambda cx$). Therefore:
+
+$$Au_0=c_1\lambda_1x_1+c_2\lambda_2x_2+\dots+c_n\lambda_nx_n$$
+
+And since each of the terms are linearly independent:
+
+$$Au_0^{k}=c_1\lambda_1^{k}x_1+c_2\lambda_2^{k}x_2+\dots+c_n\lambda_n^{k}x_n=S\Lambda^kc$$
+
+### Fibonaci Example
+
+0, 1, 2, 3, 5, 8, 13,..$F_{k}=?$
+
+And how fast it grows?
+
+$$F_{k+2}=F_{k+1}+{F_k}$$
+
+But this is a single equation, not a system. And it's a second order (as there are 2 unkowns).
+
+#### Trick
+
+We artificially make the single equation into a system, then artificially make the 2 unkowns into a single unkown vector:
+
+${F_k}+F_{k+1}=F_{k+2}$
+
+$0 + F_{k+1}=F_{k+1}$
+
+So:
+
+$$A=\begin{bmatrix} 1 & 1\\ 0 & 1 \end{bmatrix}$$
+
+And:
+
+$$u_{k+1}=\begin{bmatrix} F_{k+2} \\ F_{k+1} \end{bmatrix} \longrightarrow u_{k}=\begin{bmatrix} F_{k+1} \\ F_{k} \end{bmatrix}$$
+
+So: 
+
+$$u_0=\begin{bmatrix} F_{1} \\ F_{0} \end{bmatrix}$$
+
+$$u_1= Au_0=\begin{bmatrix} 1 & 1\\ 0 & 1 \end{bmatrix}\begin{bmatrix} F_{1} \\ F_{0} \end{bmatrix}=\begin{bmatrix} F_{1} + F_0 \\ F_{0} \end{bmatrix}$$
+
+Wait... that doesnt correspond to the fibonacci sequence, the second entry should have been $F_{k+1}$, therefore make sure to adjust A.
+
+$F_{k+1}+{F_k}=F_{k+2}$
+
+$F_{k+1} + 0=F_{k+1}$
+
+Perhaps the artifical equation should have its variable placed to the left-most pivot. Just make sure to double check matrix A fits the logic that you expect.
+
+$$A=\begin{bmatrix} 1 & 1\\ 1 & 0 \end{bmatrix}$$
+
+$$u_1= Au_0=\begin{bmatrix} 1 & 1\\ 1 & 0 \end{bmatrix}\begin{bmatrix} F_{1} \\ F_{0} \end{bmatrix}=\begin{bmatrix} F_{1} + F_0 \\ F_{1} \end{bmatrix}$$
+
+Now it make sense. And from here:
+
+$$u_k=A^ku_0$$
+
+We can look for the eigenvalues and eigenvectors of A:
+
+$$\begin{vmatrix}A-\lambda I\end{vmatrix}= \begin{vmatrix} 1-\lambda & 1\\ 1 & -\lambda\end{vmatrix}=\lambda^2-\lambda-1=0$$
+
+$$\lambda_1=\frac{1}{2}(1+\sqrt{5})\approx 1.618 \ \ \lambda_2=\frac{1}{2}(1-\sqrt{5})\approx -0.618$$
+
+The eigenvalue controls the growth of the fibonacci sequence, namely the linear combination of them and the eigenvectors. Since the negative one is absoluteively (in the mathemetical \| \| sense) smaller than 1, it will approximate 0 as k goes to infinity. 
+
+$$F_{100}=c_1\lambda_1^{100}+c_2\lambda_2^{100}$$
+
+$$F_{100}\approx c_1\begin{pmatrix}\frac{1+\sqrt{5}}{2}\end{pmatrix}^{100}+0$$
+
+The eigenvectors associated to those eigenvalues are:
+
+For $\lambda_1$:
+
+$$(A-\phi I)x=0$$
+
+$$\begin{bmatrix} 1-\phi & 1\\ 1 & -\phi\end{bmatrix}x=0$$
+
+$$\begin{bmatrix} 1-\phi & 1\\ 1 & -\phi\end{bmatrix}\begin{bmatrix} \phi \\ 1 \end{bmatrix}=\begin{bmatrix} -(\phi^2 -\phi -1)\\ \phi-\phi\end{bmatrix}=0$$
+
+So we can see that the for
+
+$$u_k=\begin{bmatrix} F_{k+1} \\ F_{k} \end{bmatrix}$$
+
+the ratio (eigenvector) between the next (top entry) number and the current (bottom entry) number is the golden number:
+
+$$\begin{bmatrix} \phi \\ 1 \end{bmatrix}$$
+
+The other eigenvector is
+
+$$\begin{bmatrix} 1-\phi \\ 1 \end{bmatrix}$$
+
+## Complex eigenvalues and eigenvectors
+
+* If n by n matrix A has $\lambda$ eigenvalue and $\mathbf{v}$ eigenvector, then their conjugates also exist
+  * The conjugate of a complex number is the same as the original one, but the imaginary part changes its sign
+* slide 18 of lecture 13
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
