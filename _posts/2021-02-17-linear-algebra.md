@@ -112,6 +112,7 @@ tags: CSE1205 linear-algebra
       - [Step 2.1 (lambda = 2)](#step-21-lambda--2)
       - [Step 2.2 (lambda = 3)](#step-22-lambda--3)
     - [Possible eigen values](#possible-eigen-values)
+    - [Eigenspace](#eigenspace)
   - [Diagonalization](#diagonalization)
     - [Systems of differential equations](#systems-of-differential-equations)
       - [1. Write u as a linear combination of eigenvectors](#1-write-u-as-a-linear-combination-of-eigenvectors)
@@ -1527,12 +1528,23 @@ We see that from the determinant equation we end up with $(a-\lambda)(b-\lambda)
   * "Similar" is not the same as row equivalent
   * Adding kI to a matrix increases the eigenvalues by k but does not change its eigenvectors.
   * Eigenvalues and eigen values are not linear, you can't conclude anything from adding A+B
+  * Matrices A and B are similar if there is an invetrible matrix P such that $A=PBP^{-1}$.
 * A n by n matrix will have n eigen values (in practice some of them can be repeated)
 * The sum of the eigenvalues equals the sum of the main diagonal of A (this sum is also called the "trace")
 * The determinant is the product of the eigenvalues
 * A nonzero determinant does not guarantee an eigenvector
   * The rotation matrix has determinant 1 but eigenvalues are the imaginary number i and -i but no eigenvectors.
 * n by n matrix does not guarantee n independent vectors
+* The geometric multiplicity of an eigen value is the dimension of the corresponding eigenvector.
+
+### Eigenspace
+
+The eigen space $E_\lambda$ is the set of all eigenvectors and the zero vector. In other words, the set of all solutions to the equation:
+
+$$A\mathbf{x}=\lambda \mathbf{x}$$
+
+This is also known as $E_\lambda=Nul(A-\lambdaI)$, which is a subspace of $R^n$.
+
 
 ## Diagonalization
 
