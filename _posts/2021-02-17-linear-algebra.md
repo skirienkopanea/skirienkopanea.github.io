@@ -1,6 +1,6 @@
 ---
 layout: post
-title:  "Linear Algebra Cheatsheet"
+title:  "Linear Algebra Summary"
 date:   2021-02-16 12:00:00 +0100
 categories: math
 tags: CSE1205 linear-algebra
@@ -111,14 +111,17 @@ tags: CSE1205 linear-algebra
       - [Step 1](#step-1)
       - [Step 2.1 (lambda = 2)](#step-21-lambda--2)
       - [Step 2.2 (lambda = 3)](#step-22-lambda--3)
+    - [Shortcut equation for 2 by 2](#shortcut-equation-for-2-by-2)
     - [Possible eigen values](#possible-eigen-values)
     - [Eigenspace](#eigenspace)
   - [Diagonalization](#diagonalization)
+    - [Similar matrix](#similar-matrix)
     - [Systems of differential equations](#systems-of-differential-equations)
       - [1. Write u as a linear combination of eigenvectors](#1-write-u-as-a-linear-combination-of-eigenvectors)
       - [1. Multiply by A](#1-multiply-by-a)
     - [Fibonaci Example](#fibonaci-example)
       - [Trick](#trick)
+  - [Complex eigenvalues and eigenvectors](#complex-eigenvalues-and-eigenvectors)
 
 ## Systems of Linear Equations
 ### Linear equation
@@ -1514,6 +1517,10 @@ v_2=0\end{matrix}$$
 
 $$\mathbf{x}= \mathbf{0} + v_1\begin{bmatrix} 1 \\ 0 \end{bmatrix} = \begin{bmatrix} 1 \\ 0 \end{bmatrix}$$
 
+### Shortcut equation for 2 by 2
+
+$$\lambda^2 -trace\lambda + det(A)$$
+
 ### Possible eigen values
 
 We see that from the determinant equation we end up with $(a-\lambda)(b-\lambda)$ and sometimes $\lambda^2=a$. In the first scenario, if a and b are different we get 2 eigenvalues, if they're the same we get 1 eigenvalue (and we would also say that such eigen value has a multiplicity of 2). In the second scenario, if a is positive we get 2 eigenvalues, if a is 0 we get no eigenvalue as by definition 0 cannot be an eigenvalue. If a is negative we get 0 eigenvalues (we actually get an imaginary number, which means we get a rotation for all inputs).
@@ -1522,7 +1529,7 @@ We see that from the determinant equation we end up with $(a-\lambda)(b-\lambda)
   * i.e. $A=2I$ has eigenvalue 2 and all vectors in $R^2$ are eigenvectors with eigenvalue 2
   * If you compute the eigenvectors from the augmented matrix, you'll see that the augmented matrix only has free variables
 * If A matrix has an eigenvalue 0, that means that $Ax=0x\longrightarrow Ax=0$ has a nontrivial solution, which means A is not invertible (A is singular), and det A = 0.
-  * The eigenvectors with eigenvalue 0 are the vectors of the Null space of A (the nontrivial vectors that make A**x**=0).
+  * The eigenvectors with eigenvalue 0 (which is a legit eigenvalue) are the vectors of the Null space of A (the nontrivial vectors that make A**x**=0).
 * If the eigenvalues refer only to one eigenvector each, then all eigenvectors are linearly independent
 * If two matrices have the same eigenvalues, with the same multiplicities, linked to the same eigenvectors, then these are "similar".
   * "Similar" is not the same as row equivalent
@@ -1536,6 +1543,8 @@ We see that from the determinant equation we end up with $(a-\lambda)(b-\lambda)
   * The rotation matrix has determinant 1 but eigenvalues are the imaginary number i and -i but no eigenvectors.
 * n by n matrix does not guarantee n independent vectors
 * The geometric multiplicity of an eigen value is the dimension of the corresponding eigenvector.
+* The eigenvalues of a triangular matrix (regardless of whether it is upper or lower zeros) are the entries on its main diagonal
+* For A being a n by n matrix, A is invertible iff there is no eigenvalue 0
 
 ### Eigenspace
 
@@ -1543,10 +1552,26 @@ The eigen space $E_\lambda$ is the set of all eigenvectors and the zero vector. 
 
 $$A\mathbf{x}=\lambda \mathbf{x}$$
 
-This is also known as $E_\lambda=Nul(A-\lambdaI)$, which is a subspace of $R^n$.
+This is also known as $E_\lambda=Nul(A-\lambda I)$, which is a subspace of $R^n$.
 
 
 ## Diagonalization
+
+* A matrix is said to be diagonalizable if it's square, with all 0's except in the main diagonal.
+* A matrix A is diagonalizable only if it has n linearly independent eigenvectors.
+* A matrix with n distinct eigenvalues has n linearly independent eigenvectors. But you may also get n linearly independent eigenvectors from just 1 shared eigenvalue (i.e $\lambda=1$ in $I$).
+* The dimension of the eigenspace (the number of linearly indepenent vectors in the set), is less than or equal to the multiplicity of the eigenvalue. So, if an eigenvalue appears twice, it has at most 2 eigenvectors
+* If zero is an eigenvalue of A then the matrix A is not invertible, but it can still be diagonazilable.
+* The sum of the dimensions of the eigenspaces must be equal to n in order for A to be a diagonaziable matrix.
+
+### Similar matrix
+
+* A is similar to B if there exists an invertible matrix P such that $A=PBP^{-1}$.
+* Similar matrices have same eigenvalues, multiplicities, and eigenvectors.
+* A matrix A is diagonazilable if it can be expressed as a similar matrix that is a diagonal matrix.
+  *  A must have n linearly independent vectors
+  *  Which form a basis for $R^n$
+  *  The algebraic multiplicity of the eigenvalue is equal to the geometric multiplicity of its eigenspace.
 
 Let S be the matrix containing the eigenvectors of A and $S^{-1}$ is the inverse. For that we need n independent eigen vectors.
 
@@ -1683,6 +1708,14 @@ $$\begin{bmatrix} \phi \\ 1 \end{bmatrix}$$
 The other eigenvector is
 
 $$\begin{bmatrix} 1-\phi \\ 1 \end{bmatrix}$$
+
+## Complex eigenvalues and eigenvectors
+
+* If n by n matrix A has $\lambda$ eigenvalue and $\mathbf{v}$ eigenvector, then their conjugates also exist
+  * The conjugate of a complex number is the same as the original one, but the imaginary part changes its sign
+* slide 18 of lecture 13
+
+
 
 
 
