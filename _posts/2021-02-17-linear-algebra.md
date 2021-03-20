@@ -74,6 +74,7 @@ tags: CSE1205 linear-algebra
     - [Invert A column by column](#invert-a-column-by-column)
     - [Invert A as a whole](#invert-a-as-a-whole)
     - [Invertible matrix theorem](#invertible-matrix-theorem)
+    - [Invert 2 by 2 fast](#invert-2-by-2-fast)
   - [Subspaces of R^n](#subspaces-of-rn)
     - [Column space (Col A)](#column-space-col-a)
     - [Null space (Nul A)](#null-space-nul-a)
@@ -116,12 +117,15 @@ tags: CSE1205 linear-algebra
     - [Eigenspace](#eigenspace)
   - [Diagonalization](#diagonalization)
     - [Similar matrix](#similar-matrix)
-    - [Systems of differential equations](#systems-of-differential-equations)
-      - [1. Write u as a linear combination of eigenvectors](#1-write-u-as-a-linear-combination-of-eigenvectors)
-      - [1. Multiply by A](#1-multiply-by-a)
+  - [Complex eigenvalues and eigenvectors](#complex-eigenvalues-and-eigenvectors)
+  - [Discrete dynamical systems](#discrete-dynamical-systems)
+    - [Recurrence relation to matrix equation](#recurrence-relation-to-matrix-equation)
+    - [Coupled system](#coupled-system)
     - [Fibonaci Example](#fibonaci-example)
       - [Trick](#trick)
-  - [Complex eigenvalues and eigenvectors](#complex-eigenvalues-and-eigenvectors)
+  - [Prey-predator system](#prey-predator-system)
+    - [Eigenvector decomposition](#eigenvector-decomposition)
+    - [Complex systems](#complex-systems)
 
 ## Systems of Linear Equations
 ### Linear equation
@@ -140,7 +144,7 @@ a_{11} x_{1} + a_{12} x_{2} + \cdots + a_{1n} x_{n} = b \\
 a_{21} x_{1} + a_{22} x_{2} + \cdots + a_{2n} x_{n} = c
 $$
 
-* a **solution** is a list ($s_1,s_2,\cdots,s_n$), also called **s**, where $s$ is usually represented as a vector, since all the x's can also be represented as a vector **x**.
+* a **solution** is a list (\\(s_1,s_2,\cdots,s_n\\)), also called **s**, where\\(s\\) is usually represented as a vector, since all the x's can also be represented as a vector **x**.
 
 $$ x =
 \begin{pmatrix}
@@ -166,7 +170,7 @@ $$
   - no solution
   - exactly one solution
   - infinitely many solutions.
-* A system is **consistent** if it has 1 or $\infty$ solutions.
+* A system is **consistent** if it has 1 or\\(\infty\\) solutions.
 * A system is **inconsistent** if has no solution.
 
 ### Matrix Notation
@@ -219,15 +223,15 @@ $$
 \end{bmatrix}
 $$
 
-* $\blacksquare$ represents any non-zero number and **\*** represents any number.
-* $\blacksquare$ identify the **pivot** positions, also called **leading entries**.
+*\\(\blacksquare\\) represents any non-zero number and **\*** represents any number.
+*\\(\blacksquare\\) identify the **pivot** positions, also called **leading entries**.
 
 Echelon form requirements:
 * All-zero rows must be placed at the bottom
 * Leading entries must be displayed as "downstairs"
   * It is fine if there's a "gap"/"missing leading entry"
   * In such occasion we find a non-pivot column
-* $\blacksquare$ only has zeros below
+*\\(\blacksquare\\) only has zeros below
 
 Reduced echelon form requirements:
 * The **leading entries** are 1's
@@ -260,10 +264,10 @@ Reduced echelon form requirements:
 ### Variables
 The row reduction algorithm will not always produce a "clean" reduced echelon form where each row has a pivot. 
 #### Basic variables
-* Variables that correspond to pivots $\blacksquare$
+* Variables that correspond to pivots\\(\blacksquare\\)
 
 #### Free variables
-* Variables that correspond to non-pivot coeffcients $*$
+* Variables that correspond to non-pivot coeffcients *
 
 Example: 
 
@@ -277,11 +281,11 @@ $$
 
 Corresponds to:
 
-$x_1 \qquad -5x_3 = 1$
+\\(x_1 \qquad -5x_3 = 1\\)
 
-$\qquad x_2 +x_3 \ \ = 4$
+\\(\qquad x_2 +x_3 \ \ = 4\\)
 
-$\qquad \qquad \quad \ 0 = 0$
+\\(\qquad \qquad \quad \ 0 = 0\\)
 
 Which equals the parametric description (of the solution set) below...
 
@@ -297,12 +301,12 @@ $$
             \end{cases}
 $$
 
-$x_3$ is free means that you are free to choose any value for $x_3$ (also called **paramater**) and each different choice of $x_3$ determines a (different) solution of the system.
+\\(x_3\\) is free means that you are free to choose any value for\\(x_3\\) (also called **paramater**) and each different choice of\\(x_3\\) determines a (different) solution of the system.
 
 
 Solving a system amounts to finding a parametric description of the solution set (such as the system of equations above or such as the [Parametric Vector Equation](#parametric-vector-equation)) or determining that the solution set is empty:
 * If a system contains an equation of the form 0 = b, where be is not zero, then it is inconsistent, else, consistent.
-* If the system is consistent and has free variables, then it has $\infty$ solutions. 
+* If the system is consistent and has free variables, then it has\\(\infty\\) solutions. 
 * If the system is consistent and has no free variables, then it has 1 solution.
 * If a system is inconsistent, the solution set is empty, even if it has free variables.
 
@@ -319,12 +323,12 @@ $$\begin{bmatrix}   u_1 \\    u_2 \end{bmatrix} + \begin{bmatrix}   v_1 \\    v_
 
 $$a\cdot\begin{bmatrix}   u_1 \\    u_2 \end{bmatrix} = \begin{bmatrix}   a\cdot u_1 \\    a\cdot u_2 \end{bmatrix}$$
 
-* The set of all vectors with 2 **entries** ("vector rows"/numbers) is expressed as $\Bbb R^2$
+* The set of all vectors with 2 **entries** ("vector rows"/numbers) is expressed as\\(\Bbb R^2\\)
   * This represents all the vectors within a 2D/plane space
-  * Two vectors in $\Bbb R^2$ are equal iff all entries are equal and in the same order.
+  * Two vectors in\\(\Bbb R^2\\) are equal iff all entries are equal and in the same order.
   * The first entry is assigned to the x-coordinate and the second entry to the y-coordinate.
-* $\Bbb R^3$ represents the set of all vectors in a 3D space
-  * 1D and 2D vectors are not implicitly allowed as the vectors in $\Bbb R^3$ must have 3 coordinates (x,y,z)
+*\\(\Bbb R^3\\) represents the set of all vectors in a 3D space
+  * 1D and 2D vectors are not implicitly allowed as the vectors in\\(\Bbb R^3\\) must have 3 coordinates (x,y,z)
   * However 1Ds may appear as (x,0,0) and 2Ds as (x,y,0) (but with the vertical notation)
 
 ### Linear Combinations
@@ -332,8 +336,8 @@ Let the vector **b** be defined by
 
 $$ b = x_1\begin{bmatrix}   a_{11} \\ a_{21} \\   \vdots \\ a_{m1} \end{bmatrix} + x_2\begin{bmatrix}   a_{21} \\ a_{22} \\   \vdots \\ a_{m2} \end{bmatrix} + \cdots $$
 
-* **$b$** is a linear combination of **$a_1$**, **$a_2$**... with **weights** (scalars) $x_1$, $x_2$, ...
-  - observe that while the columns are **$a_1$**, **$a_2$**..., when we combine rows with columns, the row index is placed before the column index.
+* **\\(b\\)** is a linear combination of **\\(a_1\\)**, **\\(a_2\\)**... with **weights** (scalars)\\(x_1\\),\\(x_2\\), ...
+  - observe that while the columns are **\\(a_1\\)**, **\\(a_2\\)**..., when we combine rows with columns, the row index is placed before the column index.
 * The vector equation above has the same solution set as the linear system whose augmented matrix is:
 
 $$
@@ -347,7 +351,7 @@ $$
 $$
 
 * **b** can only be generated by a linear combination of **a** iff the augmented matrix has a solution
-* The set of all possible linear combinations of a list of vectors $a_1$, $a_2$, ... $a_n$ is denoted as Span{$a_1$, $a_2$, ... $a_n$}
+* The set of all possible linear combinations of a list of vectors\\(a_1\\),\\(a_2\\), ...\\(a_n\\) is denoted as Span{\\(a_1\\),\\(a_2\\), ...\\(a_n\\)}
   * That is, all the b's such that
   
 $$x_1\begin{bmatrix}   a_{11} \\ a_{21} \\   \vdots \\ a_{m1} \end{bmatrix} + x_2\begin{bmatrix}   a_{21} \\ a_{22} \\   \vdots \\ a_{m2} \end{bmatrix} + \cdots = b$$
@@ -393,18 +397,18 @@ $$
 
 #### All true XOR All false
 Let A be an n x m matrix, these statements are either all true or all false.
-* A**x** = **b** has a solution for all **b**'s in $\Bbb R^n$
-* All **b**'s in $\Bbb R^n$ are a linear combination of A
-* Span{$a_1,a_2,\cdots,a_m$} = $\Bbb R^n$
+* A**x** = **b** has a solution for all **b**'s in\\(\Bbb R^n\\)
+* All **b**'s in\\(\Bbb R^n\\) are a linear combination of A
+* Span{\\(a_1,a_2,\cdots,a_m\\)} =\\(\Bbb R^n\\)
 * A has a pivot position in every row
 
 ## Solution sets and linear independence
 ### Linear dependence
 
-* A set of two vectors {$a_1$, $a_2$} is linearly dependent **iff** at least one of the vectors is a multiple of the other.
+* A set of two vectors {\\(a_1\\),\\(a_2\\)} is linearly dependent **iff** at least one of the vectors is a multiple of the other.
 * A set of 2 or more vectors is linearly dependent **iff** at least one of the vectors is within the span of another vector(s) other than itself. That is, if a vector can be expressed as a linear combination of other vectors in the set.
 * A set of 1 vector is always independent except for the **0** vector.
-  * This is because $x_10=0$ has $\infty$ nontrivial solutions.
+  * This is because\\(x_10=0\\) has\\(\infty\\) nontrivial solutions.
 * If a set of vectors has more vectors than vector entries, then there will be at least a vector within the span of another vector(s), making the set linear dependent.
   * If a matrix has more columns than rows, then there will be free variables, therefore making the matrix dependent.
 * If a set contains the zero vector, the set is linearly dependent
@@ -415,19 +419,19 @@ Let A be an n x m matrix, these statements are either all true or all false.
 * Always have at least x = **0** solution (aka **trivial solution**)
 * **Nontrivial solution** is a **non-zero vector x** that satisfies A**x** = **0**
 * **Ax = 0 has a nontrivial solution iff the system has at least one free variable**
-  * You can then use there an arbitrary non-zero number in the solution which makes $x \neq 0$
-  * Each of these infinityely many nontrivial solutions of **Ax** = **0** are called **linear dependence relation** among $a_1$, $a_2$, ..., $a_n$.
+  * You can then use there an arbitrary non-zero number in the solution which makes\\(x \neq 0\\)
+  * Each of these infinityely many nontrivial solutions of **Ax** = **0** are called **linear dependence relation** among\\(a_1\\),\\(a_2\\), ...,\\(a_n\\)
   
 #### Solution sets and dependence
 * The solution set of an homogenous system (A**x**=**0**) can always be expressed as:
   * If it has only trivial, the solution set equals Span{**0**}
     * Which is the (0,...,0) coordinate 
     * Which also means that the column vectors of A are **[linear independent](#linear-dependence)**
-  * If it has nontrivial, the solution set equals Span{$v_1 \cdots v_n$} (which is not necessarily $\Bbb R^n$, think of $v_1$[1,0,0], $v_2$[0,1,0], $v_3$[1,1,0] -assume vertical notation-, it spans a plane in $\Bbb R^3$, not the whole $\Bbb R^3$)
-    * Only 1 free variable Span{$v_1$} means the solution is a line through the origin. (i.e. the z-axis in the 3D vectors above)
-    * 2 free variables Span{$v_1,v_2$} can yield a plane (or a line if $v_1$ and $v_2$ are **[linear dependent](#linear-dependence)**) through the origin. (i.e. the x-y plane)
+  * If it has nontrivial, the solution set equals Span{\\(v_1 \cdots v_n\\)} (which is not necessarily\\(\Bbb R^n\\), think of \\(v_1\\)[1,0,0],\\(v_2\\)[0,1,0],\\(v_3\\)[1,1,0] -assume vertical notation-, it spans a plane in\\(\Bbb R^3\\), not the whole\\(\Bbb R^3\\))
+    * Only 1 free variable Span{\\(v_1\\)} means the solution is a line through the origin. (i.e. the z-axis in the 3D vectors above)
+    * 2 free variables Span{\\(v_1,v_2\\)} can yield a plane (or a line if\\(v_1\\) and\\(v_2\\) are **[linear dependent](#linear-dependence)**) through the origin. (i.e. the x-y plane)
     * It also means that there is a [parametric Vector Equation](#parametric-vector-equation) where there exists weights other than 0 for x that make A**x**=**0** true
-* Therefore, when they ask you, is {$a_1,a_2,\cdots,a_n$} a dependent or an independent set of vectors, they're actually asking...
+* Therefore, when they ask you, is {\\(a_1,a_2,\cdots,a_n\\)} a dependent or an independent set of vectors, they're actually asking...
   * **Dependent: Does Ax=0 have at least a nontrivial solution?**
     - Check if it has at least 1 **free variable.**
   * **Independent:  Does Ax=0 have only the trivial x=0 solution?**
@@ -438,15 +442,15 @@ The parametric description of a (homogenous) solution set can be expressed in a 
 
 $$x = x_1v_1 + x_2v_2 + x_3v_3 \cdots$$
 
-in CSE1205 $x = sv_1 + tv_2 + uv_3 $
+in CSE1205 \\(x = sv_1 + tv_2 + uv_3\\)
 
 ### Nonhomogeneous Linear Systems
-When these systems have $Ax \neq 0$ the system is translated by a vector constant **p** from the origin:
+When these systems have\\(Ax \neq 0\\) the system is translated by a vector constant **p** from the origin:
 
 $$x = p + x_1v_1 + x_2v_2 + x_3v_3 \cdots$$
 
-* The vector **$p$** itself is just one **particular** solution of A**x** = **b** corresponding to $x_1 \cdots x_n = 0$
-  * $xv$ is the **general** solution of A**x**=**0**
+* The vector **\\(p\\)** itself is just one **particular** solution of A**x** = **b** corresponding to\\(x_1 \cdots x_n = 0\\)
+  *\\(xv\\) is the **general** solution of A**x**=**0**
 * When there is only 1 parameter vector (v) this equation is also called "**the equation of the line through p parallel to v**"
 * The solution set of A**x** = **b** is:
   - empty if it has no solution
@@ -474,21 +478,21 @@ $$(A(\mathbf{u} + \mathbf{v}) = A\mathbf{u} + A\mathbf{v}) \leftrightarrow (T(\m
 $$(A(c\mathbf{u}) = c(A\mathbf{u})) \leftrightarrow (T(c\mathbf{u}) = c(T\mathbf{u}))$$
 
 
-For an n x m matrix, the columns are vectors in $R^n\ {or}\ R^{rows}$. A**x**=**b** would only be defined when the entries in x are the same as the number of columns (m), therefore x is in $R^m$, but the output b has the same number of entries as A has rows, therefore in $R^n$.
+For an n x m matrix, the columns are vectors in\\(R^n\ {or}\ R^{rows}\\) A**x**=**b** would only be defined when the entries in x are the same as the number of columns (m), therefore x is in\\(R^m\\), but the output b has the same number of entries as A has rows, therefore in\\(R^n\\)
 
-The correspondence from **x** to **Ax** is a **function** or a **transformation** or a **mapping** from one set of vectors in $R^m$ to another in $R^n$. Formally denoted as $f: R^m \rightarrow R^n$, where '$f$' just happens to be the arbitrary name that we gave
+The correspondence from **x** to **Ax** is a **function** or a **transformation** or a **mapping** from one set of vectors in\\(R^m\\) to another in\\(R^n\\) Formally denoted as\\(f: R^m \rightarrow R^n\\), where '\\(f\\)' just happens to be the arbitrary name that we gave
 to the function (or transformation, mapping, or even relation, see CSE1300).
 
-The "dimension" of the **inputs** is called the **domain** of '$f$', in this case $R^m$, and the "dimension" of the **output** (formally kown as "image" or vagely written as *f(x)*) is called the **co-domain**, in this case $R^n$. However, this does not necessarily mean that all "dimensions" within the co-domain are "used", as a possible transformation to a co-domain in $R^3$ could deliberatly have z = 0 for all outputs. The **range** of $f$ (the function/transformation/mapping), is the **set of all outputs**, 
+The "dimension" of the **inputs** is called the **domain** of '\\(f\\)', in this case\\(R^m\\), and the "dimension" of the **output** (formally kown as "image" or vagely written as *f(x)*) is called the **co-domain**, in this case\\(R^n\\) However, this does not necessarily mean that all "dimensions" within the co-domain are "used", as a possible transformation to a co-domain in\\(R^3\\) could deliberatly have z = 0 for all outputs. The **range** of\\(f\\) (the function/transformation/mapping), is the **set of all outputs**, 
 which happens to be the Span of each of the vector columns of A.
 
  In the example used where z is always 0, we would have a plane as a **range**, but still inside the 3D dimension (it would still have 3 coordinates, even if the 3rd is the same for all outputs). Since we know by the definition of this particular function that the co-domain is in the 3D dimension, we can already deduce that in the case of a
- $f(x)= A\mathbf{x}$ function, the column vectors of A have to be in the same $R^n$ as the co-domain, $R^3$ in this case.
+\\(f(x)= A\mathbf{x}\\) function, the column vectors of A have to be in the same\\(R^n\\) as the co-domain,\\(R^3\\) in this case.
 
 ### Matrix transformations
 
-In this context, $T(x)$ is reserved for $T(x) = A\mathbf{x}$. This matrix transformation is also denoted as
-$x \mapsto A\mathbf{x}$.
+In this context,\\(T(x)\\) is reserved for\\(T(x) = A\mathbf{x}\\) This matrix transformation is also denoted as
+\\(x \mapsto A\mathbf{x}\\)
 
 When the transformation maps an input to an output in the same dimension, it is called a **shear transformation**:
 
@@ -506,8 +510,8 @@ $$Then\ T(u) =
 6\\
 2 \end{bmatrix}$$
 
-When a transformation goes from a higher dimension to a lower one we can say that $x \mapsto A\mathbf{x}$ **projects** points in
-$R^k$ onto $R^{k-1}$.
+When a transformation goes from a higher dimension to a lower one we can say that\\(x \mapsto A\mathbf{x}\\) **projects** points in
+\\(R^k\\) onto\\(R^{k-1}\\)
 
 $$\begin{bmatrix}
 x_1\\
@@ -529,7 +533,7 @@ x_2\\
 
 ### The Matrix of a Linear transformation
 #### Identity matrix
-The identity matrix with size n x n, also denoted as $I_n$, is the matrix of a T(x) transformation such as T(x) = x.
+The identity matrix with size n x n, also denoted as\\(I_n\\), is the matrix of a T(x) transformation such as T(x) = x.
 The identity matrix returns the input in the same form since each of it's columns (n) contains only a 1 in the nth entry:
 
 $$I_2 = \begin{bmatrix}
@@ -575,12 +579,12 @@ $$=5\begin{bmatrix}
 3
 \end{bmatrix}=\mathbf{x}$$
 
-The columns of $I_n$ are formally referred to as $\mathbf{e_n}$. For a 2x2 A matrix we may express the first and second column vectors as $\vec{i}$ and $\vec{j}$.
+The columns of\\(I_n\\) are formally referred to as\\(\mathbf{e_n}\\) For a 2x2 A matrix we may express the first and second column vectors as\\(\vec{i}\\) and\\(\vec{j}\\)
 
 In the same way that in a 'f(x) = ax + b' linear function we can draw the line from just 2 points, Since T(x) is also a linear function, that means that knowing the output of 2 inputs is enough information to deduce the matrix used for the Matrix-vector product. The matrix used for the Matrix-vector product is called the **standard matrix for the linear transformation**.
 
 ## 2D Transformations
-To easily see what the 2x2 A matrix does to a vector, analyze the difference between the default values for $\color{green}{\vec{i}}$ and $\color{red}{\vec{j}}$, vs their new values defined by A. The default values are:
+To easily see what the 2x2 A matrix does to a vector, analyze the difference between the default values for\\(\color{green}{\vec{i}}\\) and\\(\color{red}{\vec{j}}\\), vs their new values defined by A. The default values are:
 
 $$
 \color{red}{\vec{j} = \begin{bmatrix}0\\1\end{bmatrix}} and\ \color{green}{\vec{i} = \begin{bmatrix}1\\0\end{bmatrix}} = \color{red}{\uparrow}\color{green}{\rightarrow}
@@ -590,7 +594,7 @@ $$
 
 ### 90° rotation (counter clockwise)
 
-To do so the green arrow would have to point to (0,1) and the red arrow would have to point to (-1,0). The new values for $\color{green}{\vec{i}}$ and $\color{red}{\vec{j}}$ would be :
+To do so the green arrow would have to point to (0,1) and the red arrow would have to point to (-1,0). The new values for\\(\color{green}{\vec{i}}\\) and\\(\color{red}{\vec{j}}\\) would be :
 
 $$\vec{i}=\begin{bmatrix}0\\1\end{bmatrix} and\ \vec{j}=\begin{bmatrix}-1\\0\end{bmatrix}$$
 
@@ -600,11 +604,11 @@ $$T(x)=\begin{bmatrix}0 & -1\\1 & 0\end{bmatrix}\begin{bmatrix}x_1\\x_2\end{bmat
 
 ### α rotation (in rad)
 
-When prompted to calculate the standard matrix for a rotation by α rad, $\color{green}{\vec{i}}$ previous coordinates (1,0) will change in the same fashion as the unit circle:
+When prompted to calculate the standard matrix for a rotation by α rad,\\(\color{green}{\vec{i}}\\) previous coordinates (1,0) will change in the same fashion as the unit circle:
 
 $$\color{green}{\vec{i}} = \begin{bmatrix}cos(\alpha)\\sin(\alpha)\end{bmatrix}$$
 
-The changes for $\color{red}{\vec{j}}$ will be the same, but with a $\frac{1}{2}\pi$ offset, as $\color{red}{\vec{j}}$ was already 90° counterclockwise from $\color{green}{\vec{i}}$:
+The changes for\\(\color{red}{\vec{j}}\\) will be the same, but with a\\(\frac{1}{2}\pi\\) offset, as\\(\color{red}{\vec{j}}\\) was already 90° counterclockwise from\\(\color{green}{\vec{i}}\\)
 
 $$\color{red}{\vec{i}} = \begin{bmatrix}cos(\alpha + \frac{1}{2}\pi)\\sin(\alpha + \frac{1}{2}\pi)\end{bmatrix} = 
 \begin{bmatrix}sin(\frac{1}{2}\pi - \alpha - \frac{1}{2}\pi)\\cos(\frac{1}{2}\pi - \alpha - \frac{1}{2}\pi)\end{bmatrix} =
@@ -616,13 +620,13 @@ $$
 
 ### Reflection through the x-axis
 
-Here $\color{green}{\vec{i}}$ and $\color{red}{\vec{j}}$ would have to go from $\color{red}{\uparrow}\color{green}{\rightarrow}$ to $\color{red}{\downarrow}\color{green}{\rightarrow}$. That means that only $\color{red}{\vec{j}}$ is changed:
+Here\\(\color{green}{\vec{i}}\\) and\\(\color{red}{\vec{j}}\\) would have to go from\\(\color{red}{\uparrow}\color{green}{\rightarrow}\\) to\\(\color{red}{\downarrow}\color{green}{\rightarrow}\\) That means that only\\(\color{red}{\vec{j}}\\) is changed:
 
 $$\vec{j_{old}}=\begin{bmatrix}0\\1\end{bmatrix} \longrightarrow \vec{j_{new}}=\begin{bmatrix}0\\-1\end{bmatrix} \longrightarrow A=\begin{bmatrix}1 & 0\\0 & -1\end{bmatrix}$$ 
 
 ### Reflection through the y-axis
 
-Here $\color{green}{\vec{i}}$ and $\color{red}{\vec{j}}$ would have to go from $\color{red}{\uparrow}\color{green}{\rightarrow}$ to $\color{green}{\leftarrow}\color{red}{\uparrow}$. That means that only $\color{green}{\vec{i}}$ is changed:
+Here\\(\color{green}{\vec{i}}\\) and\\(\color{red}{\vec{j}}\\) would have to go from\\(\color{red}{\uparrow}\color{green}{\rightarrow}\\) to\\(\color{green}{\leftarrow}\color{red}{\uparrow}\\) That means that only\\(\color{green}{\vec{i}}\\) is changed:
 
 $$\vec{i_{old}}=\begin{bmatrix}1\\0\end{bmatrix} \longrightarrow \vec{i_{new}}=\begin{bmatrix}-1\\0\end{bmatrix} \longrightarrow A=\begin{bmatrix}-1 & 0\\0 & 1\end{bmatrix}$$ 
 
@@ -638,7 +642,7 @@ This could also be achieved with:
 
 ### Reflection through the origin
 
-This is simply a 180° rotation, or alternatively scale both $\color{green}{\vec{i}}$ and $\color{red}{\vec{j}}$ by -1, resulting in:
+This is simply a 180° rotation, or alternatively scale both\\(\color{green}{\vec{i}}\\) and\\(\color{red}{\vec{j}}\\) by -1, resulting in:
 
 $$A=\begin{bmatrix}-1 & 0\\0 & -1\end{bmatrix}$$ 
 
@@ -665,7 +669,7 @@ If k > 1, then the image is stretched out. If 0 < k < 1, then the image is squee
 
 $$A = \begin{bmatrix} 1 & k \\ 0 & 1\end{bmatrix}$$
 
-Here $\color{red}{\vec{j}}$ is tranformed from $\color{red}{\uparrow}$ to $\color{red}{\nearrow}$ with k slope.
+Here\\(\color{red}{\vec{j}}\\) is tranformed from\\(\color{red}{\uparrow}\\) to\\(\color{red}{\nearrow}\\) with k slope.
 
 Which means that as we move up, the image is stretched horizontally by k units.
 
@@ -673,13 +677,13 @@ Which means that as we move up, the image is stretched horizontally by k units.
 
 $$A = \begin{bmatrix} 1 & 0 \\ k & 1\end{bmatrix}$$
 
-Here $\color{green}{\vec{i}}$ is tranformed from $\color{green}{\rightarrow}$ to $\color{green}{\nearrow}$ with k slope.
+Here\\(\color{green}{\vec{i}}\\) is tranformed from\\(\color{green}{\rightarrow}\\) to\\(\color{green}{\nearrow}\\) with k slope.
 
 Which means that as we move right, the image is stretched vertically by k units.
 
 ### i and j are dependent
 
-If both $\color{green}{\vec{i}}$ and $\color{red}{\vec{j}}$ are dependent (they can be expressed as a linear combination of the other, in this case as a scalar of the other), such as in the matrix with all 1's, we would endup with $\color{red}{\nearrow}\color{green}{\nearrow}$. It means that both $\color{green}{\vec{i}}$ and $\color{red}{\vec{j}}$ "collapse" into each other making the image of the transformation get completly squeezed in the line that goes through both $\color{green}{\vec{i}}$ and $\color{red}{\vec{j}}$.
+If both\\(\color{green}{\vec{i}}\\) and\\(\color{red}{\vec{j}}\\) are dependent (they can be expressed as a linear combination of the other, in this case as a scalar of the other), such as in the matrix with all 1's, we would endup with\\(\color{red}{\nearrow}\color{green}{\nearrow}\\) It means that both\\(\color{green}{\vec{i}}\\) and\\(\color{red}{\vec{j}}\\) "collapse" into each other making the image of the transformation get completly squeezed in the line that goes through both\\(\color{green}{\vec{i}}\\) and\\(\color{red}{\vec{j}}\\)
 
 
 ### Projection onto the x-axis
@@ -696,18 +700,18 @@ $$A=\begin{bmatrix} 0 & 0 \\ 0 & 1\end{bmatrix}$$
 
 ### Surjective (onto) and injective (one-to-one) mappings
 
-* A mapping $T:A\rightarrow B$ is **surjective** (A is **onto** B) iff Range = Codomain.
+* A mapping\\(T:A\rightarrow B\\) is **surjective** (A is **onto** B) iff Range = Codomain.
   * A has a **pivot position in every row**
-    - A**x** = **b** has a solution for all **b**'s in $\Bbb R^n$
-      - All **b**'s in $\Bbb R^n$ are a linear combination of A
-    - The **columns of A span $R^{n}$**
-* A mapping $T:A\rightarrow B$ is **injective** (A is **one-to-one** with B) iff every input gets a unique output.
+    - A**x** = **b** has a solution for all **b**'s in\\(\Bbb R^n\\)
+      - All **b**'s in\\(\Bbb R^n\\) are a linear combination of A
+    - The **columns of A span\\(R^{n}\\)**
+* A mapping\\(T:A\rightarrow B\\) is **injective** (A is **one-to-one** with B) iff every input gets a unique output.
   * The **columns of A are linearly independent**
     - **T(x) is injective (onte-to-one) iff T(X) = 0 only has the trivial solution** (not being injective doesn't have to make you surjective and viceversa)
 * A mapping is bijective if it is both, surjective and injective.
-* $T:R^n \to R^{n+1}$ is at most injective (if columns are independent)
-* $T:R^n \to R^{n-1}$ is at most surjective (if every row has a pivot)
-* $T:R^n \to R^{n}$ is is either bijective or neither surjective nor injective
+*\\(T:R^n \to R^{n+1}\\) is at most injective (if columns are independent)
+*\\(T:R^n \to R^{n-1}\\) is at most surjective (if every row has a pivot)
+*\\(T:R^n \to R^{n}\\) is is either bijective or neither surjective nor injective
 
 Hint from the Book of Proof (Richard Hammack):
 
@@ -715,7 +719,7 @@ Hint from the Book of Proof (Richard Hammack):
 
 ### Composition of 2 transformations
 
-Where $A_1$ and $A_2$ are the standard matrixes for the the 1st and the 2nd transformations respectively:
+Where\\(A_1\\) and\\(A_2\\) are the standard matrixes for the the 1st and the 2nd transformations respectively:
 
 $$T(\mathbf{x})=
 A_2\Big( A_1\begin{bmatrix}x \\ y\end{bmatrix}\Big)
@@ -726,17 +730,17 @@ Which results in a matrix multiplication, explained in the chapter below.
 ## Matrix operations
 
 ### Matrix rules
-* **ORDER MATTERS:** $A_2\cdot A_1\neq A_1\cdot A_2$
+* **ORDER MATTERS:**\\(A_2\cdot A_1\neq A_1\cdot A_2\\)
 * cancellation laws do not apply in matrix algebra
-* **associative law**: $A(BC) = (AB)C$, becuase the order is the same! (always right to left).
+* **associative law**:\\(A(BC) = (AB)C\\), becuase the order is the same! (always right to left).
 * **distributive law**:
   - A(B+C) = AB + AC (keep A on the side where it was)
   - (B+C)A = BA + CA
 * r(AB) = (rA)B = A(rB) for any scalar r
-* $I_nA=AI_n=A$
+*\\(I_nA=AI_n=A\\)
 * **A TRANSLATION IS NOT A LINEAR TRANSFORMATION**. In a transformation, the origin is always in the same spot. In a translation it is not.
-* $A^k = A\cdot A \dots A$ for k times.
-* $A^0 = I_n$
+*\\(A^k = A\cdot A \dots A\\) for k times.
+*\\(A^0 = I_n\\)
 
 ### Matrix multiplication
 
@@ -746,12 +750,12 @@ $$A_2\Big( A_1\begin{bmatrix}x \\ y\end{bmatrix}\Big)$$
 
 in which we can clearly see that first we compute the things inside the brackets, and then the things outside, matrix multiplications come from this concept, and **matrix products are therefore read from right to left**.
 
-Following up the example of 2 transformations. The matrix of the first transformation $A_1$ contains 2 columns, the updated versions of $\color{green}{\vec{i}}$ and $\color{red}{\vec{j}}$:
+Following up the example of 2 transformations. The matrix of the first transformation\\(A_1\\) contains 2 columns, the updated versions of\\(\color{green}{\vec{i}}\\) and\\(\color{red}{\vec{j}}\\)
 
 $$A_1 = \begin{bmatrix} \color{green}{\vec{i_{A_1}}} & \color{red}{\vec{j_{A_1}}}
 \end{bmatrix}$$
 
-Then, to identify the new $\color{green}{\vec{i}}$ and $\color{red}{\vec{j}}$ for $A_2$, we'd have to apply a vector multiplication of $\color{green}{\vec{i_{A_1}}}$ and $\color{red}{\vec{j_{A_1}}}$ with $A_2$ respectively. It's easier to think about the transformation by focusing on just one vector at a time, so we apply 2 sequent transformations for $\color{green}{\vec{i}}$ and $\color{red}{\vec{j}}$ respectively, and once we're done, we join $\color{green}{\vec{i_{A_2}}}$ and $\color{red}{\vec{j_{A_2}}}$ into a single matrix $A_2$:
+Then, to identify the new\\(\color{green}{\vec{i}}\\) and\\(\color{red}{\vec{j}}\\) for\\(A_2\\), we'd have to apply a vector multiplication of\\(\color{green}{\vec{i_{A_1}}}\\) and\\(\color{red}{\vec{j_{A_1}}}\\) with\\(A_2\\) respectively. It's easier to think about the transformation by focusing on just one vector at a time, so we apply 2 sequent transformations for\\(\color{green}{\vec{i}}\\) and\\(\color{red}{\vec{j}}\\) respectively, and once we're done, we join\\(\color{green}{\vec{i_{A_2}}}\\) and\\(\color{red}{\vec{j_{A_2}}}\\) into a single matrix\\(A_2\\)
 
 $$\color{green}{\vec{i_{A_2\cdot A_1}}} = A_2\cdot\color{green}{\vec{i_{A_1}}}$$
 
@@ -759,13 +763,13 @@ $$\color{red}{\vec{j_{A_2\cdot A_1}}} = A_2\cdot\color{red}{\vec{i_{j_1}}}$$
 
 $$A_2\cdot A_1 = \begin{bmatrix} \color{green}{\vec{i_{A_2\cdot A_1}}} & \color{red}{\vec{j_{A_2\cdot A_1}}}\end{bmatrix}$$
 
-Following the properties of the matrix-vector product, the matrix-matrix product (which is nothing but a transformation of a transformation), must have the number of columns in matrix A be equal to the number of rows in matrix B in AB, and AB size is $rows_A \times columns_B$.
+Following the properties of the matrix-vector product, the matrix-matrix product (which is nothing but a transformation of a transformation), must have the number of columns in matrix A be equal to the number of rows in matrix B in AB, and AB size is\\(rows_A \times columns_B\\)
 
  ![Injective vs surjective]({{ site.url }}/images/matrix_multiplication_condition.png)
 
 #### Row-column multiplication
 
-There's a shortcut formula to get the value of AB's $a_{ij}$ where i is also A's i row and j is also B's j column: Take A's i row and transpose it to a vector, then calculate the dot product with B's j column:
+There's a shortcut formula to get the value of AB's\\(a_{ij}\\) where i is also A's i row and j is also B's j column: Take A's i row and transpose it to a vector, then calculate the dot product with B's j column:
 
  ![Injective vs surjective]({{ site.url }}/images/row_column_multiplication.png)
 
@@ -780,7 +784,7 @@ Expressed as 0, it's the equivalent of a n x m (size assumed by context), with a
 
 #### Identity matrix
 
-Expressed as $I_n$ It is a n x n **diagonal matrix** (all of the diagonal matrix are n x n), and as any diagonal matrix, it is a zero matrix besides for the **(main) diaogonal entries**, these happen to be all 1's and the property that it has is $A\cdot I_n = A$
+Expressed as\\(I_n\\) It is a n x n **diagonal matrix** (all of the diagonal matrix are n x n), and as any diagonal matrix, it is a zero matrix besides for the **(main) diaogonal entries**, these happen to be all 1's and the property that it has is\\(A\cdot I_n = A\\)
 
 #### Lower/upper triangular matrix
 
@@ -798,21 +802,21 @@ Scale every column. The scalar is only defined when it comes to the left of the 
 
 You sawp the columns for the rows (just like in excel), it's **not** a 90° rotation. There are some properties:
 
-* $(A^T)^T=A$
-* $(A+B)^T=A^T+B^T$
-* For any scalar $r$: $(rA)^T = rA^T$
-* $(AB)^T = B^TA^T$
-* If A is invertible: $T^{-1}(x) = A^{-1}x$
+*\\((A^T)^T=A\\)
+*\\((A+B)^T=A^T+B^T\\)
+* For any scalar\\(r\\)\\((rA)^T = rA^T\\)
+*\\((AB)^T = B^TA^T\\)
+* If A is invertible:\\(T^{-1}(x) = A^{-1}x\\)
 
 ## Inverse matrices
 
-Not all matrices have an inverse. The inverse of $A$ is $A^{-1}$ and it should hold that:
+Not all matrices have an inverse. The inverse of\\(A\\) is\\(A^{-1}\\) and it should hold that:
 
-$A^{-1}A=I$ and $AA^{-1} = I$
+\\(A^{-1}A=I\\) and\\(AA^{-1} = I\\)
 
 A matrix that is not invertible is a **singular matrix** suchas the zero matrix, and an invertible matrix is called **nonsigular matrix**.
 
-Example of a **nonsingular matrix** would be a $T: R^2 \to R^2$, suchas a 90° rotation **counterclockwise**:
+Example of a **nonsingular matrix** would be a\\(T: R^2 \to R^2\\), suchas a 90° rotation **counterclockwise**:
 
 $$A = \begin{bmatrix} 0 & -1\\ 1 & 0\end{bmatrix}$$
 
@@ -820,13 +824,13 @@ The inverse of A would be to rotate 90° **clockwise**:
 
 $$A^{-1} = \begin{bmatrix} 0 & 1\\ -1 & 0\end{bmatrix}$$
 
-If we apply both transformations, intution says that $\color{green}{\vec{i}}$ and $\color{red}{\vec{j}}$ should return to their default values, and hence $A^{-1}A=I$ and $AA^{-1} = I$:
+If we apply both transformations, intution says that\\(\color{green}{\vec{i}}\\) and\\(\color{red}{\vec{j}}\\) should return to their default values, and hence\\(A^{-1}A=I\\) and\\(AA^{-1} = I\\)
 
 $$A^{-1}A = \begin{bmatrix} 0 & 1\\ -1 & 0\end{bmatrix}\begin{bmatrix} 0 & -1\\ 1 & 0\end{bmatrix} =\begin{bmatrix} 1 & 0\\ 0 & 1\end{bmatrix} = I$$
 
-The same would apply to $AA^{-1}=I$. This was possible since $A$ has independent columns ($\color{green}{\vec{i}}$ and $\color{red}{\vec{j}}$ are not a linear combination of each other), and therefore there is only 1 solution to T(X) = 0. If we had multiple solutions for T(x) = 0, that wolud mean that T(X) is no longer a one-to-one mapping (injective), and when we try to come up with an inverse function, an input would have multiple possible outputs, which is not allowed in a function.
+The same would apply to\\(AA^{-1}=I\\) This was possible since\\(A\\) has independent columns (\\(\color{green}{\vec{i}}\\) and\\(\color{red}{\vec{j}}\\) are not a linear combination of each other), and therefore there is only 1 solution to T(X) = 0. If we had multiple solutions for T(x) = 0, that wolud mean that T(X) is no longer a one-to-one mapping (injective), and when we try to come up with an inverse function, an input would have multiple possible outputs, which is not allowed in a function.
 
-Furthermore, if we apply the zero matrix transformation, it is impossible to restore the default values of $\color{green}{\vec{i}}$ and $\color{red}{\vec{j}}$ (for the identity matrix) when all you have is all zeros... So to analyze if the matrix is invertible, you can check if the domain and co-domain remain the same, if the matrix is dependent, and to visualize the transformation and think how to restore $\color{green}{\vec{i}}$ and $\color{red}{\vec{j}}$.
+Furthermore, if we apply the zero matrix transformation, it is impossible to restore the default values of\\(\color{green}{\vec{i}}\\) and\\(\color{red}{\vec{j}}\\) (for the identity matrix) when all you have is all zeros... So to analyze if the matrix is invertible, you can check if the domain and co-domain remain the same, if the matrix is dependent, and to visualize the transformation and think how to restore\\(\color{green}{\vec{i}}\\) and\\(\color{red}{\vec{j}}\\)
 
 There's also a formula to find the inverse of a 2x2 matrix:
 
@@ -835,28 +839,28 @@ $$A = \begin{bmatrix} a & b\\c & d\end{bmatrix}\land ad - bc \neq 0 \rightarrow 
 
 $$ad-bc = 0 \rightarrow A\ is\ not\ invertible$$
 
-$ad-bc$ is formally known as the **determinant (det A) for a 2 by 2 matrix A**, which for a $T: R^m \to R^n$  is the change in volume (3D), space (2D)... between $I$ and $A$.
+\\(ad-bc\\) is formally known as the **determinant (det A) for a 2 by 2 matrix A**, which for a\\(T: R^m \to R^n\\)  is the change in volume (3D), space (2D)... between\\(I\\) and\\(A\\)
 
-$A^{-1}$ exists iff the $det A \neq 0$
+\\(A^{-1}\\) exists iff the\\(det A \neq 0\\)
 
 Some properties for invertible matrices A nd B:
 
-* $(AB)^{-1} = B^{-1}A^{-1}$
-* $(A^T)^{-1} = (A^{-1})^T$
-* if A is an invertible n x n matrix, then for reach b in $R^n$ the equation Ax = b has the unique solution $x = A^{-1}b$
+*\\((AB)^{-1} = B^{-1}A^{-1}\\)
+*\\((A^T)^{-1} = (A^{-1})^T\\)
+* if A is an invertible n x n matrix, then for reach b in\\(R^n\\) the equation Ax = b has the unique solution\\(x = A^{-1}b\\)
 
 ### Invert A column by column
 
-If A is invertible, let $e_n$ be the nth column of $I$. Then for each of the rows of A (and columns of the inverse $a^{-1}_n$) find:
+If A is invertible, let\\(e_n\\) be the nth column of\\(I\\) Then for each of the rows of A (and columns of the inverse\\(a^{-1}_n\\)) find:
 
 $$Aa^{-1}_n=e_n$$
 
-Which in turn can be translated to an augmented Ax=b echelon matrix with the coefficent matrix of A and with b the nth column of $I$.
-The resulting vector is the nth column of $A^{-1}$.
+Which in turn can be translated to an augmented Ax=b echelon matrix with the coefficent matrix of A and with b the nth column of\\(I\\)
+The resulting vector is the nth column of\\(A^{-1}\\)
 
 ### Invert A as a whole
 
-If A is invertible, row reduce the augmented matrix $[A\ \ I]$ until it becomes $[I\ \ A^{-1}]$.
+If A is invertible, row reduce the augmented matrix\\([A\ \ I]\\) until it becomes\\([I\ \ A^{-1}]\\)
 
 ### Invertible matrix theorem
 
@@ -868,10 +872,16 @@ For a square n x n A matrix, these are either all true or all false:
 * A**x** = **0** has only the trivial solution
 * The columns of A are independenet
 * T(x) is one-to-one
-* Ax = b has at least one solution for each b in $R^n$
-* The columns of A span $R^n$
-* T(x) is $T: R^n \to R^n$
+* Ax = b has at least one solution for each b in\\(R^n\\)
+* The columns of A span\\(R^n\\)
+* T(x) is\\(T: R^n \to R^n\\)
 * The transpose of A is also invertible
+
+### Invert 2 by 2 fast
+
+$$Let\ A=\begin{bmatrix} a & b \\ c & d\end{bmatrix}$$
+
+$$A^{-1}=\frac{1}{ad-bc}\begin{bmatrix} d & -b \\ -c & a\end{bmatrix}$$
 
 This all true or all false apply only to square matrices.
 
@@ -880,19 +890,19 @@ This all true or all false apply only to square matrices.
 ## Subspaces of R^n
 These sets of vectors provide useful information about the equation A**x**=**b**.
 
-A subspace of $\mathcal{R}^n$ is any set H in $\mathcal{R}^n$ that has:
-* zero vector $\in H$
-* all linear combinations of its initial vectors are $\in H$
+A subspace of\\(\mathcal{R}^n\\) is any set H in\\(\mathcal{R}^n\\) that has:
+* zero vector\\(\in H\\)
+* all linear combinations of its initial vectors are\\(\in H\\)
 
 ### Column space (Col A)
 * The **column space** of a matrix A is the set of all linear combinations of its vector columns, denoted as **Col A**
 * The **pivot columns** of a matrix A form a basis for the column space of A.
   * YOU NEED THE ORIGINAL PIVOT COLUMNS OF A, NOT THE COLUMNS OF THE ECHELON FORM.
-* The column space of an n x m matrix is a subspace of $R^n$.
+* The column space of an n x m matrix is a subspace of\\(R^n\\)
 
 ### Null space (Nul A)
 * The **null space** of a matrix A is the set of all solutions to the equation Ax = 0, denoted as **Null A**.
-* The null space of an n x m matrix is a subspace of $R^m$ (in Ax=B the x vector has m entries)
+* The null space of an n x m matrix is a subspace of\\(R^m\\) (in Ax=B the x vector has m entries)
 
 ### Zero subspace
 
@@ -903,15 +913,15 @@ Set {**0**}
 
 ## Coodinate systems
 
-The goal of a using the basis for a subspace H (rather than a Span set) is to have a minimal set of vectors that operate as "i, j... hat", from which we can define any point laying on H, as a linear combination of the basis vectors. Usually the basis for H is defined as $\mathcal{B} = \\{b_1,\dots,b_p\\}$.
+The goal of a using the basis for a subspace H (rather than a Span set) is to have a minimal set of vectors that operate as "i, j... hat", from which we can define any point laying on H, as a linear combination of the basis vectors. Usually the basis for H is defined as\\(\mathcal{B} = \\{b_1,\dots,b_p\\}\\)
 
-The **coordinate vector of x (relative to $\mathcal{B}$) or the B-coordinate vector of x** is defined as:
+The **coordinate vector of x (relative to\\(\mathcal{B}\\)) or the B-coordinate vector of x** is defined as:
 
 $$[x]_{\mathcal{B}}=\begin{bmatrix}c_1\\\vdots\\c_p\end{bmatrix}$$
 
-Often H is a plane in $R^3$, the B-coordinate vectors are still $R^3$. However, the transformation $x\mapsto [x]_B$ is called "isomorphic" as H is isomorphic to $R^2$.
+Often H is a plane in\\(R^3\\), the B-coordinate vectors are still\\(R^3\\) However, the transformation\\(x\mapsto [x]_B\\) is called "isomorphic" as H is isomorphic to\\(R^2\\)
 
-$Let\ \mathcal{B} =${$b_1$,$b_2$,$b_3$}
+\\(Let\ \mathcal{B} =\\){\\(b_1\\),\\(b_2\\),\\(b_3\\)}
 
 $$
 If\ \mathbf{x}\ is\ a\ vector\ in\ H\ with\ [x]_{\mathcal{B}}=\begin{bmatrix}c_1\\c_2\\c_3\end{bmatrix} \\
@@ -933,8 +943,8 @@ $$rank(A) + dim(Nul(A)) = n$$
 
 For an n x n matrix, iff A is invertible, then:
 
-* The columns of A form a basis of $R^n$.
-* Col A = $R^n$
+* The columns of A form a basis of\\(R^n\\)
+* Col A =\\(R^n\\)
 * dim Col A = n
 * rank A = n
 * Nul A = \[**0**\]
@@ -973,7 +983,7 @@ a & b \\
 c & d \end{vmatrix}
 $$
 
-* Similarly, we can factor out a scalar $t$ from a row
+* Similarly, we can factor out a scalar\\(t\\) from a row
 
 ### Property 3b
 
@@ -989,7 +999,7 @@ $$
 
 * If we add a' to all rows these can be row reduced. The property only applies when 1 row is incremented.
 * If a' and b' are zero, then we would have det A = det A + 0.
-* $det2A = 2^ndetA$:
+*\\(det2A = 2^ndetA\\)
 
 $$Let\ A\ be\ 2\times 2 \to |kA| = \begin{vmatrix}k\begin{bmatrix}
 a & b \\
@@ -1033,7 +1043,7 @@ c & d \end{vmatrix}$$
 * We can use this property to achieve triangular matrices whose determinant is calculated by multiplying the elements in the main diagional (technically we are using property 3 to factor out each of the scalars multiplying each of the rows of the identity matrix).
 
 ### Property 6
-* Row of zeros $\to$ det A = 0
+* Row of zeros\\(\to\\) det A = 0
 
 ### Property 7
 * The determinant of an echelon form matrix is equal to the product of the diagonal (product of pivots), and the sign depends on the number of row exchanges we made to get into the desired triangular form (+ if even, - if odd).
@@ -1084,13 +1094,13 @@ $$
 ### Property 9
 
 * det(AB) = det A * det B
-* det $A^{-1} = 1/det A$
-* $det(A^2) = (detA)^2$
-* $det2A = 2^ndetA$ (property 3)
+* det\\(A^{-1} = 1/det A\\)
+*\\(det(A^2) = (detA)^2\\)
+*\\(det2A = 2^ndetA\\) (property 3)
 
 ### Property 10
 
-* $detA^T=detA$
+*\\(detA^T=detA\\)
   * Therefore all the things that applied to rows also apply to columns
 
 ### Algorithm for determinant 2 by 2
@@ -1275,7 +1285,7 @@ $$
 
 the second term is -1 because we had to flip the columns once. Going back to the 'Big Formula', you should have n! terms.
 
-Therefore, co-factor of $a_{ij} = C_{ij} =$
+Therefore, co-factor of\\(a_{ij} = C_{ij} =\\)
 
 $$
 \pm
@@ -1284,7 +1294,7 @@ n-1\ matrix \\
 without\ row_i,col_j
 \end{pmatrix}$$
 
-The sign of the determinant is determined by the parity of $a_{ij}$:
+The sign of the determinant is determined by the parity of\\(a_{ij}\\)
 
 Plus if i+j is even, minus if odd.
 
@@ -1296,14 +1306,14 @@ $$
 \end{matrix}
 $$
 
-Like a n x n chessboard with $a_{11}=+$
+Like a n x n chessboard with\\(a_{11}=+\\)
 
 ### Cofactor formula
-* for rows (pick constant $i$):
+* for rows (pick constant\\(i\\)):
 
 $$detA = a_{i1}C_{i1} + a_{i2}C_{i2} + \dots +  a_{in}C_{in}$$
 
-* for columns (pick constant $j$):
+* for columns (pick constant\\(j\\)):
 
 $$detA = a_{1j}C_{1j} + a_{2j}C_{2j} + \dots +  a_{nj}C_{nj}$$
 
@@ -1401,7 +1411,7 @@ $$a_{11}(a_{22}a_{33}-a_{23}a_{32})
 * We can increase the amount of zeros by adding a scaled row to another row, as this operation does not change the sign or value of the determinant.
   * Remember that linear dependence is obvious when two
 columns or two rows are the same or a column or a row is zero. Which would then make the determinant 0.
-* Alternatively, we could also use row reduction to achieve an echelon matrix and calculate the determinant by multiplying all the pivots. Just remember how many row swaps you did (if odd $\to$ change the sign, else don't).
+* Alternatively, we could also use row reduction to achieve an echelon matrix and calculate the determinant by multiplying all the pivots. Just remember how many row swaps you did (if odd\\(\to\\) change the sign, else don't).
   * Even if the not reduced echelon form is not unique, the product of the diagonal is!
 
 ## Eigenvectors and eigenvalues
@@ -1424,20 +1434,20 @@ Going back to the [linear transformations](#2d-transformations), we find that fo
 
 ### Calculate eigenvectors and eigenvalues
 
-According to the definition of an eigenvector and eigenvalue we have $A\mathbf{x} = \lambda \mathbf{x}$.
-Where A is the standard transformation matrix, $\mathbf{x}$ is the eigenvector and $\lambda$ is the eigenvalue (scalar).
+According to the definition of an eigenvector and eigenvalue we have\\(A\mathbf{x} = \lambda \mathbf{x}\\)
+Where A is the standard transformation matrix,\\(\mathbf{x}\\) is the eigenvector and\\(\lambda\\) is the eigenvalue (scalar).
 
-This is equivalent to $A\mathbf{x} = (\lambda I)\mathbf{x} \longrightarrow A\mathbf{x} - (\lambda I)\mathbf{x} = \mathbf{0}$
+This is equivalent to\\(A\mathbf{x} = (\lambda I)\mathbf{x} \longrightarrow A\mathbf{x} - (\lambda I)\mathbf{x} = \mathbf{0}\\)
 
-$(A - \lambda I)\mathbf{x} = \mathbf{0}$
+\\((A - \lambda I)\mathbf{x} = \mathbf{0}\\)
 
-The main take away from this formula is that besides **v** being the **0** vector (trivial solution), if we want to find another solution (eigenvector), that would mean that more than one input share the same output, which means the transformation is no longer injective. Since it is no longer injective, is no longer bijective, which means $(A - \lambda I)$ is not invertible (is singular) and must have determinant equal to zero.
+The main take away from this formula is that besides **v** being the **0** vector (trivial solution), if we want to find another solution (eigenvector), that would mean that more than one input share the same output, which means the transformation is no longer injective. Since it is no longer injective, is no longer bijective, which means\\((A - \lambda I)\\) is not invertible (is singular) and must have determinant equal to zero.
 
 #### Step 1 - The characteristic equation
-All we need to do is to tweak the value of $\lambda$ such that $det(A - \lambda I) = 0$. This equation is known as the "characteristic equation" or the "eigenvalue equation".
+All we need to do is to tweak the value of\\(\lambda\\) such that\\(det(A - \lambda I) = 0\\) This equation is known as the "characteristic equation" or the "eigenvalue equation".
 
 #### Step 2 - Null space of A
-Now that we know $\lambda$, we can actually compute  $(A - \lambda I)\mathbf{x} = \mathbf{0}$ and solve it with an augmented matrix.
+Now that we know\\(\lambda\\), we can actually compute \\((A - \lambda I)\mathbf{x} = \mathbf{0}\\) and solve it with an augmented matrix.
 Esentially we are solving for the null space of A.
 
 ### Example
@@ -1523,19 +1533,19 @@ $$\lambda^2 -trace\lambda + det(A)$$
 
 ### Possible eigen values
 
-We see that from the determinant equation we end up with $(a-\lambda)(b-\lambda)$ and sometimes $\lambda^2=a$. In the first scenario, if a and b are different we get 2 eigenvalues, if they're the same we get 1 eigenvalue (and we would also say that such eigen value has a multiplicity of 2). In the second scenario, if a is positive we get 2 eigenvalues, if a is 0 we get no eigenvalue as by definition 0 cannot be an eigenvalue. If a is negative we get 0 eigenvalues (we actually get an imaginary number, which means we get a rotation for all inputs).
+We see that from the determinant equation we end up with\\((a-\lambda)(b-\lambda)\\) and sometimes\\(\lambda^2=a\\) In the first scenario, if a and b are different we get 2 eigenvalues, if they're the same we get 1 eigenvalue (and we would also say that such eigen value has a multiplicity of 2). In the second scenario, if a is positive we get 2 eigenvalues, if a is 0 we get no eigenvalue as by definition 0 cannot be an eigenvalue. If a is negative we get 0 eigenvalues (we actually get an imaginary number, which means we get a rotation for all inputs).
 
 * A single eigenvalue can be used by more than one eigenvector
-  * i.e. $A=2I$ has eigenvalue 2 and all vectors in $R^2$ are eigenvectors with eigenvalue 2
+  * i.e.\\(A=2I\\) has eigenvalue 2 and all vectors in\\(R^2\\) are eigenvectors with eigenvalue 2
   * If you compute the eigenvectors from the augmented matrix, you'll see that the augmented matrix only has free variables
-* If A matrix has an eigenvalue 0, that means that $Ax=0x\longrightarrow Ax=0$ has a nontrivial solution, which means A is not invertible (A is singular), and det A = 0.
+* If A matrix has an eigenvalue 0, that means that\\(Ax=0x\longrightarrow Ax=0\\) has a nontrivial solution, which means A is not invertible (A is singular), and det A = 0.
   * The eigenvectors with eigenvalue 0 (which is a legit eigenvalue) are the vectors of the Null space of A (the nontrivial vectors that make A**x**=0).
 * If the eigenvalues refer only to one eigenvector each, then all eigenvectors are linearly independent
 * If two matrices have the same eigenvalues, with the same multiplicities, linked to the same eigenvectors, then these are "similar".
   * "Similar" is not the same as row equivalent
   * Adding kI to a matrix increases the eigenvalues by k but does not change its eigenvectors.
   * Eigenvalues and eigen values are not linear, you can't conclude anything from adding A+B
-  * Matrices A and B are similar if there is an invetrible matrix P such that $A=PBP^{-1}$.
+  * Matrices A and B are similar if there is an invetrible matrix P such that\\(A=PBP^{-1}\\)
 * A n by n matrix will have n eigen values (in practice some of them can be repeated)
 * The sum of the eigenvalues equals the sum of the main diagonal of A (this sum is also called the "trace")
 * The determinant is the product of the eigenvalues
@@ -1548,34 +1558,34 @@ We see that from the determinant equation we end up with $(a-\lambda)(b-\lambda)
 
 ### Eigenspace
 
-The eigen space $E_\lambda$ is the set of all eigenvectors and the zero vector. In other words, the set of all solutions to the equation:
+The eigen space\\(E_\lambda\\) is the set of all eigenvectors and the zero vector. In other words, the set of all solutions to the equation:
 
 $$A\mathbf{x}=\lambda \mathbf{x}$$
 
-This is also known as $E_\lambda=Nul(A-\lambda I)$, which is a subspace of $R^n$.
+This is also known as\\(E_\lambda=Nul(A-\lambda I)\\), which is a subspace of\\(R^n\\)
 
 
 ## Diagonalization
 
 * A matrix is said to be diagonalizable if it's square, with all 0's except in the main diagonal.
 * A matrix A is diagonalizable only if it has n linearly independent eigenvectors.
-* A matrix with n distinct eigenvalues has n linearly independent eigenvectors. But you may also get n linearly independent eigenvectors from just 1 shared eigenvalue (i.e $\lambda=1$ in $I$).
+* A matrix with n distinct eigenvalues has n linearly independent eigenvectors. But you may also get n linearly independent eigenvectors from just 1 shared eigenvalue (i.e\\(\lambda=1\\) in\\(I\\)).
 * The dimension of the eigenspace (the number of linearly indepenent vectors in the set), is less than or equal to the multiplicity of the eigenvalue. So, if an eigenvalue appears twice, it has at most 2 eigenvectors
 * If zero is an eigenvalue of A then the matrix A is not invertible, but it can still be diagonazilable.
 * The sum of the dimensions of the eigenspaces must be equal to n in order for A to be a diagonaziable matrix.
 
 ### Similar matrix
 
-* A is similar to B if there exists an invertible matrix P such that $A=PBP^{-1}$.
+* A is similar to B if there exists an invertible matrix P such that\\(A=PBP^{-1}\\)
 * Similar matrices have same eigenvalues, multiplicities, and eigenvectors.
 * A matrix A is diagonazilable if it can be expressed as a similar matrix that is a diagonal matrix.
   *  A must have n linearly independent vectors
-  *  Which form a basis for $R^n$
+  *  Which form a basis for\\(R^n\\)
   *  The algebraic multiplicity of the eigenvalue is equal to the geometric multiplicity of its eigenspace.
 
-Let S be the matrix containing the eigenvectors of A and $S^{-1}$ is the inverse. For that we need n independent eigen vectors.
+Let S be the matrix containing the eigenvectors of A and\\(S^{-1}\\) is the inverse. For that we need n independent eigen vectors.
 
-By the definition of the eigenvector, when you multiply $As_1$ you're recreating $Ax=\lambda x$, therefore  $As_1=\lambda_1 s_1$ so $AS=\begin{bmatrix}\lambda_1 s_1 & \lambda_2 s_2 & \dots & \lambda_n s_n \end{bmatrix}$
+By the definition of the eigenvector, when you multiply\\(As_1\\) you're recreating\\(Ax=\lambda x\\), therefore \\(As_1=\lambda_1 s_1\\) so\\(AS=\begin{bmatrix}\lambda_1 s_1 & \lambda_2 s_2 & \dots & \lambda_n s_n \end{bmatrix}\\)
 
 We can factor out the lambdas:
 
@@ -1589,47 +1599,94 @@ $$
 
 Where capital Lambda is the matrix with 0s and the eigenvalues across the main diagonal.
 
-From $AS=S\Lambda$ we also get:
+From\\(AS=S\Lambda\\) we also get:
 
 $$S^{-1}AS=\Lambda$$
 
 $$A=S\Lambda S^{-1}$$
 
-If $Ax=\lambda x$ then $A^2x=\lambda Ax=\lambda^2x$
+If\\(Ax=\lambda x\\) then\\(A^2x=\lambda Ax=\lambda^2x\\)
 
-Similarly, we also have $A^2=S\Lambda S^{-1}S\Lambda S^{-1}=S\Lambda^2 S^{-1}$. So:
+Similarly, we also have\\(A^2=S\Lambda S^{-1}S\Lambda S^{-1}=S\Lambda^2 S^{-1}\\) So:
 
 $$A^k=S\Lambda^k S^{-1}$$
 
 The eigenvalues change by the power of k while the egenvectors remain the same.
 
-* If all absolute eigenvalues are smaller than 1, then $A^\infty = 0$ (given that all eigenvalues have multiplicity of 1)
+* If all absolute eigenvalues are smaller than 1, then\\(A^\infty = 0\\) (given that all eigenvalues have multiplicity of 1)
 * A is sure to have n independent eigenvectors (and be diagonalizable) if all the eigenvalues are different.
 * A diagonal matrix has its eigenvalues sitting infront of you in the main diagonal
 
-### Systems of differential equations
+## Complex eigenvalues and eigenvectors
+* Here we allow matrices to be in the\\(\mathcal{C}^n\\) domain, rather than\\(R^n\\)
+  * Now eigenvalues can also be complex numbers
+* If n by n matrix A has\\(\lambda\\) eigenvalue and\\(\mathbf{v}\\) eigenvector, then their conjugates also exist
+  * The conjugate of a complex number is the same as the original one, but the imaginary part changes its sign, and its associated with the conjugate of lambda.
+* Let A be a real 2 x 2 matrix with eigenvalues\\(a \pm bi\\) where\\(b\neq 0\\) and a and b are real numbers. Then there exists an invertible real matrix P such that:
 
-Assuming the appropiate properties of A, let $u_{k+1}=Au_k$ where this eventually leads to $u_k=A^ku_0$. This is used to solve difference equations.
+$$A=P\begin{bmatrix} a & -b \\ b & a \end{bmatrix}P^{-1}$$
 
-To solve:
+* The middle matrix with a's and b's is called C.
 
-#### 1. Write u as a linear combination of eigenvectors
+* Then the eigenvalues of that matrix are\\(\lambda=a \pm bi\\)
 
-$$u_0=\begin{bmatrix} r_1 \\ r_2 \\ \vdots \\ r_n \end{bmatrix} = c_1\begin{bmatrix} r_1 \\ 0 \\ \vdots \\ 0 \end{bmatrix}+c_2\begin{bmatrix} 0 \\ r_2 \\ 0 \\ \vdots \end{bmatrix} + \dots + c_n\begin{bmatrix} 0 \\ 0 \\ \vdots \\ r_n \end{bmatrix}=u_0=c_1x_1+c_2x_2 \dots + c_nx_n=Sc$$
+The matrix P can be constructed as
 
-#### 1. Multiply by A
+$$P=\left[ Re \mathbf{v} \ Im \mathbf{v} \right]$$
 
-Because each of the $x$ are eigenvectors going their own way, $Ax=\lambda x$. Since $c$ is just a scalar, $Acx=\lambda cx$). Therefore:
+Where v is an eigenvector associated to the eigenvalue a - bi.
 
-$$Au_0=c_1\lambda_1x_1+c_2\lambda_2x_2+\dots+c_n\lambda_nx_n$$
+* \\(r=\|\lambda\|=\sqrt{a^2+b^2}\\)
 
-And since each of the terms are linearly independent:
+$$C = r\begin{bmatrix} \frac{a}{r} & -\frac{b}{r} \\ \frac{b}{r} & \frac{a}{r}\end{bmatrix}=r\begin{bmatrix} \cos\phi & -\sin\phi \\ \sin\phi & \cos\phi\end{bmatrix}$$
 
-$$Au_0^{k}=c_1\lambda_1^{k}x_1+c_2\lambda_2^{k}x_2+\dots+c_n\lambda_n^{k}x_n=S\Lambda^kc$$
+* The angle \\(\phi\\) is called the argument of\\(\lambda=a+bi\\) (which is arctan(b/a)) and the rotation of the transformation\\(x \mapsto Cx\\) and scaled by\\(\|\lambda\|\\)
+
+## Discrete dynamical systems
+### Recurrence relation to matrix equation
+
+$$\cases{a_k=2a_{k-1} \\ b_k = 3b_{k-1}} \Leftrightarrow \begin{bmatrix} a_k \\ b_k \end{bmatrix} = \begin{bmatrix} 2 & 0 \\ 0 & 3 \end{bmatrix}\begin{bmatrix} a_{k-1} \\ b_{k-1} \end{bmatrix}$$
+
+$$x_k = \begin{bmatrix} a_k \\ b_k \end{bmatrix} = \left(\begin{bmatrix} 2 & 0 \\ 0 & 3 \end{bmatrix}\right)^k\begin{bmatrix} a_0 \\ b_0 \end{bmatrix}$$
+
+* These recurrent relations where \\(x_k=Ax_{k-1}\\) (for all k > 0) are known as discrete dynamical systems
+  * Discrete because it refers to different states over time
+* \\(x_k\\) is known as a state vector and \\(x_0\\) is known as the initial state vectors
+
+### Coupled system
+
+$$\cases{a_k=6a_{k-1}\ -2b_{bk-1}\\ b_k = 6a_{k-1} \ -b_{k-1}} \Leftrightarrow \begin{bmatrix} a_k \\ b_k \end{bmatrix} = \begin{bmatrix} 6 & -2 \\ 6 & -1 \end{bmatrix}\begin{bmatrix} a_{k-1} \\ b_{k-1} \end{bmatrix}$$
+
+* Need to diagonalize:
+
+Use \\(A^k=S\Lambda^k S^{-1}\\)
+
+$$\Lambda=\begin{bmatrix}
+\lambda_1 & 0 & \cdots & 0\\
+0 & \lambda_2 & 0 & 0\\
+0 & 0 & \ddots & \vdots\\
+0 & 0 & \dots & \lambda_n\end{bmatrix}$$
+
+The eigenvectors of S can be scaled such that the columns of S don't have fractions. Get the inverse of S quickly with:
+
+$$Let\ S=\begin{bmatrix} a & b \\ c & d\end{bmatrix}$$
+
+$$S^{-1}=\frac{1}{ad-bc}\begin{bmatrix} d & -b \\ -c & a\end{bmatrix}$$
+
+* A matrix can only be diagonaziable if S (also called P) has n independent columns (eigenvectors). In other words, A is diagonaziable iff its eigenvector matrix is invertible.
+* Therefore \\(x_k=\left(S\Lambda^k S^{-1}\right)x_0\\)  or, if you know the previous transformation \\(x_k=Ax_{k-1}\\)
+* This transformation overtime (discrete system) has the impact of:
+* The eigenvalues regard the absolute size:
+  * attracting vectors towards the origin if all eigenvalues are smaller than 1
+  * repelling vectors away from the origin if all eigenvalues are larger than 1
+    * except the constant zero trajectory
+  * saddle point if some lambdas are bigger than 1 and others smaller than 1
+    * Some tend towards the origin
+    * Some repell away
 
 ### Fibonaci Example
 
-0, 1, 2, 3, 5, 8, 13,..$F_{k}=?$
+0, 1, 2, 3, 5, 8, 13,..\\(F_{k}=?\\)
 
 And how fast it grows?
 
@@ -1641,9 +1698,9 @@ But this is a single equation, not a system. And it's a second order (as there a
 
 We artificially make the single equation into a system, then artificially make the 2 unkowns into a single unkown vector:
 
-${F_k}+F_{k+1}=F_{k+2}$
+\\({F_k}+F_{k+1}=F_{k+2}\\)
 
-$0 + F_{k+1}=F_{k+1}$
+\\(0 + F_{k+1}=F_{k+1}\\)
 
 So:
 
@@ -1659,11 +1716,11 @@ $$u_0=\begin{bmatrix} F_{1} \\ F_{0} \end{bmatrix}$$
 
 $$u_1= Au_0=\begin{bmatrix} 1 & 1\\ 0 & 1 \end{bmatrix}\begin{bmatrix} F_{1} \\ F_{0} \end{bmatrix}=\begin{bmatrix} F_{1} + F_0 \\ F_{0} \end{bmatrix}$$
 
-Wait... that doesnt correspond to the fibonacci sequence, the second entry should have been $F_{k+1}$, therefore make sure to adjust A.
+Wait... that doesnt correspond to the fibonacci sequence, the second entry should have been\\(F_{k+1}\\), therefore make sure to adjust A.
 
-$F_{k+1}+{F_k}=F_{k+2}$
+\\(F_{k+1}+{F_k}=F_{k+2}\\)
 
-$F_{k+1} + 0=F_{k+1}$
+\\(F_{k+1} + 0=F_{k+1}\\)
 
 Perhaps the artifical equation should have its variable placed to the left-most pivot. Just make sure to double check matrix A fits the logic that you expect.
 
@@ -1687,48 +1744,135 @@ $$F_{100}=c_1\lambda_1^{100}+c_2\lambda_2^{100}$$
 
 $$F_{100}\approx c_1\begin{pmatrix}\frac{1+\sqrt{5}}{2}\end{pmatrix}^{100}+0$$
 
-The eigenvectors associated to those eigenvalues are:
+The eigenvectors can be solved using the techniques seen before.
 
-For $\lambda_1$:
+## Prey-predator system
 
-$$(A-\phi I)x=0$$
+Let vector \\(x_k\\) denote the population of both owls and rats after k months such that
 
-$$\begin{bmatrix} 1-\phi & 1\\ 1 & -\phi\end{bmatrix}x=0$$
+$$x_k=\begin{bmatrix}O_k \\ R_k \end{bmatrix}$$
 
-$$\begin{bmatrix} 1-\phi & 1\\ 1 & -\phi\end{bmatrix}\begin{bmatrix} \phi \\ 1 \end{bmatrix}=\begin{bmatrix} -(\phi^2 -\phi -1)\\ \phi-\phi\end{bmatrix}=0$$
+Then let the system below denote the population dynamics overtime:
 
-So we can see that the for
+$$\cases{
+  O_{k+1}=0.5O_k \ + (0.4)R_k \\ R_{k+1}=-(0.104)O_k + 1.1R_k
+}$$
 
-$$u_k=\begin{bmatrix} F_{k+1} \\ F_{k} \end{bmatrix}$$
-
-the ratio (eigenvector) between the next (top entry) number and the current (bottom entry) number is the golden number:
-
-$$\begin{bmatrix} \phi \\ 1 \end{bmatrix}$$
-
-The other eigenvector is
-
-$$\begin{bmatrix} 1-\phi \\ 1 \end{bmatrix}$$
-
-## Complex eigenvalues and eigenvectors
-
-* If n by n matrix A has $\lambda$ eigenvalue and $\mathbf{v}$ eigenvector, then their conjugates also exist
-  * The conjugate of a complex number is the same as the original one, but the imaginary part changes its sign
-* slide 18 of lecture 13
+* The first equation indicates that:
+  * with no rats, only half the owls will survive each month
+  * If there are plenty rats, the owl population will increase
+* The second equation indicates that:
+  * with no owls, the rats would increase by 10% each month
+  * If there are plenty owls, the rat population will decrease
+* The direction of greatest repulstion is the eigenvector that has eigenvalue greater than 1 (in absolute terms).
+* The direction of greatest attraction is the eigenvector that has eigenvalue less than 1 (in absolute terms).
 
 
+We can see from this system that there should be a sweetspot overtime in which there will be a balanced amount of owls and rats keeping both populations stable.
+
+* That sweet spot is \\(\lim{x_k}_{k\to\infty}\approx x^{10^{a\ lot}}=A^{10^{a\ lot}}x_0\\) 
+* A can be made from the system definition:
+
+$$A=\begin{bmatrix}0.5 & 0.4\\-0.104 & 1.1\end{bmatrix}$$
+
+Matlab returns the eigenvalues 0.58 and 1.02, and the following eigenvector matrix V:
+
+```matlab
+>> A=[.5 .4; -.104 1.1]
+
+A =
+
+    0.5000    0.4000
+   -0.1040    1.1000
+
+>> [V,D] = eig(A)
+
+V =
+
+   -0.9806   -0.6097
+   -0.1961   -0.7926
 
 
+D =
+
+    0.5800         0
+         0    1.0200
+
+>> 
+```
+
+Matlab has rounded the the operations, but in fact -0.9806/-0.1961 = 5/1 and -0.6097/-0.7926 = 10/13.
+
+Therefore, the corresponding eigenvectors for \\(\lambda_1=.58\\) and \\(\lambda_1=1.02\\) are
+
+$$v_1=\begin{bmatrix}5 \\ 1 \end{bmatrix} \ \ \ v_2=\begin{bmatrix}10 \\ 13 \end{bmatrix}$$
+
+Instead of using \\(x_k = A^kx_0\\) directly, since we don't know \\(x_0\\) yet, we can **decompose** \\(x_0\\) in eigenvectors:
+
+### Eigenvector decomposition
+
+$$Let\ x_0=\begin{bmatrix}? \\ ? \\ ? \end{bmatrix}$$.
+
+Then we have that
+
+$$x_0=c_1\begin{bmatrix}? \\? \\ ? \end{bmatrix}+ c_2\begin{bmatrix}? \\ ? \\ ? \end{bmatrix} + c_3\begin{bmatrix}? \\ ?\\ ? \end{bmatrix}$$
+
+Since we defined \\(x_k=Ax_{k-1}\\), then we have that
+
+$$x_1=A\left(c_1\begin{bmatrix}? \\? \\ ? \end{bmatrix}+ c_2\begin{bmatrix}? \\ ? \\ ? \end{bmatrix} + c_3\begin{bmatrix}? \\ ?\\ ? \end{bmatrix}\right)
+=c_1A\begin{bmatrix}? \\? \\ ? \end{bmatrix}+ c_2A\begin{bmatrix}? \\ ? \\ ? \end{bmatrix} + c_3A\begin{bmatrix}? \\ ?\\ ? \end{bmatrix}
+=c_1Av_1 + c_2Av_2 + c_3Av_3$$
+
+* The thing is that \\(x\\) can't just be decomposed into arbitrary vectors and scalars. \\(x_0\\) must be strictly expressed as a linear combination of the eigenvectors scaled by some constants c. To find those c constants first we must find the eigenvectors and eigenvalues of A (matlab: `[V,D] = eig(A)`). If \\(x_0\\) is given in the problem, then we can make another system of equations to solve for \\(x_0\\), i.e.
+
+$$\cases{
+  c_1 {v_1}_1 + c_2 {v_2}_1 = {x_0}_1 \\
+  c_1 {v_1}_2 + c_2 {v_2}_2= {x_0}_2 \\
+}$$
+
+* Solving this system gives you the vector c, which can be then used in the formula below:
+
+Also, Since v are eigenvectors of A, we have \\(Av=\lambda v\\):
+
+$$x_1=c_1\lambda_1v_1 + c_2\lambda_2v_2 + c_3\lambda_3v_3$$
+
+$$x_k=c_1\lambda^k_1v_1 + c_2\lambda^k_2v_2 + c_3\lambda^k_3v_3$$
+
+$$x_0=c_1\lambda^0_1v_1 + c_2\lambda^0_2v_2 + c_3\lambda^0_3v_3=c_1v_1+c_2v_2+c_3v_3$$
+
+Therefore, if in our owl vs rat example, since \\(x_0\\) is unkown, we can't solve for c. We can only express the solution given \\(\lambda_1=.58\\), \\(\lambda_2=1.02\\) and
+
+$$v_1=\begin{bmatrix}5 \\ 1 \end{bmatrix} \ \ \ v_2=\begin{bmatrix}10 \\ 13 \end{bmatrix}$$
+
+Then  leave c as a constant \\(x_k=c_1\lambda^k_1v_1 + c_2\lambda^k_2v_2\\)
+
+$$x_k=c_1.58^k\begin{bmatrix}5 \\ 1 \end{bmatrix} + c_21.02^k\begin{bmatrix}10 \\ 13 \end{bmatrix}$$
 
 
+From the fact that .58 is smaller than 1, as k grows to infinity, the rate of growth for both owls and rats will be solely defined by 1.02 and the ratio of owls to rats will be mantained at 10/13. Although c is not known, as we get closer to infinty that becomess irrelevant, and we've managed to solve one of the things we managed to learn some things about the system nevertheless.
 
+### Complex systems
 
+Take matrix A which as complex eigenvalues:
 
+$$A=PCP^{-1}$$
 
+* Where matrix C is strictly composed of the complex eigenvalues of matrix A, such that a is the real part of the eigenvalues and \\(\pm b\\) is the coeffcient multiplying \\(i\\) in the complex eigenvalue.
 
+$$C=\begin{bmatrix} a & -b \\b & a \end{bmatrix}$$
 
+* Rember that P is composed of the real parts on the 1st column, and the negative imaginary parts on the second column.
 
+* Trying to do
+$$A^k=P\left(\begin{bmatrix} a & -b \\b & a \end{bmatrix}\right)^kP^{-1}$$ is hard, because C is not a diagonal matrix
+  
+* Instead use the property:
 
+$$C^k =r^k\begin{bmatrix} \cos(k\phi) & -\sin(k\phi) \\ \sin(k\phi) & \cos(k\phi)\end{bmatrix}$$
 
-
-
-
+* Remember that \\(\phi=\arctan(\frac{b}{a})\\) and that \\(r=\|\lambda\|=\sqrt{a^2+b^2}\\)
+* Therefore \\(x_k=\left(PC^k P^{-1}\right)x_0\\) or, if you know the previous transformation \\(x_k=Cx_{k-1}\\)
+* This transformation overtime is a rotation that creates:
+  * Spiral towards the origin if r < 1
+  * Spiral away from the origin if r > 1
+  * Elliptic (or even circle sometimes) if r = 1.
