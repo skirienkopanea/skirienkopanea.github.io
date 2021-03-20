@@ -4,4 +4,4 @@ _site
 .jekyll-metadata
 vendor
 temp
-_includes\math.html
+_includes/math.html
