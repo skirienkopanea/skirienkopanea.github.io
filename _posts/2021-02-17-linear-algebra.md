@@ -1764,6 +1764,9 @@ $$\cases{
 * The second equation indicates that:
   * with no owls, the rats would increase by 10% each month
   * If there are plenty owls, the rat population will decrease
+* The direction of greatest repulstion is the eigenvector that has eigenvalue greater than 1 (in absolute terms).
+* The direction of greatest attraction is the eigenvector that has eigenvalue less than 1 (in absolute terms).
+
 
 We can see from this system that there should be a sweetspot overtime in which there will be a balanced amount of owls and rats keeping both populations stable.
 
