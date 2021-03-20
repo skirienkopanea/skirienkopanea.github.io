@@ -74,6 +74,7 @@ tags: CSE1205 linear-algebra
     - [Invert A column by column](#invert-a-column-by-column)
     - [Invert A as a whole](#invert-a-as-a-whole)
     - [Invertible matrix theorem](#invertible-matrix-theorem)
+    - [Invert 2 by 2 fast](#invert-2-by-2-fast)
   - [Subspaces of R^n](#subspaces-of-rn)
     - [Column space (Col A)](#column-space-col-a)
     - [Null space (Nul A)](#null-space-nul-a)
@@ -122,6 +123,7 @@ tags: CSE1205 linear-algebra
     - [Fibonaci Example](#fibonaci-example)
       - [Trick](#trick)
   - [Complex eigenvalues and eigenvectors](#complex-eigenvalues-and-eigenvectors)
+  - [Recurrence relation to matrix equation](#recurrence-relation-to-matrix-equation)
 
 ## Systems of Linear Equations
 ### Linear equation
@@ -872,6 +874,12 @@ For a square n x n A matrix, these are either all true or all false:
 * The columns of A span $R^n$
 * T(x) is $T: R^n \to R^n$
 * The transpose of A is also invertible
+
+### Invert 2 by 2 fast
+
+$$Let\ A=\begin{bmatrix} a & b \\ c & d\end{bmatrix}$$
+
+$$A^{-1}=\frac{1}{ad-bc}\begin{bmatrix} d & -b \\ -c & a\end{bmatrix}$$
 
 This all true or all false apply only to square matrices.
 
@@ -1710,10 +1718,34 @@ The other eigenvector is
 $$\begin{bmatrix} 1-\phi \\ 1 \end{bmatrix}$$
 
 ## Complex eigenvalues and eigenvectors
-
+* Here we allow matrices to be in the $\mathcal{C}^n$ domain, rather than $R^n$.
+  * Now eigenvalues can also be complex numbers
 * If n by n matrix A has $\lambda$ eigenvalue and $\mathbf{v}$ eigenvector, then their conjugates also exist
-  * The conjugate of a complex number is the same as the original one, but the imaginary part changes its sign
-* slide 18 of lecture 13
+  * The conjugate of a complex number is the same as the original one, but the imaginary part changes its sign, and its associated with the conjugate of lambda.
+* Let A be a real 2 x 2 matrix with eigenvalues $a \pm bi$ where $b\neq 0$ and a and b are real numbers. Then there exists an invertible real matrix P such that:
+
+$$A=P\begin{bmatrix} a & -b \\ b & a \end{bmatrix}P^{-1}$$
+
+* The middle matrix with a's and b's is called C.
+
+* Then the eigenvalues of that matrix are $\lambda=a \pm bi$.
+
+The matrix P can be constructed as
+
+$$P=\left[ Re \mathbf{v} \ Im \mathbf{v} \right]$$
+
+Where v is an eigenvector associated to the eigenvalue a - bi.
+
+* $r=\|\lambda\|=\sqrt{a^2+b^2}$
+
+$$C = r\begin{bmatrix} \frac{a}{r} & -\frac{b}{r} \\ \frac{b}{r} & \frac{a}{r}\end{bmatrix}=\begin{bmatrix} r & 0 \\0 & r\end{bmatrix}\begin{bmatrix} \cos\phi & -\sin\phi \\ \sin\phi & \cos\phi\end{bmatrix}$$
+
+* The angle $\phi$ is called the argument of $\lambda=a+bi$ (which is arctan(b/a)) and the rotation of the transformation $x \mapsto Cx$ and scaled by $\|\lambda\|$.
+
+## Recurrence relation to matrix equation
+
+$$\cases{a_k=2a_{k-1} \\ b_k = 3b_{k-1}}$$
+
 
 
 
