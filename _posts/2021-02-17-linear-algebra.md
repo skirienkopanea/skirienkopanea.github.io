@@ -117,13 +117,15 @@ tags: CSE1205 linear-algebra
     - [Eigenspace](#eigenspace)
   - [Diagonalization](#diagonalization)
     - [Similar matrix](#similar-matrix)
-    - [Systems of differential equations](#systems-of-differential-equations)
-      - [1. Write u as a linear combination of eigenvectors](#1-write-u-as-a-linear-combination-of-eigenvectors)
-      - [1. Multiply by A](#1-multiply-by-a)
+  - [Complex eigenvalues and eigenvectors](#complex-eigenvalues-and-eigenvectors)
+  - [Discrete dynamical systems](#discrete-dynamical-systems)
+    - [Recurrence relation to matrix equation](#recurrence-relation-to-matrix-equation)
+    - [Coupled system](#coupled-system)
     - [Fibonaci Example](#fibonaci-example)
       - [Trick](#trick)
-  - [Complex eigenvalues and eigenvectors](#complex-eigenvalues-and-eigenvectors)
-  - [Recurrence relation to matrix equation](#recurrence-relation-to-matrix-equation)
+  - [Prey-predator system](#prey-predator-system)
+    - [Eigenvector decomposition](#eigenvector-decomposition)
+    - [Complex systems](#complex-systems)
 
 ## Systems of Linear Equations
 ### Linear equation
@@ -1615,25 +1617,72 @@ The eigenvalues change by the power of k while the egenvectors remain the same.
 * A is sure to have n independent eigenvectors (and be diagonalizable) if all the eigenvalues are different.
 * A diagonal matrix has its eigenvalues sitting infront of you in the main diagonal
 
-### Systems of differential equations
+## Complex eigenvalues and eigenvectors
+* Here we allow matrices to be in the\\(\mathcal{C}^n\\) domain, rather than\\(R^n\\)
+  * Now eigenvalues can also be complex numbers
+* If n by n matrix A has\\(\lambda\\) eigenvalue and\\(\mathbf{v}\\) eigenvector, then their conjugates also exist
+  * The conjugate of a complex number is the same as the original one, but the imaginary part changes its sign, and its associated with the conjugate of lambda.
+* Let A be a real 2 x 2 matrix with eigenvalues\\(a \pm bi\\) where\\(b\neq 0\\) and a and b are real numbers. Then there exists an invertible real matrix P such that:
 
-Assuming the appropiate properties of A, let\\(u_{k+1}=Au_k\\) where this eventually leads to\\(u_k=A^ku_0\\) This is used to solve difference equations.
+$$A=P\begin{bmatrix} a & -b \\ b & a \end{bmatrix}P^{-1}$$
 
-To solve:
+* The middle matrix with a's and b's is called C.
 
-#### 1. Write u as a linear combination of eigenvectors
+* Then the eigenvalues of that matrix are\\(\lambda=a \pm bi\\)
 
-$$u_0=\begin{bmatrix} r_1 \\ r_2 \\ \vdots \\ r_n \end{bmatrix} = c_1\begin{bmatrix} r_1 \\ 0 \\ \vdots \\ 0 \end{bmatrix}+c_2\begin{bmatrix} 0 \\ r_2 \\ 0 \\ \vdots \end{bmatrix} + \dots + c_n\begin{bmatrix} 0 \\ 0 \\ \vdots \\ r_n \end{bmatrix}=u_0=c_1x_1+c_2x_2 \dots + c_nx_n=Sc$$
+The matrix P can be constructed as
 
-#### 1. Multiply by A
+$$P=\left[ Re \mathbf{v} \ Im \mathbf{v} \right]$$
 
-Because each of the\\(x\\) are eigenvectors going their own way,\\(Ax=\lambda x\\) Since\\(c\\) is just a scalar,\\(Acx=\lambda cx\\)). Therefore:
+Where v is an eigenvector associated to the eigenvalue a - bi.
 
-$$Au_0=c_1\lambda_1x_1+c_2\lambda_2x_2+\dots+c_n\lambda_nx_n$$
+* \\(r=\|\lambda\|=\sqrt{a^2+b^2}\\)
 
-And since each of the terms are linearly independent:
+$$C = r\begin{bmatrix} \frac{a}{r} & -\frac{b}{r} \\ \frac{b}{r} & \frac{a}{r}\end{bmatrix}=r\begin{bmatrix} \cos\phi & -\sin\phi \\ \sin\phi & \cos\phi\end{bmatrix}$$
 
-$$Au_0^{k}=c_1\lambda_1^{k}x_1+c_2\lambda_2^{k}x_2+\dots+c_n\lambda_n^{k}x_n=S\Lambda^kc$$
+* The angle \\(\phi\\) is called the argument of\\(\lambda=a+bi\\) (which is arctan(b/a)) and the rotation of the transformation\\(x \mapsto Cx\\) and scaled by\\(\|\lambda\|\\)
+
+## Discrete dynamical systems
+### Recurrence relation to matrix equation
+
+$$\cases{a_k=2a_{k-1} \\ b_k = 3b_{k-1}} \Leftrightarrow \begin{bmatrix} a_k \\ b_k \end{bmatrix} = \begin{bmatrix} 2 & 0 \\ 0 & 3 \end{bmatrix}\begin{bmatrix} a_{k-1} \\ b_{k-1} \end{bmatrix}$$
+
+$$x_k = \begin{bmatrix} a_k \\ b_k \end{bmatrix} = \left(\begin{bmatrix} 2 & 0 \\ 0 & 3 \end{bmatrix}\right)^k\begin{bmatrix} a_0 \\ b_0 \end{bmatrix}$$
+
+* These recurrent relations where \\(x_k=Ax_{k-1}\\) (for all k > 0) are known as discrete dynamical systems
+  * Discrete because it refers to different states over time
+* \\(x_k\\) is known as a state vector and \\(x_0\\) is known as the initial state vectors
+
+### Coupled system
+
+$$\cases{a_k=6a_{k-1}\ -2b_{bk-1}\\ b_k = 6a_{k-1} \ -b_{k-1}} \Leftrightarrow \begin{bmatrix} a_k \\ b_k \end{bmatrix} = \begin{bmatrix} 6 & -2 \\ 6 & -1 \end{bmatrix}\begin{bmatrix} a_{k-1} \\ b_{k-1} \end{bmatrix}$$
+
+* Need to diagonalize:
+
+Use \\(A^k=S\Lambda^k S^{-1}\\)
+
+$$\Lambda=\begin{bmatrix}
+\lambda_1 & 0 & \cdots & 0\\
+0 & \lambda_2 & 0 & 0\\
+0 & 0 & \ddots & \vdots\\
+0 & 0 & \dots & \lambda_n\end{bmatrix}$$
+
+The eigenvectors of S can be scaled such that the columns of S don't have fractions. Get the inverse of S quickly with:
+
+$$Let\ S=\begin{bmatrix} a & b \\ c & d\end{bmatrix}$$
+
+$$S^{-1}=\frac{1}{ad-bc}\begin{bmatrix} d & -b \\ -c & a\end{bmatrix}$$
+
+* A matrix can only be diagonaziable if S (also called P) has n independent columns (eigenvectors). In other words, A is diagonaziable iff its eigenvector matrix is invertible.
+* Therefore \\(x_k=\left(S\Lambda^k S^{-1}\right)x_0\\)  or, if you know the previous transformation \\(x_k=Ax_{k-1}\\)
+* This transformation overtime (discrete system) has the impact of:
+* The eigenvalues regard the absolute size:
+  * attracting vectors towards the origin if all eigenvalues are smaller than 1
+  * repelling vectors away from the origin if all eigenvalues are larger than 1
+    * except the constant zero trajectory
+  * saddle point if some lambdas are bigger than 1 and others smaller than 1
+    * Some tend towards the origin
+    * Some repell away
 
 ### Fibonaci Example
 
@@ -1695,54 +1744,132 @@ $$F_{100}=c_1\lambda_1^{100}+c_2\lambda_2^{100}$$
 
 $$F_{100}\approx c_1\begin{pmatrix}\frac{1+\sqrt{5}}{2}\end{pmatrix}^{100}+0$$
 
-The eigenvectors associated to those eigenvalues are:
+The eigenvectors can be solved using the techniques seen before.
 
-For\\(\lambda_1\\)
+## Prey-predator system
 
-$$(A-\phi I)x=0$$
+Let vector \\(x_k\\) denote the population of both owls and rats after k months such that
 
-$$\begin{bmatrix} 1-\phi & 1\\ 1 & -\phi\end{bmatrix}x=0$$
+$$x_k=\begin{bmatrix}O_k \\ R_k \end{bmatrix}$$
 
-$$\begin{bmatrix} 1-\phi & 1\\ 1 & -\phi\end{bmatrix}\begin{bmatrix} \phi \\ 1 \end{bmatrix}=\begin{bmatrix} -(\phi^2 -\phi -1)\\ \phi-\phi\end{bmatrix}=0$$
+Then let the system below denote the population dynamics overtime:
 
-So we can see that the for
+$$\cases{
+  O_{k+1}=0.5O_k \ + (0.4)R_k \\ R_{k+1}=-(0.104)O_k + 1.1R_k
+}$$
 
-$$u_k=\begin{bmatrix} F_{k+1} \\ F_{k} \end{bmatrix}$$
+* The first equation indicates that:
+  * with no rats, only half the owls will survive each month
+  * If there are plenty rats, the owl population will increase
+* The second equation indicates that:
+  * with no owls, the rats would increase by 10% each month
+  * If there are plenty owls, the rat population will decrease
 
-the ratio (eigenvector) between the next (top entry) number and the current (bottom entry) number is the golden number:
+We can see from this system that there should be a sweetspot overtime in which there will be a balanced amount of owls and rats keeping both populations stable.
 
-$$\begin{bmatrix} \phi \\ 1 \end{bmatrix}$$
+* That sweet spot is \\(\lim{x_k}_{k\to\infty}\approx x^{10^{a\ lot}}=A^{10^{a\ lot}}x_0\\) 
+* A can be made from the system definition:
 
-The other eigenvector is
+$$A=\begin{bmatrix}0.5 & 0.4\\-0.104 & 1.1\end{bmatrix}$$
 
-$$\begin{bmatrix} 1-\phi \\ 1 \end{bmatrix}$$
+Matlab returns the eigenvalues 0.58 and 1.02, and the following eigenvector matrix V:
 
-## Complex eigenvalues and eigenvectors
-* Here we allow matrices to be in the\\(\mathcal{C}^n\\) domain, rather than\\(R^n\\)
-  * Now eigenvalues can also be complex numbers
-* If n by n matrix A has\\(\lambda\\) eigenvalue and\\(\mathbf{v}\\) eigenvector, then their conjugates also exist
-  * The conjugate of a complex number is the same as the original one, but the imaginary part changes its sign, and its associated with the conjugate of lambda.
-* Let A be a real 2 x 2 matrix with eigenvalues\\(a \pm bi\\) where\\(b\neq 0\\) and a and b are real numbers. Then there exists an invertible real matrix P such that:
+```matlab
+>> A=[.5 .4; -.104 1.1]
 
-$$A=P\begin{bmatrix} a & -b \\ b & a \end{bmatrix}P^{-1}$$
+A =
 
-* The middle matrix with a's and b's is called C.
+    0.5000    0.4000
+   -0.1040    1.1000
 
-* Then the eigenvalues of that matrix are\\(\lambda=a \pm bi\\)
+>> [V,D] = eig(A)
 
-The matrix P can be constructed as
+V =
 
-$$P=\left[ Re \mathbf{v} \ Im \mathbf{v} \right]$$
+   -0.9806   -0.6097
+   -0.1961   -0.7926
 
-Where v is an eigenvector associated to the eigenvalue a - bi.
 
-* \\(r=\|\lambda\|=\sqrt{a^2+b^2}\\)
+D =
 
-$$C = r\begin{bmatrix} \frac{a}{r} & -\frac{b}{r} \\ \frac{b}{r} & \frac{a}{r}\end{bmatrix}=\begin{bmatrix} r & 0 \\0 & r\end{bmatrix}\begin{bmatrix} \cos\phi & -\sin\phi \\ \sin\phi & \cos\phi\end{bmatrix}$$
+    0.5800         0
+         0    1.0200
 
-* The angle \\(\phi\\) is called the argument of\\(\lambda=a+bi\\) (which is arctan(b/a)) and the rotation of the transformation\\(x \mapsto Cx\\) and scaled by\\(\|\lambda\|\\)
+>> 
+```
 
-## Recurrence relation to matrix equation
+Matlab has rounded the the operations, but in fact -0.9806/-0.1961 = 5/1 and -0.6097/-0.7926 = 10/13.
 
-$$\cases{a_k=2a_{k-1} \\ b_k = 3b_{k-1}} \Leftrightarrow \begin{bmatrix} a_k \\ b_k \end{bmatrix} = \begin{bmatrix} 2 & 0 \\ 0 & 3 \end{bmatrix}\begin{bmatrix} a_{k-1} \\ b_{k-1} \end{bmatrix}$$
+Therefore, the corresponding eigenvectors for \\(\lambda_1=.58\\) and \\(\lambda_1=1.02\\) are
 
+$$v_1=\begin{bmatrix}5 \\ 1 \end{bmatrix} \ \ \ v_2=\begin{bmatrix}10 \\ 13 \end{bmatrix}$$
+
+Instead of using \\(x_k = A^kx_0\\) directly, since we don't know \\(x_0\\) yet, we can **decompose** \\(x_0\\) in eigenvectors:
+
+### Eigenvector decomposition
+
+$$Let\ x_0=\begin{bmatrix}? \\ ? \\ ? \end{bmatrix}$$.
+
+Then we have that
+
+$$x_0=c_1\begin{bmatrix}? \\? \\ ? \end{bmatrix}+ c_2\begin{bmatrix}? \\ ? \\ ? \end{bmatrix} + c_3\begin{bmatrix}? \\ ?\\ ? \end{bmatrix}$$
+
+Since we defined \\(x_k=Ax_{k-1}\\), then we have that
+
+$$x_1=A\left(c_1\begin{bmatrix}? \\? \\ ? \end{bmatrix}+ c_2\begin{bmatrix}? \\ ? \\ ? \end{bmatrix} + c_3\begin{bmatrix}? \\ ?\\ ? \end{bmatrix}\right)
+=c_1A\begin{bmatrix}? \\? \\ ? \end{bmatrix}+ c_2A\begin{bmatrix}? \\ ? \\ ? \end{bmatrix} + c_3A\begin{bmatrix}? \\ ?\\ ? \end{bmatrix}
+=c_1Av_1 + c_2Av_2 + c_3Av_3$$
+
+* The thing is that \\(x\\) can't just be decomposed into arbitrary vectors and scalars. \\(x_0\\) must be strictly expressed as a linear combination of the eigenvectors scaled by some constants c. To find those c constants first we must find the eigenvectors and eigenvalues of A (matlab: `[V,D] = eig(A)`). If \\(x_0\\) is given in the problem, then we can make another system of equations to solve for \\(x_0\\), i.e.
+
+$$\cases{
+  c_1 {v_1}_1 + c_2 {v_2}_1 = {x_0}_1 \\
+  c_1 {v_1}_2 + c_2 {v_2}_2= {x_0}_2 \\
+}$$
+
+* Solving this system gives you the vector c, which can be then used in the formula below:
+
+Also, Since v are eigenvectors of A, we have \\(Av=\lambda v\\):
+
+$$x_1=c_1\lambda_1v_1 + c_2\lambda_2v_2 + c_3\lambda_3v_3$$
+
+$$x_k=c_1\lambda^k_1v_1 + c_2\lambda^k_2v_2 + c_3\lambda^k_3v_3$$
+
+$$x_0=c_1\lambda^0_1v_1 + c_2\lambda^0_2v_2 + c_3\lambda^0_3v_3=c_1v_1+c_2v_2+c_3v_3$$
+
+Therefore, if in our owl vs rat example, since \\(x_0\\) is unkown, we can't solve for c. We can only express the solution given \\(\lambda_1=.58\\), \\(\lambda_2=1.02\\) and
+
+$$v_1=\begin{bmatrix}5 \\ 1 \end{bmatrix} \ \ \ v_2=\begin{bmatrix}10 \\ 13 \end{bmatrix}$$
+
+Then  leave c as a constant \\(x_k=c_1\lambda^k_1v_1 + c_2\lambda^k_2v_2\\)
+
+$$x_k=c_1.58^k\begin{bmatrix}5 \\ 1 \end{bmatrix} + c_21.02^k\begin{bmatrix}10 \\ 13 \end{bmatrix}$$
+
+
+From the fact that .58 is smaller than 1, as k grows to infinity, the rate of growth for both owls and rats will be solely defined by 1.02 and the ratio of owls to rats will be mantained at 10/13. Although c is not known, as we get closer to infinty that becomess irrelevant, and we've managed to solve one of the things we managed to learn some things about the system nevertheless.
+
+### Complex systems
+
+Take matrix A which as complex eigenvalues:
+
+$$A=PCP^{-1}$$
+
+* Where matrix C is strictly composed of the complex eigenvalues of matrix A, such that a is the real part of the eigenvalues and \\(\pm b\\) is the coeffcient multiplying \\(i\\) in the complex eigenvalue.
+
+$$C=\begin{bmatrix} a & -b \\b & a \end{bmatrix}$$
+
+* Rember that P is composed of the real parts on the 1st column, and the negative imaginary parts on the second column.
+
+* Trying to do
+$$A^k=P\left(\begin{bmatrix} a & -b \\b & a \end{bmatrix}\right)^kP^{-1}$$ is hard, because C is not a diagonal matrix
+  
+* Instead use the property:
+
+$$C^k =r^k\begin{bmatrix} \cos(k\phi) & -\sin(k\phi) \\ \sin(k\phi) & \cos(k\phi)\end{bmatrix}$$
+
+* Remember that \\(\phi=\arctan(\frac{b}{a})\\) and that \\(r=\|\lambda\|=\sqrt{a^2+b^2}\\)
+* Therefore \\(x_k=\left(PC^k P^{-1}\right)x_0\\) or, if you know the previous transformation \\(x_k=Cx_{k-1}\\)
+* This transformation overtime is a rotation that creates:
+  * Spiral towards the origin if r < 1
+  * Spiral away from the origin if r > 1
+  * Elliptic (or even circle sometimes) if r = 1.
