@@ -126,6 +126,12 @@ tags: CSE1205 linear-algebra
   - [Prey-predator system](#prey-predator-system)
     - [Eigenvector decomposition](#eigenvector-decomposition)
     - [Complex systems](#complex-systems)
+  - [Orthogonality](#orthogonality)
+    - [Orthogonal set](#orthogonal-set)
+    - [Orthomonal set](#orthomonal-set)
+    - [Orthogonal matrices](#orthogonal-matrices)
+  - [Orthogonal projections](#orthogonal-projections)
+  - [Least squares](#least-squares)
 
 ## Systems of Linear Equations
 ### Linear equation
@@ -610,13 +616,10 @@ $$\color{green}{\vec{i}} = \begin{bmatrix}cos(\alpha)\\sin(\alpha)\end{bmatrix}$
 
 The changes for\\(\color{red}{\vec{j}}\\) will be the same, but with a\\(\frac{1}{2}\pi\\) offset, as\\(\color{red}{\vec{j}}\\) was already 90° counterclockwise from\\(\color{green}{\vec{i}}\\)
 
-$$\color{red}{\vec{i}} = \begin{bmatrix}cos(\alpha + \frac{1}{2}\pi)\\sin(\alpha + \frac{1}{2}\pi)\end{bmatrix} = 
+$$\vec{j} = \begin{bmatrix}cos(\alpha + \frac{1}{2}\pi)\\sin(\alpha + \frac{1}{2}\pi)\end{bmatrix} = 
 \begin{bmatrix}sin(\frac{1}{2}\pi - \alpha - \frac{1}{2}\pi)\\cos(\frac{1}{2}\pi - \alpha - \frac{1}{2}\pi)\end{bmatrix} =
 \begin{bmatrix}sin(- \alpha)\\cos(- \alpha)\end{bmatrix} = \begin{bmatrix}-sin(\alpha)\\cos(\alpha)\end{bmatrix}
 $$
-
-
-
 
 ### Reflection through the x-axis
 
@@ -1876,3 +1879,147 @@ $$C^k =r^k\begin{bmatrix} \cos(k\phi) & -\sin(k\phi) \\ \sin(k\phi) & \cos(k\phi
   * Spiral towards the origin if r < 1
   * Spiral away from the origin if r > 1
   * Elliptic (or even circle sometimes) if r = 1.
+
+## Orthogonality
+
+* Orthogonal means 90 degrees and is described by the symbol \\(\perp\\), also known as perpendicular
+* Not just 2 vectors can be orthogonal when the dot product is 0, but also subspaces themselves (seen as areas) can be orthogonal
+  * Examples are rowspace vs nullspace and columnspace vs nullspace
+* A dot product between two vectors is equivalent to the matrix-vector transformation of one of the vectors and the other one transponsed taken the role of A (for \\(R^2\\)):
+
+$$\vec{a}\cdot\vec{b}=\begin{bmatrix}a_1 \\ a_2 \end{bmatrix}\cdot\begin{bmatrix}b_1 \\ b_2 \end{bmatrix}=\vec{a}^T\vec{b}=
+\begin{bmatrix}a_1 & a_2 \end{bmatrix}\begin{bmatrix}b_1 \\ b_2 \end{bmatrix}=b_1 a_1 + b_2 a_2$$
+
+Which can be interpreted as the transformation that takes input b and projects it into the 1D line such that \\(\vec{i}\\) and \\(\vec{j}\\) are defined by the columns of \\(a^T\\). This expresses the length of the line calculated from: the distance from the origin to the point where one vector is orthogonally projected on to the other one, times the length of the other vector. It happens that when the vectors are perpendicular, the projection point is the origin, and thus we get 0*length of the other vector. So when the dot product is 0 it shows that the vectors are perpendicular/orthogonal/have a 90 degrees angle. When the dot product is negative it means they point in the opposite direction.
+
+* Another test for ortoghanility between 2 vectors is to use the pythagoreas theorem:
+
+$$\|a\|^2+\|b\|^2=\|a+b\|^2$$
+
+* Geometric interpretation of the dot proudct:
+
+$$a\cdot b = \|a\|\|b\|\cos \alpha$$
+
+* Some geometric definitions:
+  * Norm of a vector is the length
+  * The distance between two vectors is the length of (a-b)
+  * Orthogonal vectors are vectors with a 0 innerproduct
+
+* All vector lengths are positive except for the 0 vector, which is 0.
+
+$$\|a\|^2=\left(\sqrt{a_1^2+a_2^2}\right)^2=a_1^2+a_2^2=a_1a_1+a_2a_2=a^Ta$$
+
+* The 0 vector is orthogonal with all the vectors, including itself
+* Subspace S is orthogonal to subspace T iff every vector in S is orthogonal to every vector in T
+* If 2 subspaces have an overlaping vector that is not the origin then they are not orthogonal as that vector cannot be orthogonal to itself
+* Rowspace is orthogonal to nullspace because of the defintion of the nullspace which takes all the x's such that Ax=0. This also means that each of the rows of A make a dot product with x and yield 0:
+
+$$Ax=0 \Leftrightarrow \begin{bmatrix} row_1 \\ row_2 \\ \vdots \\row_n \end{bmatrix} \begin{bmatrix}  \\ x \\  \\ \end{bmatrix}=
+\begin{bmatrix} 0 \\ 0 \\ \vdots \\0 \end{bmatrix}=0$$
+
+* However, the subspace of the rows is not just the rows themselves, it's also all possible linear combinations of the rows. These are also orthogonal to the nullspace:
+
+$$c_1*row_1=0$$
+
+$$c_2*row_2=0$$
+
+$$c_2*row_2+c_1*row_1=0$$
+
+* Nullspace contains all vectors that are perpendicular to the row space 
+* The inner product and the dot product are the same thing
+* \\(Nullspace(A^TA)=Nullspace(A)\\)
+* \\(rank(A^TA)=rank(A)\\)
+* \\(A^TA\\) is invertible if the columns of A are linearly independent (think of A also being not necessarily a square matrix)
+* The orthogonal complement of a subspace is the set of all vectors that are ortogonal to all the vectors in the subspace (strictly each of these vectors of the complement must be, each, orthogonal to all vectors)
+  * The orthogonal complement is denoted with \\(^\perp\\)
+* \\((Col A)^T=rowspace\\)
+  * \\((Col A^T)^\perp=Nul A\\)
+* \\((Col A)^\perp=Nul A^T\\)
+* \\(dim W + dim W^\perp=n\\)
+  * This means that the column space of one matrix + the column space of it's orthoghonal component make up for the whole R^n 
+
+### Orthogonal set
+
+* all of the possible vector pairs in the set are orthogonal
+* If it doesnt have the zero vector then it is linearly independent
+
+### Orthomonal set
+
+* all of the possible vector pairs in the set are orthogonal
+* In addition, the same vector can be paired with itself and it produces inner product 1
+* slide 26, 27
+
+### Orthogonal matrices
+* slide 28
+* book 6.1, 6.2
+
+## Orthogonal projections
+
+This is relevant when our matrix A has too many rows, and therefore some free variables.
+
+The projection p is a line that connects two vectors with the minimum length possible. Such line makes a 90 degree angle. The line that connects those two vectors is also called "error", as it expresses the difference between b and p.
+
+ ![Injective vs surjective]({{ site.url }}/images/projection.png)
+
+* We can see that p is a multiple of a, therefore: p = xa
+* We also see that \\(a\perp e\\), therefore: \\(0=a^Te=a^T(b-p)=a^T(b-xa)=0\\)
+  * \\(xa^Ta = a^Tb\\)
+  * \\(x=\frac{a^Tb}{a^Ta}\\)
+
+$$p = \frac{a^Tb}{a^Ta}a$$
+
+If I double b, I double p:
+
+$$2p = \frac{a^T2b}{a^Ta}a=2\frac{a^Tb}{a^Ta}a$$
+
+If I double a, p remains constant:
+
+$$p = \frac{2a^Tb}{2a^T2a}2a=\frac{a^Tb}{a^Ta}a$$
+
+* remember that e is the vector from p to b (p+e=b). And that p is the vector from 0 to p.
+
+This projection of b into a can be translated into a matrix, the **projection matrix**
+
+$$p = Pb$$
+
+$$P=\frac{a^T}{a^Ta}a$$
+
+* Remember that \\(1/q = q^{-1}\\) and this works surprisingly well with matricesses
+
+$$P=(a^Ta)^{-1}a^Ta$$
+
+Which P equals identity for squared invertible matrices, in case A is not squared then:
+
+$$p = (a^Ta)^{-1}a^Tab$$
+
+
+* The column space of P is the line through a
+* Rank(P)=1
+  * Rank is the same as the dimension
+* \\(P^T=P\\) (it's symmetric)
+* Applying the projection a second time will land you on the same spot you already are from the first projection.
+* \\(P^2=P\\)
+
+Why project?
+
+* Because Ax=b may have no solution, we want to solve for the "closest next thing"
+* Solve Ax=p
+* To find x in p=Ax, we know that the error (b-p aka b-Ax) is perpendicular to p (p might be a line in 2D, or a plane in 3D, and so forth)
+  * (b-Ax) is therefore perpendicular to each of the columns of A. Therefore, for both columns of A:
+    * \\(a_1^T(b-Ax)=0\\) and \\(a_2^T(b-Ax)=0\\)
+
+$$\begin{bmatrix} a^T_1 \\ a^T_2 \end{bmatrix}(b-Ax)=\begin{bmatrix} 0 \\ 0 \end{bmatrix}$$
+
+$$A^T(b-Ax)=0$$
+
+* e in \\(N(A^T)\\)
+* \\(e \perp C(A)\\)
+* \\(A^TAx=A^Tb\\)
+* \\(x=(A^TA)^-1A^Tb\\)
+* \\(p=Ax=A(A^TA)^{-1}A^Tb\\)
+
+
+## Least squares
+
+Fitting a line through 3 points sometimes is impossible. Therefore  Ax=b does not have a solution, but instead we can use \\(A^TAx=A^Tb\\) wich will give us a line with the smallest error between the points and the line.
+
