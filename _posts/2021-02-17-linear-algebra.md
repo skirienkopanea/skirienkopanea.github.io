@@ -127,11 +127,16 @@ tags: CSE1205 linear-algebra
     - [Eigenvector decomposition](#eigenvector-decomposition)
     - [Complex systems](#complex-systems)
   - [Orthogonality](#orthogonality)
+    - [Ortho-Normal vectors](#ortho-normal-vectors)
+    - [Orthonormal matrix](#orthonormal-matrix)
     - [Orthogonal set](#orthogonal-set)
     - [Orthomonal set](#orthomonal-set)
     - [Orthogonal matrices](#orthogonal-matrices)
   - [Orthogonal projections](#orthogonal-projections)
   - [Least squares](#least-squares)
+  - [Gram-Schmidt process](#gram-schmidt-process)
+  - [Symmetric matrices](#symmetric-matrices)
+    - [Positive definitive symetric matrices](#positive-definitive-symetric-matrices)
 
 ## Systems of Linear Equations
 ### Linear equation
@@ -1938,6 +1943,30 @@ $$c_2*row_2+c_1*row_1=0$$
 * \\(dim W + dim W^\perp=n\\)
   * This means that the column space of one matrix + the column space of it's orthoghonal component make up for the whole R^n 
 
+### Ortho-Normal vectors
+
+Normalized vectors have a length of 1, therefore orthonormal vectors have a dot product of 0 except whith themselves, which is 1.
+
+The gram schmidt process will transform a matrix A whose columns are not orthonormal to a matrix that does have orthonormal vectors while mantaining the other properties
+
+add the case
+
+### Orthonormal matrix
+
+Orthogonal are orthonormal square matrices
+
+\\(Q^TQ=I\\)
+
+If Q is squared, \\(Q^T\\) is the inverse of Q.
+
+Why use orthogonal matrices?
+
+Makes the projection onto its column space easier
+
+\\(P=Q(Q^TQ)^{-1}Q^T=QQ^T\\)
+
+IF Q is squared P=I
+
 ### Orthogonal set
 
 * all of the possible vector pairs in the set are orthogonal
@@ -2017,9 +2046,53 @@ $$A^T(b-Ax)=0$$
 * \\(A^TAx=A^Tb\\)
 * \\(x=(A^TA)^-1A^Tb\\)
 * \\(p=Ax=A(A^TA)^{-1}A^Tb\\)
-
+* The things in the column space of A are Ax
+* p and e are perpendicular
+* e is perpendicular to every vector in the column space
+* If A has independent columns \\(A^TA\\) is invertible
+  * A matrix is invertible when its nullspace is only the 0 vector
+  * Columns are always indepedent if they are orthonomal (perpendicular, unit) vectors [100],[010],[001]
+    * i = [cos theta, sin theta], j = [-sin theta, cos theta]
 
 ## Least squares
 
 Fitting a line through 3 points sometimes is impossible. Therefore  Ax=b does not have a solution, but instead we can use \\(A^TAx=A^Tb\\) wich will give us a line with the smallest error between the points and the line.
+
+* Goal: Minimize
+
+$$\|Ax-b\|^2=\|e\|^2=e^2_1+e^2_2+e^2_3$$
+
+Hence "least" squares.
+
+## Gram-Schmidt process
+
+For 2 independent vectors, let one as-is and the other one has to become the error vector that is parallel to a.
+
+p+e=b
+
+e=b-p
+
+p=(A^Tb/a^Ta)A
+
+A=QR
+
+
+## Symmetric matrices
+
+\\(A=A^T\\)
+
+* Eigenvalues are real
+* Eigenvectors can be chosen perpendicular (remember that they can be chosen from a vector span)
+* Usually we express \\(A=S\LambdaS^{-1}\\), but now we can choose the vector to have a unit size (orthonormal eigenvectors)
+* Symmetric case \\(A=Q\Lambda\Q^{-1}=Q\Lambda\Q^{-T}\\)
+* Every symmetric matrix is a combination of perpendicual projection matrices
+* The number of positive eigenvalues is the same as the number of positive pivots
+
+### Positive definitive symetric matrices
+
+* All eigenvalues are positive
+* all pivots are positive
+* all sub determinants are positive
+
+
 
