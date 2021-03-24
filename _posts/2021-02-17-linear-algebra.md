@@ -127,12 +127,17 @@ tags: CSE1205 linear-algebra
     - [Eigenvector decomposition](#eigenvector-decomposition)
     - [Complex systems](#complex-systems)
   - [Orthogonality](#orthogonality)
-    - [Ortho-Normal vectors](#ortho-normal-vectors)
-    - [Orthonormal matrix](#orthonormal-matrix)
-    - [Orthogonal set](#orthogonal-set)
-    - [Orthomonal set](#orthomonal-set)
-    - [Orthogonal matrices](#orthogonal-matrices)
-  - [Orthogonal projections](#orthogonal-projections)
+    - [Inner product](#inner-product)
+    - [Normal vectors](#normal-vectors)
+    - [Orthogonal vectors](#orthogonal-vectors)
+    - [Orthonormal vectors](#orthonormal-vectors)
+    - [Orthogonal complements](#orthogonal-complements)
+    - [Orthogonal sets](#orthogonal-sets)
+    - [Orthogonal projections](#orthogonal-projections)
+    - [Orthonormal sets](#orthonormal-sets)
+    - [Orthogonal matrix](#orthogonal-matrix)
+    - [Orthogonal Projections in higher dimensions](#orthogonal-projections-in-higher-dimensions)
+    - [Orthonomal basis projections](#orthonomal-basis-projections)
   - [Least squares](#least-squares)
   - [Gram-Schmidt process](#gram-schmidt-process)
   - [Symmetric matrices](#symmetric-matrices)
@@ -723,7 +728,7 @@ $$A=\begin{bmatrix} 0 & 0 \\ 0 & 1\end{bmatrix}$$
 
 Hint from the Book of Proof (Richard Hammack):
 
- ![Injective vs surjective]({{ site.url }}/images/injective_vs_surjective_richard_hammack_book_of_proof.png)
+![Injective vs surjective]({{ site.url }}/images/injective_vs_surjective_richard_hammack_book_of_proof.png)
 
 ### Composition of 2 transformations
 
@@ -773,13 +778,13 @@ $$A_2\cdot A_1 = \begin{bmatrix} \color{green}{\vec{i_{A_2\cdot A_1}}} & \color{
 
 Following the properties of the matrix-vector product, the matrix-matrix product (which is nothing but a transformation of a transformation), must have the number of columns in matrix A be equal to the number of rows in matrix B in AB, and AB size is\\(rows_A \times columns_B\\)
 
- ![Injective vs surjective]({{ site.url }}/images/matrix_multiplication_condition.png)
+![Injective vs surjective]({{ site.url }}/images/matrix_multiplication_condition.png)
 
 #### Row-column multiplication
 
 There's a shortcut formula to get the value of AB's\\(a_{ij}\\) where i is also A's i row and j is also B's j column: Take A's i row and transpose it to a vector, then calculate the dot product with B's j column:
 
- ![Injective vs surjective]({{ site.url }}/images/row_column_multiplication.png)
+![Injective vs surjective]({{ site.url }}/images/row_column_multiplication.png)
 
 #### Zero matrix
 
@@ -1425,15 +1430,15 @@ columns or two rows are the same or a column or a row is zero. Which would then 
 ## Eigenvectors and eigenvalues
 Going back to the [linear transformations](#2d-transformations), we find that for some standard matrices A of a transformation, there are vector inputs such that the output after the transformation is a scalar of themselves (aka, it is within their own span, it's "parallel"), such vector inputs are called eigenvectors, and the scalars are called eigenvalues. For instance, matrix A below has 2 eigenvectors (by definition an eigenvector must have 1 eigenvalue). One of the eigenvectors is X = (1,0), and since T = (3,0) we can see that the eigenvalue is 3, since 3 * X = T.
 
- ![In span]({{ site.url }}/images/in_span_1.png)
+![In span]({{ site.url }}/images/in_span_1.png)
 
  The other eigenvector is X = (-1,1), which gives T = (-2,2), therefore the eigenvalue being 2.
 
- ![In span]({{ site.url }}/images/in_span_2.png)
+![In span]({{ site.url }}/images/in_span_2.png)
 
  You can see an example of a non eigenvector below, as X = (1,1) does not produce an output within it's on spawn T = (4,2)
 
- ![Not in span]({{ site.url }}/images/not_in_span.png)
+![Not in span]({{ site.url }}/images/not_in_span.png)
 
 ### 3D rotation
 
@@ -1890,37 +1895,59 @@ $$C^k =r^k\begin{bmatrix} \cos(k\phi) & -\sin(k\phi) \\ \sin(k\phi) & \cos(k\phi
 * Orthogonal means 90 degrees and is described by the symbol \\(\perp\\), also known as perpendicular
 * Not just 2 vectors can be orthogonal when the dot product is 0, but also subspaces themselves (seen as areas) can be orthogonal
   * Examples are rowspace vs nullspace and columnspace vs nullspace
-* A dot product between two vectors is equivalent to the matrix-vector transformation of one of the vectors and the other one transponsed taken the role of A (for \\(R^2\\)):
 
-$$\vec{a}\cdot\vec{b}=\begin{bmatrix}a_1 \\ a_2 \end{bmatrix}\cdot\begin{bmatrix}b_1 \\ b_2 \end{bmatrix}=\vec{a}^T\vec{b}=
+### Inner product
+* Also known as dot product between two vectors, it's equivalent to the matrix-vector product of one of the vectors transponsed with the other one so that the result is a 1x1 matrix, interpreted as a scalar:
+
+$$\vec{a}\bullet\vec{b}=\begin{bmatrix}a_1 \\ a_2 \end{bmatrix}\cdot\begin{bmatrix}b_1 \\ b_2 \end{bmatrix}=\vec{a}^T\vec{b}=
 \begin{bmatrix}a_1 & a_2 \end{bmatrix}\begin{bmatrix}b_1 \\ b_2 \end{bmatrix}=b_1 a_1 + b_2 a_2$$
 
-Which can be interpreted as the transformation that takes input b and projects it into the 1D line such that \\(\vec{i}\\) and \\(\vec{j}\\) are defined by the columns of \\(a^T\\). This expresses the length of the line calculated from: the distance from the origin to the point where one vector is orthogonally projected on to the other one, times the length of the other vector. It happens that when the vectors are perpendicular, the projection point is the origin, and thus we get 0*length of the other vector. So when the dot product is 0 it shows that the vectors are perpendicular/orthogonal/have a 90 degrees angle. When the dot product is negative it means they point in the opposite direction.
+This transformation expresses the length of the the distance from the origin to the point where one vector is orthogonally projected on to the other one, times the length of the later one. It happens that when the vectors are already perpendicular, the projection point is the origin, and thus we get 0*length of the vector where the projection lies. When the dot product is negative it means they point in the opposite direction, when positive in the same one.
 
-* Another test for ortoghanility between 2 vectors is to use the pythagoreas theorem:
-
-$$\|a\|^2+\|b\|^2=\|a+b\|^2$$
-
+* A dot product is only defined when the vectors have the same number of entries. Let u, v and we be vectors and c a scalar, a dot product can be expressed with a dot or with the transponse:
+* \\(u\bullet v=u^Tv\\)
+* \\(u^Tv=v^Tu\\)
+* \\((u+v)^Tw=u^Tw+v^Tw\\)
+* \\((cu)^Tv=c(u^Tv)=u^T(cv)\\)
+* \\(u^Tu\gt 0\\), uu=0 only for u=0
+* The length (called norm) of v is expressed as the nonnegative scalar \\(\\|v\\|\\) defined by:
+* $$\|v\|=\sqrt{v^Tv}$$
 * Geometric interpretation of the dot proudct:
 
-$$a\cdot b = \|a\|\|b\|\cos \alpha$$
+$$a\bullet b = \|a\|\|b\|\cos \alpha$$
 
-* Some geometric definitions:
-  * Norm of a vector is the length
-  * The distance between two vectors is the length of (a-b)
-  * Orthogonal vectors are vectors with a 0 innerproduct
+* The distance between two vectors is the length of \\(\\|u-v\\|\\), also expressed as \\(dist(u,v)=\sqrt{(u-v)\bullet(u-v)}\\)
 
-* All vector lengths are positive except for the 0 vector, which is 0.
+### Normal vectors
+* Vectors whose length are 1 are called unit vectors
+  * normalizing: scale a nonzero vector \\(v\\) by \\(\frac{1}{\\|v\\|}\\) to obtain a unit vector
 
-$$\|a\|^2=\left(\sqrt{a_1^2+a_2^2}\right)^2=a_1^2+a_2^2=a_1a_1+a_2a_2=a^Ta$$
-
+### Orthogonal vectors
+* Orthogonal vectors are vectors with a 0 innerproduct
+  * Another test is based on pythagoras: u and v are orthogonal iff \\(\\|u+v\\|^2 = \\|u\\|^2+\\|v\\|^2\\)
 * The 0 vector is orthogonal with all the vectors, including itself
-* Subspace S is orthogonal to subspace T iff every vector in S is orthogonal to every vector in T
-* If 2 subspaces have an overlaping vector that is not the origin then they are not orthogonal as that vector cannot be orthogonal to itself
+
+### Orthonormal vectors
+* Orthonormal vectors are orthogonal and normal (length 1) vectors
+
+### Orthogonal complements
+* A vector z is orthogonal to a subspace W iff it is orthogonal to each vector in the subspace W set.
+  * The set of all orthogonal vectors to W are called the **orthogonal complement** of W and is denoted as \\(W^\perp\\)
+![Complement]({{ site.url }}/images/complement.png)
+* If W is a plane, then \\(W^\perp\\) is a line (all the vectors spanned by 1 basis vector perpendicular on W)
+  * \\(W^\perp=L\\) and \\(W=L^\perp\\) (the complement of the complement cancels out)
+    * under the premise that all the vectors must depart from the origin only
+    * If 2 subspaces have an overlaping vector that is not the origin then they are not orthogonal as that vector cannot be orthogonal to itself (only 0 is orthogonal to itself)
+* \\(\left({W^\perp}\right)^\perp=W\\)
+* If W is a subspace of \\(R^n\\) so is\\(W^\perp\\), furthermore:
+  * dim W + dim \\(W^\perp\\) = n, where dim stands for dimension (rank).
 * Rowspace is orthogonal to nullspace because of the defintion of the nullspace which takes all the x's such that Ax=0. This also means that each of the rows of A make a dot product with x and yield 0:
+    * rowspace = rowspan:
+![Subspaces]({{ site.url }}/images/subspaces.png)
+  * Dot product of each row with vector x (of the null space) yields zero:
 
 $$Ax=0 \Leftrightarrow \begin{bmatrix} row_1 \\ row_2 \\ \vdots \\row_n \end{bmatrix} \begin{bmatrix}  \\ x \\  \\ \end{bmatrix}=
-\begin{bmatrix} 0 \\ 0 \\ \vdots \\0 \end{bmatrix}=0$$
+\begin{bmatrix} 0 \\ 0 \\ \vdots \\0 \end{bmatrix}$$
 
 * However, the subspace of the rows is not just the rows themselves, it's also all possible linear combinations of the rows. These are also orthogonal to the nullspace:
 
@@ -1930,105 +1957,116 @@ $$c_2*row_2=0$$
 
 $$c_2*row_2+c_1*row_1=0$$
 
-* Nullspace contains all vectors that are perpendicular to the row space 
-* The inner product and the dot product are the same thing
-* \\(Nullspace(A^TA)=Nullspace(A)\\)
-* \\(rank(A^TA)=rank(A)\\)
-* \\(A^TA\\) is invertible if the columns of A are linearly independent (think of A also being not necessarily a square matrix)
-* The orthogonal complement of a subspace is the set of all vectors that are ortogonal to all the vectors in the subspace (strictly each of these vectors of the complement must be, each, orthogonal to all vectors)
-  * The orthogonal complement is denoted with \\(^\perp\\)
-* \\((Col A)^T=rowspace\\)
-  * \\((Col A^T)^\perp=Nul A\\)
-* \\((Col A)^\perp=Nul A^T\\)
-* \\(dim W + dim W^\perp=n\\)
-  * This means that the column space of one matrix + the column space of it's orthoghonal component make up for the whole R^n 
+* Since this statement is true for any matrix, it is also true for \\(A^T\\). Therefore:
+  * \\((Row\ A)^\perp=Nul A\\)
+  * \\((Row\ A^T)^\perp=Nul A^T \Longleftrightarrow (Col\ A)^\perp=Nul A^T\\)
 
-### Ortho-Normal vectors
+### Orthogonal sets
+A set of vectors {\\(a_1\\), \\(a_2\\), \\(a_3\\), ..., \\(a_n\\)} in \\(R^n\\) is an **orthogonal set** if each possible pair combination of **distinct** vectors from the set is orthogonal, i.e.:
 
-Normalized vectors have a length of 1, therefore orthonormal vectors have a dot product of 0 except whith themselves, which is 1.
+{$$\begin{bmatrix} 1 \\ 0 \\ 0 \end{bmatrix}$$,$$\begin{bmatrix} 0 \\ 1 \\ 0 \end{bmatrix}$$,$$\begin{bmatrix} 0 \\ 0 \\ 1 \end{bmatrix}$$}
 
-The gram schmidt process will transform a matrix A whose columns are not orthonormal to a matrix that does have orthonormal vectors while mantaining the other properties
+* If the orthogonal set does not contain the zero vector, then all the vectors are independent
+* An **orthogonal basis** for a subspace W of \\(R^n\\) is a basis for W that is also an orthogonal set
+* Orthogonal basis are **nice**:
+  * any vector in \\(R^n\\) can be expressed as a linear combination of the columns of A
+  * the weights of the columns for any vector y can be defined by
+  * $$c_j=\frac{y\bullet a_j}{a_j\bullet a_j}$$
+  * such that \\(y=c_1a_1+c_2a_2+\dots+c_na_n\\)
+  * Therefore you dont need an augmented matrix to solve for the weights
 
-add the case
-
-### Orthonormal matrix
-
-Orthogonal are orthonormal square matrices
-
-\\(Q^TQ=I\\)
-
-If Q is squared, \\(Q^T\\) is the inverse of Q.
-
-Why use orthogonal matrices?
-
-Makes the projection onto its column space easier
-
-\\(P=Q(Q^TQ)^{-1}Q^T=QQ^T\\)
-
-IF Q is squared P=I
-
-### Orthogonal set
-
-* all of the possible vector pairs in the set are orthogonal
-* If it doesnt have the zero vector then it is linearly independent
-
-### Orthomonal set
-
-* all of the possible vector pairs in the set are orthogonal
-* In addition, the same vector can be paired with itself and it produces inner product 1
-* slide 26, 27
-
-### Orthogonal matrices
-* slide 28
-* book 6.1, 6.2
-
-## Orthogonal projections
+### Orthogonal projections
 
 This is relevant when our matrix A has too many rows, and therefore some free variables.
 
-The projection p is a line that connects two vectors with the minimum length possible. Such line makes a 90 degree angle. The line that connects those two vectors is also called "error", as it expresses the difference between b and p.
+The orthogonal projection \\(\hat{y}\\) onto L (spanned by u) is a vector that lands on the point \\((\hat{y}_1,\hat{y}_2)\\). The line between the tip of y and the tip of \\(\hat{y}\\) that connects these two vectors, in the minimum length possible, is is called "error" (e), as its length is the difference between them (\\(\\|y-\hat{y}\\|\\)), and the vector e comes from the arithmetic operation \\(y-\hat{y}\\), which is ortogonal to the line L where projection \\(\hat{y}\\) lies onto.
 
- ![Injective vs surjective]({{ site.url }}/images/projection.png)
+![Injective vs surjective]({{ site.url }}/images/projection.png)
 
-* We can see that p is a multiple of a, therefore: p = xa
-* We also see that \\(a\perp e\\), therefore: \\(0=a^Te=a^T(b-p)=a^T(b-xa)=0\\)
-  * \\(xa^Ta = a^Tb\\)
-  * \\(x=\frac{a^Tb}{a^Ta}\\)
+* We can see that \\(\hat{y}\\) is a multiple of u, therefore: \\(\hat{y}\\) = cu
+* We can also see that \\(\hat{y}+e=y\\)
+  * \\(e=y-\hat{y}\\)
+* We also see that \\(L\perp e\\), therefore: \\(0=u^Te=u^T(y-\hat{y})=u^T(y-cu)=0\\)
+  * \\(u^Ty-cu^Tu=0\\)
+  * \\(cu^Tu=u^Ty\\)
+  * \\(c=\frac{u^Ty}{u^Tu}\\)
 
-$$p = \frac{a^Tb}{a^Ta}a$$
+$$\hat{y} = \frac{u^Ty}{u^Tu}u$$
 
-If I double b, I double p:
+If I double y, I double \\(\hat{y}\\) (it represents the same side of a twice as large equivalent triangle):
 
-$$2p = \frac{a^T2b}{a^Ta}a=2\frac{a^Tb}{a^Ta}a$$
+$$2\hat{y} =  \frac{u^T2y}{u^Tu}u = 2\frac{u^Ty}{u^Tu}u$$
 
-If I double a, p remains constant:
+If I double v, \\(\hat{y}\\) remains constant (it's projected onto the same line from the same spot):
 
-$$p = \frac{2a^Tb}{2a^T2a}2a=\frac{a^Tb}{a^Ta}a$$
+$$p = \frac{2u^Ty}{2u^T2y}2u=\frac{u^Ty}{u^Tu}u$$
 
-* remember that e is the vector from p to b (p+e=b). And that p is the vector from 0 to p.
+This equation is formally known as the orthogonal projection of vector y onto a line L spanned by u, who both go through the origin:
 
-This projection of b into a can be translated into a matrix, the **projection matrix**
+$$\hat{y}=proj_L\ y = \frac{y\bullet u}{u\bullet u}u$$ 
 
-$$p = Pb$$
+### Orthonormal sets
 
-$$P=\frac{a^T}{a^Ta}a$$
+It is like an orthogonal set, but in addition the length of the vectors is 1. The clearest examples are a subset of vectors e (columns of I matrix) for \\(R^n\\).
 
-* Remember that \\(1/q = q^{-1}\\) and this works surprisingly well with matricesses
+* An m x n matrix U has orthonormal columns iff \\(U^TU=I\\)
+* U matrix with orthonormal sets of columns (this alone does not qualify for a orthogonal matrix), are even **nicer**, as they also have that:
+  * The length of a transformation remains the same: \\(\\|Ux\\|=\\|x\\|\\)
+  * Dot product between vectors is preserved: \\((Ux)\bullet(Uy)=x\bullet y\\)
+  * \\((Ux)\bullet(Uy)=0 \Longleftrightarrow x\bullet y=0\\)
+  * Since the length of the vectors is 1, any vector y can be expressed as \\(y=(y\bullet a_1)a_1+(y\bullet a_1)a_2\dots\\)
 
-$$P=(a^Ta)^{-1}a^Ta$$
+### Orthogonal matrix
+* Orthogonal matrices are actually **orthonormal column** square matrices
+* An orthogonal matrix is a **square, invertible** matrix Q with **orthonormal columns**, such that:
+  * \\(Q^{-1}=Q^T\\)
+  * \\(Q^TQ=I\\)
+* Orthogonal matrixes have orthonormal rows too
+* Transformations with an orthonormal matrix makes the projection onto its column space easy since Q is **squared** (\\(QQ^T=Q^TQ=I\\)):
+  * \\(P=Q(Q^TQ)^{-1}Q^T=QQ^T=I\\)
+  * Doesnt work for non square matrices as \\(2x3 \cdot 3x2 = 3x3 \ vs\ 3x2 \cdot 3x2 = 2x2\\)
+* Their determinant is either 1 or -1
+* To prove that a matrix is orthogonal just prove that inverse is equal to the transponse or that \\(Q^TQ=I\\)
 
-Which P equals identity for squared invertible matrices, in case A is not squared then:
+### Orthogonal Projections in higher dimensions
 
-$$p = (a^Ta)^{-1}a^Tab$$
+* In higher dimensions instead of having a single vector u span a subspace of \\(R^2\\), namely the line L, we can have an orthogonal basis set composed of {\\(u_1,u_2,\dots,u_n\\)} that spans a subspace W.
+* The orthogonal projection of y onto W is \\(\hat{y}\\), which is the closest point to y in that lies in W:
+  * \\(\hat{y}\\) makes the smallest error (difference of y vs a vector in W):\\(\\|y-\hat{y}\\|\lt \\|y-v\\), where v represents any other vector in W distinct from \\(\hat{y}\\).
+  * \\(\hat{y}\\) is formally regarded as the best approximation to y by elements of W.
+  * It doesnt matter which orthogonal basis is used for W (in 2D we just scaled u by 2), as the projection point will lie on the same spot in higher dimensions too. However, regardless of the basis for W, the subspace must remain the same.
 
+This projection of y onto line L spanned by u can be translated into a matrix, the **projection matrix**: \\(\hat{y} = Py\\), where P stands for the projection matrix
 
-* The column space of P is the line through a
-* Rank(P)=1
-  * Rank is the same as the dimension
-* \\(P^T=P\\) (it's symmetric)
+$$P=\frac{u}{u^Tu}u^T$$
+
+* We are left with a transponsed vector, which is equivalent to a 1xn matrix
+* Remember that \\(\frac{1}{A} = A^{-1}\\), therefore:
+
+$$P=U(U^TU)^{-1}U^T$$
+
 * Applying the projection a second time will land you on the same spot you already are from the first projection.
 * \\(P^2=P\\)
 
+For higher dimensions, we have more vectors in the orthogonal basis. Therefore P looks like:
+
+$$P=\frac{u_1}{u_1^Tu_1}u_1^T+\frac{u_2}{u_2^Tu_2}u_2^T+\dots+\frac{u_n}{u_n^Tu_n}u_n^T$$
+
+Therefore:
+
+$$\hat{y} = Py=(\frac{u_1}{u_1^Tu_1}u_1^T+\frac{u_2}{u_2^Tu_2}u_2^T+\dots+\frac{u_n}{u_n^Tu_n}u_n^T)y$$
+
+### Orthonomal basis projections
+
+If \\(P=\begin{bmatrix} u_1 & u_2 & \dots & u_n \end{bmatrix}\\), that is, the columns of P are an orthonormal basis. Then the lengths of the columns are all 1 and the projection of y onto subspace W is simplified to:
+
+$$proj_Wy=UU^Ty$$
+
+If P is a squared matrix, it happens that all the u columns span the entire space \\(R^n\\) already. Therefore any vector that you are going to "project" onto the "subspace" of \\(R^n\\) is already in \\(R^n\\), so the vector is not transformed at all and \\(P=I\\).
+* This matches the fact that for orthogonal matrices (squared matrices with orthonormal basis): \\(QQ^T=Q^TQ=I\\)
+
+
+---
 Why project?
 
 * Because Ax=b may have no solution, we want to solve for the "closest next thing"
@@ -2053,6 +2091,19 @@ $$A^T(b-Ax)=0$$
   * A matrix is invertible when its nullspace is only the 0 vector
   * Columns are always indepedent if they are orthonomal (perpendicular, unit) vectors [100],[010],[001]
     * i = [cos theta, sin theta], j = [-sin theta, cos theta]
+
+
+* \\(Nullspace(A^TA)=Nullspace(A)\\)
+* \\(rank(A^TA)=rank(A)\\)
+* \\(A^TA\\) is invertible if the columns of A are linearly independent (think of A also being not necessarily a square matrix)
+* The orthogonal complement of a subspace is the set of all vectors that are ortogonal to all the vectors in the subspace (strictly each of these vectors of the complement must be, each, orthogonal to all vectors)
+  * The orthogonal complement is denoted with \\(^\perp\\)
+* \\((Col A)^T=rowspace\\)
+  * \\((Col A^T)^\perp=Nul A\\)
+* \\((Col A)^\perp=Nul A^T\\)
+* \\(dim W + dim W^\perp=n\\)
+  * This means that the column space of one matrix + the column space of it's orthoghonal component make up for the whole R^n 
+
 
 ## Least squares
 
