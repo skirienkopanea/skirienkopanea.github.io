@@ -138,8 +138,11 @@ tags: CSE1205 linear-algebra
     - [Orthogonal matrix](#orthogonal-matrix)
     - [Orthogonal Projections in higher dimensions](#orthogonal-projections-in-higher-dimensions)
     - [Orthonomal basis projections](#orthonomal-basis-projections)
-  - [Least squares](#least-squares)
   - [Gram-Schmidt process](#gram-schmidt-process)
+    - [Orthogonal to orthonormal](#orthogonal-to-orthonormal)
+    - [QR Factorization](#qr-factorization)
+  - [Least squares](#least-squares)
+    - [Least squares](#least-squares-1)
   - [Symmetric matrices](#symmetric-matrices)
     - [Positive definitive symetric matrices](#positive-definitive-symetric-matrices)
 
@@ -1108,12 +1111,12 @@ $$
 
 * det(AB) = det A * det B
 * det\\(A^{-1} = 1/det A\\)
-*\\(det(A^2) = (detA)^2\\)
-*\\(det2A = 2^ndetA\\) (property 3)
+* \\(det(A^2) = (detA)^2\\)
+* \\(det2A = 2^ndetA\\) (property 3)
 
 ### Property 10
 
-*\\(detA^T=detA\\)
+* \\(detA^T=detA\\)
   * Therefore all the things that applied to rows also apply to columns
 
 ### Algorithm for determinant 2 by 2
@@ -1575,6 +1578,10 @@ The eigen space\\(E_\lambda\\) is the set of all eigenvectors and the zero vecto
 
 $$A\mathbf{x}=\lambda \mathbf{x}$$
 
+$$A\mathbf{x}-\lambda \mathbf{x}=0$$
+
+$$(A-\lambda) \mathbf{x}=0$$
+
 This is also known as\\(E_\lambda=Nul(A-\lambda I)\\), which is a subspace of\\(R^n\\)
 
 
@@ -1648,6 +1655,7 @@ The matrix P can be constructed as
 $$P=\left[ Re \mathbf{v} \ Im \mathbf{v} \right]$$
 
 Where v is an eigenvector associated to the eigenvalue a - bi.
+* The same way that the conjugate of an eigenvalue is another eigenvalue in the matrix, the conjugate of an eigenvector is also another eigenvector
 
 * \\(r=\|\lambda\|=\sqrt{a^2+b^2}\\)
 
@@ -1939,8 +1947,9 @@ $$a\bullet b = \|a\|\|b\|\cos \alpha$$
     * under the premise that all the vectors must depart from the origin only
     * If 2 subspaces have an overlaping vector that is not the origin then they are not orthogonal as that vector cannot be orthogonal to itself (only 0 is orthogonal to itself)
 * \\(\left({W^\perp}\right)^\perp=W\\)
-* If W is a subspace of \\(R^n\\) so is\\(W^\perp\\), furthermore:
-  * dim W + dim \\(W^\perp\\) = n, where dim stands for dimension (rank).
+* For an n x m matrix:
+  * dim Col A + dim \\(Nul A\\) = m, where dim stands for number of columns.
+  * 
 * Rowspace is orthogonal to nullspace because of the defintion of the nullspace which takes all the x's such that Ax=0. This also means that each of the rows of A make a dot product with x and yield 0:
     * rowspace = rowspan:
 ![Subspaces]({{ site.url }}/images/subspaces.png)
@@ -2056,6 +2065,10 @@ Therefore:
 
 $$\hat{y} = Py=(\frac{u_1}{u_1^Tu_1}u_1^T+\frac{u_2}{u_2^Tu_2}u_2^T+\dots+\frac{u_n}{u_n^Tu_n}u_n^T)y$$
 
+```matlab
+projection=((v1/(transpose(v1)*v1))*transpose(v1)+(etcera))*y
+```
+
 ### Orthonomal basis projections
 
 If \\(P=\begin{bmatrix} u_1 & u_2 & \dots & u_n \end{bmatrix}\\), that is, the columns of P are an orthonormal basis. Then the lengths of the columns are all 1 and the projection of y onto subspace W is simplified to:
@@ -2065,11 +2078,40 @@ $$proj_Wy=UU^Ty$$
 If P is a squared matrix, it happens that all the u columns span the entire space \\(R^n\\) already. Therefore any vector that you are going to "project" onto the "subspace" of \\(R^n\\) is already in \\(R^n\\), so the vector is not transformed at all and \\(P=I\\).
 * This matches the fact that for orthogonal matrices (squared matrices with orthonormal basis): \\(QQ^T=Q^TQ=I\\)
 
+## Gram-Schmidt process
 
----
-Why project?
+* Orthogonal projections onto a subspace W can only be made with orthogonal basis vectors. If the given subspace is not defined with orthogonal vectors, then you cant use the known techniques to project y onto W (z or e are not orthogonal to W).
+* The gram-schmidt process is to find an equivalent basis vectors that are orthogonal:
 
-* Because Ax=b may have no solution, we want to solve for the "closest next thing"
+Given a basis \\(\\{x_1,\dots,x_p\\}\\) for a nonzero subspace W of \\(R^n\\):
+
+$$v_1=x_1$$
+
+$$v_2=x_2 - \frac{x_2\bullet v_1}{v_1\bullet v_1}v_1$$
+
+$$v_3=x_3 - \frac{x_3\bullet v_1}{v_1\bullet v_1}v_1 - \frac{x_3\bullet v_2}{v_2\bullet v_2}v_2$$
+
+Then \\(\\{v_1,\dots,v_p\\}\\) is an orthogonal basis for W.
+
+* Span\\(\\{x_1,\dots,x_p\\}\\) = Span \\(\\{v_1,\dots,v_p\\}\\).
+
+### Orthogonal to orthonormal
+
+This is an easy transformation. (Often after doing grand-schmidt), just scale the vectors to be normal vectors (length 1):
+* Scale a nonzero vector \\(v\\) by \\(\frac{1}{\\|v\\|}\\) to obtain a normalized vector.
+
+### QR Factorization
+* This is a factorization used in many algorithms, one of them **least squares**. Any m x n matrix with linearly independent columns can be factored as A = QR, where Q is an m x n orthonormal basis (apply grand-schmidt of A for that) and R is the n x n upper triangular invertible matrix with positive entries on its diagonal that follows from:
+* \\(A=QR\\)
+* \\(Q^TA=Q^TQR=IR\\)
+* \\(Q^TA=R\\)
+
+## Least squares
+
+* If you can't solve Ax=b because the system has no solution. You may as well just go for the next best thing, which is to project b onto the columnspace of A, and then solve for \\(Ax=\hat{b}\\) which does have a solution. To do so A must have orthogonal columns.
+
+
+
 * Solve Ax=p
 * To find x in p=Ax, we know that the error (b-p aka b-Ax) is perpendicular to p (p might be a line in 2D, or a plane in 3D, and so forth)
   * (b-Ax) is therefore perpendicular to each of the columns of A. Therefore, for both columns of A:
@@ -2089,10 +2131,8 @@ $$A^T(b-Ax)=0$$
 * e is perpendicular to every vector in the column space
 * If A has independent columns \\(A^TA\\) is invertible
   * A matrix is invertible when its nullspace is only the 0 vector
-  * Columns are always indepedent if they are orthonomal (perpendicular, unit) vectors [100],[010],[001]
+  * Columns are always indepedent if they are orthonormal (perpendicular, unit) vectors [100],[010],[001]
     * i = [cos theta, sin theta], j = [-sin theta, cos theta]
-
-
 * \\(Nullspace(A^TA)=Nullspace(A)\\)
 * \\(rank(A^TA)=rank(A)\\)
 * \\(A^TA\\) is invertible if the columns of A are linearly independent (think of A also being not necessarily a square matrix)
@@ -2104,9 +2144,7 @@ $$A^T(b-Ax)=0$$
 * \\(dim W + dim W^\perp=n\\)
   * This means that the column space of one matrix + the column space of it's orthoghonal component make up for the whole R^n 
 
-
-## Least squares
-
+### Least squares
 Fitting a line through 3 points sometimes is impossible. Therefore  Ax=b does not have a solution, but instead we can use \\(A^TAx=A^Tb\\) wich will give us a line with the smallest error between the points and the line.
 
 * Goal: Minimize
@@ -2115,17 +2153,6 @@ $$\|Ax-b\|^2=\|e\|^2=e^2_1+e^2_2+e^2_3$$
 
 Hence "least" squares.
 
-## Gram-Schmidt process
-
-For 2 independent vectors, let one as-is and the other one has to become the error vector that is parallel to a.
-
-p+e=b
-
-e=b-p
-
-p=(A^Tb/a^Ta)A
-
-A=QR
 
 
 ## Symmetric matrices
