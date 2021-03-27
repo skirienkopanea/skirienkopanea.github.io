@@ -140,9 +140,13 @@ tags: CSE1205 linear-algebra
     - [Orthonomal basis projections](#orthonomal-basis-projections)
   - [Gram-Schmidt process](#gram-schmidt-process)
     - [Orthogonal to orthonormal](#orthogonal-to-orthonormal)
-    - [QR Factorization](#qr-factorization)
   - [Least squares](#least-squares)
-    - [Least squares](#least-squares-1)
+    - [QR Factorization](#qr-factorization)
+    - [Least squares shortcut: Normal equations for Ax=b](#least-squares-shortcut-normal-equations-for-axb)
+      - [Finding whether there is only 1 least squares solution](#finding-whether-there-is-only-1-least-squares-solution)
+    - [Least squares when A is already orthogonal](#least-squares-when-a-is-already-orthogonal)
+  - [Linear models](#linear-models)
+    - [Multiple regression](#multiple-regression)
   - [Symmetric matrices](#symmetric-matrices)
     - [Positive definitive symetric matrices](#positive-definitive-symetric-matrices)
 
@@ -2093,6 +2097,14 @@ $$v_3=x_3 - \frac{x_3\bullet v_1}{v_1\bullet v_1}v_1 - \frac{x_3\bullet v_2}{v_2
 
 Then \\(\\{v_1,\dots,v_p\\}\\) is an orthogonal basis for W.
 
+This formula formally means:
+
+$$v_1=x_1$$
+
+$$v_1=x_2-{projX_1}_{Span\{x_1\}}$$
+
+$$v_n=x_n-{projX_n}_{Span\{x_1,\dots,x_n\}}$$
+
 * Span\\(\\{x_1,\dots,x_p\\}\\) = Span \\(\\{v_1,\dots,v_p\\}\\).
 
 ### Orthogonal to orthonormal
@@ -2100,60 +2112,68 @@ Then \\(\\{v_1,\dots,v_p\\}\\) is an orthogonal basis for W.
 This is an easy transformation. (Often after doing grand-schmidt), just scale the vectors to be normal vectors (length 1):
 * Scale a nonzero vector \\(v\\) by \\(\frac{1}{\\|v\\|}\\) to obtain a normalized vector.
 
-### QR Factorization
-* This is a factorization used in many algorithms, one of them **least squares**. Any m x n matrix with linearly independent columns can be factored as A = QR, where Q is an m x n orthonormal basis (apply grand-schmidt of A for that) and R is the n x n upper triangular invertible matrix with positive entries on its diagonal that follows from:
-* \\(A=QR\\)
-* \\(Q^TA=Q^TQR=IR\\)
-* \\(Q^TA=R\\)
-
 ## Least squares
 
 * If you can't solve Ax=b because the system has no solution. You may as well just go for the next best thing, which is to project b onto the columnspace of A, and then solve for \\(Ax=\hat{b}\\) which does have a solution. To do so A must have orthogonal columns.
+* Formally we would want to change the name of x for \\(\hat{x}\\), which stands for the approximated x that solves for the the projected b, called \\(\hat{b}\\), such that \\(\hat{b}={projb}_{ColSpace\{A\}}\\). However, we are not manually projecting x anywhere, it's just to highlight that it's a least squares solution associated with the projected b.
+* This creates the inequality equation below for a matrix A in m x n with a b in \\(R^m\\), but whose columns can only Span \\(R^n\\):
+
+$$\|b-A\hat{x}\| \le \|b-Ax\|$$
+
+"for all x in \\(R^n\\)". Which means:
+
+$$\|b-projX| \le \|b-Ax\|$$
+
+$$\|e_{\hat{x}}| \le \|e_{any\ x}\|$$
+
+* This is true because the error associated with the projected b solution: \\(e_{\hat{b}}\perp Col A\\), whereas the other choices of x do not make a perpendicular e, which makes \\(\\|e_\hat{b}\\|\\) be the shortest length, called the least-squares because this length is calculated by the square root of the sums of the squared entries. Some processes skip the square root step. This is almost the same as the "best approximation theorem".
+  * The least squares solution is in \\(R^{number\ of\ columns}\\)
+  * The least squares solutions is nonempty
+  * \\(\\|b-A\hat{x}\\|\\) is caled the least-squares error.
+
+### QR Factorization
+* Any m x n matrix with linearly independent columns can be factored as A = QR, where Q is an m x n orthonormal basis (apply grand-schmidt of A for that) and R is the n x n upper triangular invertible matrix with positive entries on its diagonal that follows from:
+* \\(A=QR\\)
+* \\(Q^TA=Q^TQR=IR\\)
+* \\(Q^TA=R\\)
+* The solution for least squares: \\(\hat{x}=R^{-1}Q^Tb\\)
+* It is faster to solve for: \\(Rx=Q^Tb\\)
 
 
+### Least squares shortcut: Normal equations for Ax=b
+* All the solutions for \\(A\hat{x}=\hat{b}\\) (formally known as the least squares solutions for Ax=b). Are the exact same solutions as for \\(A^TAx=A^Tb\\). Which is easier than to have to project b and then solve x for \\(Ax=\hat{b}\\).
+  * Since \\(e_\hat{b}\perp Col A\Leftrightarrow (b-\hat{b}) \perp Col A \Leftrightarrow (b-A\hat{x})\perp Col A\\)
+    * \\(a_1\bullet (b-A\hat{x}) = 0\\)
+    * \\(a_2\bullet (b-A\hat{x}) = 0\\)
+    * ...
+    * \\(a_n\bullet (b-A\hat{x}) = 0\\)
+    * \\(A^T(b-A\hat{x}) = 0\\)
+    * \\(A^Tb-A^TA\hat{x} = 0\\)
+    * \\(A^Tb = A^TA\hat{x}\\)
 
-* Solve Ax=p
-* To find x in p=Ax, we know that the error (b-p aka b-Ax) is perpendicular to p (p might be a line in 2D, or a plane in 3D, and so forth)
-  * (b-Ax) is therefore perpendicular to each of the columns of A. Therefore, for both columns of A:
-    * \\(a_1^T(b-Ax)=0\\) and \\(a_2^T(b-Ax)=0\\)
+#### Finding whether there is only 1 least squares solution
+* The columns of A are linearly independent
+* The matrix \\(A^TA\\) is invertible
+* If the statements above are true, then the solution is:
 
-$$\begin{bmatrix} a^T_1 \\ a^T_2 \end{bmatrix}(b-Ax)=\begin{bmatrix} 0 \\ 0 \end{bmatrix}$$
+$$\hat{x}=(A^TA)^{-1}A^Tb$$
 
-$$A^T(b-Ax)=0$$
+### Least squares when A is already orthogonal
 
-* e in \\(N(A^T)\\)
-* \\(e \perp C(A)\\)
-* \\(A^TAx=A^Tb\\)
-* \\(x=(A^TA)^-1A^Tb\\)
-* \\(p=Ax=A(A^TA)^{-1}A^Tb\\)
-* The things in the column space of A are Ax
-* p and e are perpendicular
-* e is perpendicular to every vector in the column space
-* If A has independent columns \\(A^TA\\) is invertible
-  * A matrix is invertible when its nullspace is only the 0 vector
-  * Columns are always indepedent if they are orthonormal (perpendicular, unit) vectors [100],[010],[001]
-    * i = [cos theta, sin theta], j = [-sin theta, cos theta]
-* \\(Nullspace(A^TA)=Nullspace(A)\\)
-* \\(rank(A^TA)=rank(A)\\)
-* \\(A^TA\\) is invertible if the columns of A are linearly independent (think of A also being not necessarily a square matrix)
-* The orthogonal complement of a subspace is the set of all vectors that are ortogonal to all the vectors in the subspace (strictly each of these vectors of the complement must be, each, orthogonal to all vectors)
-  * The orthogonal complement is denoted with \\(^\perp\\)
-* \\((Col A)^T=rowspace\\)
-  * \\((Col A^T)^\perp=Nul A\\)
-* \\((Col A)^\perp=Nul A^T\\)
-* \\(dim W + dim W^\perp=n\\)
-  * This means that the column space of one matrix + the column space of it's orthoghonal component make up for the whole R^n 
+If we need to approximate x for Ax=b and A is already orthogonal, we don't need any of the shortcurts (i.e. Gram-Schmidt conversion from non orthogonal to orthogonal, or solving \\(\hat{x}=(A^TA)^{-1}A^Tb\\)). We can just calculate the projection \\(\hat{b}\\) and solve for \\(Ax=\hat{b}\\).
 
-### Least squares
-Fitting a line through 3 points sometimes is impossible. Therefore  Ax=b does not have a solution, but instead we can use \\(A^TAx=A^Tb\\) wich will give us a line with the smallest error between the points and the line.
+## Linear models
+* resiuduals is an equivalent term for error
+* data is an equivalent term for the coordinates
+* general model is equivalent to an equation in a system on inequations
+* design matrix X is equivalent to matrix A
+* parameter vector \\(\Beta\\) is equivalent to x
+* the observation vector y is equivalent to b
 
-* Goal: Minimize
-
-$$\|Ax-b\|^2=\|e\|^2=e^2_1+e^2_2+e^2_3$$
-
-Hence "least" squares.
-
-
+### Multiple regression
+* Approxamiting a function by a linear function with linear weights
+* Use the running time = mass and height example
+* Use the symbols from the prelecture videos and slides
 
 ## Symmetric matrices
 
