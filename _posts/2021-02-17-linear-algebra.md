@@ -142,11 +142,17 @@ tags: CSE1205 linear-algebra
     - [Orthogonal to orthonormal](#orthogonal-to-orthonormal)
   - [Least squares](#least-squares)
     - [QR Factorization](#qr-factorization)
-    - [Least squares shortcut: Normal equations for Ax=b](#least-squares-shortcut-normal-equations-for-axb)
-      - [Finding whether there is only 1 least squares solution](#finding-whether-there-is-only-1-least-squares-solution)
     - [Least squares when A is already orthogonal](#least-squares-when-a-is-already-orthogonal)
+    - [Least squares shortcut for all matrices with A linearly independent and (A^T)A invertible](#least-squares-shortcut-for-all-matrices-with-a-linearly-independent-and-ata-invertible)
+    - [Solution when (A^T)A is not invertible: Use the normal equation](#solution-when-ata-is-not-invertible-use-the-normal-equation)
   - [Linear models](#linear-models)
-    - [Multiple regression](#multiple-regression)
+    - [Least-Squares Lines](#least-squares-lines)
+      - [Fitting line to a 2D model data](#fitting-line-to-a-2d-model-data)
+      - [Measuring how close is the line to the data](#measuring-how-close-is-the-line-to-the-data)
+      - [Translating data points into a system](#translating-data-points-into-a-system)
+    - [The general linear model](#the-general-linear-model)
+    - [Least-squares fitting for other curves](#least-squares-fitting-for-other-curves)
+    - [Multiple Regression](#multiple-regression)
   - [Symmetric matrices](#symmetric-matrices)
     - [Positive definitive symetric matrices](#positive-definitive-symetric-matrices)
 
@@ -2139,9 +2145,19 @@ $$\|e_{\hat{x}}| \le \|e_{any\ x}\|$$
 * The solution for least squares: \\(\hat{x}=R^{-1}Q^Tb\\)
 * It is faster to solve for: \\(Rx=Q^Tb\\)
 
+### Least squares when A is already orthogonal
 
-### Least squares shortcut: Normal equations for Ax=b
-* All the solutions for \\(A\hat{x}=\hat{b}\\) (formally known as the least squares solutions for Ax=b). Are the exact same solutions as for \\(A^TAx=A^Tb\\). Which is easier than to have to project b and then solve x for \\(Ax=\hat{b}\\).
+The shortcut \\(Rx=Q^Tb\\) is not needed when A is already orthogonal. You can calculate the projection \\(\hat{b}\\) like in [Orthogonal Projections in higher dimensions](#orthogonal-projections-in-higher-dimensions) and solve for \\(Ax=\hat{b}\\).
+
+### Least squares shortcut for all matrices with A linearly independent and (A^T)A invertible
+These statementes are all logically equivalent:
+* The columns of A are linearly independent
+* The matrix \\(A^TA\\) is invertible
+* Ax=b has a unique least squares solution for each b, precisely:
+
+$$\hat{x}=(A^TA)^{-1}A^Tb$$
+
+* All the solutions for \\(A\hat{x}=\hat{b}\\) (formally known as the least squares solutions for Ax=b). Are the exact same solutions as for \\(A^TAx=A^Tb\\), known as the "normal equation". Which is easier than to have to project b and then solve x for \\(Ax=\hat{b}\\).
   * Since \\(e_\hat{b}\perp Col A\Leftrightarrow (b-\hat{b}) \perp Col A \Leftrightarrow (b-A\hat{x})\perp Col A\\)
     * \\(a_1\bullet (b-A\hat{x}) = 0\\)
     * \\(a_2\bullet (b-A\hat{x}) = 0\\)
@@ -2150,31 +2166,97 @@ $$\|e_{\hat{x}}| \le \|e_{any\ x}\|$$
     * \\(A^T(b-A\hat{x}) = 0\\)
     * \\(A^Tb-A^TA\hat{x} = 0\\)
     * \\(A^Tb = A^TA\hat{x}\\)
+    * \\(\hat{x}=(A^TA)^{-1}A^Tb\\)
 
-#### Finding whether there is only 1 least squares solution
-* The columns of A are linearly independent
-* The matrix \\(A^TA\\) is invertible
-* If the statements above are true, then the solution is:
-
-$$\hat{x}=(A^TA)^{-1}A^Tb$$
-
-### Least squares when A is already orthogonal
-
-If we need to approximate x for Ax=b and A is already orthogonal, we don't need any of the shortcurts (i.e. Gram-Schmidt conversion from non orthogonal to orthogonal, or solving \\(\hat{x}=(A^TA)^{-1}A^Tb\\)). We can just calculate the projection \\(\hat{b}\\) and solve for \\(Ax=\hat{b}\\).
+### Solution when (A^T)A is not invertible: Use the normal equation
+* Then the columns of A are not linearly independent
+* There are more than one least square solutions
+* You cant do QR Factorization nor the shortcut for linearly independent matrices. Solutions can be found with the "normal equation": \\(A^TAx=A^Tb\\)
 
 ## Linear models
-* resiuduals is an equivalent term for error
-* data is an equivalent term for the coordinates
-* general model is equivalent to an equation in a system on inequations
-* design matrix X is equivalent to matrix A
-* parameter vector \\(\Beta\\) is equivalent to x
-* the observation vector y is equivalent to b
+A linear model is used to "model" (pretend) a relationship between data sets by means of a formula that predicts the value of one variable as a function of other variable(s). A linear model is expresed as a system of linear equations defined by the data. In the real world, data collection might come with some error/noise and/or the variables themselves are not linearly related per se. However, to simplify and estimate things, it is possible to find a linear equation with the smallest error (as in distance from linear model to actual data points), for which we use Least squares. **When only y is presumed to have error the residual is no longer the perpendicular line from the observed value to the predicted value (from b to projected b), but just the difference in the y-axis, that is, the residual is \\(y_n - (\beta_0+\beta_1x_1)\\)**
+* Notation differs between Linear algebra and Statistics:
 
-### Multiple regression
-* Approxamiting a function by a linear function with linear weights
-* Use the running time = mass and height example
-* Use the symbols from the prelecture videos and slides
+Linear algebra | Statistics
+---|---
+\\(Ax=b\\) | \\(X\beta =y\\)
+Matrix A | Design matrix X
+input vector x | parameter vector (regression coeffiecients) \\(\beta\\)
+output vector b | observation vector y
 
+### Least-Squares Lines
+y=ax + b is expressed ass \\(y=\beta_0 + \beta_1x\\).
+
+#### Fitting line to a 2D model data
+Data for which we have \\((x_1,y_1)\dots(x_n,y_n)\\) data points and a model \\(y=\beta+\beta_1x\\) (also known as the **regression line of y on x**, because errors in data are assumed to be only on y... that is, it is clear that x is the input, independent variable and y the dependent variable, we can distinguish between the **predicted y-value** given by the regression line: \\((x_j,\beta_0+\beta_1x_j)\\).
+and the actual observed value of \\(y_j\\). The difference between the observed value (in LA: y) and the predicted value (in LA \\(\hat{y}\\)) is called the residual (in LA the error, however the error in LA is exclusively the perpendicular one, whereas in this particular regression case is just the difference of the y-axis values. Although the interpetation for error may vary, the approach to approximate for beta and y is the same).
+
+#### Measuring how close is the line to the data
+* Easiest choice is to add the squares of the residuals as it produces an absolute non-negative length.
+* The least-squares is the line \\(y=\beta_0+\beta_1x\\) that minimizes the sum of the squares of the residuals.
+
+#### Translating data points into a system
+* If data points were on a straight line, the parameters \\(\beta_0 + \beta_1\\) would satisfy:
+
+Predicted y-value | Observed y-value
+---:|:---
+$$\beta_0+\beta_1x_1$$ | $$y_1$$
+$$\beta_0+\beta_1x_2$$|$$y_2$$
+$$\vdots$$|$$\vdots$$
+$$\beta_0+\beta_1x_n$$|$$y_n$$
+
+* Such that \\(X\beta = y\\), where:
+
+$$X=\begin{bmatrix} 1 & x_1\\ 1 & x_2\\ \vdots & \vdots \\ 1 & x_n\end{bmatrix}, \beta=\begin{bmatrix} \beta_0 \\ \beta_1\end{bmatrix}, y = \begin{bmatrix} y_1 \\ y_2 \\ \vdots \\y_n\end{bmatrix}$$
+
+If the data points don't lie on a line, then there is no solution for \\(\beta\\) such that the entries of \\(\beta\\) make the matrix vector product output y. However, we can apply least squares to generate a projection of y onto the column space of X, and find the beta for that equation.
+
+### The general linear model
+* To make a models that use more variables we an use the same equation by just expanding the columns of X and the entries of \\(\beta\\) accordingly. Statisticans add an additional vector, the residual vector \\(\epsilon\\), such that:
+* \\(y=X\beta + \epsilon\\)
+* It is still a linear model, this line just travels in higher dimensions.
+* X and y are determined by the data set. \\(\beta\\) and the residual vector are found via least-squares.
+* The least square solution \\(\beta\\) is a solution of the normal equations:
+
+$$X^TX\hat{\beta} = X^T\hat{y}$$
+
+### Least-squares fitting for other curves
+ * When the data does not seem to fit into a line we can still make a model
+ * the unkowns do not necessarily need to be a "raw" variable (such as \\(x_1, x_2 ...\\))
+ * The unkowns can be functions (such as \\(f_1(x),f_2(x)...\\))
+ * This is a "fit" to a curve for instance.
+ * Usually the shape of the data distribution reveals a likely model to use to try to minimize the resiudals of, such as the formula below for parabolas:
+
+$$y=\beta_0+\beta_1x+\beta_2x^2$$
+
+* Then we can turn it into a system of equations based on each data point:
+
+$$y_1=\beta_0+\beta_1x_1+\beta_2x^2_1+\epsilon_1$$
+
+$$y_2=\beta_0+\beta_1x_2+\beta_2x^2_2+\epsilon_2$$
+
+$$\vdots$$
+
+$$y_n=\beta_0+\beta_1x_n+\beta_2x^2_n+\epsilon_n$$
+
+* Such that \\(y=X\beta + \epsilon\\) and:
+
+$$ y = \begin{bmatrix} y_1 \\ y_2 \\ \vdots \\y_n\end{bmatrix}, X=\begin{bmatrix} 1 & x_1 & x^2_1\\ 1 & x_2 & x^2_2\\ \vdots & \vdots \\ 1 & x_n & x^2_n\end{bmatrix}, \beta=\begin{bmatrix} \beta_0 \\ \beta_1 \\ \beta_2\end{bmatrix}, \epsilon = \begin{bmatrix} \epsilon_0 \\ \epsilon_1 \\ \epsilon_2\end{bmatrix}$$
+
+* Looking at the graph and (arbitrarily) deciding to model it based on a quadratic formula is adecuate as long as you are happy with the size of the residual. Sometimes throwing more columns into X might lead to smaller residuals.
+
+### Multiple Regression
+These are models that have multiple variables as input, which then make the model a 3D or more model. The model can be made in the same fashion, just that the unkowns are functions that take 2 or more inputs, such that:
+
+$$y=\beta_0f_0(u,v)+\beta_1f_1(u,v)+\dots$$
+
+or also as a simpler fashion such as:
+
+$$y=\beta_0+\beta_1u+\beta_2v\dots$$
+
+The least squares process to fit the data is called **trend surface**. An example would be a model that fits data points for altitude, latitud and longitude.
+
+---
 ## Symmetric matrices
 
 \\(A=A^T\\)
