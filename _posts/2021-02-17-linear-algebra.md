@@ -126,6 +126,35 @@ tags: CSE1205 linear-algebra
   - [Prey-predator system](#prey-predator-system)
     - [Eigenvector decomposition](#eigenvector-decomposition)
     - [Complex systems](#complex-systems)
+  - [Orthogonality](#orthogonality)
+    - [Inner product](#inner-product)
+    - [Normal vectors](#normal-vectors)
+    - [Orthogonal vectors](#orthogonal-vectors)
+    - [Orthonormal vectors](#orthonormal-vectors)
+    - [Orthogonal complements](#orthogonal-complements)
+    - [Orthogonal sets](#orthogonal-sets)
+    - [Orthogonal projections](#orthogonal-projections)
+    - [Orthonormal sets](#orthonormal-sets)
+    - [Orthogonal matrix](#orthogonal-matrix)
+    - [Orthogonal Projections in higher dimensions](#orthogonal-projections-in-higher-dimensions)
+    - [Orthonomal basis projections](#orthonomal-basis-projections)
+  - [Gram-Schmidt process](#gram-schmidt-process)
+    - [Orthogonal to orthonormal](#orthogonal-to-orthonormal)
+  - [Least squares](#least-squares)
+    - [QR Factorization](#qr-factorization)
+    - [Least squares when A is already orthogonal](#least-squares-when-a-is-already-orthogonal)
+    - [Least squares shortcut for all matrices with A linearly independent and (A^T)A invertible](#least-squares-shortcut-for-all-matrices-with-a-linearly-independent-and-ata-invertible)
+    - [Solution when (A^T)A is not invertible: Use the normal equation](#solution-when-ata-is-not-invertible-use-the-normal-equation)
+  - [Linear models](#linear-models)
+    - [Least-Squares Lines](#least-squares-lines)
+      - [Fitting line to a 2D model data](#fitting-line-to-a-2d-model-data)
+      - [Measuring how close is the line to the data](#measuring-how-close-is-the-line-to-the-data)
+      - [Translating data points into a system](#translating-data-points-into-a-system)
+    - [The general linear model](#the-general-linear-model)
+    - [Least-squares fitting for other curves](#least-squares-fitting-for-other-curves)
+    - [Multiple Regression](#multiple-regression)
+  - [Symmetric matrices](#symmetric-matrices)
+    - [Positive definitive symetric matrices](#positive-definitive-symetric-matrices)
 
 ## Systems of Linear Equations
 ### Linear equation
@@ -610,13 +639,10 @@ $$\color{green}{\vec{i}} = \begin{bmatrix}cos(\alpha)\\sin(\alpha)\end{bmatrix}$
 
 The changes for\\(\color{red}{\vec{j}}\\) will be the same, but with a\\(\frac{1}{2}\pi\\) offset, as\\(\color{red}{\vec{j}}\\) was already 90° counterclockwise from\\(\color{green}{\vec{i}}\\)
 
-$$\color{red}{\vec{i}} = \begin{bmatrix}cos(\alpha + \frac{1}{2}\pi)\\sin(\alpha + \frac{1}{2}\pi)\end{bmatrix} = 
+$$\vec{j} = \begin{bmatrix}cos(\alpha + \frac{1}{2}\pi)\\sin(\alpha + \frac{1}{2}\pi)\end{bmatrix} = 
 \begin{bmatrix}sin(\frac{1}{2}\pi - \alpha - \frac{1}{2}\pi)\\cos(\frac{1}{2}\pi - \alpha - \frac{1}{2}\pi)\end{bmatrix} =
 \begin{bmatrix}sin(- \alpha)\\cos(- \alpha)\end{bmatrix} = \begin{bmatrix}-sin(\alpha)\\cos(\alpha)\end{bmatrix}
 $$
-
-
-
 
 ### Reflection through the x-axis
 
@@ -715,7 +741,7 @@ $$A=\begin{bmatrix} 0 & 0 \\ 0 & 1\end{bmatrix}$$
 
 Hint from the Book of Proof (Richard Hammack):
 
- ![Injective vs surjective]({{ site.url }}/images/injective_vs_surjective_richard_hammack_book_of_proof.png)
+![Injective vs surjective]({{ site.url }}/images/injective_vs_surjective_richard_hammack_book_of_proof.png)
 
 ### Composition of 2 transformations
 
@@ -765,13 +791,13 @@ $$A_2\cdot A_1 = \begin{bmatrix} \color{green}{\vec{i_{A_2\cdot A_1}}} & \color{
 
 Following the properties of the matrix-vector product, the matrix-matrix product (which is nothing but a transformation of a transformation), must have the number of columns in matrix A be equal to the number of rows in matrix B in AB, and AB size is\\(rows_A \times columns_B\\)
 
- ![Injective vs surjective]({{ site.url }}/images/matrix_multiplication_condition.png)
+![Injective vs surjective]({{ site.url }}/images/matrix_multiplication_condition.png)
 
 #### Row-column multiplication
 
 There's a shortcut formula to get the value of AB's\\(a_{ij}\\) where i is also A's i row and j is also B's j column: Take A's i row and transpose it to a vector, then calculate the dot product with B's j column:
 
- ![Injective vs surjective]({{ site.url }}/images/row_column_multiplication.png)
+![Injective vs surjective]({{ site.url }}/images/row_column_multiplication.png)
 
 #### Zero matrix
 
@@ -1095,12 +1121,12 @@ $$
 
 * det(AB) = det A * det B
 * det\\(A^{-1} = 1/det A\\)
-*\\(det(A^2) = (detA)^2\\)
-*\\(det2A = 2^ndetA\\) (property 3)
+* \\(det(A^2) = (detA)^2\\)
+* \\(det2A = 2^ndetA\\) (property 3)
 
 ### Property 10
 
-*\\(detA^T=detA\\)
+* \\(detA^T=detA\\)
   * Therefore all the things that applied to rows also apply to columns
 
 ### Algorithm for determinant 2 by 2
@@ -1417,15 +1443,15 @@ columns or two rows are the same or a column or a row is zero. Which would then 
 ## Eigenvectors and eigenvalues
 Going back to the [linear transformations](#2d-transformations), we find that for some standard matrices A of a transformation, there are vector inputs such that the output after the transformation is a scalar of themselves (aka, it is within their own span, it's "parallel"), such vector inputs are called eigenvectors, and the scalars are called eigenvalues. For instance, matrix A below has 2 eigenvectors (by definition an eigenvector must have 1 eigenvalue). One of the eigenvectors is X = (1,0), and since T = (3,0) we can see that the eigenvalue is 3, since 3 * X = T.
 
- ![In span]({{ site.url }}/images/in_span_1.png)
+![In span]({{ site.url }}/images/in_span_1.png)
 
  The other eigenvector is X = (-1,1), which gives T = (-2,2), therefore the eigenvalue being 2.
 
- ![In span]({{ site.url }}/images/in_span_2.png)
+![In span]({{ site.url }}/images/in_span_2.png)
 
  You can see an example of a non eigenvector below, as X = (1,1) does not produce an output within it's on spawn T = (4,2)
 
- ![Not in span]({{ site.url }}/images/not_in_span.png)
+![Not in span]({{ site.url }}/images/not_in_span.png)
 
 ### 3D rotation
 
@@ -1562,6 +1588,10 @@ The eigen space\\(E_\lambda\\) is the set of all eigenvectors and the zero vecto
 
 $$A\mathbf{x}=\lambda \mathbf{x}$$
 
+$$A\mathbf{x}-\lambda \mathbf{x}=0$$
+
+$$(A-\lambda) \mathbf{x}=0$$
+
 This is also known as\\(E_\lambda=Nul(A-\lambda I)\\), which is a subspace of\\(R^n\\)
 
 
@@ -1635,6 +1665,7 @@ The matrix P can be constructed as
 $$P=\left[ Re \mathbf{v} \ Im \mathbf{v} \right]$$
 
 Where v is an eigenvector associated to the eigenvalue a - bi.
+* The same way that the conjugate of an eigenvalue is another eigenvalue in the matrix, the conjugate of an eigenvector is also another eigenvector
 
 * \\(r=\|\lambda\|=\sqrt{a^2+b^2}\\)
 
@@ -1876,3 +1907,372 @@ $$C^k =r^k\begin{bmatrix} \cos(k\phi) & -\sin(k\phi) \\ \sin(k\phi) & \cos(k\phi
   * Spiral towards the origin if r < 1
   * Spiral away from the origin if r > 1
   * Elliptic (or even circle sometimes) if r = 1.
+
+## Orthogonality
+
+* Orthogonal means 90 degrees and is described by the symbol \\(\perp\\), also known as perpendicular
+* Not just 2 vectors can be orthogonal when the dot product is 0, but also subspaces themselves (seen as areas) can be orthogonal
+  * Examples are rowspace vs nullspace and columnspace vs nullspace
+
+### Inner product
+* Also known as dot product between two vectors, it's equivalent to the matrix-vector product of one of the vectors transponsed with the other one so that the result is a 1x1 matrix, interpreted as a scalar:
+
+$$\vec{a}\bullet\vec{b}=\begin{bmatrix}a_1 \\ a_2 \end{bmatrix}\cdot\begin{bmatrix}b_1 \\ b_2 \end{bmatrix}=\vec{a}^T\vec{b}=
+\begin{bmatrix}a_1 & a_2 \end{bmatrix}\begin{bmatrix}b_1 \\ b_2 \end{bmatrix}=b_1 a_1 + b_2 a_2$$
+
+This transformation expresses the length of the the distance from the origin to the point where one vector is orthogonally projected on to the other one, times the length of the later one. It happens that when the vectors are already perpendicular, the projection point is the origin, and thus we get 0*length of the vector where the projection lies. When the dot product is negative it means they point in the opposite direction, when positive in the same one.
+
+* A dot product is only defined when the vectors have the same number of entries. Let u, v and we be vectors and c a scalar, a dot product can be expressed with a dot or with the transponse:
+* \\(u\bullet v=u^Tv\\)
+* \\(u^Tv=v^Tu\\)
+* \\((u+v)^Tw=u^Tw+v^Tw\\)
+* \\((cu)^Tv=c(u^Tv)=u^T(cv)\\)
+* \\(u^Tu\gt 0\\), uu=0 only for u=0
+* The length (called norm) of v is expressed as the nonnegative scalar \\(\\|v\\|\\) defined by:
+* $$\|v\|=\sqrt{v^Tv}$$
+* Geometric interpretation of the dot proudct:
+
+$$a\bullet b = \|a\|\|b\|\cos \alpha$$
+
+* The distance between two vectors is the length of \\(\\|u-v\\|\\), also expressed as \\(dist(u,v)=\sqrt{(u-v)\bullet(u-v)}\\)
+
+### Normal vectors
+* Vectors whose length are 1 are called unit vectors
+  * normalizing: scale a nonzero vector \\(v\\) by \\(\frac{1}{\\|v\\|}\\) to obtain a unit vector
+
+### Orthogonal vectors
+* Orthogonal vectors are vectors with a 0 innerproduct
+  * Another test is based on pythagoras: u and v are orthogonal iff \\(\\|u+v\\|^2 = \\|u\\|^2+\\|v\\|^2\\)
+* The 0 vector is orthogonal with all the vectors, including itself
+
+### Orthonormal vectors
+* Orthonormal vectors are orthogonal and normal (length 1) vectors
+
+### Orthogonal complements
+* A vector z is orthogonal to a subspace W iff it is orthogonal to each vector in the subspace W set.
+  * The set of all orthogonal vectors to W are called the **orthogonal complement** of W and is denoted as \\(W^\perp\\)
+![Complement]({{ site.url }}/images/complement.png)
+* If W is a plane, then \\(W^\perp\\) is a line (all the vectors spanned by 1 basis vector perpendicular on W)
+  * \\(W^\perp=L\\) and \\(W=L^\perp\\) (the complement of the complement cancels out)
+    * under the premise that all the vectors must depart from the origin only
+    * If 2 subspaces have an overlaping vector that is not the origin then they are not orthogonal as that vector cannot be orthogonal to itself (only 0 is orthogonal to itself)
+* \\(\left({W^\perp}\right)^\perp=W\\)
+* For an n x m matrix:
+  * dim Col A + dim \\(Nul A\\) = m, where dim stands for number of columns.
+  * 
+* Rowspace is orthogonal to nullspace because of the defintion of the nullspace which takes all the x's such that Ax=0. This also means that each of the rows of A make a dot product with x and yield 0:
+    * rowspace = rowspan:
+![Subspaces]({{ site.url }}/images/subspaces.png)
+  * Dot product of each row with vector x (of the null space) yields zero:
+
+$$Ax=0 \Leftrightarrow \begin{bmatrix} row_1 \\ row_2 \\ \vdots \\row_n \end{bmatrix} \begin{bmatrix}  \\ x \\  \\ \end{bmatrix}=
+\begin{bmatrix} 0 \\ 0 \\ \vdots \\0 \end{bmatrix}$$
+
+* However, the subspace of the rows is not just the rows themselves, it's also all possible linear combinations of the rows. These are also orthogonal to the nullspace:
+
+$$c_1*row_1=0$$
+
+$$c_2*row_2=0$$
+
+$$c_2*row_2+c_1*row_1=0$$
+
+* Since this statement is true for any matrix, it is also true for \\(A^T\\). Therefore:
+  * \\((Row\ A)^\perp=Nul A\\)
+  * \\((Row\ A^T)^\perp=Nul A^T \Longleftrightarrow (Col\ A)^\perp=Nul A^T\\)
+
+### Orthogonal sets
+A set of vectors {\\(a_1\\), \\(a_2\\), \\(a_3\\), ..., \\(a_n\\)} in \\(R^n\\) is an **orthogonal set** if each possible pair combination of **distinct** vectors from the set is orthogonal, i.e.:
+
+{$$\begin{bmatrix} 1 \\ 0 \\ 0 \end{bmatrix}$$,$$\begin{bmatrix} 0 \\ 1 \\ 0 \end{bmatrix}$$,$$\begin{bmatrix} 0 \\ 0 \\ 1 \end{bmatrix}$$}
+
+* If the orthogonal set does not contain the zero vector, then all the vectors are independent
+* An **orthogonal basis** for a subspace W of \\(R^n\\) is a basis for W that is also an orthogonal set
+* Orthogonal basis are **nice**:
+  * any vector in \\(R^n\\) can be expressed as a linear combination of the columns of A
+  * the weights of the columns for any vector y can be defined by
+  * $$c_j=\frac{y\bullet a_j}{a_j\bullet a_j}$$
+  * such that \\(y=c_1a_1+c_2a_2+\dots+c_na_n\\)
+  * Therefore you dont need an augmented matrix to solve for the weights
+
+### Orthogonal projections
+
+This is relevant when our matrix A has too many rows, and therefore some free variables.
+
+The orthogonal projection \\(\hat{y}\\) onto L (spanned by u) is a vector that lands on the point \\((\hat{y}_1,\hat{y}_2)\\). The line between the tip of y and the tip of \\(\hat{y}\\) that connects these two vectors, in the minimum length possible, is is called "error" (e), as its length is the difference between them (\\(\\|y-\hat{y}\\|\\)), and the vector e comes from the arithmetic operation \\(y-\hat{y}\\), which is ortogonal to the line L where projection \\(\hat{y}\\) lies onto.
+
+![Injective vs surjective]({{ site.url }}/images/projection.png)
+
+* We can see that \\(\hat{y}\\) is a multiple of u, therefore: \\(\hat{y}\\) = cu
+* We can also see that \\(\hat{y}+e=y\\)
+  * \\(e=y-\hat{y}\\)
+* We also see that \\(L\perp e\\), therefore: \\(0=u^Te=u^T(y-\hat{y})=u^T(y-cu)=0\\)
+  * \\(u^Ty-cu^Tu=0\\)
+  * \\(cu^Tu=u^Ty\\)
+  * \\(c=\frac{u^Ty}{u^Tu}\\)
+
+$$\hat{y} = \frac{u^Ty}{u^Tu}u$$
+
+If I double y, I double \\(\hat{y}\\) (it represents the same side of a twice as large equivalent triangle):
+
+$$2\hat{y} =  \frac{u^T2y}{u^Tu}u = 2\frac{u^Ty}{u^Tu}u$$
+
+If I double v, \\(\hat{y}\\) remains constant (it's projected onto the same line from the same spot):
+
+$$p = \frac{2u^Ty}{2u^T2y}2u=\frac{u^Ty}{u^Tu}u$$
+
+This equation is formally known as the orthogonal projection of vector y onto a line L spanned by u, who both go through the origin:
+
+$$\hat{y}=proj_L\ y = \frac{y\bullet u}{u\bullet u}u$$ 
+
+### Orthonormal sets
+
+It is like an orthogonal set, but in addition the length of the vectors is 1. The clearest examples are a subset of vectors e (columns of I matrix) for \\(R^n\\).
+
+* An m x n matrix U has orthonormal columns iff \\(U^TU=I\\)
+* U matrix with orthonormal sets of columns (this alone does not qualify for a orthogonal matrix), are even **nicer**, as they also have that:
+  * The length of a transformation remains the same: \\(\\|Ux\\|=\\|x\\|\\)
+  * Dot product between vectors is preserved: \\((Ux)\bullet(Uy)=x\bullet y\\)
+  * \\((Ux)\bullet(Uy)=0 \Longleftrightarrow x\bullet y=0\\)
+  * Since the length of the vectors is 1, any vector y can be expressed as \\(y=(y\bullet a_1)a_1+(y\bullet a_1)a_2\dots\\)
+
+### Orthogonal matrix
+* Orthogonal matrices are actually **orthonormal column** square matrices
+* An orthogonal matrix is a **square, invertible** matrix Q with **orthonormal columns**, such that:
+  * \\(Q^{-1}=Q^T\\)
+  * \\(Q^TQ=I\\)
+* Orthogonal matrixes have orthonormal rows too
+* Transformations with an orthonormal matrix makes the projection onto its column space easy since Q is **squared** (\\(QQ^T=Q^TQ=I\\)):
+  * \\(P=Q(Q^TQ)^{-1}Q^T=QQ^T=I\\)
+  * Doesnt work for non square matrices as \\(2x3 \cdot 3x2 = 3x3 \ vs\ 3x2 \cdot 3x2 = 2x2\\)
+* Their determinant is either 1 or -1
+* To prove that a matrix is orthogonal just prove that inverse is equal to the transponse or that \\(Q^TQ=I\\)
+
+### Orthogonal Projections in higher dimensions
+
+* In higher dimensions instead of having a single vector u span a subspace of \\(R^2\\), namely the line L, we can have an orthogonal basis set composed of {\\(u_1,u_2,\dots,u_n\\)} that spans a subspace W.
+* The orthogonal projection of y onto W is \\(\hat{y}\\), which is the closest point to y in that lies in W:
+  * \\(\hat{y}\\) makes the smallest error (difference of y vs a vector in W):\\(\\|y-\hat{y}\\|\lt \\|y-v\\), where v represents any other vector in W distinct from \\(\hat{y}\\).
+  * \\(\hat{y}\\) is formally regarded as the best approximation to y by elements of W.
+  * It doesnt matter which orthogonal basis is used for W (in 2D we just scaled u by 2), as the projection point will lie on the same spot in higher dimensions too. However, regardless of the basis for W, the subspace must remain the same.
+
+This projection of y onto line L spanned by u can be translated into a matrix, the **projection matrix**: \\(\hat{y} = Py\\), where P stands for the projection matrix
+
+$$P=\frac{u}{u^Tu}u^T$$
+
+* We are left with a transponsed vector, which is equivalent to a 1xn matrix
+* Remember that \\(\frac{1}{A} = A^{-1}\\), therefore:
+
+$$P=U(U^TU)^{-1}U^T$$
+
+* Applying the projection a second time will land you on the same spot you already are from the first projection.
+* \\(P^2=P\\)
+
+For higher dimensions, we have more vectors in the orthogonal basis. Therefore P looks like:
+
+$$P=\frac{u_1}{u_1^Tu_1}u_1^T+\frac{u_2}{u_2^Tu_2}u_2^T+\dots+\frac{u_n}{u_n^Tu_n}u_n^T$$
+
+Therefore:
+
+$$\hat{y} = Py=(\frac{u_1}{u_1^Tu_1}u_1^T+\frac{u_2}{u_2^Tu_2}u_2^T+\dots+\frac{u_n}{u_n^Tu_n}u_n^T)y$$
+
+```matlab
+projection=((v1/(transpose(v1)*v1))*transpose(v1)+(etcera))*y
+```
+
+### Orthonomal basis projections
+
+If \\(P=\begin{bmatrix} u_1 & u_2 & \dots & u_n \end{bmatrix}\\), that is, the columns of P are an orthonormal basis. Then the lengths of the columns are all 1 and the projection of y onto subspace W is simplified to:
+
+$$proj_Wy=UU^Ty$$
+
+If P is a squared matrix, it happens that all the u columns span the entire space \\(R^n\\) already. Therefore any vector that you are going to "project" onto the "subspace" of \\(R^n\\) is already in \\(R^n\\), so the vector is not transformed at all and \\(P=I\\).
+* This matches the fact that for orthogonal matrices (squared matrices with orthonormal basis): \\(QQ^T=Q^TQ=I\\)
+
+## Gram-Schmidt process
+
+* Orthogonal projections onto a subspace W can only be made with orthogonal basis vectors. If the given subspace is not defined with orthogonal vectors, then you cant use the known techniques to project y onto W (z or e are not orthogonal to W).
+* The gram-schmidt process is to find an equivalent basis vectors that are orthogonal:
+
+Given a basis \\(\\{x_1,\dots,x_p\\}\\) for a nonzero subspace W of \\(R^n\\):
+
+$$v_1=x_1$$
+
+$$v_2=x_2 - \frac{x_2\bullet v_1}{v_1\bullet v_1}v_1$$
+
+$$v_3=x_3 - \frac{x_3\bullet v_1}{v_1\bullet v_1}v_1 - \frac{x_3\bullet v_2}{v_2\bullet v_2}v_2$$
+
+Then \\(\\{v_1,\dots,v_p\\}\\) is an orthogonal basis for W.
+
+This formula formally means:
+
+$$v_1=x_1$$
+
+$$v_1=x_2-{projX_1}_{Span\{x_1\}}$$
+
+$$v_n=x_n-{projX_n}_{Span\{x_1,\dots,x_n\}}$$
+
+* Span\\(\\{x_1,\dots,x_p\\}\\) = Span \\(\\{v_1,\dots,v_p\\}\\).
+
+### Orthogonal to orthonormal
+
+This is an easy transformation. (Often after doing grand-schmidt), just scale the vectors to be normal vectors (length 1):
+* Scale a nonzero vector \\(v\\) by \\(\frac{1}{\\|v\\|}\\) to obtain a normalized vector.
+
+## Least squares
+
+* If you can't solve Ax=b because the system has no solution. You may as well just go for the next best thing, which is to project b onto the columnspace of A, and then solve for \\(Ax=\hat{b}\\) which does have a solution. To do so A must have orthogonal columns.
+* Formally we would want to change the name of x for \\(\hat{x}\\), which stands for the approximated x that solves for the the projected b, called \\(\hat{b}\\), such that \\(\hat{b}={projb}_{ColSpace\{A\}}\\). However, we are not manually projecting x anywhere, it's just to highlight that it's a least squares solution associated with the projected b.
+* This creates the inequality equation below for a matrix A in m x n with a b in \\(R^m\\), but whose columns can only Span \\(R^n\\):
+
+$$\|b-A\hat{x}\| \le \|b-Ax\|$$
+
+"for all x in \\(R^n\\)". Which means:
+
+$$\|b-projX| \le \|b-Ax\|$$
+
+$$\|e_{\hat{x}}| \le \|e_{any\ x}\|$$
+
+* This is true because the error associated with the projected b solution: \\(e_{\hat{b}}\perp Col A\\), whereas the other choices of x do not make a perpendicular e, which makes \\(\\|e_\hat{b}\\|\\) be the shortest length, called the least-squares because this length is calculated by the square root of the sums of the squared entries. Some processes skip the square root step. This is almost the same as the "best approximation theorem".
+  * The least squares solution is in \\(R^{number\ of\ columns}\\)
+  * The least squares solutions is nonempty
+  * \\(\\|b-A\hat{x}\\|\\) is caled the least-squares error.
+
+### QR Factorization
+* Any m x n matrix with linearly independent columns can be factored as A = QR, where Q is an m x n orthonormal basis (apply grand-schmidt of A for that) and R is the n x n upper triangular invertible matrix with positive entries on its diagonal that follows from:
+* \\(A=QR\\)
+* \\(Q^TA=Q^TQR=IR\\)
+* \\(Q^TA=R\\)
+* The solution for least squares: \\(\hat{x}=R^{-1}Q^Tb\\)
+* It is faster to solve for: \\(Rx=Q^Tb\\)
+
+### Least squares when A is already orthogonal
+
+The shortcut \\(Rx=Q^Tb\\) is not needed when A is already orthogonal. You can calculate the projection \\(\hat{b}\\) like in [Orthogonal Projections in higher dimensions](#orthogonal-projections-in-higher-dimensions) and solve for \\(Ax=\hat{b}\\).
+
+### Least squares shortcut for all matrices with A linearly independent and (A^T)A invertible
+These statementes are all logically equivalent:
+* The columns of A are linearly independent
+* The matrix \\(A^TA\\) is invertible
+* Ax=b has a unique least squares solution for each b, precisely:
+
+$$\hat{x}=(A^TA)^{-1}A^Tb$$
+
+* All the solutions for \\(A\hat{x}=\hat{b}\\) (formally known as the least squares solutions for Ax=b). Are the exact same solutions as for \\(A^TAx=A^Tb\\), known as the "normal equation". Which is easier than to have to project b and then solve x for \\(Ax=\hat{b}\\).
+  * Since \\(e_\hat{b}\perp Col A\Leftrightarrow (b-\hat{b}) \perp Col A \Leftrightarrow (b-A\hat{x})\perp Col A\\)
+    * \\(a_1\bullet (b-A\hat{x}) = 0\\)
+    * \\(a_2\bullet (b-A\hat{x}) = 0\\)
+    * ...
+    * \\(a_n\bullet (b-A\hat{x}) = 0\\)
+    * \\(A^T(b-A\hat{x}) = 0\\)
+    * \\(A^Tb-A^TA\hat{x} = 0\\)
+    * \\(A^Tb = A^TA\hat{x}\\)
+    * \\(\hat{x}=(A^TA)^{-1}A^Tb\\)
+
+### Solution when (A^T)A is not invertible: Use the normal equation
+* Then the columns of A are not linearly independent
+* There are more than one least square solutions
+* You cant do QR Factorization nor the shortcut for linearly independent matrices. Solutions can be found with the "normal equation": \\(A^TAx=A^Tb\\)
+
+## Linear models
+A linear model is used to "model" (pretend) a relationship between data sets by means of a formula that predicts the value of one variable as a function of other variable(s). A linear model is expresed as a system of linear equations defined by the data. In the real world, data collection might come with some error/noise and/or the variables themselves are not linearly related per se. However, to simplify and estimate things, it is possible to find a linear equation with the smallest error (as in distance from linear model to actual data points), for which we use Least squares. **When only y is presumed to have error the residual is no longer the perpendicular line from the observed value to the predicted value (from b to projected b), but just the difference in the y-axis, that is, the residual is \\(y_n - (\beta_0+\beta_1x_1)\\)**
+* Notation differs between Linear algebra and Statistics:
+
+Linear algebra | Statistics
+---|---
+\\(Ax=b\\) | \\(X\beta =y\\)
+Matrix A | Design matrix X
+input vector x | parameter vector (regression coeffiecients) \\(\beta\\)
+output vector b | observation vector y
+
+### Least-Squares Lines
+y=ax + b is expressed ass \\(y=\beta_0 + \beta_1x\\).
+
+#### Fitting line to a 2D model data
+Data for which we have \\((x_1,y_1)\dots(x_n,y_n)\\) data points and a model \\(y=\beta+\beta_1x\\) (also known as the **regression line of y on x**, because errors in data are assumed to be only on y... that is, it is clear that x is the input, independent variable and y the dependent variable, we can distinguish between the **predicted y-value** given by the regression line: \\((x_j,\beta_0+\beta_1x_j)\\).
+and the actual observed value of \\(y_j\\). The difference between the observed value (in LA: y) and the predicted value (in LA \\(\hat{y}\\)) is called the residual (in LA the error, however the error in LA is exclusively the perpendicular one, whereas in this particular regression case is just the difference of the y-axis values. Although the interpetation for error may vary, the approach to approximate for beta and y is the same).
+
+#### Measuring how close is the line to the data
+* Easiest choice is to add the squares of the residuals as it produces an absolute non-negative length.
+* The least-squares is the line \\(y=\beta_0+\beta_1x\\) that minimizes the sum of the squares of the residuals.
+
+#### Translating data points into a system
+* If data points were on a straight line, the parameters \\(\beta_0 + \beta_1\\) would satisfy:
+
+Predicted y-value | Observed y-value
+---:|:---
+$$\beta_0+\beta_1x_1$$ | $$y_1$$
+$$\beta_0+\beta_1x_2$$|$$y_2$$
+$$\vdots$$|$$\vdots$$
+$$\beta_0+\beta_1x_n$$|$$y_n$$
+
+* Such that \\(X\beta = y\\), where:
+
+$$X=\begin{bmatrix} 1 & x_1\\ 1 & x_2\\ \vdots & \vdots \\ 1 & x_n\end{bmatrix}, \beta=\begin{bmatrix} \beta_0 \\ \beta_1\end{bmatrix}, y = \begin{bmatrix} y_1 \\ y_2 \\ \vdots \\y_n\end{bmatrix}$$
+
+If the data points don't lie on a line, then there is no solution for \\(\beta\\) such that the entries of \\(\beta\\) make the matrix vector product output y. However, we can apply least squares to generate a projection of y onto the column space of X, and find the beta for that equation.
+
+### The general linear model
+* To make a models that use more variables we an use the same equation by just expanding the columns of X and the entries of \\(\beta\\) accordingly. Statisticans add an additional vector, the residual vector \\(\epsilon\\), such that:
+* \\(y=X\beta + \epsilon\\)
+* It is still a linear model, this line just travels in higher dimensions.
+* X and y are determined by the data set. \\(\beta\\) and the residual vector are found via least-squares.
+* The least square solution \\(\beta\\) is a solution of the normal equations:
+
+$$X^TX\hat{\beta} = X^T\hat{y}$$
+
+### Least-squares fitting for other curves
+ * When the data does not seem to fit into a line we can still make a model
+ * the unkowns do not necessarily need to be a "raw" variable (such as \\(x_1, x_2 ...\\))
+ * The unkowns can be functions (such as \\(f_1(x),f_2(x)...\\))
+ * This is a "fit" to a curve for instance.
+ * Usually the shape of the data distribution reveals a likely model to use to try to minimize the resiudals of, such as the formula below for parabolas:
+
+$$y=\beta_0+\beta_1x+\beta_2x^2$$
+
+* Then we can turn it into a system of equations based on each data point:
+
+$$y_1=\beta_0+\beta_1x_1+\beta_2x^2_1+\epsilon_1$$
+
+$$y_2=\beta_0+\beta_1x_2+\beta_2x^2_2+\epsilon_2$$
+
+$$\vdots$$
+
+$$y_n=\beta_0+\beta_1x_n+\beta_2x^2_n+\epsilon_n$$
+
+* Such that \\(y=X\beta + \epsilon\\) and:
+
+$$ y = \begin{bmatrix} y_1 \\ y_2 \\ \vdots \\y_n\end{bmatrix}, X=\begin{bmatrix} 1 & x_1 & x^2_1\\ 1 & x_2 & x^2_2\\ \vdots & \vdots \\ 1 & x_n & x^2_n\end{bmatrix}, \beta=\begin{bmatrix} \beta_0 \\ \beta_1 \\ \beta_2\end{bmatrix}, \epsilon = \begin{bmatrix} \epsilon_0 \\ \epsilon_1 \\ \epsilon_2\end{bmatrix}$$
+
+* Looking at the graph and (arbitrarily) deciding to model it based on a quadratic formula is adecuate as long as you are happy with the size of the residual. Sometimes throwing more columns into X might lead to smaller residuals.
+
+### Multiple Regression
+These are models that have multiple variables as input, which then make the model a 3D or more model. The model can be made in the same fashion, just that the unkowns are functions that take 2 or more inputs, such that:
+
+$$y=\beta_0f_0(u,v)+\beta_1f_1(u,v)+\dots$$
+
+or also as a simpler fashion such as:
+
+$$y=\beta_0+\beta_1u+\beta_2v\dots$$
+
+The least squares process to fit the data is called **trend surface**. An example would be a model that fits data points for altitude, latitud and longitude.
+
+---
+## Symmetric matrices
+
+\\(A=A^T\\)
+
+* Eigenvalues are real
+* Eigenvectors can be chosen perpendicular (remember that they can be chosen from a vector span)
+* Usually we express \\(A=S\LambdaS^{-1}\\), but now we can choose the vector to have a unit size (orthonormal eigenvectors)
+* Symmetric case \\(A=Q\Lambda\Q^{-1}=Q\Lambda\Q^{-T}\\)
+* Every symmetric matrix is a combination of perpendicual projection matrices
+* The number of positive eigenvalues is the same as the number of positive pivots
+
+### Positive definitive symetric matrices
+
+* All eigenvalues are positive
+* all pivots are positive
+* all sub determinants are positive
+
+
+
