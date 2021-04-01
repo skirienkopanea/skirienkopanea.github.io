@@ -154,7 +154,9 @@ tags: CSE1205 linear-algebra
     - [Least-squares fitting for other curves](#least-squares-fitting-for-other-curves)
     - [Multiple Regression](#multiple-regression)
   - [Symmetric matrices](#symmetric-matrices)
-    - [Positive definitive symetric matrices](#positive-definitive-symetric-matrices)
+    - [Sepctral theorem](#sepctral-theorem)
+      - [Sepctral decomposition](#sepctral-decomposition)
+    - [Algorithm for orthogonal diagonalization](#algorithm-for-orthogonal-diagonalization)
 
 ## Systems of Linear Equations
 ### Linear equation
@@ -2256,23 +2258,52 @@ $$y=\beta_0+\beta_1u+\beta_2v\dots$$
 
 The least squares process to fit the data is called **trend surface**. An example would be a model that fits data points for altitude, latitud and longitude.
 
----
 ## Symmetric matrices
-
-\\(A=A^T\\)
-
-* Eigenvalues are real
-* Eigenvectors can be chosen perpendicular (remember that they can be chosen from a vector span)
-* Usually we express \\(A=S\LambdaS^{-1}\\), but now we can choose the vector to have a unit size (orthonormal eigenvectors)
-* Symmetric case \\(A=Q\Lambda\Q^{-1}=Q\Lambda\Q^{-T}\\)
-* Every symmetric matrix is a combination of perpendicual projection matrices
+* The matrix is symetric with respect to the main diagonal
+* Therefore \\(A=A^T\\)
+  * Such matrix must be square
+  * Main diagonal is arbitrary, the other entries occur in pairs (on opposite sides of the main diagonal)
+* All eigenvalues are real
+* For each eigenvalue: the geometric multiplicity = algebraic multiplicity
+* Eigenvectors of a symmetric matrix that correspond to different eigenvalues are orthogonal
+  * 2 distinct eigenvectors can have the same eigenvalue scalar, yet these 2 eigenvectors are still different and not necessarily orthogonal, but for this eigenspace there exists an orthonormal basis. Use Grand-Schmidt.
+* The inverse of an orthogonal matrix (such as the eigenvector matrix of a symmetric matrix) is the transpose
+  * Which makes symetric matrices very easy to diagonalize
+  * Usually we express \\(A=S\Lambda S^{-1}\\), but now we can normalize S, such that \\(A=Q\Lambda Q^{-1}=Q\Lambda Q^{T}\\)
+  * A is a symmetric matrix iff A is orthogonally diagonalizable
 * The number of positive eigenvalues is the same as the number of positive pivots
 
-### Positive definitive symetric matrices
+### Sepctral theorem
+* The set of eigenvalues of A is sometimes called the spectrum of A
+* A has n real eigenvalues if we count the multiplicites
+* The geometric multiplicity of an eigenvalue is equal to its algebraic multiplicity
+  * That is, if the algebraic multiplicity is 2, then the eigenvalue Spans 2D
+* The egienspaces are mutually orthogonal (because the eigenvectors are orthogonal)
+* A is orthogonally diagonalizable
 
-* All eigenvalues are positive
-* all pivots are positive
-* all sub determinants are positive
+#### Sepctral decomposition
+
+$$A=QDQ^T=\begin{bmatrix} q_1 & \dots & q_n \end{bmatrix}\begin{bmatrix}
+\lambda_1 & 0 & \cdots & 0\\
+0 & \lambda_2 & 0 & 0\\
+0 & 0 & \ddots & \vdots\\
+0 & 0 & \dots & \lambda_n\end{bmatrix}\begin{bmatrix} q^T_1 \\ \vdots \\ q^T_n \end{bmatrix}$$
+
+$$A=\lambda_1q_1q^T_1+\lambda_2q_2q^T_2+\dots+\lambda_nq_nq^T_n$$
+
+* Each term has rank 1 and a multiple of \\(u_n\\)
+* The vector \\((u_ju^T_j)x\\) is the orthogonal projection of x onto the subspace spanned by \\(u_j\\).
+
+### Algorithm for orthogonal diagonalization
+1. Compute the eigenvalues of A
+2. Construct a basis of the corresponding eigenspace
+3. Make the basis orthonormal
+   1. Use Gram-Schmidt to rothogonalize if necessary
+   2. USe scaling to normalize basis vectors
+4. Construct the matrix S using the basis vectors
+5. Construct matrix D using the eigenvalues on the main diagonal
+
+
 
 
 

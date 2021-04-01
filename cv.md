@@ -8,12 +8,12 @@ permalink: /cv/
 * Location: Remote/South Holland, the Netherlands.
 
 ## Technical skills
-
-### Frameworks
+### Frameworks/protocols
 * Wordpress
 * npm, node
 * Springboot
 * HTTP/1.1 protocol
+* Websockets
 
 ### Programming languages
 * Java
@@ -26,7 +26,7 @@ permalink: /cv/
 * SQL
 * XML, JSON, CSV...
 * Latex
-* Markup
+* Markdown
 * Inkscape
 * GIMP
 * Blender 3D
@@ -49,7 +49,6 @@ permalink: /cv/
   * Sunday Hoofdklasse 2015 - 2016
 
 ## General skills
-
 ### Tools
 * Git
 * Sharepoint
@@ -68,8 +67,8 @@ permalink: /cv/
   * Organized first [student powerlifting competition in Rotterdam](https://www.youtube.com/watch?v=qGqPqr8v-oY)
 
 ## Creative portfolio
-* 2D Designs: [https://www.deviantart.com/kikizana/gallery/all](https://www.deviantart.com/kikizana/gallery/all)
-* 3D designs: [https://sketchfab.com/kikizana](https://sketchfab.com/kikizana)
+* 2D designs: [https://www.deviantart.com/kikizana/gallery/all](https://www.deviantart.com/kikizana/gallery/all)
+* 3D models: [https://sketchfab.com/kikizana](https://sketchfab.com/kikizana)
 * Apps: [https://github.com/skirienkopanea?tab=repositories](https://github.com/skirienkopanea?tab=repositories)
 
 ### Last app
@@ -80,8 +79,6 @@ Javascript three.js model viewer.
 
 ### Currently developing
 ![screenshot]({{ site.url }}/images/questi.JPG)
-
-
 
 Check my [LinkedIn](https://www.linkedin.com/in/sergio-kirienko/), [Github](https://github.com/skirienkopanea). <a onclick="window.print();" href="#print">Print this page
 </a>
