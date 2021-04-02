@@ -34,7 +34,7 @@ Below you can find some of my study notes and useful external links. My notes ma
 
 ## Y1Q3
 
-
+* [CSE1205_Linear_algebra.pdf][CSE1205] 
 * [Gilbert Strang lectures on Linear Algebra (MIT) (for CSE1205)](https://www.youtube.com/playlist?list=PL49CF3715CB9EF31D)
 * [Learn Git (for CSE1105)](https://learngitbranching.js.org/)
 * [Git GUI (for CSE1105)](https://www.sourcetreeapp.com/)
@@ -55,3 +55,4 @@ Below you can find some of my study notes and useful external links. My notes ma
 [CSE1500_db1]:{{ site.url }}/downloads/CSE1500_db_LogicalRelationalSchemalExamples.pdf
 [CSE1500_db2]:{{ site.url }}/downloads/CSE1500_db(crowsfoot-vs-chen).pdf
 [CSE1500_web]:{{ site.url }}/downloads/CSE1500_web(http-html-js-nodejs-css-ejs-cookies-sessions-authentication-security).pdf
+[CSE1205]:{{ site.url }}/downloads/CSE1205_Linear_algebra.pdf
