@@ -95,6 +95,7 @@ tags: CSE1205 linear-algebra
     - [Det A formula](#det-a-formula)
     - [Property 9](#property-9)
     - [Property 10](#property-10)
+    - [Eigenvalue property](#eigenvalue-property)
     - [Algorithm for determinant 2 by 2](#algorithm-for-determinant-2-by-2)
     - [Algorithm for determinant 3 by 3](#algorithm-for-determinant-3-by-3)
     - [Big formula for determinant of n by n](#big-formula-for-determinant-of-n-by-n)
@@ -1131,6 +1132,10 @@ $$
 * \\(detA^T=detA\\)
   * Therefore all the things that applied to rows also apply to columns
 
+### Eigenvalue property
+
+* \\(detA=\lambda_1 \cdot \lambda_2 \cdot \lambda_3 \dots \lambda_n\\)
+
 ### Algorithm for determinant 2 by 2
 
 $$\begin{vmatrix}
@@ -1669,11 +1674,14 @@ $$P=\left[ Re \mathbf{v} \ Im \mathbf{v} \right]$$
 Where v is an eigenvector associated to the eigenvalue a - bi.
 * The same way that the conjugate of an eigenvalue is another eigenvalue in the matrix, the conjugate of an eigenvector is also another eigenvector
 
-* \\(r=\|\lambda\|=\sqrt{a^2+b^2}\\)
+* Radius/length/modlus: \\(r=\|\lambda\|=\sqrt{a^2+b^2}\\)
 
 $$C = r\begin{bmatrix} \frac{a}{r} & -\frac{b}{r} \\ \frac{b}{r} & \frac{a}{r}\end{bmatrix}=r\begin{bmatrix} \cos\phi & -\sin\phi \\ \sin\phi & \cos\phi\end{bmatrix}$$
 
-* The angle \\(\phi\\) is called the argument of \\(\lambda=a+bi\\) (which is arctan(b/a)) and the rotation of the transformation \\(x \mapsto Cx\\) and scaled by \\(\|\lambda\|\\)
+* The angle \\(\phi\\) is called the argument of \\(\lambda=a+bi\\) (which is generally arctan(b/a), when both parts are positive, else have a look at the unit circle) and the rotation of the transformation \\(x \mapsto Cx\\) and scaled by \\(\|\lambda\|\\)
+
+Between -pi and pi:
+![argument]({{ site.url }}/images/argument.svg)
 
 ## Discrete dynamical systems
 ### Recurrence relation to matrix equation
@@ -1884,6 +1892,8 @@ $$x_k=c_1.58^k\begin{bmatrix}5 \\ 1 \end{bmatrix} + c_21.02^k\begin{bmatrix}10 \
 
 From the fact that .58 is smaller than 1, as k grows to infinity, the rate of growth for both owls and rats will be solely defined by 1.02 and the ratio of owls to rats will be mantained at 10/13. Although c is not known, as we get closer to infinty that becomess irrelevant, and we've managed to solve one of the things we managed to learn some things about the system nevertheless.
 
+![Complement]({{ site.url }}/images/system.JPG)
+
 ### Complex systems
 
 Take matrix A which as complex eigenvalues:
@@ -2075,7 +2085,7 @@ $$P=\frac{u_1}{u_1^Tu_1}u_1^T+\frac{u_2}{u_2^Tu_2}u_2^T+\dots+\frac{u_n}{u_n^Tu_
 
 Therefore:
 
-$$\hat{y} = Py=(\frac{u_1}{u_1^Tu_1}u_1^T+\frac{u_2}{u_2^Tu_2}u_2^T+\dots+\frac{u_n}{u_n^Tu_n}u_n^T)y$$
+$$\hat{y} = Py=(\frac{u_1^T}{u_1^Tu_1}u_1+\frac{u_2^T}{u_2^Tu_2}u_2+\dots+\frac{u_n^T}{u_n^Tu_n}u_n)y$$
 
 ```matlab
 projection=((v1/(transpose(v1)*v1))*transpose(v1)+(etcera))*y
