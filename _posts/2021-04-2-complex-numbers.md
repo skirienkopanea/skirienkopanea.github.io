@@ -3,7 +3,7 @@ layout: post
 title:  "Complex Numbers"
 date:   2021-04-9 23:51:00 +0100
 categories: math
-tags: linear-algebra,calculus
+tags: 
 ---
 {% include math.html %}
 <!--more-->
