@@ -3,7 +3,7 @@ layout: post
 title:  "Linear Algebra Summary"
 date:   2021-04-2 12:00:00 +0100
 categories: math
-tags: CSE1205 linear-algebra
+tags: CSE1205
 ---
 {% include math.html %}
 <!--more-->
