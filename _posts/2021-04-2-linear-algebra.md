@@ -95,7 +95,7 @@ tags: CSE1205 linear-algebra
     - [Det A formula](#det-a-formula)
     - [Property 9](#property-9)
     - [Property 10](#property-10)
-    - [Eigenvalue property](#eigenvalue-property)
+    - [Eigenvalue properties](#eigenvalue-properties)
     - [Algorithm for determinant 2 by 2](#algorithm-for-determinant-2-by-2)
     - [Algorithm for determinant 3 by 3](#algorithm-for-determinant-3-by-3)
     - [Big formula for determinant of n by n](#big-formula-for-determinant-of-n-by-n)
@@ -1132,9 +1132,10 @@ $$
 * \\(detA^T=detA\\)
   * Therefore all the things that applied to rows also apply to columns
 
-### Eigenvalue property
-
-* \\(detA=\lambda_1 \cdot \lambda_2 \cdot \lambda_3 \dots \lambda_n\\)
+### Eigenvalue properties
+* To reduce calculation overhead for finding the eigenvalues of a 3x3 or larger matrix, you can use the eigenvalues available from the problem description and combine them in a system of equations with det A and trace such that you only need to co-factor A rather than det (A-\\(\lambda\\)) = 0, which is harder.
+  * \\(detA=\lambda_1 \cdot \lambda_2 \cdot \lambda_3 \dots \lambda_n\\)
+  * \\(trace=\lambda_1 + \lambda_2 + \lambda_3 + \lambda_n\\)
 
 ### Algorithm for determinant 2 by 2
 
