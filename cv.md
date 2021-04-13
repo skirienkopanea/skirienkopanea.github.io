@@ -72,13 +72,11 @@ permalink: /cv/
 * Apps: [https://github.com/skirienkopanea?tab=repositories](https://github.com/skirienkopanea?tab=repositories)
 
 ### Last app
-Javascript three.js model viewer.
-<div class="cannot-use-iframe-directly-must-place-it-within-div">
-    <iframe title="A 3D model" width="100%" height="480" src="https://hereinmygarage.herokuapp.com/?model=truck" allowfullscreen=true></iframe>
-</div>
+[questi](https://github.com/skirienkopanea/questi): Q&A Springboot app for online lectures.
+![screenshot]({{ site.url }}/images/questi.JPG)
 
 ### Currently developing
-![screenshot]({{ site.url }}/images/questi.JPG)
+[gym](https://github.com/skirienkopanea/gym): Springboot app for workout planning.
 
 Check my [LinkedIn](https://www.linkedin.com/in/sergio-kirienko/), [Github](https://github.com/skirienkopanea). <a onclick="window.print();" href="#print">Print this page
 </a>
