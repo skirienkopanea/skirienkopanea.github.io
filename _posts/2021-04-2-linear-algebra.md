@@ -968,7 +968,7 @@ vectors in any basis for H. The dimension of the zero subspace {**0**} is define
 
 If a matrix A has n columns, then some are free variables (dimNul(A)) and some are legit basis (pivots, which add to rank(A)), the sum of the numer of pivots and the number of free variables = n, formally:
 
-$$rank(A) + dim(Nul(A)) = n$$
+$$rank(A) + dim(Nul(A)) = number\ columns$$
 
 For an n x n matrix, iff A is invertible, then:
 
@@ -1615,7 +1615,7 @@ This is also known as \\(E_\lambda=Nul(A-\lambda I)\\), which is a subspace of \
 ### Similar matrix
 
 * A is similar to B if there exists an invertible matrix P such that \\(A=PBP^{-1}\\)
-* Similar matrices have same eigenvalues, multiplicities, and eigenvectors.
+* Similar matrices have same eigenvalues, multiplicities.
 * A matrix A is diagonazilable if it can be expressed as a similar matrix that is a diagonal matrix.
   *  A must have n linearly independent vectors
   *  Which form a basis for \\(R^n\\)
@@ -2064,7 +2064,7 @@ It is like an orthogonal set, but in addition the length of the vectors is 1. Th
 
 * In higher dimensions instead of having a single vector u span a subspace of \\(R^2\\), namely the line L, we can have an orthogonal basis set composed of { \\(u_1,u_2,\dots,u_n\\)} that spans a subspace W.
 * The orthogonal projection of y onto W is \\(\hat{y}\\), which is the closest point to y in that lies in W:
-  * \\(\hat{y}\\) makes the smallest error (difference of y vs a vector in W): \\(\\|y-\hat{y}\\|\lt \\|y-v\\), where v represents any other vector in W distinct from \\(\hat{y}\\).
+  * \\(\hat{y}\\) makes the smallest error (difference of y vs a vector in W): \\(\\|y-\hat{y}\\|\lt \\|y-v\\|\\), where v represents any other vector in W distinct from \\(\hat{y}\\).
   * \\(\hat{y}\\) is formally regarded as the best approximation to y by elements of W.
   * It doesnt matter which orthogonal basis is used for W (in 2D we just scaled u by 2), as the projection point will lie on the same spot in higher dimensions too. However, regardless of the basis for W, the subspace must remain the same.
 

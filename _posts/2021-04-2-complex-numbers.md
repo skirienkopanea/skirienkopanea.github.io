@@ -1,9 +1,9 @@
 ---
 layout: post
-title:  "Complex Numbers"
-date:   2021-04-9 23:51:00 +0100
+title:  "Complex Numbers Cheatsheet"
+date:   2021-04-9 23:51:00 +0200
 categories: math
-tags: 
+tags: cheatsheet
 ---
 {% include math.html %}
 <!--more-->
