@@ -40,6 +40,7 @@ permalink: /cv/
 * English (full working proficency)
 * Dutch (limited working proficency)
 
+
 ## Education
 * TU Delft: BSc Computer Science (2020 - 2023)
 * Erasmus University Rotterdam: MSc Business Information Management (2017 - 2018)
