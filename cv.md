@@ -7,7 +7,7 @@ permalink: /cv/
 * Email: s.kirienkopanea@student.tudelft.nl
 * Location: Remote/South Holland, the Netherlands.
 
-## Technical skills
+## Skills
 ### Frameworks/protocols
 * Wordpress
 * npm, node
@@ -27,10 +27,18 @@ permalink: /cv/
 * XML, JSON, CSV...
 * Latex
 * Markdown
+* Git
+* Sharepoint
+* MS Office
 * Inkscape
 * GIMP
 * Blender 3D
 * Camtasia studio
+
+### Natural languages
+* Spanish (native)
+* English (full working proficency)
+* Dutch (limited working proficency)
 
 ## Education
 * TU Delft: BSc Computer Science (2020 - 2023)
@@ -47,17 +55,6 @@ permalink: /cv/
 * RKSV Leonidas: Football player (2016)
   * Sunday Topklasse 2014 - 2015
   * Sunday Hoofdklasse 2015 - 2016
-
-## General skills
-### Tools
-* Git
-* Sharepoint
-* MS Office
-
-### Natural languages
-* Spanish (native)
-* English (full working proficency)
-* Dutch (limited working proficency)
 
 ## Volunteer
 * CVV Zwervers: Goalkeeper coach (2015 - 2016)
