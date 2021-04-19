@@ -27,6 +27,7 @@ permalink: /cv/
 * XML, JSON, CSV...
 * Latex
 * Markdown
+* Matlab
 * Git
 * Sharepoint
 * MS Office
