@@ -31,6 +31,31 @@ tags: CSE1210
       - [Birthday example:](#birthday-example)
     - [Bayes rule (Librarian vs farmer)](#bayes-rule-librarian-vs-farmer)
       - [Law of total probability](#law-of-total-probability)
+  - [Independence](#independence)
+    - [Independence of two or more events](#independence-of-two-or-more-events)
+  - [Discrete random variables](#discrete-random-variables)
+    - [Probability distribution of a discrete random variable](#probability-distribution-of-a-discrete-random-variable)
+      - [Discrete probability distribution of X aka mass function of X](#discrete-probability-distribution-of-x-aka-mass-function-of-x)
+      - [(Cumulative) Distribution function of X](#cumulative-distribution-function-of-x)
+    - [Combinatorics](#combinatorics)
+    - [Binomial distribution](#binomial-distribution)
+    - [Bernoulli distribution](#bernoulli-distribution)
+    - [Geometric distribution](#geometric-distribution)
+    - [Poisson distribution](#poisson-distribution)
+      - [Relationship between binomial and possion distributions](#relationship-between-binomial-and-possion-distributions)
+  - [Continuous random variables](#continuous-random-variables)
+    - [Arbitrary example](#arbitrary-example)
+      - [Mean and variance for continuous probability distribution](#mean-and-variance-for-continuous-probability-distribution)
+    - [Quantiles (percentiles)](#quantiles-percentiles)
+      - [Median](#median)
+      - [kth percentile](#kth-percentile)
+    - [Probability density functions](#probability-density-functions)
+    - [Cumulative distribution function](#cumulative-distribution-function)
+    - [Normal distribution \\(N(\mu,\sigma^2)\\)](#normal-distribution-nmusigma2)
+    - [Standard normal distribution \\(N(0,1)\\)](#standard-normal-distribution-n01)
+    - [Uniform distribution](#uniform-distribution)
+    - [Exponential distribution](#exponential-distribution)
+    - [Pareto distribution](#pareto-distribution)
 
 ## Terminology
 * stochastic: having a random probability distribution or pattern that may be analysed statistically but may not be predicted precisely.
@@ -48,15 +73,17 @@ tags: CSE1210
   * Test hypotheses
 
 ## Numerical summaries
-* Average (also known as mean)
+* Average (also known as mean) = \\(\mu\\)
 * Median (middle number/interval of the distinct set, not necessarily the same as the average)
 * Minimum and maximum value (range)
 * Lower and upper quartile
+  * They are the 25th and 75th percentiles
+  * That is, the value of x such that the area under the curve between \\(-\infty\\) and the percentile amounts to .25 and .75 respectievely
 
 ## Five-number summary
 * Minimum
 * Lower quartile (median of the set from the minimum to the median)
-* Median
+* Median (50th percentile)
 * Upper quartile (median of the set from the median to the maximum)
 * Maximum
 
@@ -220,3 +247,183 @@ $$= \left(1-\frac{n-1}{365}\right)\cdot\left(1-\frac{n-2}{365}\right)\cdot\left(
 ![Total Probability]({{ site.url }}/images/total_p.PNG)
 * For \\(C_1, C_2...\\) disjoint events such that \\(C_1 \cup C_2 \cup ...=\Omega\\) :
 * $$P(A)=P(A|C_1)P(C_1)+P(A|C_2)P(C_2)+\dots$$
+
+## Independence
+* Physical independence: When 2 events are implicitly independent due to their physical nature (i.e. tossing a coin after withdrawing a card)
+* To show that A and B are (stochastically) independent it suffices to prove just one of the following:
+  * \\(P(A\|B)=P(A)\\)
+  * \\(P(B\|A)=P(B)\\)
+  * \\(P(A\cap B)=P(A)P(B)\\)
+
+### Independence of two or more events
+* A and B being independent and B and C being independent and C and A being indepdendent does NOT imply \\(A \cap B \cap C\\)are indepdendent. It has to be strictly proven that Events \\(A_1, A_2,\dots\\) are independent iff:
+  * \\(P(A_1 \cap A_2 \cap \dots ) = P(A_1)P(A_2)...\\)
+    * It also holdes if you rpelace an event for its complement
+
+## Discrete random variables
+* Random variabels emerge from the process of mapping random processes (i.e. rolling two dice) to numbers (their sum)
+
+$$S=sum\ of\ 2\ dice = \begin{cases}
+               2 & if\ (1,1)\\
+               3 & if\ (1,2)\\
+               4 & if\ (1,3)\\
+               \vdots & \vdots\\
+               12 & if\ (6,6)
+            \end{cases}
+$$
+
+* Random variables are denoted by capital leters
+  * tossing a coin maps to X: \\({(H,T)} \mapsto X\\), where X is a random variable that is an integer (its no longer H or T)
+
+
+$$X=\begin{cases}
+               1 & if\ heads\\
+               0 & if\ tails\\
+            \end{cases}
+$$
+
+* The value choices for 1 and 0 are arbitrary, any values would still make X a random variable
+* Random variables are not like the traditional variables in algebra such as y = 5x
+  * You can assign values and/or solve for traditional variables (or unkowns)
+  * A random variable does not have a fixed value, it can take many diferent values each time we re-run the experiment, with different probabilities.
+    * Therefore random variables are more useful when we use them in terms of the probability of the random variable being equal to something. That probability is a fixed number.
+    * \\(P(Y\le 6)\\)
+
+* Discrete random variabels are those that can take "int" values, 1, 2, 3, 4, etc. Such as number of facebook friends. Whereas continuous random variables can take infinitue values between those "int" values, such as the 100m race time of an athlete (without rounding).
+
+### Probability distribution of a discrete random variable
+* Example, let X = "number of heads after 3 coin toss"
+* $$\Omega=\left\{\begin{matrix}(H,H,H), \\ (H,H,T), \\ (H,T,H), \\ (H,T,T), \\ (T,H,H), \\ (T,H,T), \\ (T,T,H), \\ (T,T,T)\end{matrix}\right\}$$
+* \\(P(X=0)=\\{(T,T,T)\\}.size()/\Omega.size()=1/8\\)
+* \\(P(X=1)=3/8\\)
+* \\(P(X=2)=3/8\\)
+* \\(P(X=3)=1/8\\)
+
+#### Discrete probability distribution of X aka mass function of X
+* Also known as probability mass function p. p is the function that maps R to the interval [0,1]:
+* \\(p(a)=P(X=a)\\)
+
+![pf]({{ site.url }}/images/pf.png)
+
+* The beauty is that we don't need to know much about X nor \\(\Omega\\) in order to use inputs for p(a).
+* The allowed inputs are \\(-\infty < a < \infty\\)
+* Before we were forced to describe all the events in set theory, such as \\(P(\\{(T,T,H)\\})\\), now we can just say p(1). We can also use P(X<2), which would be equal to P(X=0) + P(X=1) = 1/8 + 3/8 = 1/2. This is known as the distribution function.
+
+#### (Cumulative) Distribution function of X 
+* The distribution function F of a random variable X is similar to the mass function, but instead we map the cummulative probability of being smaller than the input:
+* \\(F(a)=P(X\le a)=\sum_{a_i\le a}{p(a_i)}\\) for \\(-\infty < a < \infty\\)
+
+![df]({{ site.url }}/images/df.png)
+
+* The probablity when X = a does exist, the value taken dependes on wheter the inequality includes equal or not. The white line is just for the \\(aesthetics\\)
+* As X approaches -\\(\infty\\) the value goes to 0 and as it approaches \\(\infty\\) the value goes to 1.
+
+### Combinatorics
+* $$\begin{pmatrix}n \\ k \end{pmatrix}=nCk=\frac{n!}{k!(n-k)!}$$ is read as n choose k. n being the number of tosses and k the number of successes.
+
+![btree]({{ site.url }}/images/btree.png)
+
+* $$\begin{pmatrix}n \\k \end{pmatrix}$$ this binomial coeffecient calculates the count of scenarios with desired k success of a tree of n layers.
+
+### Binomial distribution
+* $$P(X=k)=\begin{pmatrix}n \\k \end{pmatrix}p^k(1-p)^{n-k}$$
+* Since trials are independent, the individual probability for each counted scenarios to occur is \\(p^k\\), but we have nCk of them, therefore we multiply them with the binomial cofficient.
+* In addition we have to complete the tree with the joint (independent) probability of the remaining failures, which are \\((1-p)^{n-k}\\)
+* Formally the probability mass function is \\(p(x)=...\\)
+* A binomial distribution is a discrete version of the normal distribution
+  * The distribution becomes normal as the number of trials increases.
+* This is a bernoulli distribution of n independent trials
+
+![bd]({{ site.url }}/images/bd.png)
+### Bernoulli distribution
+* A bernoulli distribution is a binomial distribution that only has X=0 and X=1 bars from 1 trial.
+
+### Geometric distribution
+* Binomial distribution whose probability mass function is given by:
+* $$P(X=k)=(1-p)^{k-1}p$$
+* We use this to compute the probability of a success at the kth trial
+
+![gd]({{ site.url }}/images/gd.png)
+
+* We can make a cummulative distribution of the geometric one to get the probability success by at least the nth trial.
+
+![gcd]({{ site.url }}/images/gcd.png)
+
+### Poisson distribution
+* Counts the number of occurences (actually the probability of happening) of an event genearlly in a given unit of time (or distance, area, volume...)
+* Events occur randomly and independently
+  * (Homogeneity) The rate λ at which arrivals occur is constant over time: in a subinterval of length u the expectation of the number of telephone calls is λu.
+  * (Independence) The numbers of arrivals in disjoint time intervals are independent
+random variables.
+* $$P(X=k)=\frac{\lambda^ke^{-\lambda}}{k!}$$
+  * \\(\lambda=\mu=mean\\)
+  * for the poisson distribution \\(\mu=\sigma^2=\lambda\\)
+
+![pd]({{ site.url }}/images/pd.png)
+
+* As lambda approaches 0 the right skewness of the poisson distribution becomes more noticeable
+
+#### Relationship between binomial and possion distributions
+* The binomial distribution tends toward the possion distribution as \\(n\to \infty, p \to 0\\) and \\(np\\) stays constant.
+* The poisson distribution with \\(\lambda=np\\) closely approximates the binomial distribution if \\(n\\) is large and \\(p\\) is small
+
+## Continuous random variables
+* Their possible values constitute of an entire range (with infinite possible values in between), such as height, weight, time, etc.
+* Probabilities and percentiles are found by integrating the probability density function
+* Deriving the mean and variance also requires integration
+
+### Arbitrary example
+* Suppose for a random variable X that the probability density (mass) function follows \\(f(x)=cx^3\\) for \\(2\le x \le 4\\) and 0 otherwise.
+* What value of c makes this a legit distribution?
+  * \\(f(X)=cx^3\\) must be positive at all times, therefore c must be positive
+  * \\(\int^{\infty}_{-\infty}f(x)dx=1\\)
+ * $$\int^{4}_{2}cx^3dx=1$$
+ * $$\frac{1}{4}c\left[x^4\right]^4_2=1$$
+ * $$\frac{1}{4}c[4^4-4^2]=1$$
+ * $$60c=1$$
+ * $$c=\frac{1}{60}$$
+
+#### Mean and variance for continuous probability distribution
+Lecture 4 https://www.youtube.com/watch?v=Ro7dayHU5DQ&list=PLvxOuBpazmsPDZGwqhhjE3KkLWnTD34R0&index=3
+
+### Quantiles (percentiles)
+#### Median
+* It's the X value that splits the area into two halves of equal size (0.5 each)
+![median]({{ site.url }}/images/median.png)
+#### kth percentile
+* It's the value of x such that the area under the curve between \\(-\infty\\) and k amounts to k%
+
+### Probability density functions
+* $$P(a\le X \le b)=\int^{b}_{a}{f(x)}dx$$
+* \\(P(a\le X \le b)=P(a\lt X \lt b)\\) because \\(P(X=a)=0\\)
+* \\(f(x)\ge0\\)
+* Area of entire curve is 1
+
+### Cumulative distribution function
+* $$P(X \le t)=\int^{t}_{-\infty}{f(x)}dx$$
+
+### Normal distribution \\(N(\mu,\sigma^2)\\)
+* $$f(x)=\frac{1}{\sigma\sqrt{2\pi}}e^{-\frac{1}{2}(\frac{x-\mu}{\sigma})^2}$$
+
+![nd]({{ site.url }}/images/nd.png)
+
+### Standard normal distribution \\(N(0,1)\\)
+
+
+### Uniform distribution
+* $$f(x)=\frac{1}{\beta-\alpha}$$ for \\(\alpha \le x \le \beta\\)
+
+![ud]({{ site.url }}/images/ud.png)
+
+
+
+### Exponential distribution
+* $$f(x)=\lambda e^{-\lambda x}$$
+* $$F(X)=1-e^{-\lambda x}$$
+
+![ud]({{ site.url }}/images/ud.png)
+
+### Pareto distribution
+* \\(f(x)=0\\) for \\(x \lt 1\\) and \\(f(x)=\frac{\alpha}{x^{\alpha+1}}, F(X)=1-x^{-\alpha}\\) for \\(x \ge 1\\).
+
+![pareto]({{ site.url }}/images/pareto.png)
