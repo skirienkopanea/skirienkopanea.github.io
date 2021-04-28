@@ -475,7 +475,7 @@ random variables.
 * E[X]=\\(\frac{1}{\lambda}\\)
 * Var(X)=\\(\frac{1}{\lambda^2}\\)
 
-![ud]({{ site.url }}/images/ud.png)
+![ed]({{ site.url }}/images/ed.png)
 
 ### Pareto distribution
 * \\(f(x)=0\\) for \\(x \lt 1\\) and \\(f(x)=\frac{\alpha}{x^{\alpha+1}}, F(X)=1-x^{-\alpha}\\) for \\(x \ge 1\\).
