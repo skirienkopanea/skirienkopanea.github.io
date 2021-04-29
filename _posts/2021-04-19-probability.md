@@ -100,20 +100,20 @@ tags: CSE1210
   * Displays data in intervals, which are determined by a "bin" width
   * Bin width is mostly arbitrary, but there are "sweet spots" that show more useful information than others
 
-![histogram]({{ site.url }}/images/histogram_width.PNG)
+![histogram]({{ site.url }}/images/histogram_width.png)
 
 * Two peaks indicate that there are likely two different types of eruption
 * Scatter plots show tupple observations, often the x-axis is inteded to represent the independent variable (input, *cause*) and the y-axis the dependent variable (output).
 
-![scatterplot]({{ site.url }}/images/scatterplot.PNG)
+![scatterplot]({{ site.url }}/images/scatterplot.png)
 
 * However scatter plots can be deceiving. The two scatter plots look similar a priory. But if we use boxplots we can easily see the difference.
 
-![boxplot]({{ site.url }}/images/boxplot.PNG)
+![boxplot]({{ site.url }}/images/boxplot.png)
 
 * A boxplot is a visual simplified representation of the data distribution (rotated 90 degrees) 
 
-![boxplot]({{ site.url }}/images/boxplot2.PNG)
+![boxplot]({{ site.url }}/images/boxplot2.png)
 
 * IQR stands for interquartile range, which is the distance between the upper and lower quartiles. This is the range of the middle half of the dataset.
 
@@ -252,7 +252,7 @@ $$= \left(1-\frac{n-1}{365}\right)\cdot\left(1-\frac{n-2}{365}\right)\cdot\left(
   * P(E) could be expressed instead of in just the 2 disjoint events of they hypotheses and the hypotheses complement, it could be expressed in terms of many other disjoint events as the law of total probability suggests.
 
 #### Law of total probability
-![Total Probability]({{ site.url }}/images/total_p.PNG)
+![Total Probability]({{ site.url }}/images/total_p.png)
 * For \\(C_1, C_2...\\) disjoint events such that \\(C_1 \cup C_2 \cup ...=\Omega\\) :
 * $$P(A)=P(A|C_1)P(C_1)+P(A|C_2)P(C_2)+\dots$$
 
