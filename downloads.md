@@ -5,7 +5,7 @@ permalink: /downloads/
 ---
 Below you can find some of my study notes and useful external links. My notes may contain some mistakes and some content might be copied directly from the book/slides, credits are implicitly given to all of the authors that contributed to the literature/materials provided in the course (CSE####). If you'd like my notes to cite your work more explicitly, if you would like me to take some of my notes down, and/or if you have noticed a broken link/have a comment, please send me an e-mail to [s.kirienkopanea@student.tudelft.nl](mailto:s.kirienkopanea@student.tudelft.nl).
 
-*Course codes: CSE1300 (Reasoning and Logic), CSE110 (Object-Oriented Programing), CSE1100 (Computer Organisation), CSE1200 (Calculus), CSE1305 (Algorithms & Data Structures), CSE1500 (Database & Web Technology)*
+*Course codes: CSE1300 (Reasoning and Logic), CSE110 (Object-Oriented Programing), CSE1100 (Computer Organisation), CSE1200 (Calculus), CSE1305 (Algorithms & Data Structures), CSE1500 (Database & Web Technology)... TODO: Update the entire list*
 
 <div id ="container"  markdown="1" class="download">
 
@@ -39,7 +39,14 @@ Below you can find some of my study notes and useful external links. My notes ma
 * [Questi repository (for CSE1105)](https://github.com/skirienkopanea/questi)
 * [Learn Git (for CSE1105)](https://learngitbranching.js.org/)
 * [Git GUI (for CSE1105)](https://www.sourcetreeapp.com/)
+* [Relational algebra video (for CSE1505)](https://www.youtube.com/watch?v=tii7xcFilOA)
+* [SQL to relational algebra tool (for CSE1505)](https://dbis-uibk.github.io/relax/calc/local/uibk/local/0)
 
+## Y1Q4
+
+* [CSE1110_Software_Quality_and_Testing_Book](https://sttp.site)
+* [CSE1405_Computer_Networks_Book](http://index-of.es/Varios-2/Computer%20Networks%205th%20Edition.pdf#page=1)
+* [jbstatistics youtube channel for (CSE1210)](https://www.youtube.com/user/jbstatistics)
 </div>
 
 <br>
