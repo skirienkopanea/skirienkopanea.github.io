@@ -1890,10 +1890,7 @@ Then  leave c as a constant \\(x_k=c_1\lambda^k_1v_1 + c_2\lambda^k_2v_2\\)
 
 $$x_k=c_1.58^k\begin{bmatrix}5 \\ 1 \end{bmatrix} + c_21.02^k\begin{bmatrix}10 \\ 13 \end{bmatrix}$$
 
-
 From the fact that .58 is smaller than 1, as k grows to infinity, the rate of growth for both owls and rats will be solely defined by 1.02 and the ratio of owls to rats will be mantained at 10/13. Although c is not known, as we get closer to infinty that becomess irrelevant, and we've managed to solve one of the things we managed to learn some things about the system nevertheless.
-
-![Complement]({{ site.url }}/images/system.JPG)
 
 ### Complex systems
 

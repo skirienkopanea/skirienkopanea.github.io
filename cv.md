@@ -16,6 +16,7 @@ permalink: /cv/
 * Websockets
 
 ### Programming languages
+* Python
 * Java
 * Javascript
 * PHP
@@ -70,12 +71,9 @@ permalink: /cv/
 * 3D models: [https://sketchfab.com/kikizana](https://sketchfab.com/kikizana)
 * Apps: [https://github.com/skirienkopanea?tab=repositories](https://github.com/skirienkopanea?tab=repositories)
 
-### Last app
-[questi](https://github.com/skirienkopanea/questi): Q&A Springboot app for online lectures.
-![screenshot]({{ site.url }}/images/questi.JPG)
-
 ### Currently developing
-[gym](https://github.com/skirienkopanea/gym): Springboot app for workout planning.
+![404](https://raw.githubusercontent.com/skirienkopanea/gym/main/screenshot.png)
+* Javafx app for workout planning.
 
 Check my [LinkedIn](https://www.linkedin.com/in/sergio-kirienko/), [Github](https://github.com/skirienkopanea). <a onclick="window.print();" href="#print">Print this page
 </a>
