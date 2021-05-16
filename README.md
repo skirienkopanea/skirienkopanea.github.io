@@ -4,14 +4,16 @@ My personal blog made with Jekyll
 [Link](https://skirienkopanea.github.io/)
 
 ## Backlog
-* CSS media query for printing that hides the header and the footer
-* Move math js script to header and use if tag = math then run script
 * Finish bash scripts cheat sheet
-* Make a git cheat sheet
-* Make a vim cheat sheet
 * make a python cheat sheet
-* Make a cheatshet of all the courses in post format (plaintext good for SEO)
-* change dark highlight for blue code snippet words (i.e. flags in console)
 * Make dark mode for the mobile phone nav menu
-* review bash/terminal/etc terminology and edit the unix/linux posts,tags,categories accordingly
-  * https://www.youtube.com/watch?v=hMSByvFHOro&list=PL-p5XmQHB_JQg53zeRfRu7-Ku-Omh5ZUp&index=9
+* Move Linear Algebra Summary to pdf
+  * Keep linear algebra cheatsheet post
+* Move CN post to pdf summary
+  * add pdf of labs
+* Keep SQT post
+  * add pdf of labs
+* Learn C and C++ for Algorithms and Data Structures prep
+* Make 8-bit breadboard computer
+* Make basic C# GUI app
+* Make basic ASP Net website
