@@ -3,30 +3,37 @@ layout: page
 title: CV
 permalink: /cv/
 ---
+{% include math.html %}
+
 ## Sergio Kirienko
 * Email: s.kirienkopanea@student.tudelft.nl
 * Location: Remote/South Holland, the Netherlands.
 
 ## Skills
-### Frameworks/protocols
-* Wordpress
-* npm, node
-* Springboot
-* HTTP/1.1 protocol
-* Websockets
-
 ### Programming languages
-* Python
 * Java
 * Javascript
+* Python
+* R
 * PHP
+<!--More languages will go here as soon as I publish a github project. Then remove Natural language jitter to fit all in 1 page--> 
 
-### Non-programing languages/tools
+### Frameworks
+* Springboot
+* npm
+* Wordpress
+<!--Big data frameworks will go here-->
+
+### Markup/scripting/misc languages, tools...
 * HTML
 * CSS
 * SQL
 * XML, JSON, CSV...
-* Latex
+* HTTP/1.1 protocol (telnet)
+* Websockets (in javascript)
+* node (javascript)
+* JavaFX
+* \\(\LaTeX\\)
 * Markdown
 * Matlab
 * Git
@@ -36,15 +43,18 @@ permalink: /cv/
 * GIMP
 * Blender 3D
 * Camtasia studio
+* Minecraft
 
 ### Natural languages
 * Spanish (native)
 * English (full working proficency)
 * Dutch (limited working proficency)
-
+* Catalan (full working proficency)
+* Attempts to speak Portuguese and French after a few beers, Russian after a few shots...
+* Open to learn and acquire new romance or germanic language proficency on demand
 
 ## Education
-* TU Delft: BSc Computer Science (2020 - 2023)
+* Delft University of Technology: BSc Computer Science (2020 - currently enrolled)
 * Erasmus University Rotterdam: MSc Business Information Management (2017 - 2018)
   * Thesis: Case study for the implementation of virtual teams
 * Erasmus University Roterdam: BSc International Business Administration (2014 - 2017)
@@ -54,28 +64,33 @@ permalink: /cv/
 ## Work experience
 * FRISS \| fraud, risk & compliance: Consultant (2019 - 2020)
   * Consulting, support, implementation, pre-sales
-* Erasmus University Rotterdam: Technology Management Coach (2017)
+* Erasmus University Rotterdam: Teacher Assistant for "Technology Management" (2017)
+  * Course taught by Delft University of Technology and Rotterdam School of Management
 * RKSV Leonidas: Football player (2016)
   * Sunday Topklasse 2014 - 2015
   * Sunday Hoofdklasse 2015 - 2016
 
 ## Volunteer
-* CVV Zwervers: Goalkeeper coach (2015 - 2016)
-  * Under 12 - Under 16
-* Erasmus Strength: Director
+* Erasmus Strength: Director (2017 - 2018)
   * Rebranding
   * Organized first [student powerlifting competition in Rotterdam](https://www.youtube.com/watch?v=qGqPqr8v-oY)
+* CVV Zwervers: Goalkeeper coach (2015 - 2016)
+  * Under 12 - Under 16
 
-## Creative portfolio
-* 2D designs: [https://www.deviantart.com/kikizana/gallery/all](https://www.deviantart.com/kikizana/gallery/all)
-* 3D models: [https://sketchfab.com/kikizana](https://sketchfab.com/kikizana)
-* Apps: [https://github.com/skirienkopanea?tab=repositories](https://github.com/skirienkopanea?tab=repositories)
+## Social/Links
+* Linkedin: [https://www.linkedin.com/in/sergio-kirienko/](https://www.linkedin.com/in/sergio-kirienko/)
+* Github: [https://github.com/skirienkopanea](https://github.com/skirienkopanea)
+* DeviantArt: [https://www.deviantart.com/kikizana/gallery/all](https://www.deviantart.com/kikizana/gallery/all)
+* Sketchfab: [https://sketchfab.com/kikizana](https://sketchfab.com/kikizana)
+* Youtube: [https://www.youtube.com/channel/UCh_TqOMHKvp7xoKM7u6shNA](https://www.youtube.com/channel/UCh_TqOMHKvp7xoKM7u6shNA)
+* Transfermarkt: [https://www.transfermarkt.com/sergio-kirienko-panea/profil/spieler/331596](https://www.transfermarkt.com/sergio-kirienko-panea/profil/spieler/331596)
 
-### Currently developing
-![404](https://raw.githubusercontent.com/skirienkopanea/gym/main/screenshot.png)
-* Javafx app for workout planning.
+<div class="noprint">
+<h3> Currently developing </h3>
+<p><img src="https://raw.githubusercontent.com/skirienkopanea/gym/main/screenshot.png" width="100%"/></p>
 
-Check my [LinkedIn](https://www.linkedin.com/in/sergio-kirienko/), [Github](https://github.com/skirienkopanea). <a onclick="window.print();" href="#print">Print this page
-</a>
+<a onclick="window.print();" href="#print">Print this page</a>
+
+</div>
 
 [//]: # Download my [1-page-CV-Sergio.pdf]("todo")
