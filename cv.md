@@ -66,7 +66,7 @@ permalink: /cv/
   * Consulting, support, implementation, pre-sales
 * Erasmus University Rotterdam: Teacher Assistant for "Technology Management" (2017)
   * Course taught by Delft University of Technology and Rotterdam School of Management
-* RKSV Leonidas: Football player (2016)
+* RKSV Leonidas: Football player (2014-2016)
   * Sunday Topklasse 2014 - 2015
   * Sunday Hoofdklasse 2015 - 2016
 
