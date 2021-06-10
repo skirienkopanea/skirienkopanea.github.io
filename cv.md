@@ -25,25 +25,14 @@ permalink: /cv/
 <!--Big data frameworks will go here-->
 
 ### Markup/scripting/misc languages, tools...
-* HTML
-* CSS
-* SQL
-* XML, JSON, CSV...
-* HTTP/1.1 protocol (telnet)
-* Websockets (in javascript)
-* node (javascript)
-* JavaFX
-* \\(\LaTeX\\)
-* Markdown
-* Matlab
-* Git
-* Sharepoint
-* MS Office
-* Inkscape
-* GIMP
-* Blender 3D
-* Camtasia studio
-* Minecraft
+* Web: HTML, CSS, SQL, node (javascript), websocekts...
+* Networks: Wireshark, SOAP UI, Postman, telnet, tracert...
+  * XML, JSON, CSV, XSLT...
+* Desktop GUI: JavaFX
+* Teamwork: Git, Sharepoint, MS Office...
+* Graphics: Inkscape, GIMP, Blender 3D
+* Video: Camtasia studio
+* Misc: \\(\LaTeX\\), Markdown, Matlab
 
 ### Natural languages
 * Spanish (native)
