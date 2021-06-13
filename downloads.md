@@ -46,6 +46,9 @@ Below you can find some of my study notes and useful external links. My notes ma
 
 * [CSE1110_Software_Quality_and_Testing_Book](https://sttp.site)
 * [CSE1405_Computer_Networks_Book](http://index-of.es/Varios-2/Computer%20Networks%205th%20Edition.pdf#page=1)
+* [CSE1405_security.pdf][CSE1405_security]
+* [Wireshark (for CSE1405)](https://www.wireshark.org/)
+* [Chris Greer (for CSE1405)](https://www.youtube.com/watch?v=OU-A2EmVrKQ)
 * [jbstatistics youtube channel for (CSE1210)](https://www.youtube.com/user/jbstatistics)
 </div>
 
@@ -64,3 +67,4 @@ Below you can find some of my study notes and useful external links. My notes ma
 [CSE1500_db2]:{{ site.url }}/downloads/CSE1500_db(crowsfoot-vs-chen).pdf
 [CSE1500_web]:{{ site.url }}/downloads/CSE1500_web(http-html-js-nodejs-css-ejs-cookies-sessions-authentication-security).pdf
 [CSE1205]:{{ site.url }}/downloads/CSE1205_Linear_algebra.pdf
+[CSE1405_security]:{{ site.url }}/downloads/CSE1405_security.pdf
