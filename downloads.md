@@ -36,6 +36,7 @@ Below you can find some of my study notes and useful external links. My notes ma
 
 * [CSE1205_Linear_algebra.pdf][CSE1205] 
 * [Gilbert Strang lectures on Linear Algebra (MIT) (for CSE1205)](https://www.youtube.com/playlist?list=PL49CF3715CB9EF31D)
+* [CSE1105_Lecture_notes.pdf][CSE1105] 
 * [Questi repository (for CSE1105)](https://github.com/skirienkopanea/questi)
 * [Learn Git (for CSE1105)](https://learngitbranching.js.org/)
 * [Git GUI (for CSE1105)](https://www.sourcetreeapp.com/)
@@ -59,6 +60,7 @@ Below you can find some of my study notes and useful external links. My notes ma
 
 [CSE1300]:{{ site.url }}/downloads/CSE1300_(propositional_logic-predicate_logic-arguments-sets-proofs).pdf
 [CSE1100]:{{ site.url }}/downloads/CSE1100_(java_oop-lectures-tutorials-assignments).pdf
+[CSE1105]:{{ site.url }}/downloads/CSE1105_Lecture_notes.pdf
 [CSE1400]:{{ site.url }}/downloads/CSE1400_(history-logic_circuits-data_representation-isa-assembly-cpu-io-memory-pipelining).pdf
 [CSE1200_summary]:{{ site.url }}/downloads/CSE1200_(wiskundeB-calculus).pdf
 [CSE1305_algorithms-data_structures]:{{ site.url }}/downloads/CSE1305_algorithms-data_structures.pdf
