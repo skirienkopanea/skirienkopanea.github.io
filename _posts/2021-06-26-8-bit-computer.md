@@ -16,6 +16,7 @@ tags: project
     - [Basic circuit](#basic-circuit)
       - [Sample closed circuit](#sample-closed-circuit)
     - [Common mistakes](#common-mistakes)
+    - [Astable 555 timer](#astable-555-timer)
 
 ## Introduction
 Ben Eater is an online educator on computer-related topics from which I'm following his 8-bit computer project. [https://eater.net/8bit](https://eater.net/8bit). The computer is composed of different modules, which are built on breadboards. The modules are the clock module, registers and ALU (arithmetic and logic unit) module, RAM (random access memory) and program counter module, and output and control logic module.
@@ -112,4 +113,7 @@ We will be using a 5V (volt) power source, which Ben has crafted by cutting off 
     * To leave enough space for bending the wires and plug them into the board leave a room of 3 more wholes.
 * Integrated circuits:
   * Not connecting an integrated circuit in the middle of the board as that will connect both ends of the IC (making a shortircuit)
+
+### Astable 555 timer
+
 
