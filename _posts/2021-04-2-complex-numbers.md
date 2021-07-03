@@ -82,18 +82,18 @@ $$x=1 \lor x=-1 \lor x=i \lor x=-i$$
 * This can be directly expressed in polar form
 
 ### Polar form
-* \\(z=r(\cos{\theta}+\sin{\theta})\\)
+* \\(z=r(\cos{\theta}+i\sin{\theta})\\)
 
 ### Eulers identity
-* \\(z=r(\cos{\theta}+\sin{\theta})=re^{i\theta}\\)
+* \\(z=r(\cos{\theta}+i\sin{\theta})=re^{i\theta}\\)
 
 ### Multiplication and division in polar and euler form
-* \\(zw=\\|z\\|\\|w\\|(\cos{(s+t)}+\sin{(s+t)})=\\|z\\|\\|w\\|e^{i(s+t)}\\)
+* \\(zw=\\|z\\|\\|w\\|(\cos{(s+t)}+i\sin{(s+t)})=\\|z\\|\\|w\\|e^{i(s+t)}\\)
 * \\(z\cdot\bar{z}=\\|z\\|^2\\)
   * Because we have \\(\theta + -\theta\\), therefore a real, positive number
   * z and its conjugate have the same length, therefore the length squared
-* \\(\frac{z}{w}=\frac{\\|z\\|}{\\|w\\|}(\cos{(s-t)}+\sin{(s-t)})\frac{\\|z\\|}{\\|w\\|}e^{i(s-t)}\\) (for s \\(s\neq 0\\))
-* \\(z^n=\\|z\\|^n(\cos{(n\theta)}+\sin{(n\theta)})=\\|z\\|^ne^{in\theta}\\)
+* \\(\frac{z}{w}=\frac{\\|z\\|}{\\|w\\|}(\cos{(s-t)}+i\sin{(s-t)})=\frac{\\|z\\|}{\\|w\\|}e^{i(s-t)}\\) (for s \\(s\neq 0\\))
+* \\(z^n=\\|z\\|^n(\cos{(n\theta)}+i\sin{(n\theta)})=\\|z\\|^ne^{in\theta}\\)
 
 ### Multiplication in regular form
 * Re(zw) = Re(z)Re(w) – Im(z)Im(w)
