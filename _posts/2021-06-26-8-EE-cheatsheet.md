@@ -2,7 +2,7 @@
 layout: post
 title:  "Engineering Circuits basics"
 date:   2021-06-26 00:51:00 +0200
-categories: hardware circuits
+categories: hardware
 tags: cheatsheet
 ---
 {% include math.html %}
@@ -16,13 +16,19 @@ tags: cheatsheet
   - [Ohm's Law](#ohms-law)
   - [Power calculations](#power-calculations)
   - [Kirchhoff's Current Law (KCL)](#kirchhoffs-current-law-kcl)
-  - [Kirchoff's Voltage Law (KVL)](#kirchoffs-voltage-law-kvl)
+  - [Kirchhoff's Voltage Law (KVL)](#kirchhoffs-voltage-law-kvl)
   - [Dependent Current Sources](#dependent-current-sources)
   - [Resistors in series and Parallel](#resistors-in-series-and-parallel)
   - [Voltage divider circuits](#voltage-divider-circuits)
   - [Current Divider Circuits](#current-divider-circuits)
   - [Node voltage method](#node-voltage-method)
-  - [Dependent sources and supernodes](#dependent-sources-and-supernodes)
+    - [Dependent sources and supernodes](#dependent-sources-and-supernodes)
+  - [Mesh current method](#mesh-current-method)
+    - [Current source, Supermesh and dependent power source](#current-source-supermesh-and-dependent-power-source)
+  - [Source transformations](#source-transformations)
+    - [Currents in parallel](#currents-in-parallel)
+    - [Power sources in series](#power-sources-in-series)
+  - [Thevenin Equivalent Circuits](#thevenin-equivalent-circuits)
 
 ## Introduction
 I'm following this video [https://www.youtube.com/watch?v=OGa_b26eK2c](https://www.youtube.com/watch?v=OGa_b26eK2c)
@@ -112,7 +118,7 @@ Example of i sign convention, power and om's law:
 
 $$-i_1+i_2+i_3=0$$
 
-## Kirchoff's Voltage Law (KVL)
+## Kirchhoff's Voltage Law (KVL)
 * The algebraic sum of all the voltage drops around any closed path in a circuit is zero. It doesnt regard nodes, it just regards loops.
   * KVL, although uses a route path of its own for the loops, it does take the  polarity of the actual currents (i.e. where the + and - terminals are) to determine the sign of the voltage drop in the KVL equation.
   * If the "loop path" goes from positive terminal to negative terminal, the votlage drop is positive
@@ -164,6 +170,8 @@ rref(A)
 * In series is also called "daisy chaining"
   * The current that flows through them remains the same. In a DC circuit the current can only change if it branches.
   * The resistance of the 3 resistors is equivalent to a resistor with a resistance of their sum.
+  * The powersource might be in between the resistors but that's still in series.
+![404]({{ site.url }}/images/8bit/series.PNG)
 * Parallel resistors
   * The current branches
 
@@ -199,7 +207,7 @@ rref(A)
 ![404]({{ site.url }}/images/8bit/cdc.PNG)
 
 ## Node voltage method
-* It takes less equations than Kirchoff's laws and it's more strict.
+* It takes less equations than Kirchhoff's laws and it's more strict.
 * It's called voltage but it's just the "currents" sum equal to zero
 * A node is any interconnection of two or more components
 * Essential node are those that have 3 or more components (the supply is a component)
@@ -232,13 +240,64 @@ Example:
      * $$\text{NV @ Node 2:}\ \frac{v_2-v_1}{2} + \frac{v_2}{10} - 3 = 0$$
 4. Solve for \\(v_1\\) and \\(v_2\\).
 
-## Dependent sources and supernodes
+* The main takeaway from the NV is that
+  * We write a modified KCL where we pretend that the all curents at the node are leaving and their sum equals 0
+  * if parallel branches (where the positive and negative terminals are connected directly to the source without resistance) have the same voltage, in the event that the terminals experience a resistance between the parallel branches, we can calculate the voltage drop from the resistance by substracting the voltages of branch A and branch B (then divide that by the resistance itself to get i (I=V/R)).
+    * In NV context the positive voltage is the one of the node we are writting the equation.
+
+### Dependent sources and supernodes
 * They are labled with a romboid: <+ ->
-* A source (independent or dependent) connected to two essential nodes will reduce the number of available NV equations (because generally it's gonna be hard to find out the current of that leg).
-  * you'll need to introduce a variable i into the NV equation and reuse that i for the other node of the source and then cancel them out.
-  * Or you can apply the "supernode" technique which just merges the nodes. KCL, KVL, NVL also apply two a selection n nodes, "what comes inside the area equals what comes outside the area"
+* A source (independent or dependent) connected to two essential nodes will reduce the number of available NV equations (because generally it's gonna be hard to find out the current of that leg if we're just given the voltage).
+  * you'll need to introduce a variable \\(i_k\\) into the NV equation and reuse that \\(i_k\\) for the other node of the source and then cancel them out.
+  * Or you can apply the "supernode" technique which just merges the nodes. KCL, KVL, NVL also apply two a selection of n nodes, "what comes inside the area equals what comes outside the area"
     * Then apply NV to the merged node
-  * Since we lost 1 equation, we need to supplement it with something else, such as a KVL or KCL.
 ![404]({{ site.url }}/images/8bit/sn.PNG)
-This is also allowed:
+  * Since we lost 1 equation, we need to supplement it with something else, such as a KVL or KCL.
+  * Another not so obvious example:
 ![404]({{ site.url }}/images/8bit/sn2.PNG)
+
+## Mesh current method
+* It's a modified KVL much like NV is a modified KCL
+
+Steps:
+1. Identify the meshes (polygons, squares, triangles, etc)
+   * The number of equations you need is equal to the number of meshes you have. 
+2. Label the \\(i_n\\) of each mesh
+3. Write the mesh equations wiht the "net currents" that is, whenever an edge has two labled \\(i_n\\)'s, use the difference (and have the positive i to be the one of the given mesh equation)
+![404]({{ site.url }}/images/8bit/mcm.PNG)
+4. Solve the system of equations
+5. With the mesh currents you can find the real currents.
+   * You have to pay attention to the circuit, the circuit currents are either equal to the mesh currents (when they are not "fighting" with another current) or to the difference between two mesh currents (those that overlap a leg).
+* The take away of MC and NV is that they are direct applications of Kirchhoff's law with a very specific algorithm to solve the problems, which generally reduces the amount of equations and sets a clear action plan to solve a problem.
+
+### Current source, Supermesh and dependent power source
+* Like in a supernode you can experience tricky problems with powersources whose current (and resistance) is unkown, here you can experience problems with current sources whose voltage (and resistance) is unkown.
+* Any time you see a current source that travels two meshes you'll either have to come up with a dummy voltage variable (that will be cancelled out) or draw a supermesh around the problem area.
+![404]({{ site.url }}/images/8bit/sm.PNG)
+  * Either approach will require an additional constraint equation to solve the system, you can use the fact that the difference between \\(i_a\\) and \\(i_b\\) has got to be the amps of the (a priori problematic) current source
+* A dependendent powersource will introduce an additional variable onto the system of equations. It can be circumvented by finding another constraint equation by means of for instance KCL involving said variable.
+
+## Source transformations
+* Circuit simplification of the current and voltage sources.
+  * You can rewrire a resistor in series with a power source into a circuit where the the resistor is on parallel with a current source
+![404]({{ site.url }}/images/8bit/st.PNG)
+  * What we need to find is the value of the current source with Ohm's law
+    * $$i_s=\frac{v_s}{R}$$
+* If a current source has a resistor in series, it can be ignored as the current entering the resistor is the same one leaving it, which goes unnoticed to the terminals a and b
+* If a power source has a resistor in parallel, it doesnt matter to a and b either as the voltage remains the same
+* The polarity of the power source has to match the direction of the current source.
+
+### Currents in parallel
+* It's the algebraic sum of them (algebraic means that it's sensetive to signs instead of just summing absolute values).
+
+![404]({{ site.url }}/images/8bit/cip.PNG)
+
+* Currents in series dont make sense because the value of a current source is supposed to hold for the entire leg.
+
+### Power sources in series
+* They're equivalent to a power source of the algebraic sum of them (if they are of opposite polarity, it's gonna be the difference of them and it'll keep the polarity of the bigger one)
+* Power source in series should have the same voltage (KVL) if not the higher voltage source would be discharged onto the lower voltage source until both have the same votlage and/or will fuck things up.
+
+## Thevenin Equivalent Circuits
+
+

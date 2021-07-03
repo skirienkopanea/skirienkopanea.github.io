@@ -2,7 +2,7 @@
 layout: post
 title:  "Ben Eater 8-bit computer project"
 date:   2021-06-26 00:51:00 +0200
-categories: hardware architecture
+categories: hardware
 tags: project
 ---
 {% include math.html %}
