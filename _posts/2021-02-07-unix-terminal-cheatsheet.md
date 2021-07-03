@@ -3,7 +3,7 @@ layout: post
 title:  "Unix Cheatsheet"
 date:   2021-02-07 12:00:00 +0100
 categories: unix
-tags: cheatsheet terminal
+tags: cheatsheet
 ---
 <style>
 :root {
