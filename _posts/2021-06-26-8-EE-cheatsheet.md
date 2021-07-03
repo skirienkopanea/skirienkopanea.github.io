@@ -2,8 +2,8 @@
 layout: post
 title:  "Engineering Circuits basics"
 date:   2021-06-26 00:51:00 +0200
-categories: hardware
-tags: project
+categories: hardware circuits
+tags: cheatsheet
 ---
 {% include math.html %}
 <!--more-->
@@ -240,3 +240,5 @@ Example:
     * Then apply NV to the merged node
   * Since we lost 1 equation, we need to supplement it with something else, such as a KVL or KCL.
 ![404]({{ site.url }}/images/8bit/sn.PNG)
+This is also allowed:
+![404]({{ site.url }}/images/8bit/sn2.PNG)
