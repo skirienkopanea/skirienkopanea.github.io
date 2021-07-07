@@ -35,6 +35,8 @@ tags: cheatsheet
     - [Maximum Power transfer](#maximum-power-transfer)
     - [Superposition](#superposition)
   - [Capacitors and Inductors (Vol 5 and 4)](#capacitors-and-inductors-vol-5-and-4)
+    - [Inductor (L)](#inductor-l)
+    - [Capacitor (C)](#capacitor-c)
   - [Op-Amp Circuits (Vol 6)](#op-amp-circuits-vol-6)
 
 ## Introduction
@@ -360,5 +362,55 @@ Examle:
   * It is also appropiate when you need to simplify the circuit, the cost is that you'll have to repeat the process for each source
 
 ## Capacitors and Inductors (Vol 5 and 4)
+### Inductor (L)
+![404]({{ site.url }}/images/8bit/inductor.PNG)
+* Unit: Henry (H)
+* Circuit element that stores energy in a magnetic field.
+  * The current goes through the coil and the more turns the more the magnetic field is concentrentated.
+  * The more current the stronger the magnetic field
+* $$V_L(t)=L\frac{di}{dt}$$
+  * The voltage drop of an inductor is it's resistance times the derivative of the current with respect to time.
+  * It's not proportional to the current itself, but to how fast the current changes
+  * The reason this is true is because an inductor itself it's just piece of cable without resistance, therefore a circuit with just a source and an inductor is just a shortcircuit.
+  * Constant current -> 0V
+  * Current rises -> +V
+  * Current decreases -> -V
+* Rewritting the voltage equation yields the current equation:
 
+$$i(t)=\frac{1}{L}\int_0^t v(t)dt + i(0)$$
+
+![404]({{ site.url }}/images/8bit/inductorvoltagecurrent.PNG)
+
+* Power is still p = iv
+  * however p cannot be expressed with resistance as it's 0, the alternative is to replace v(t) with di/dt so:
+  * $$p=i\cdot L \cdot \frac{di}{dt}$$
+  * We dont need to know anything about the current if we already know the voltage:
+  * $$p=v \left(\frac{1}{L}\int_0^t v(t)dt + i(0)\right)$$
+
+* Recall that \\(\text{power}=\frac{\text{energy}}{\text{time}}=\frac{dw}{dt}\\) where "w" stands for energy (work).
+  * dw = pdt
+  * \\(w = \int_0^tpdt = \text{energy}\\)
+  * \\(\text{Energy is the integral of power}\\)
+  * \\(w = L\frac{1}{2}i^2\\) in jules.
+    * This means that energy stored in a transistor increases quadratically as the current increases. It also means that if the current is constant the stored energy is also a (constant) positive number. If current increased from 0 to k and then it remained constant at k we hare mantaining the energy gained during the current increase.
+
+### Capacitor (C)
+* Symbol --\| \|-- or --\| (--
+* Unit: (often in micro) Farad (F)
+* Stores energy as an electric field
+  * You have two plates between the terminals not touching each other (in general they have a dielectric (insulator) between them)
+  * The capaticance is governed by the insulator (i.e. rubber, glass, plastic), the surface of the plates.
+  * No current is actually flowing between plates, the electrones get stuck at the end of the plate and they charge up that side of the capacitor generating an electric field around the plate.
+![404]({{ site.url }}/images/8bit/capacitor.PNG)
+  * Because the positive field attracts the negative electrones at the other side and repels the positive ones, it feels as if the positive electrones are flowing.
+* The current through capacitor is \\(i(t)=C\frac{dv}{dt}\\) with C standing for capacitance.
+* While an inductor looks like a shortcircuit in the long-term steady state, a capacitor acts like an open circuit.
+  * If Voltage has no change, then i = 0
+  * If the voltage rises, then current is positive (goes in the direction written in the circuit)
+  * If the voltage falls the current goes in the opposite direction.
+* $$v(t) =  \frac{1}{C}\int_0^ti(t)dt + v(0)$$
+* $$p=iv$$
+  * $$p(t)=Cv\frac{dv}{dt}$$
+  * $$p(t)=i\left(\frac{1}{C}\int_0^ti(t)dt +v(0)\right)$$
+* $$w=\frac{1}{2}Cv^2$$
 ## Op-Amp Circuits (Vol 6)
