@@ -396,6 +396,7 @@ $$i(t)=\frac{1}{L}\int_0^t v(t)dt + i(0)$$
 * Inductors inductance in series/parallel is like a resistor resistance:
   * In series: Leq = L1 + L2 ...
   * In parallel: \\(L_{eq}=\frac{1}{L_1}+\frac{1}{L_2}+\dots\\)
+
 ### Capacitor (C)
 * Symbol --\| \|-- or --\| (--
 * Unit: (often in micro) Farad (F)
@@ -415,4 +416,8 @@ $$i(t)=\frac{1}{L}\int_0^t v(t)dt + i(0)$$
   * $$p(t)=Cv\frac{dv}{dt}$$
   * $$p(t)=i\left(\frac{1}{C}\int_0^ti(t)dt +v(0)\right)$$
 * $$w=\frac{1}{2}Cv^2$$
+* Capacitor capacitance in series/parallel is the opposite of a resistor resistance:
+  * In series: \\(C_{eq}=\frac{1}{C_1}+\frac{1}{C_2}+\dots\\)
+  * In parallel: Ceq = C1 + C2 ...
+
 ## Op-Amp Circuits (Vol 6)
