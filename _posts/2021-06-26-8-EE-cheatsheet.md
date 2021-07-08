@@ -393,7 +393,9 @@ $$i(t)=\frac{1}{L}\int_0^t v(t)dt + i(0)$$
   * \\(\text{Energy is the integral of power}\\)
   * \\(w = L\frac{1}{2}i^2\\) in jules.
     * This means that energy stored in a transistor increases quadratically as the current increases. It also means that if the current is constant the stored energy is also a (constant) positive number. If current increased from 0 to k and then it remained constant at k we hare mantaining the energy gained during the current increase.
-
+* Inductors inductance in series/parallel is like a resistor resistance:
+  * In series: Leq = L1 + L2 ...
+  * In parallel: \\(L_{eq}=\frac{1}{L_1}+\frac{1}{L_2}+\dots\\)
 ### Capacitor (C)
 * Symbol --\| \|-- or --\| (--
 * Unit: (often in micro) Farad (F)
