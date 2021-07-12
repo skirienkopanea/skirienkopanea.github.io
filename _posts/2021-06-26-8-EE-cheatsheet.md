@@ -44,7 +44,7 @@ tags: cheatsheet
       - [Time constant of an RC (capacitor) Circuit](#time-constant-of-an-rc-capacitor-circuit)
       - [Step response of RL (inductor) circuits](#step-response-of-rl-inductor-circuits)
       - [Step response of RC (capacitor) circuits](#step-response-of-rc-capacitor-circuits)
-  - [Op-Amp Circuits (Vol 6)](#op-amp-circuits-vol-6)
+  - [Op-Amp Circuits](#op-amp-circuits)
 
 ## Introduction
 ### Voltage, Current, Resistance
@@ -400,6 +400,9 @@ $$i(t)=\frac{1}{L}\int_0^t v(t)dt + i(0)$$
   * \\(\text{Energy is the integral of power}\\)
   * \\(w = L\frac{1}{2}i^2\\) in jules.
     * This means that energy stored in a transistor increases quadratically as the current increases. It also means that if the current is constant the stored energy is also a (constant) positive number. If current increased from 0 to k and then it remained constant at k we hare mantaining the energy gained during the current increase.
+* Inductors inductance in series/parallel is like a resistor resistance:
+  * In series: Leq = L1 + L2 ...
+  * In parallel: \\(L_{eq}=\frac{1}{L_1}+\frac{1}{L_2}+\dots\\)
 
 ### Capacitor (C)
 * Symbol --\| \|-- or --\| (--
@@ -420,9 +423,11 @@ $$i(t)=\frac{1}{L}\int_0^t v(t)dt + i(0)$$
   * $$p(t)=Cv\frac{dv}{dt}$$
   * $$p(t)=i\left(\frac{1}{C}\int_0^ti(t)dt +v(0)\right)$$
 * $$w=\frac{1}{2}Cv^2$$
+* Capacitor capacitance in series/parallel is the opposite of a resistor resistance:
+  * In series: \\(C_{eq}=\frac{1}{C_1}+\frac{1}{C_2}+\dots\\)
+  * In parallel: Ceq = C1 + C2 ...
 
 ### Natural and Step Response
-
 * Transient response of a circuit: what happens within a short time (charging/discharging process).
 * Steady state response of a circuit: what happens past the charging/discharging processes in the long term.
 * Natural response of the circuit (discharging): What is the circuit going to do when you give some initial conditions (current, voltage) and then disconnect all the sources and observe the discharge process.
@@ -486,4 +491,4 @@ $$i(t)=\frac{1}{L}\int_0^t v(t)dt + i(0)$$
 * \\(i(t)=\left(I_s-\frac{V_0}{R}\right)e^{-t/\tau}\\)
 * The shape of the graphs for voltage and i for the capacitor are reversed when compared to the inductor
 
-## Op-Amp Circuits (Vol 6)
+## Op-Amp Circuits
