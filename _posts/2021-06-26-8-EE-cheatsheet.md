@@ -34,9 +34,16 @@ tags: cheatsheet
     - [Current Divider Circuits](#current-divider-circuits)
     - [Maximum Power transfer](#maximum-power-transfer)
     - [Superposition](#superposition)
-  - [Capacitors and Inductors (Vol 5 and 4)](#capacitors-and-inductors-vol-5-and-4)
+  - [Capacitors and Inductors](#capacitors-and-inductors)
     - [Inductor (L)](#inductor-l)
     - [Capacitor (C)](#capacitor-c)
+    - [Natural and Step Response](#natural-and-step-response)
+      - [Natural response of an LR (inductor) Circuit](#natural-response-of-an-lr-inductor-circuit)
+      - [Time constant of an LR (inductor) Circuit](#time-constant-of-an-lr-inductor-circuit)
+      - [Natural response of an RC (capacitor) circuit](#natural-response-of-an-rc-capacitor-circuit)
+      - [Time constant of an RC (capacitor) Circuit](#time-constant-of-an-rc-capacitor-circuit)
+      - [Step response of RL (inductor) circuits](#step-response-of-rl-inductor-circuits)
+      - [Step response of RC (capacitor) circuits](#step-response-of-rc-capacitor-circuits)
   - [Op-Amp Circuits (Vol 6)](#op-amp-circuits-vol-6)
 
 ## Introduction
@@ -361,7 +368,7 @@ Examle:
   * It's a great method for troubleshooting problems with sources.
   * It is also appropiate when you need to simplify the circuit, the cost is that you'll have to repeat the process for each source
 
-## Capacitors and Inductors (Vol 5 and 4)
+## Capacitors and Inductors
 ### Inductor (L)
 ![404]({{ site.url }}/images/8bit/inductor.PNG)
 * Unit: Henry (H)
@@ -413,4 +420,70 @@ $$i(t)=\frac{1}{L}\int_0^t v(t)dt + i(0)$$
   * $$p(t)=Cv\frac{dv}{dt}$$
   * $$p(t)=i\left(\frac{1}{C}\int_0^ti(t)dt +v(0)\right)$$
 * $$w=\frac{1}{2}Cv^2$$
+
+### Natural and Step Response
+
+* Transient response of a circuit: what happens within a short time (charging/discharging process).
+* Steady state response of a circuit: what happens past the charging/discharging processes in the long term.
+* Natural response of the circuit (discharging): What is the circuit going to do when you give some initial conditions (current, voltage) and then disconnect all the sources and observe the discharge process.
+* Step response of the circuit (charging): What happens when we hookup a source to the circuit.
+
+#### Natural response of an LR (inductor) Circuit
+* LR circuit: Circuit with at least one inductor (L) and one resistor.
+![404]({{ site.url }}/images/8bit/lr.PNG)
+  * The switch is initially closed but it opened at t = 0 (so we can assume that the previous state was charged)
+  * If we leave the switch closed for a long period of time it would reach a steady state, then the inductor would just look like a short circuit
+  * From t0 onwards we observe how the inducted energy from the inductor L bleeds out to the resistor R, this is known as the discharge process of an inductor.
+![404]({{ site.url }}/images/8bit/lr2.PNG)
+  * SW stands for switch, we want to simplify the circuit into a single LR loop, in this occasion it was just acheived after opening the switch, but sometimes equivalent circuit simplifications will need to be used. This is so we can directly use the punch line to calculate the current rather than having to do new differential equations every time.
+  * i(t) decreases as time goes on
+  * We write a KVL loop with everything in terms of i:
+    * \\(L\frac{di}{dt}+iR=0\\)
+    * \\(\frac{1}{i}di=-\frac{R}{L}dt\\)
+    * \\(\int_i(0)^i(t)\frac{1}{i}di=\int_0^t-\frac{R}{L}dt\\)
+    * \\(\int_{i(0)}^{i(t)}\frac{1}{i}di=\int_0^t-\frac{R}{L}dt\\)
+    * \\(ln(i(t))-ln(i(0)) = - R/L (t-0)\\)
+    * \\(ln \frac{i(t)}{i(0)} = - \frac{R}{L}t\\)
+    * \\(\frac{i(t)}{i(0)} = e^{-\frac{R}{L}t}\\)
+    * \\(i(t)=I_0e^{-\frac{R}{L}t}\\), for \\(t \ge 0\\) and with \\(I_0=i(0)\\), so it decreases exponentially (called exponential decay/natural response of an LR circuit) 
+    * The ratio of R over L determines how fast the current decays
+![404]({{ site.url }}/images/8bit/lr3.PNG)
+
+#### Time constant of an LR (inductor) Circuit
+* \\(\tau = L/R\\)
+![404]({{ site.url }}/images/8bit/tc.PNG)
+* After 1T has elapsed, \\(i(T) = I_0e^-1 = 0.37 I_0\\)
+* After 2T have elapsed, \\(i(2T) = I_0e^-2 = 0.14 I_0\\)
+  * After k time has elapsed i decays by initial value times \\(e^k\\)
+* When the decay is less than 1% of \\(I_0\\), such as 5T (which is a thumbrule), we say that the decay is over and that we have reached a steady state.
+  * The charging process is also exponential and it takes 5T to charge an inductor/capacitor.
+
+#### Natural response of an RC (capacitor) circuit
+* You can charge/discharge a capacitor exponentially in the same fashion as an inductor.
+* In inductors we have \\(I_0\\) which then bleeds out, here we have \\(V_s\\) which in the same fashion decreases exponentially.
+![404]({{ site.url }}/images/8bit/nr.PNG)
+* We can do a KCL in terms of voltage for a node that just connects the capacitor and the resistor and solve for v
+![404]({{ site.url }}/images/8bit/nr2.PNG)
+* \\(v(t)=V_se^{-\frac{t}{RC}}\\) for \\(t \ge 0\\)
+
+#### Time constant of an RC (capacitor) Circuit
+* \\(T=RC\\)
+* After 1T the voltage drop is 0.37 of the initial voltage of the capacitor
+* After 5t the voltage drop is less than 1% of the initial voltage value.
+
+#### Step response of RL (inductor) circuits
+![404]({{ site.url }}/images/8bit/sr.PNG)
+* The current starts flowing at t=0.
+  * It raises exponentially until reaching the short circuit current (thus with the resistance of the components in series): \\(i(t)=\frac{V_s}{R}+\left(I_0-\frac{V_s}{R}\right)e^{-t/\tau}\\) for \\(t \ge 0\\) and \\(\tau = L/R\\)
+* The voltage drops exponentially (the current increases at a diminishing rate, which means that the inductor "consumes" less overtime):
+  * \\(v(t)=V_se^{-t/\tau}\\) for \\(t \ge 0\\)
+![404]({{ site.url }}/images/8bit/sr2.PNG)
+
+#### Step response of RC (capacitor) circuits
+![404]({{ site.url }}/images/8bit/src.PNG)
+* \\(V(t)=I_sR+\left(V_0-I_sR\right)e^{-t/\tau}\\)
+  * Overtime we get an open circuit and the final voltage is the same as the parallel component. \\(V0\\) is the initial voltage on the capacitor
+* \\(i(t)=\left(I_s-\frac{V_0}{R}\right)e^{-t/\tau}\\)
+* The shape of the graphs for voltage and i for the capacitor are reversed when compared to the inductor
+
 ## Op-Amp Circuits (Vol 6)

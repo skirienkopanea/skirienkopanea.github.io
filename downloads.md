@@ -46,6 +46,7 @@ Below you can find some of my study notes and useful external links. My notes ma
 ## Y1Q4
 
 * [CSE1110_Software_Quality_and_Testing_Book](https://sttp.site)
+* [CSE1405_book_lectures_summary][CSE1405_book_lectures_summary]
 * [CSE1405_Computer_Networks_Book](http://index-of.es/Varios-2/Computer%20Networks%205th%20Edition.pdf#page=1)
 * [CSE1405_security.pdf][CSE1405_security]
 * [Wireshark (for CSE1405)](https://www.wireshark.org/)
@@ -70,3 +71,4 @@ Below you can find some of my study notes and useful external links. My notes ma
 [CSE1500_web]:{{ site.url }}/downloads/CSE1500_web(http-html-js-nodejs-css-ejs-cookies-sessions-authentication-security).pdf
 [CSE1205]:{{ site.url }}/downloads/CSE1205_Linear_algebra.pdf
 [CSE1405_security]:{{ site.url }}/downloads/CSE1405_security.pdf
+[CSE1405_book_lectures_summary]:{{ site.url }}/downloads/CSE1405_book_lectures_summary.pdf
