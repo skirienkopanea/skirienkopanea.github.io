@@ -15,7 +15,7 @@ You can also connect with me via [Linkedin](https://www.linkedin.com/in/sergio-k
 
 This blog has been made with [jekyll][jekyll-organization] and [minima](https://github.com/jekyll/minima).
 
-## Education hall of fame:
+## Favorite educators:
 1. Gilbert Strang for linear algebra
 2. Grant Sanderson for calculus
 3. Sal Khan for Khan Academy (highschool and first year college math)
@@ -23,5 +23,6 @@ This blog has been made with [jekyll][jekyll-organization] and [minima](https://
 5. Richard Hammac for math proofs
 6. Ben Eater for computer architecture
 7. Jeremy Balka for Statistics
+8. Jason Gibson from MathTutorDVD.com for Circuit Analysis
 
 [jekyll-organization]: https://github.com/jekyll

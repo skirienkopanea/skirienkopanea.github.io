@@ -45,6 +45,23 @@ tags: cheatsheet
       - [Step response of RL (inductor) circuits](#step-response-of-rl-inductor-circuits)
       - [Step response of RC (capacitor) circuits](#step-response-of-rc-capacitor-circuits)
   - [Op-Amp Circuits](#op-amp-circuits)
+    - [Voltage](#voltage)
+    - [Current](#current)
+    - [Open Loop Voltage Gain](#open-loop-voltage-gain)
+    - [Linear Region](#linear-region)
+    - [Ideal Opamp](#ideal-opamp)
+    - [Inverting amplifier circuit](#inverting-amplifier-circuit)
+      - [Gain](#gain)
+      - [KCL example](#kcl-example)
+      - [KVL example](#kvl-example)
+    - [Summing amplifier circuit](#summing-amplifier-circuit)
+    - [Non-Inverting amplifier](#non-inverting-amplifier)
+    - [Difference amplifier](#difference-amplifier)
+    - [Common mode rejection ratio](#common-mode-rejection-ratio)
+    - [Common Mode and Differential Mode Signal Components](#common-mode-and-differential-mode-signal-components)
+    - [Deriving commmon mode rejection ratio](#deriving-commmon-mode-rejection-ratio)
+    - [Integrating amplifier circuit](#integrating-amplifier-circuit)
+      - [With square pulse input](#with-square-pulse-input)
 
 ## Introduction
 ### Voltage, Current, Resistance
@@ -492,3 +509,141 @@ $$i(t)=\frac{1}{L}\int_0^t v(t)dt + i(0)$$
 * The shape of the graphs for voltage and i for the capacitor are reversed when compared to the inductor
 
 ## Op-Amp Circuits
+* Op-amp = operational (addition, sign change, scaling, integration, differentation) amplifier
+  * Building blocks (in the form of integrated circuits) of first analog computers
+  * Popular Op-Amp \\(\mu A\\) 741 (or just "741")
+* DIP = dual in-line package (two sets of pins that fit in a breadboard "spine")
+* Symbol = +- triangle
+![404]({{ site.url }}/images/8bit/opamp2.PNG)
+* The numbers are the terminals
+  1. Offset null: used to compensate for the degration of performance overtime.
+  2. Inverting input
+  3. Noninverting input: both inputs 2 and 3 difference is taken as input
+  4. V-: negative power supply
+  5. Nc
+  6. V+: positive power supply
+  7. Output
+  8. Offset Null
+
+![404]({{ site.url }}/images/8bit/opamp.PNG)
+
+### Voltage
+* Vcc = common collector supply voltage (legacy name) = power suply
+* All voltage measurements are made relative to the common ground
+
+![404]({{ site.url }}/images/8bit/opamp3.PNG)
+
+### Current
+![404]({{ site.url }}/images/8bit/opamp4.PNG)
+* In reality the currents don't always go in the drawing direction, but we assume this for the KCLs
+
+### Open Loop Voltage Gain
+* In practice we can simplify the opamp and implicitly assume the supply voltage
+
+![404]({{ site.url }}/images/8bit/opamp5.PNG)
+
+* \\(V_{0}=A(V_2-V_1)\\), with A as the "gain" and \\(V_n\\) as output (0), inv-input.
+
+### Linear Region
+* Region you need to stay such that the gain of the amplifier increases linearly (and work properly)
+  * \\(-V_{cc} \ge V_0 \ge V_{cc}\\) or simply \\(V_0 \ge \|V_{cc}\|\\) (However know that the positive voltage does not need to be absolutely as large as the negative voltage)
+  * The output can never be bigger than the supply voltage (otherwise you violate the law of conservation of energy)
+
+![404]({{ site.url }}/images/8bit/opamp6.PNG)
+* When we reach the flat line (\\(V_{cc}\\)), it's called saturation
+* Gain A is generally manufactured to be very large (i.e. 10,000)
+  * Which basically means that you reach saturation very easily with the slightest difference between \\(V_2\\) and \\(V_1\\).
+
+### Ideal Opamp
+* Perfect inputs, outputs, etc.
+* Typical opamps use 10V-20V power sources, which with \\(10^4\\) typical Gain value leaves us with a 2mV = V2 - v1 for the minimum difference to reach the saturation value (opamp then becomes useless for the porpuse of linear amplification)
+  * Because of this we have the "virtual short" condition, which means that \\(v_1 \approx v_2\\)
+  * In an ideal opamp \\(v_1 = v_2\\) which is like a short circuit because that's what happens when you have a short circuit (you directly connect two points and hence have the same voltage)
+* OpAmps have high input resistance (\\(M\Omega\\)) or higher.
+  * an ideal OpAmp has infinite input resistance and therefore \\(i_1=i_2=0\\)
+  * Output resistance is equal to zero
+* The reason we assume the ideal opamp conditions is to make circuit analysis much simpler (and the final result is still very close to reality)
+* KCL: \\(i_1 + i_2 + i_0 + i_c^{+} + i_{c}^{-} = 0\\)
+  * \\(i_0 = -( i_c^{+} + i_{c}^{-})\\)
+  * This means that (most) of the current of the output comes actually from the supply source (even though its generally not drawn).
+* \\(V^+ \& V^-\\) are often the same, but can be different.
+
+### Inverting amplifier circuit
+![404]({{ site.url }}/images/8bit/opamp9.PNG)
+* Rf = feedback resistor
+* Rs = source resistor
+* \\(i_s=\frac{V_s}{R_s}\\)
+* \\(i_f=\frac{V_0}{R_f}\\)
+
+#### Gain
+* Because the default configuration has a really large gain (\\(10^4\\)), we use external resistors in a specific configuration to finetune the desired gain.
+* Since \\(i_1=0\\) -> \\(i_s = -i_f\\)
+  * \\(\frac{V_0}{R_f}=-\frac{V_s}{R_s}\\)
+  * \\(V_0=-\frac{R_f}{R_s}V_s\\)
+  * \\(\text{Gain}=-\frac{R_f}{R_s}\\)
+* The negative sign guarantees that the output will always be negative
+  * If you dont want to have a negative gain then you can just put two inverting opamps cancelling the sign flip
+* To stay linear (and avoid saturation): \\(\frac{Rf}{Rs} \lt \|\frac{V_{cc}}{V_s}\|\\)
+
+#### KCL example
+![404]({{ site.url }}/images/8bit/opamp7.PNG)
+* \\(V_2=V_1=V_b=0\\) (virtual short)
+* \\(i_{25}=V/R\\) = Difference of voltage before and after (both in relation to ground)/\\((25\cdot 10^3)=\frac{1-0}{25\cdot 10^3}=0.04mA\\)
+* KCL @ inv input: \\(-i_{25} + -i_{100} + i_1= 0\\)
+  * \\(i_{100} = -i_{25} + 0 =-0.04mA\\)
+
+#### KVL example
+* In an opamp circuit a convinient way to "close" a KVL loop is to start at voltage 0 (commong round) and travel all the way to another common ground (voltage 0) (furthermore it is implied that is a short circuit anyway since it has the same voltage).
+* In case of doubt, remember that resistors only have negative voltage drops.
+![404]({{ site.url }}/images/8bit/opamp8.PNG)
+  * KVL: \\(-V_0 + i_{100}\cdot 10^3 = 0\\)
+    * \\(V_0=-4\\)
+
+### Summing amplifier circuit
+![404]({{ site.url }}/images/8bit/sac.PNG)
+* If it wasnt for Rb and Rc (regarded as inputs) then the circuit would be the same as an inverter circuit
+* The output is basically the superposition of each of the inverter opamps with Ra, Rb and Rc respectively.
+
+Example to solve for \\(V_0\\):
+![404]({{ site.url }}/images/8bit/sac2.PNG)
+* \\(V_0=-(\frac{R_f}{R_a}V_a+\frac{R_f}{R_b}V_b+\frac{R_f}{R_c}V_c)\\)
+  * \\(V_0=-Rf(\frac{V_a}{R_a}+\frac{V_b}{R_b}+\frac{V_c}{R_c})\\)
+  * The output will still always be negative.
+  * Each input has its own gain
+  * V0 turns out to be IR with I being the sum of the input currents.
+  * When Ra, Rb and Rc are the same (i.e. Rs): \\(V_0 = - \frac{R_f}{R_s}(V_a+V_b+V_c)\\)
+  * If we set \\(R_f = R_s\\) then the gain is 1 and the output is the inverted (negative) sum of the inputs (with no scaling).
+
+### Non-Inverting amplifier
+* You can do it by using two inverting amplifier in series
+![404]({{ site.url }}/images/8bit/nia.PNG)
+* Or you can do it with just 1 amplifier
+![404]({{ site.url }}/images/8bit/nia2.PNG)
+  * Because the current going into the positive input is 0 and because of the virtual short (perfect opamp assumption) then \\(v_2 = v_g = v_1\\)
+![404]({{ site.url }}/images/8bit/nia3.PNG)
+  * Then \\(v_1 = v_0 \left(\frac{R_s}{R_s+R_f}\right)=v_g\\)
+    * \\(v_0=v_g  \left(\frac{R_s+R_f}{R_s}\right) = v_g \cdot \text{Gain}\\)
+    * \\(\text{Gain} = \left(\frac{R_s+R_f}{R_s}\right) =  \left(1+\frac{R_f}{R_s}\right)\\)
+    * We can see that the gain cannot be negative as the resistance of resistors cannot be negative and therefore the input has the same sign as the output.
+    * The gain is always greater than 1. (the inverting amplifier could make gains smaller than 1)
+    * For linear operation (to avoid saturation): \\(\text{Gain} \le \|\frac{V_{cc}}{V_g}\|\\)
+
+### Difference amplifier
+![404]({{ site.url }}/images/8bit/da.PNG)
+* We want to calculate the difference between \\(V_a\\) and \\(V_b\\) and amplify it as output \\(V_0\\)
+  * NV @ input 1: \\(\frac{v_1-v_a}{R_a} + \frac{v_1-v_0}{R_b} + i_1 = 0\\)
+  * Voltage divider of bottom resistors: \\(v_2 = v_b \left(\frac{R_d}{R_c+R_d}\right)\\)
+  * Perfect opamp facts: \\(v_1 = v_2\\), \\(i_1=i_2=0\\)
+  * Simplifying & substition of the equations yields: \\(v_1=v_2=v_b\left(\frac{R_d}{R_c+R_d}\right)\\) and
+  \\(v_0=\frac{R_d(R_a+R_b)}{R_a(R_c+R_d)}v_b-\frac{R_b}{R_a}v_a\\)
+
+
+### Common mode rejection ratio
+
+### Common Mode and Differential Mode Signal Components
+
+### Deriving commmon mode rejection ratio
+
+### Integrating amplifier circuit
+
+#### With square pulse input
