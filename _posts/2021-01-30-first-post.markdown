@@ -65,7 +65,7 @@ And now the moment of truth... This is a math post because I decided to include 
 
 $$\sum_{i=0}^{n}\frac{1}{2^n} = 2$$
 
-In-line equation: $\sum_{i=0}^{n}\frac{1}{2^n} = (\frac{1}{2^0})\cdot \frac{1}{1-\frac{1}{2}} = 2$
+In-line equation: \\(\sum_{i=0}^{n}\frac{1}{2^n} = (\frac{1}{2^0})\cdot \frac{1}{1-\frac{1}{2}} = 2\\)
 
 An arbitrary matrix:
 
