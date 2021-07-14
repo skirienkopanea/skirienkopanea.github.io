@@ -636,9 +636,13 @@ Example to solve for \\(V_0\\):
   * Perfect opamp facts: \\(v_1 = v_2\\), \\(i_1=i_2=0\\)
   * Simplifying & substition of the equations yields: \\(v_1=v_2=v_b\left(\frac{R_d}{R_c+R_d}\right)\\) and
   \\(v_0=\frac{R_d(R_a+R_b)}{R_a(R_c+R_d)}v_b-\frac{R_b}{R_a}v_a\\)
-
+  * We can see that the \\(v_a\\) signal is amplified with a negative sign and with a gain of \\(\frac{R_b}{R_a}\\) and that the signal of \\(v_b\\) is positive with a gain of \\(\frac{R_d(R_a+R_b)}{R_a(R_c+R_d)}\\).
+    * In general this allows to amplify a and b with different scales.
+    * In practice you may want to amplify a and b with the same scale, then you apply the constraint: \\(\frac{R_a}{R_b}=\frac{R_c}{R_d}\\)
+    * This yields \\(v_0=\frac{R_b}{R_a}(v_b-v_a)\\), with a gain of \\(\frac{R_b}{R_a}\\)
 
 ### Common mode rejection ratio
+* Measures how much an opamp diverges from the ideal opamp
 
 ### Common Mode and Differential Mode Signal Components
 
