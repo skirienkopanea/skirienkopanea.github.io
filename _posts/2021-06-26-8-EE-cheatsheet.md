@@ -59,6 +59,14 @@ tags: cheatsheet
     - [Difference amplifier](#difference-amplifier)
     - [Integrating amplifier circuit](#integrating-amplifier-circuit)
     - [Common mode rejection ratio](#common-mode-rejection-ratio)
+  - [Transistors, Logic gates and logic circuits](#transistors-logic-gates-and-logic-circuits)
+    - [Bjt](#bjt)
+    - [p](#p)
+    - [n](#n)
+    - [Logic gates](#logic-gates)
+    - [NOR gate](#nor-gate)
+    - [Latches (CO stuff)](#latches-co-stuff)
+    - [SR latch](#sr-latch)
 
 ## Introduction
 ### Voltage, Current, Resistance
@@ -657,3 +665,19 @@ Example to solve for \\(V_0\\):
 * Common Mode Rejection Ratio (CMRR) = \\(\frac{\text{Gain of difference of }v_2\ \&\ v_1}{\text{Gain of common mode signals}}\\)
   * \\(CMMR=\frac{A_d}{A_c}\\), you want \\(A_d\\) to be high (it should approximate A) and \\(A_c\\) to be low (it should approximate 0).
   * CMMR is usually \\(10^3\\) to \\(10^6\\) and it is usually expressed in decibels
+
+## Transistors, Logic gates and logic circuits
+* Use CO book and/or notes
+### Bjt
+### p
+### n
+### Logic gates
+### NOR gate
+* Logic symbol
+* Truth table
+* Transistor circuit implementation
+
+### Latches (CO stuff)
+### SR latch
+* Truth table
+* Circuit implementation
