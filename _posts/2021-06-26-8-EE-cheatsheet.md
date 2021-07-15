@@ -390,7 +390,7 @@ Examle:
   * The current goes through the coil and the more turns the more the magnetic field is concentrentated.
   * The more current the stronger the magnetic field
 * $$V_L(t)=L\frac{di}{dt}$$
-  * The voltage drop of an inductor is it's resistance times the derivative of the current with respect to time.
+  * The voltage drop of an inductor is it's inductance times the derivative of the current with respect to time.
   * It's not proportional to the current itself, but to how fast the current changes
   * The reason this is true is because an inductor itself it's just piece of cable without resistance, therefore a circuit with just a source and an inductor is just a shortcircuit.
   * Constant current -> 0V
@@ -640,6 +640,13 @@ Example to solve for \\(V_0\\):
 
 ### Integrating amplifier circuit
 ![404]({{ site.url }}/images/ee/iac.PNG)
+* It's the same as an inverting opamp except for the feedback resistor that has been changed for a capacitor.
+  * \\(i_f=C_f\frac{dv_0}{dt}\\)
+  * Recall that \\(i_s+i_f=0\\) and \\(i_s = \frac{v_s}{R_s}\\) 
+    * \\(\frac{v_s}{R_s} + C_f\frac{dv_0}{dt}\\)
+    * ...
+    * \\(v_0(t)=-\frac{1}{R_sC_f}\int_{t_0}^{t}v_s(t)dt+v_0(t_0)\\)
+      * if the initial charge on the capacitor is 0 then \\(v_0(t_0)=0\\)
 
 ### Common mode rejection ratio
 * Measures how much an opamp diverges from the ideal opamp
