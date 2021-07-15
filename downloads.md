@@ -46,9 +46,12 @@ Below you can find some of my study notes and useful external links. My notes ma
 ## Y1Q4
 
 * [CSE1110_Software_Quality_and_Testing_Book](https://sttp.site)
+* [CSE1110_sqt_labs][CSE1110_sqt_labs]
+* [CSE1110_sqt-skeleton][CSE1110_sqt-skeleton]
 * [CSE1405_book_lectures_summary][CSE1405_book_lectures_summary]
 * [CSE1405_Computer_Networks_Book](http://index-of.es/Varios-2/Computer%20Networks%205th%20Edition.pdf#page=1)
 * [CSE1405_security.pdf][CSE1405_security]
+* [CSE1405_cn_labs][CSE1405_cn_labs]
 * [Wireshark (for CSE1405)](https://www.wireshark.org/)
 * [Chris Greer (for CSE1405)](https://www.youtube.com/watch?v=OU-A2EmVrKQ)
 * [jbstatistics youtube channel for (CSE1210)](https://www.youtube.com/user/jbstatistics)
@@ -72,3 +75,6 @@ Below you can find some of my study notes and useful external links. My notes ma
 [CSE1205]:{{ site.url }}/downloads/CSE1205_Linear_algebra.pdf
 [CSE1405_security]:{{ site.url }}/downloads/CSE1405_security.pdf
 [CSE1405_book_lectures_summary]:{{ site.url }}/downloads/CSE1405_book_lectures_summary.pdf
+[CSE1110_sqt_labs]:{{ site.url }}/downloads/CSE1110_sqt_labs.pdf
+[CSE1110_sqt-skeleton]:{{ site.url }}/downloads/CSE1110_sqt-skeleton.rar
+[CSE1405_cn_labs]:{{ site.url }}/downloads/CSE1405_cn_labs.pdf

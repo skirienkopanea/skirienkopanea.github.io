@@ -57,11 +57,8 @@ tags: cheatsheet
     - [Summing amplifier circuit](#summing-amplifier-circuit)
     - [Non-Inverting amplifier](#non-inverting-amplifier)
     - [Difference amplifier](#difference-amplifier)
-    - [Common mode rejection ratio](#common-mode-rejection-ratio)
-    - [Common Mode and Differential Mode Signal Components](#common-mode-and-differential-mode-signal-components)
-    - [Deriving commmon mode rejection ratio](#deriving-commmon-mode-rejection-ratio)
     - [Integrating amplifier circuit](#integrating-amplifier-circuit)
-      - [With square pulse input](#with-square-pulse-input)
+    - [Common mode rejection ratio](#common-mode-rejection-ratio)
 
 ## Introduction
 ### Voltage, Current, Resistance
@@ -102,7 +99,7 @@ tags: cheatsheet
 * Transformer: allows a voltage to change its value
   * Useful to transform the wall socket voltage to a smaller voltage for light home appliances
 
-![Breadboard]({{ site.url }}/images/8bit/circuitcheatsheet.PNG)
+![Breadboard]({{ site.url }}/images/ee/circuitcheatsheet.PNG)
 Source [https://learn.sparkfun.com/tutorials/how-to-read-a-schematic/all](https://learn.sparkfun.com/tutorials/how-to-read-a-schematic/all)
 
 ### Ohm's Law
@@ -134,7 +131,7 @@ Source [https://learn.sparkfun.com/tutorials/how-to-read-a-schematic/all](https:
   * \\(p=\frac{v^2}{r}\\)
 
 Example of sign convention of the voltage drop (ignore the signs of i in the picture (typo), what we change is the drop sign, if the cuurrent goes from - to + then the voltage drop is negative (power source) if it goes from + to - it's possitive (passive component):
-![404]({{ site.url }}/images/8bit/power.PNG)
+![404]({{ site.url }}/images/ee/power.PNG)
 
 ### Kirchhoff's Current Law (KCL)
 * The algebraic (sign sensitive) sum of currents at any node is zero
@@ -145,7 +142,7 @@ Example of sign convention of the voltage drop (ignore the signs of i in the pic
     * If the current reaches the node, then it has negative sign
   * Although usually observed at nodes that connect 3+ things, two elements are also connected by a node (even if they are on the same stright line ont sequence, there is a node between every component)
 * If you have n nodes you can only write n-1 independent equations. So it is not worth to write up the last node equation as that one wont be independent (just a rewriting of existing ones) and wont help solve the problem
-![404]({{ site.url }}/images/8bit/kcl.PNG)
+![404]({{ site.url }}/images/ee/kcl.PNG)
 
 $$-i_1+i_2+i_3=0$$
 
@@ -156,25 +153,25 @@ $$-i_1+i_2+i_3=0$$
   * If the "current" goes from the negative terminal to the positive terminal the votlage drop is negative.
 * See how R1 has a positive drop in loop 1 yet a negative drop in loop 2
 
-![404]({{ site.url }}/images/8bit/kvl.PNG)
+![404]({{ site.url }}/images/ee/kvl.PNG)
 
 * Se how we can just take the outside loop too
 
 * In a practical setting KVL is used in combination with Ohm's law, so you end up rewritting KVL in terms of current * resistance:
 
-![404]({{ site.url }}/images/8bit/kvl2.PNG)
+![404]({{ site.url }}/images/ee/kvl2.PNG)
 
 * In complex circuits, you'll likely exhaust the n-1 indepdendent KCL equations and you'll suplement it with as many KVL loop equations as possible to achieve n equations for n variables. Then solve the system of linear equations with a machine (i.e. matrix solver)
   * For n total loops, you can write n-1 independent equations
   * There are as many loops as arbitrary closed paths without branches you can find, i.e. some of them:
 
-![404]({{ site.url }}/images/8bit/kvl3.PNG)
+![404]({{ site.url }}/images/ee/kvl3.PNG)
 
 Example to solve for \\(i_1\\):
 
-![404]({{ site.url }}/images/8bit/kvl4.PNG)
+![404]({{ site.url }}/images/ee/kvl4.PNG)
 
-![404]({{ site.url }}/images/8bit/kvl5.PNG)
+![404]({{ site.url }}/images/ee/kvl5.PNG)
 
 ```matlab
 rref(A)
@@ -184,14 +181,14 @@ rref(A)
 
 ### Dependent Current Sources
 
-![404]({{ site.url }}/images/8bit/dcs.PNG)
+![404]({{ site.url }}/images/ee/dcs.PNG)
 
 * Any arrow symbol represents a current source.
   * When it's within a circle its a source that adjusts its voltage in response to the resistance in the circuit such that the emitted current is constant.
   * When it's within a diamond it is a dependent current source. That is the final amount flowing from the component is not fixed, and most importantly that depends on the behaviour of somewhere else in the circuit (i.e. a transistor triggering things).
 * Independent circuits that are located close to each other and that have the same big picture type of goal are commonly connected to the same negative terminal to ensure that base voltage (difference between + and -) is consistent among all the circuits. Otherwise you might get a circuit with a base voltage of +500 and +600 vs other one with 0 and +100 located close to each other which can cause many problems. The negative terminal also regarded as ground, therefore the practice of connecting all the negative terminals to the same negative voltage source is called "grounding".
 
-![404]({{ site.url }}/images/8bit/dcs2.PNG)
+![404]({{ site.url }}/images/ee/dcs2.PNG)
 
 * The voltage drop for each of the parallel branches connected to the same source is the same.
 * If you get a negative current it means that the direction that you've drawn in your circuit is flipped.
@@ -214,13 +211,13 @@ rref(A)
 * Once the node voltages are found, it's very easy to find everything else.
 
 Example:
-![404]({{ site.url }}/images/8bit/nvm.PNG)
+![404]({{ site.url }}/images/ee/nvm.PNG)
 1. Identify the essential nodes (we have 3 so we need 2 equations)
    * Just because the bottom node is spread out it is still one node that connects several components at once
 2. Pick a reference node (bottom one has the most interconnections)
    * The reference node is symbolized with a triangle that represents commonality or reference.
 3. The node voltage equations that we will find are for the two top (essential) nodes with respect to the reference node
-![404]({{ site.url }}/images/8bit/nvm2.PNG)
+![404]({{ site.url }}/images/ee/nvm2.PNG)
    * Se that the minus signs are the reference node such that the voltages \\(v_1\\) and \\(v_2\\) (for nodes 1 and 2 respectively) are measured in reference to the reference node.
    * When you are writing the node voltage equations of an essential node you ignore the current direction of i and pretend that all i are leaving the node. (the sign of the answer will take care of everything).
     * prepararation for \\(\text{NV @ Node 1:}\\)
@@ -243,10 +240,10 @@ Example:
   * you'll need to introduce a variable \\(i_k\\) into the NV equation and reuse that \\(i_k\\) for the other node of the source and then cancel them out.
   * Or you can apply the "supernode" technique which just merges the nodes. KCL, KVL, NVL also apply two a selection of n nodes, "what comes inside the area equals what comes outside the area"
     * Then apply NV to the merged node
-![404]({{ site.url }}/images/8bit/sn.PNG)
+![404]({{ site.url }}/images/ee/sn.PNG)
   * Since we lost 1 equation, we need to supplement it with something else, such as a KVL or KCL.
   * Another not so obvious example:
-![404]({{ site.url }}/images/8bit/sn2.PNG)
+![404]({{ site.url }}/images/ee/sn2.PNG)
 
 ### Mesh current method
 * It's a modified KVL much like NV is a modified KCL
@@ -256,7 +253,7 @@ Steps:
    * The number of equations you need is equal to the number of meshes you have. 
 2. Label the \\(i_n\\) of each mesh
 3. Write the mesh equations wiht the "net currents" that is, whenever an edge has two labled \\(i_n\\)'s, use the difference (and have the positive i to be the one of the given mesh equation)
-![404]({{ site.url }}/images/8bit/mcm.PNG)
+![404]({{ site.url }}/images/ee/mcm.PNG)
 4. Solve the system of equations
 5. With the mesh currents you can find the real currents.
    * You have to pay attention to the circuit, the circuit currents are either equal to the mesh currents (when they are not "fighting" with another current) or to the difference between two mesh currents (those that overlap a leg).
@@ -265,7 +262,7 @@ Steps:
 #### Current source, Supermesh and dependent power source
 * Like in a supernode you can experience tricky problems with powersources whose current (and resistance) is unkown, here you can experience problems with current sources whose voltage (and resistance) is unkown.
 * Any time you see a current source that travels two meshes you'll either have to come up with a dummy voltage variable (that will be cancelled out) or draw a supermesh around the problem area.
-![404]({{ site.url }}/images/8bit/sm.PNG)
+![404]({{ site.url }}/images/ee/sm.PNG)
   * Either approach will require an additional constraint equation to solve the system, you can use the fact that the difference between \\(i_a\\) and \\(i_b\\) has got to be the amps of the (a priori problematic) current source
 * A dependendent powersource will introduce an additional variable onto the system of equations. It can be circumvented by finding another constraint equation by means of for instance KCL involving said variable.
 
@@ -275,11 +272,11 @@ Steps:
   * The current that flows through them remains the same. In a DC circuit the current can only change if it branches.
   * The resistance of the 3 resistors is equivalent to a resistor with a resistance of their sum.
   * The powersource might be in between the resistors but that's still in series.
-![404]({{ site.url }}/images/8bit/series.PNG)
+![404]({{ site.url }}/images/ee/series.PNG)
 * Parallel resistors
   * The current branches
 
-![404]({{ site.url }}/images/8bit/parallel.PNG)
+![404]({{ site.url }}/images/ee/parallel.PNG)
 
 * For 2 parallel resistors you can use:
   * $$R_{eq}=\frac{R_1R_2}{R_1+R_2}$$
@@ -290,7 +287,7 @@ Steps:
 ### Source transformations
 * Circuit simplification of the current and voltage sources.
   * You can rewrire a resistor in series with a power source into a circuit where the the resistor is on parallel with a current source
-![404]({{ site.url }}/images/8bit/st.PNG)
+![404]({{ site.url }}/images/ee/st.PNG)
   * What we need to find is the value of the current source with Ohm's law
     * $$i_s=\frac{v_s}{R}$$
 * If a current source has a resistor in series, it can be ignored as the current entering the resistor is the same one leaving it, which goes unnoticed to the terminals a and b
@@ -300,7 +297,7 @@ Steps:
 ### Currents in parallel
 * It's the algebraic sum of them (algebraic means that it's sensetive to signs instead of just summing absolute values).
 
-![404]({{ site.url }}/images/8bit/cip.PNG)
+![404]({{ site.url }}/images/ee/cip.PNG)
 
 * Currents in series dont make sense because the value of a current source is supposed to hold for the entire leg.
 
@@ -311,7 +308,7 @@ Steps:
 ### Thevenin Equivalent Circuits
 * Lets you model the entire circuit as a voltage source and a resistance.
 
-![404]({{ site.url }}/images/8bit/tec.PNG)
+![404]({{ site.url }}/images/ee/tec.PNG)
 
 * Any network of resistors and sources can always be rewritten in terms of a single voltage source and a single resistor.
   * This also applies with inductors and capacitors in AC
@@ -325,7 +322,7 @@ Steps:
 * You'll find 2 and 3 probably by using Node Voltage or Mesh Voltage methods.
 
 Examle: 
-![404]({{ site.url }}/images/8bit/tec2.PNG)
+![404]({{ site.url }}/images/ee/tec2.PNG)
 * \\(\text{MC1: } -72 + (i_1-i_2)5 + i_120 = 0\\)
 * \\(\text{MC2: } (i_2-i_1)5 + i_212 + i_28 = 0\\)
 * Solve for \\(i_1\\) and \\(i_2\\) and you get 3 and 0.6 respectively.
@@ -335,7 +332,7 @@ Examle:
   * This would yield 12.72, 6 and 10.8
 * \\(R_{th}=\frac{V_{th}}{i_{sc}}=\frac{64.8}{10.8}=6\\)
 
-![404]({{ site.url }}/images/8bit/tec3.PNG)
+![404]({{ site.url }}/images/ee/tec3.PNG)
 
 ### Norton Equivalent Circuits
 * Transforming a Thevenin equivalent to a current source with a resistor in parallel
@@ -344,7 +341,7 @@ Examle:
 * You can use a voltage divider to use a 12V source to supply a 5V circuit
   * It doesnt matter (only for the current) the size of the resistance to divide the volts, what matters is the ratio of the two resistors, that's what determines how much voltage will go to each part.
 
-![404]({{ site.url }}/images/8bit/vd.PNG)
+![404]({{ site.url }}/images/ee/vd.PNG)
 
 * The 2V volts calculated are the "no load" voltage.
   * Once we connect the load we are actually adding a parallel resistance with the 2 oms resistors.
@@ -353,7 +350,7 @@ Examle:
     * If the load is 0, we are creating a short circuit that skips the 2 oms resistor, so we end up with 0V and 10V in the first resistor.
     * The equivalent resistance can be calculated with the 2 resistors parallel equivalence \\(R_{eq}=\frac{R_1R_2}{R_1+R_2}\\)
     * The (no load) voltage going through that circuit can be calculated with (which is basically the same as just the voltage drop of the resistor. However we calculate without KVL or Oms law, that is, without needing to find the current and just by using the source voltage and resistances):
-![404]({{ site.url }}/images/8bit/vd2.PNG)
+![404]({{ site.url }}/images/ee/vd2.PNG)
 * To calculate the actual voltage going through the loaded circuit first apply the equivalence resitance and then the voltage formula above.
 * The bigger \\(R_2\\) the closer the no load voltage it gets to the source voltage
 * The smaller \\(R_2\\) the closer the no load voltage goes to 0 (short circuit).
@@ -361,12 +358,12 @@ Examle:
 ### Current Divider Circuits
 * This applies to circuits that have a fixed current source.
  * You have to use the opposite resistance as numerator.
-![404]({{ site.url }}/images/8bit/cdc.PNG)
+![404]({{ site.url }}/images/ee/cdc.PNG)
 
 ### Maximum Power transfer
 * We can model the load that we want as a resistor
 
-![404]({{ site.url }}/images/8bit/pt.PNG)
+![404]({{ site.url }}/images/ee/pt.PNG)
 
 * We are looking for which value of the load resistance results in maximum power transfer from the source to the load.
   * When resistance is 0, we have \\(P=I^2R=I\cdot 0=0\\)
@@ -375,7 +372,7 @@ Examle:
     * You can manually check this by writting a function that returns the power delivered to the load as a function of resistance and set the derivative equal to 0.
     * It kinda looks like a voltage divider too, in which we can see that when the value of the two the resistors are equal, then the voltage of the source is split evenly among the two resistors.
 * When maximum power is being delivered whe know that \\(R_{load} = R_{th}\\)
-![404]({{ site.url }}/images/8bit/mpt.PNG)
+![404]({{ site.url }}/images/ee/mpt.PNG)
   * $$P_{max}=\frac{V^2_{th}}{4R_{th}}$$
 
 ### Superposition
@@ -387,7 +384,7 @@ Examle:
 
 ## Capacitors and Inductors
 ### Inductor (L)
-![404]({{ site.url }}/images/8bit/inductor.PNG)
+![404]({{ site.url }}/images/ee/inductor.PNG)
 * Unit: Henry (H)
 * Circuit element that stores energy in a magnetic field.
   * The current goes through the coil and the more turns the more the magnetic field is concentrentated.
@@ -403,7 +400,7 @@ Examle:
 
 $$i(t)=\frac{1}{L}\int_0^t v(t)dt + i(0)$$
 
-![404]({{ site.url }}/images/8bit/inductorvoltagecurrent.PNG)
+![404]({{ site.url }}/images/ee/inductorvoltagecurrent.PNG)
 
 * Power is still p = iv
   * however p cannot be expressed with resistance as it's 0, the alternative is to replace v(t) with di/dt so:
@@ -428,7 +425,7 @@ $$i(t)=\frac{1}{L}\int_0^t v(t)dt + i(0)$$
   * You have two plates between the terminals not touching each other (in general they have a dielectric (insulator) between them)
   * The capaticance is governed by the insulator (i.e. rubber, glass, plastic), the surface of the plates.
   * No current is actually flowing between plates, the electrones get stuck at the end of the plate and they charge up that side of the capacitor generating an electric field around the plate.
-![404]({{ site.url }}/images/8bit/capacitor.PNG)
+![404]({{ site.url }}/images/ee/capacitor.PNG)
   * Because the positive field attracts the negative electrones at the other side and repels the positive ones, it feels as if the positive electrones are flowing.
 * The current through capacitor is \\(i(t)=C\frac{dv}{dt}\\) with C standing for capacitance.
 * While an inductor looks like a shortcircuit in the long-term steady state, a capacitor acts like an open circuit.
@@ -452,11 +449,11 @@ $$i(t)=\frac{1}{L}\int_0^t v(t)dt + i(0)$$
 
 #### Natural response of an LR (inductor) Circuit
 * LR circuit: Circuit with at least one inductor (L) and one resistor.
-![404]({{ site.url }}/images/8bit/lr.PNG)
+![404]({{ site.url }}/images/ee/lr.PNG)
   * The switch is initially closed but it opened at t = 0 (so we can assume that the previous state was charged)
   * If we leave the switch closed for a long period of time it would reach a steady state, then the inductor would just look like a short circuit
   * From t0 onwards we observe how the inducted energy from the inductor L bleeds out to the resistor R, this is known as the discharge process of an inductor.
-![404]({{ site.url }}/images/8bit/lr2.PNG)
+![404]({{ site.url }}/images/ee/lr2.PNG)
   * SW stands for switch, we want to simplify the circuit into a single LR loop, in this occasion it was just acheived after opening the switch, but sometimes equivalent circuit simplifications will need to be used. This is so we can directly use the punch line to calculate the current rather than having to do new differential equations every time.
   * i(t) decreases as time goes on
   * We write a KVL loop with everything in terms of i:
@@ -469,11 +466,11 @@ $$i(t)=\frac{1}{L}\int_0^t v(t)dt + i(0)$$
     * \\(\frac{i(t)}{i(0)} = e^{-\frac{R}{L}t}\\)
     * \\(i(t)=I_0e^{-\frac{R}{L}t}\\), for \\(t \ge 0\\) and with \\(I_0=i(0)\\), so it decreases exponentially (called exponential decay/natural response of an LR circuit) 
     * The ratio of R over L determines how fast the current decays
-![404]({{ site.url }}/images/8bit/lr3.PNG)
+![404]({{ site.url }}/images/ee/lr3.PNG)
 
 #### Time constant of an LR (inductor) Circuit
 * \\(\tau = L/R\\)
-![404]({{ site.url }}/images/8bit/tc.PNG)
+![404]({{ site.url }}/images/ee/tc.PNG)
 * After 1T has elapsed, \\(i(T) = I_0e^-1 = 0.37 I_0\\)
 * After 2T have elapsed, \\(i(2T) = I_0e^-2 = 0.14 I_0\\)
   * After k time has elapsed i decays by initial value times \\(e^k\\)
@@ -483,9 +480,9 @@ $$i(t)=\frac{1}{L}\int_0^t v(t)dt + i(0)$$
 #### Natural response of an RC (capacitor) circuit
 * You can charge/discharge a capacitor exponentially in the same fashion as an inductor.
 * In inductors we have \\(I_0\\) which then bleeds out, here we have \\(V_s\\) which in the same fashion decreases exponentially.
-![404]({{ site.url }}/images/8bit/nr.PNG)
+![404]({{ site.url }}/images/ee/nr.PNG)
 * We can do a KCL in terms of voltage for a node that just connects the capacitor and the resistor and solve for v
-![404]({{ site.url }}/images/8bit/nr2.PNG)
+![404]({{ site.url }}/images/ee/nr2.PNG)
 * \\(v(t)=V_se^{-\frac{t}{RC}}\\) for \\(t \ge 0\\)
 
 #### Time constant of an RC (capacitor) Circuit
@@ -494,15 +491,15 @@ $$i(t)=\frac{1}{L}\int_0^t v(t)dt + i(0)$$
 * After 5t the voltage drop is less than 1% of the initial voltage value.
 
 #### Step response of RL (inductor) circuits
-![404]({{ site.url }}/images/8bit/sr.PNG)
+![404]({{ site.url }}/images/ee/sr.PNG)
 * The current starts flowing at t=0.
   * It raises exponentially until reaching the short circuit current (thus with the resistance of the components in series): \\(i(t)=\frac{V_s}{R}+\left(I_0-\frac{V_s}{R}\right)e^{-t/\tau}\\) for \\(t \ge 0\\) and \\(\tau = L/R\\)
 * The voltage drops exponentially (the current increases at a diminishing rate, which means that the inductor "consumes" less overtime):
   * \\(v(t)=V_se^{-t/\tau}\\) for \\(t \ge 0\\)
-![404]({{ site.url }}/images/8bit/sr2.PNG)
+![404]({{ site.url }}/images/ee/sr2.PNG)
 
 #### Step response of RC (capacitor) circuits
-![404]({{ site.url }}/images/8bit/src.PNG)
+![404]({{ site.url }}/images/ee/src.PNG)
 * \\(V(t)=I_sR+\left(V_0-I_sR\right)e^{-t/\tau}\\)
   * Overtime we get an open circuit and the final voltage is the same as the parallel component. \\(V0\\) is the initial voltage on the capacitor
 * \\(i(t)=\left(I_s-\frac{V_0}{R}\right)e^{-t/\tau}\\)
@@ -514,7 +511,7 @@ $$i(t)=\frac{1}{L}\int_0^t v(t)dt + i(0)$$
   * Popular Op-Amp \\(\mu A\\) 741 (or just "741")
 * DIP = dual in-line package (two sets of pins that fit in a breadboard "spine")
 * Symbol = +- triangle
-![404]({{ site.url }}/images/8bit/opamp2.PNG)
+![404]({{ site.url }}/images/ee/opamp2.PNG)
 * The numbers are the terminals
   1. Offset null: used to compensate for the degration of performance overtime.
   2. Inverting input
@@ -525,22 +522,22 @@ $$i(t)=\frac{1}{L}\int_0^t v(t)dt + i(0)$$
   7. Output
   8. Offset Null
 
-![404]({{ site.url }}/images/8bit/opamp.PNG)
+![404]({{ site.url }}/images/ee/opamp.PNG)
 
 ### Voltage
 * Vcc = common collector supply voltage (legacy name) = power suply
 * All voltage measurements are made relative to the common ground
 
-![404]({{ site.url }}/images/8bit/opamp3.PNG)
+![404]({{ site.url }}/images/ee/opamp3.PNG)
 
 ### Current
-![404]({{ site.url }}/images/8bit/opamp4.PNG)
+![404]({{ site.url }}/images/ee/opamp4.PNG)
 * In reality the currents don't always go in the drawing direction, but we assume this for the KCLs
 
 ### Open Loop Voltage Gain
 * In practice we can simplify the opamp and implicitly assume the supply voltage
 
-![404]({{ site.url }}/images/8bit/opamp5.PNG)
+![404]({{ site.url }}/images/ee/opamp5.PNG)
 
 * \\(V_{0}=A(V_2-V_1)\\), with A as the "gain" and \\(V_n\\) as output (0), inv-input.
 
@@ -549,7 +546,7 @@ $$i(t)=\frac{1}{L}\int_0^t v(t)dt + i(0)$$
   * \\(-V_{cc} \ge V_0 \ge V_{cc}\\) or simply \\(V_0 \ge \|V_{cc}\|\\) (However know that the positive voltage does not need to be absolutely as large as the negative voltage)
   * The output can never be bigger than the supply voltage (otherwise you violate the law of conservation of energy)
 
-![404]({{ site.url }}/images/8bit/opamp6.PNG)
+![404]({{ site.url }}/images/ee/opamp6.PNG)
 * When we reach the flat line (\\(V_{cc}\\)), it's called saturation
 * Gain A is generally manufactured to be very large (i.e. 10,000)
   * Which basically means that you reach saturation very easily with the slightest difference between \\(V_2\\) and \\(V_1\\).
@@ -569,7 +566,7 @@ $$i(t)=\frac{1}{L}\int_0^t v(t)dt + i(0)$$
 * \\(V^+ \& V^-\\) are often the same, but can be different.
 
 ### Inverting amplifier circuit
-![404]({{ site.url }}/images/8bit/opamp9.PNG)
+![404]({{ site.url }}/images/ee/opamp9.PNG)
 * Rf = feedback resistor
 * Rs = source resistor
 * \\(i_s=\frac{V_s}{R_s}\\)
@@ -586,7 +583,7 @@ $$i(t)=\frac{1}{L}\int_0^t v(t)dt + i(0)$$
 * To stay linear (and avoid saturation): \\(\frac{Rf}{Rs} \lt \|\frac{V_{cc}}{V_s}\|\\)
 
 #### KCL example
-![404]({{ site.url }}/images/8bit/opamp7.PNG)
+![404]({{ site.url }}/images/ee/opamp7.PNG)
 * \\(V_2=V_1=V_b=0\\) (virtual short)
 * \\(i_{25}=V/R\\) = Difference of voltage before and after (both in relation to ground)/\\((25\cdot 10^3)=\frac{1-0}{25\cdot 10^3}=0.04mA\\)
 * KCL @ inv input: \\(-i_{25} + -i_{100} + i_1= 0\\)
@@ -595,17 +592,17 @@ $$i(t)=\frac{1}{L}\int_0^t v(t)dt + i(0)$$
 #### KVL example
 * In an opamp circuit a convinient way to "close" a KVL loop is to start at voltage 0 (commong round) and travel all the way to another common ground (voltage 0) (furthermore it is implied that is a short circuit anyway since it has the same voltage).
 * In case of doubt, remember that resistors only have negative voltage drops.
-![404]({{ site.url }}/images/8bit/opamp8.PNG)
+![404]({{ site.url }}/images/ee/opamp8.PNG)
   * KVL: \\(-V_0 + i_{100}\cdot 10^3 = 0\\)
     * \\(V_0=-4\\)
 
 ### Summing amplifier circuit
-![404]({{ site.url }}/images/8bit/sac.PNG)
+![404]({{ site.url }}/images/ee/sac.PNG)
 * If it wasnt for Rb and Rc (regarded as inputs) then the circuit would be the same as an inverter circuit
 * The output is basically the superposition of each of the inverter opamps with Ra, Rb and Rc respectively.
 
 Example to solve for \\(V_0\\):
-![404]({{ site.url }}/images/8bit/sac2.PNG)
+![404]({{ site.url }}/images/ee/sac2.PNG)
 * \\(V_0=-(\frac{R_f}{R_a}V_a+\frac{R_f}{R_b}V_b+\frac{R_f}{R_c}V_c)\\)
   * \\(V_0=-Rf(\frac{V_a}{R_a}+\frac{V_b}{R_b}+\frac{V_c}{R_c})\\)
   * The output will still always be negative.
@@ -616,11 +613,11 @@ Example to solve for \\(V_0\\):
 
 ### Non-Inverting amplifier
 * You can do it by using two inverting amplifier in series
-![404]({{ site.url }}/images/8bit/nia.PNG)
+![404]({{ site.url }}/images/ee/nia.PNG)
 * Or you can do it with just 1 amplifier
-![404]({{ site.url }}/images/8bit/nia2.PNG)
+![404]({{ site.url }}/images/ee/nia2.PNG)
   * Because the current going into the positive input is 0 and because of the virtual short (perfect opamp assumption) then \\(v_2 = v_g = v_1\\)
-![404]({{ site.url }}/images/8bit/nia3.PNG)
+![404]({{ site.url }}/images/ee/nia3.PNG)
   * Then \\(v_1 = v_0 \left(\frac{R_s}{R_s+R_f}\right)=v_g\\)
     * \\(v_0=v_g  \left(\frac{R_s+R_f}{R_s}\right) = v_g \cdot \text{Gain}\\)
     * \\(\text{Gain} = \left(\frac{R_s+R_f}{R_s}\right) =  \left(1+\frac{R_f}{R_s}\right)\\)
@@ -629,7 +626,7 @@ Example to solve for \\(V_0\\):
     * For linear operation (to avoid saturation): \\(\text{Gain} \le \|\frac{V_{cc}}{V_g}\|\\)
 
 ### Difference amplifier
-![404]({{ site.url }}/images/8bit/da.PNG)
+![404]({{ site.url }}/images/ee/da.PNG)
 * We want to calculate the difference between \\(V_a\\) and \\(V_b\\) and amplify it as output \\(V_0\\)
   * NV @ input 1: \\(\frac{v_1-v_a}{R_a} + \frac{v_1-v_0}{R_b} + i_1 = 0\\)
   * Voltage divider of bottom resistors: \\(v_2 = v_b \left(\frac{R_d}{R_c+R_d}\right)\\)
@@ -641,13 +638,15 @@ Example to solve for \\(V_0\\):
     * In practice you may want to amplify a and b with the same scale, then you apply the constraint: \\(\frac{R_a}{R_b}=\frac{R_c}{R_d}\\)
     * This yields \\(v_0=\frac{R_b}{R_a}(v_b-v_a)\\), with a gain of \\(\frac{R_b}{R_a}\\)
 
+### Integrating amplifier circuit
+![404]({{ site.url }}/images/ee/iac.PNG)
+
 ### Common mode rejection ratio
 * Measures how much an opamp diverges from the ideal opamp
-
-### Common Mode and Differential Mode Signal Components
-
-### Deriving commmon mode rejection ratio
-
-### Integrating amplifier circuit
-
-#### With square pulse input
+  * The higher the ratio, the more it rejectes common mode signals, the more "ideal" it is.
+* Rejecting the common mode signal: Anything common to \\(v_1\\) and \\(v_2\\) shall not be amplified (rejected, that is, the gain of the common signals should be 0), recall that in an ideal opamp \\(v_0=A(v_2-v_1)\\) and when \\(v_1=v_2\\) then \\(v_0=0\\)
+* In real life \\(v_0=A(v_2-v_1)\\) is just an approxamition and it's impossible to manufacture perfectly, so you won't get that if \\(v_1=v_2\\) then \\(v_0=0\\)
+  * In real life: \\(\text{if } v_1 = v_2 \implies v_0 \neq 0\\)
+* Common Mode Rejection Ratio (CMRR) = \\(\frac{\text{Gain of difference of }v_2\ \&\ v_1}{\text{Gain of common mode signals}}\\)
+  * \\(CMMR=\frac{A_d}{A_c}\\), you want \\(A_d\\) to be high (it should approximate A) and \\(A_c\\) to be low (it should approximate 0).
+  * CMMR is usually \\(10^3\\) to \\(10^6\\) and it is usually expressed in decibels

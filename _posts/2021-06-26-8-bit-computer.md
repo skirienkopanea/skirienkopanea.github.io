@@ -54,7 +54,7 @@ The clock coordinates everything, it sets the timing of everything.
   * 5 \\(10\mu F\\) capacitors
 * We are using the 555 timer IC (integrated circuit (chip))
 * Our clock is adjustable-speed (from less than 1Hz to a few hundred Hz).
-![Hertz]({{ site.url }}/images/8bit/1hz.jpg)
+![Hertz]({{ site.url }}/images/8bit/clock/1hz.jpg)
    *  One Hertz (Hz) is defined as one cycle per second
 * The clock can also be put into a manual mode where you push a button to advance each clock cycle. (Useful for debugging)
 
