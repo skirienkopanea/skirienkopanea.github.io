@@ -5,7 +5,7 @@ permalink: /downloads/
 ---
 Below you can find some of my study notes and useful external links. My notes may contain some mistakes and some content might be copied directly from the book/slides, credits are implicitly given to all of the authors that contributed to the literature/materials provided in the course (CSE####). If you'd like my notes to cite your work more explicitly, if you would like me to take some of my notes down, and/or if you have noticed a broken link/have a comment, please send me an e-mail to [s.kirienkopanea@student.tudelft.nl](mailto:s.kirienkopanea@student.tudelft.nl).
 
-*Course codes: CSE1300 (Reasoning and Logic), CSE110 (Object-Oriented Programing), CSE1100 (Computer Organisation), CSE1200 (Calculus), CSE1305 (Algorithms & Data Structures), CSE1500 (Database & Web Technology)... TODO: Update the entire list*
+*Y1 Course codes: {(CSE1300, Reasoning & Logic), (CSE110, Object-Oriented Programing), (CSE1100, Computer Organisation), (CSE1200, Calculus), (CSE1305, Algorithms & Data Structures), (CSE1500, Database & Web Technology, (CSE1205, Linear Algebra), (CSE1105, Object Oriented Programming Project), (CSE1505 Information & Data Management), (CSE1110, Software Quality & Testing), (CSE1405, Computer Networks), (CSE1210, Probability Theory & Statistics)}*
 
 <div id ="container"  markdown="1" class="download">
 
@@ -59,6 +59,16 @@ Below you can find some of my study notes and useful external links. My notes ma
 
 <br>
 *For ADS: MIT open course 6.006 is a good one but only some lectures are helpful. 6.042 also has some topics covered but usually much more in depth than what we need to know for the exam. The first few 1-14 lectures of 6.006 are very good, though lecture 1 and 2 are not necessarily helpful (can safely skip)*
+
+<br>
+*Y2 Course codes: {(CSE2..., ...)}*
+
+<div id ="container"  markdown="1" class="download">
+
+## Y2Q1
+* Machine Learning
+</div>
+
 
 [//]: # Link variables
 
