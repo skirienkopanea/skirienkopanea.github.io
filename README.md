@@ -5,7 +5,7 @@ My personal blog made with Jekyll
 
 ## Backlog
 * Finish bash scripts cheat sheet
-* make a python cheat sheet
+* upgrade python cheat sheet
 * Make dark mode for the mobile phone nav menu
 * Move Linear Algebra Summary to pdf
   * Keep linear algebra cheatsheet post
