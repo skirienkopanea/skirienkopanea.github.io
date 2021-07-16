@@ -284,7 +284,7 @@ Steps:
 * Parallel resistors
   * The current branches
 
-![404]({{ site.url }}/images/ee/parallel.PNG)
+![404]({{ site.url }}/images/ee/parallel.png)
 
 * For 2 parallel resistors you can use:
   * $$R_{eq}=\frac{R_1R_2}{R_1+R_2}$$
