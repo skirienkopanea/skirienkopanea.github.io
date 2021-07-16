@@ -29,6 +29,7 @@ tags: project
       - [Tinkercad](#tinkercad-1)
     - [Bistable 555 timer](#bistable-555-timer)
       - [Schematic](#schematic-2)
+      - [Tinkercad](#tinkercad-2)
 
 ## Introduction
 Ben Eater is an online educator on computer-related topics from which I'm following his 8-bit computer project. [https://eater.net/8bit](https://eater.net/8bit). The computer is composed of different modules, which are built on breadboards. The modules are the clock module, registers and ALU (arithmetic and logic unit) module, RAM (random access memory) and program counter module, and output and control logic module.
@@ -275,3 +276,11 @@ Datasheet recomends:
 * The \\(1k\Omega\\) resistor on pin 4 is to connect 5V to pin 4 as recommended by the 555 datasheet and we use a resistor instead of just a piece of wire as pin 4 is also connected to ground and we do not want a short circuit.
 * Not included in the schematic is the \\(.01\mu F\\) capacitor from ground to pin 5
 
+#### Tinkercad
+* Tinkercad of the [original schematic]({{ site.url }}/hardware/2021/06/26/8-bit-computer.html#schematic-2)
+![404]({{ site.url }}/images/8bit/clock/clock8.PNG)
+[Open tinkercad](https://www.tinkercad.com/things/j2aXkFz1LPm-555-timer-p7)
+
+* Ben replica
+![404]({{ site.url }}/images/8bit/clock/clock9.PNG)
+[Open tinkercad](https://www.tinkercad.com/things/lFTIiefIzFf-555-timer-p8)
