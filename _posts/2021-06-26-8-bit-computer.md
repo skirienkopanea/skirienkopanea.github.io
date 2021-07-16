@@ -28,6 +28,7 @@ tags: project
       - [Noise](#noise-1)
       - [Tinkercad](#tinkercad-1)
     - [Bistable 555 timer](#bistable-555-timer)
+      - [Schematic](#schematic-2)
 
 ## Introduction
 Ben Eater is an online educator on computer-related topics from which I'm following his 8-bit computer project. [https://eater.net/8bit](https://eater.net/8bit). The computer is composed of different modules, which are built on breadboards. The modules are the clock module, registers and ALU (arithmetic and logic unit) module, RAM (random access memory) and program counter module, and output and control logic module.
@@ -126,6 +127,7 @@ The clock coordinates everything, it sets the timing of everything.
 * The breadboard rails are +5V and 0V (ground) although the voltage range of the 555 timer is typically 4.5 to 16 volts.
   * The output of the 555 timer is around 3.3V and at least 2.75V
 * The LED is connected to the output pin (3) and with a \\(220\Omega\\) as the current comming out of the output pin might burn it. The LED should alternate between on and off.
+* It is called astable because it always alternates states
 
 #### Schematic
 ![404]({{ site.url }}/images/8bit/clock/555_circuit.PNG)
@@ -208,6 +210,7 @@ When we add all the noise and manual speed adjustments we end up with the follow
 * A debouncing circuit deals with this issue
 ![404]({{ site.url }}/images/8bit/clock/monostable.PNG)
    * The duration of the high signal is determined by the capacitance times resitance of the two components on the right.
+* It is called monostable because it only has 1 stable status (low)
 
 #### Schematic
 ![404]({{ site.url }}/images/8bit/clock/555_circuit2.PNG)
@@ -248,7 +251,27 @@ Datasheet recomends:
 [Open tinkercad](https://www.tinkercad.com/things/cBU2bNvFG8y-555-timer-p6)
 
 ### Bistable 555 timer
-* We could use a switch to manually alternate between the monostable and the astable clock.
-  * Just connect the output to the sides of the switch
-  * However we face the same rebound issue
-![404]({{ site.url }}/images/8bit/clock/switch.PNG)
+* We could use a switch to manually alternate between the high and low clock output states
+  * However if we just use a mechanical switch we face the same rebound issue
+* Since the 555 timer has a built-in SR latch, we can we can use it to set/reset the clock style as it also acts as a debouncer (because it latches the last state).
+  * We use a switch that is "break before make"
+![404]({{ site.url }}/images/8bit/clock/breakbeforemake.PNG)
+    * The bouncing is always between the next step and the break, so any bouncing is not harmful as the desired result has been already latched as we'll show below
+
+![404]({{ site.url }}/images/8bit/clock/clock7.PNG)
+* It is called bistable because both high and low output states are latched
+
+#### Schematic
+![404]({{ site.url }}/images/8bit/clock/clock6.PNG)
+* We connect the threshold pin to the ground and just use the trigger pin (2) to set S = 1 (via the bottom comparator) and the reset pin (4) to directly (skipping the top comparator) set R = 1
+  * Since threshold is always below 3.33, R will always be 0 except when deliberately using the reset pin.
+  * Basically we need to send a low signal either to pin 2 (because it is inverted) xor pin 4 (because we want the trigger input of the comparator to be lower than 1.67) to set and reset respectively.
+  * Since we have a break-before-make switch, we will either:
+    * Connect pin 2 to ground (and make it 0V instead of the previous \\(V_{cc}\\)), which sets S = 1
+    * Break (neither pin 2 nor 4 are connected to ground): hold state
+      * Pin 2 has \\(V_{cc}\\) and therefore S = 0
+      * Reset pin is an open circuit and therefore doesn't overwrite the top comparator, who always outputs low, so R = 0
+    * Connect pin 4 to ground and set R = 1
+* The \\(1k\Omega\\) resistor on pin 4 is to connect 5V to pin 4 as recommended by the 555 datasheet and we use a resistor instead of just a piece of wire as pin 4 is also connected to ground and we do not want a short circuit.
+* Not included in the schematic is the \\(.01\mu F\\) capacitor from ground to pin 5
+
