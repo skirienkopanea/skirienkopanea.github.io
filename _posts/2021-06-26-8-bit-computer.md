@@ -27,6 +27,7 @@ tags: project
       - [Step response](#step-response-1)
       - [Noise](#noise-1)
       - [Tinkercad](#tinkercad-1)
+    - [Bistable 555 timer](#bistable-555-timer)
 
 ## Introduction
 Ben Eater is an online educator on computer-related topics from which I'm following his 8-bit computer project. [https://eater.net/8bit](https://eater.net/8bit). The computer is composed of different modules, which are built on breadboards. The modules are the clock module, registers and ALU (arithmetic and logic unit) module, RAM (random access memory) and program counter module, and output and control logic module.
@@ -195,15 +196,15 @@ When we add all the noise and manual speed adjustments we end up with the follow
   * (Not inteded to implement in real life) Replaced the polarized capacitor with a small capacitor as it takes less space on the breadboard (it still has \\(1\mu F\\)).
   * Shifted (aesthitically only) components to take less space.
   * Placed everything on the breadboard
-![404]({{ site.url }}/images/8bit/clock/clock3.png)
+![404]({{ site.url }}/images/8bit/clock/clock3.PNG)
 [Open tinkercad](https://www.tinkercad.com/things/4aTt5fsfbwB-555-timer-p3)
 
 ### Monostable 555 timer
 * We want to be able to manually advance 1 clock cycle
 * Although a simple pushbutton seems to be enough to create cycles
 ![404]({{ site.url }}/images/8bit/clock/pushbutton.PNG)
-![404]({{ site.url }}/images/8bit/clock/bounce.PNG)
   * In reality the push button mechanics might unvoluntarily create additional clock cycles as the metal bounces additional times, not susceptible to the human eye
+![404]({{ site.url }}/images/8bit/clock/bounce.PNG)
 * A debouncing circuit deals with this issue
 ![404]({{ site.url }}/images/8bit/clock/monostable.PNG)
    * The duration of the high signal is determined by the capacitance times resitance of the two components on the right.
@@ -245,3 +246,9 @@ Datasheet recomends:
 * Ben replica (with noise upgrade)
 ![404]({{ site.url }}/images/8bit/clock/clock5.PNG)
 [Open tinkercad](https://www.tinkercad.com/things/cBU2bNvFG8y-555-timer-p6)
+
+### Bistable 555 timer
+* We could use a switch to manually alternate between the monostable and the astable clock.
+  * Just connect the output to the sides of the switch
+  * However we face the same rebound issue
+![404]({{ site.url }}/images/8bit/clock/switch.PNG)
