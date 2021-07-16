@@ -17,10 +17,13 @@ tags: project
       - [Common mistakes](#common-mistakes)
   - [Clock module](#clock-module)
     - [Astable 555 timer](#astable-555-timer)
+      - [Schematic](#schematic)
       - [Step response](#step-response)
-    - [Speed](#speed)
-    - [Noise](#noise)
-    - [Tinkercad](#tinkercad)
+      - [Speed](#speed)
+      - [Noise](#noise)
+      - [Tinkercad](#tinkercad)
+    - [Monostable 555 timer](#monostable-555-timer)
+      - [Schematic](#schematic-1)
 
 ## Introduction
 Ben Eater is an online educator on computer-related topics from which I'm following his 8-bit computer project. [https://eater.net/8bit](https://eater.net/8bit). The computer is composed of different modules, which are built on breadboards. The modules are the clock module, registers and ALU (arithmetic and logic unit) module, RAM (random access memory) and program counter module, and output and control logic module.
@@ -97,7 +100,6 @@ The clock coordinates everything, it sets the timing of everything.
   * 5 Yellow LEDs
   * 5 Blue LEDs
   * 5 \\(0.01\mu F\\) capacitors
-    * The microfarad (symbolized µF) is a unit of capacitance.
   * 5 \\(0.1\mu F\\) capacitors
   * 5 \\(1\mu F\\) capacitors
   * 5 \\(10\mu F\\) capacitors
@@ -120,7 +122,8 @@ The clock coordinates everything, it sets the timing of everything.
 * The breadboard rails are +5V and 0V (ground) although the voltage range of the 555 timer is typically 4.5 to 16 volts.
   * The output of the 555 timer is around 3.3V and at least 2.75V
 * The LED is connected to the output pin (3) and with a \\(220\Omega\\) as the current comming out of the output pin might burn it. The LED should alternate between on and off.
-* This is the schematic of the circuit (including the inside of the 555 timer):
+
+#### Schematic
 ![404]({{ site.url }}/images/8bit/clock/555_circuit.PNG)
   * The [opamps]({{ site.url }}/hardware/2021/06/26/8-EE-cheatsheet.html#op-amp-circuits) (triangles with +-) are in a comparator setting
 ![404]({{ site.url }}/images/8bit/clock/opamp105.gif)
@@ -147,7 +150,7 @@ The clock coordinates everything, it sets the timing of everything.
     * The top comparator will be the first one to switch from hight to low output, which would leave SR = 00, and mantain the current status quo.
     * As the voltage of the capacitor drops below 1.66 volts the bottom comprator will switch from low to high output, which leaves SR = 10, which sets Q high (LED is back on) and \\(\overline{Q}\\) is low, which disconnects the discharger and everything is set back to the starting point (except that the capacitor might not have been fully discharged before it starts charging againg)
 
-### Speed
+#### Speed
 * The flashing frequency of the led is determined by Q which is determined by how quickly the capcitor charges and discharges
   * This is determined by how much current flows into the capacitor
   * The more resistance in the resistors, the less current flowing into the capacitor and the slower it's going to charge (and also the slower it's going to discharge as fewer current will be travelling back to the discharger)
@@ -160,7 +163,7 @@ The clock coordinates everything, it sets the timing of everything.
 * We can replace the 100k resistor with a 1k resistor and a potentiometer in series (so when the potentiometer has 0 resistance there's at least a 1k ressitor between pin 6 and 7) to manually adjust the speed of the clock
 
 
-### Noise
+#### Noise
 * Adding a \\(.01\mu F\\) capacitor from ground to pin 5 is recommended by the 555 timer datasheet as it clears the noise from low to high
 ![404]({{ site.url }}/images/8bit/clock/noise.PNG)
 * Our power supply (typically with curled wires) may act "not perfect" (i.e. as an inductor sometimes) and sometimes components (specially transistors) might get more volts than they actually desire at times.
@@ -169,9 +172,42 @@ The clock coordinates everything, it sets the timing of everything.
   * Ideally you'd want to have this capacitor right next to the power pins of the chip but there aint that much space in a breadboard.
 * Low voltage on pin number 4 triggers a SR = 01 that overwrites whatever is going on with the comparators and resets (turns off) the SR latch. Therefore the datasheet recomends to hookup pin 4 directly to 5V power supply
 
-When we add all the noise and manual speed adjustments we end up with the followin breadboard:
+When we add all the noise and manual speed adjustments we end up with the following breadboard:
 
 ![404]({{ site.url }}/images/8bit/clock/555_final.PNG)
 
-### Tinkercad
+#### Tinkercad
+* Tinkercad of the [original schematic]({{ site.url }}/hardware/2021/06/26/8-bit-computer.html#schematic)
+![404]({{ site.url }}/images/8bit/clock/clock1.png)
+[Open tinkercad](https://www.tinkercad.com/things/kRi8HItiSbm-555-timer-p1/)
+
+* Tinkercad of the upgraded circuit
+  * \\(1M\Omega\\) Potentiometer in series with Resistor B, which it decreases from \\(100k\Omega\\) to \\(1k\Omega\\) to manually adjust the speed.
+  * \\(.01\mu F\\) capacitor parallel to power supply to control voltage spike noise
+  * \\(.01\mu F\\) capacitor from ground to pin 5 to control low to high clock signal noise
+  * \\(V_{cc}\\) to pin 4 to avoid unvoluntary clock resets
+![404]({{ site.url }}/images/8bit/clock/clock2.PNG)
+[Open tinkercad](https://www.tinkercad.com/things/0G7nymUncAr-555-timer-p2)
+
+* Ben replica
+  * (Not inteded to implement in real life) Replaced the polarized capacitor with a small capacitor as it takes less space on the breadboard (it still has \\(1\mu F\\)).
+  * Shifted (aesthitically only) components to take less space.
+  * Placed everything on the breadboard
+![404]({{ site.url }}/images/8bit/clock/clock3.png)
+[Open tinkercad](https://www.tinkercad.com/things/4aTt5fsfbwB-555-timer-p3)
+
+### Monostable 555 timer
+* We want to be able to manually advance 1 clock cycle
+* Although a simple pushbutton seems to be enough to create cycles
+![404]({{ site.url }}/images/8bit/clock/pushbutton.PNG)
+![404]({{ site.url }}/images/8bit/clock/bounce.PNG)
+  * In reality the push button mechanics might unvoluntarily create additional clock cycles as the metal bounces additional times, not susceptible to the human eye
+* A debouncing circuit deals with this issue
+![404]({{ site.url }}/images/8bit/clock/monostable.PNG)
+   * The duration of the high signal is determined by the capacitance times resitance of the two components on the right.
+
+#### Schematic
+![404]({{ site.url }}/images/8bit/clock/555_circuit.PNG)
+* 
+
 
