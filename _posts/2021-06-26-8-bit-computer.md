@@ -20,6 +20,7 @@ tags: project
       - [Step response](#step-response)
     - [Speed](#speed)
     - [Noise](#noise)
+    - [Tinkercad](#tinkercad)
 
 ## Introduction
 Ben Eater is an online educator on computer-related topics from which I'm following his 8-bit computer project. [https://eater.net/8bit](https://eater.net/8bit). The computer is composed of different modules, which are built on breadboards. The modules are the clock module, registers and ALU (arithmetic and logic unit) module, RAM (random access memory) and program counter module, and output and control logic module.
@@ -101,7 +102,7 @@ The clock coordinates everything, it sets the timing of everything.
   * 5 \\(1\mu F\\) capacitors
   * 5 \\(10\mu F\\) capacitors
 * We are using the 555 timer IC (integrated circuit (chip) below)
-![404]({{ site.url }}/images/8bit/clock/555.PNG)
+![404]({{ site.url }}/images/8bit/clock/555.png)
 
 * Our clock is adjustable-speed (from less than 1Hz to a few hundred Hz).
 ![Hertz]({{ site.url }}/images/8bit/clock/1hz.jpg)
@@ -171,3 +172,6 @@ The clock coordinates everything, it sets the timing of everything.
 When we add all the noise and manual speed adjustments we end up with the followin breadboard:
 
 ![404]({{ site.url }}/images/8bit/clock/555_final.PNG)
+
+### Tinkercad
+
