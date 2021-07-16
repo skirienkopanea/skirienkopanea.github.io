@@ -24,6 +24,9 @@ tags: project
       - [Tinkercad](#tinkercad)
     - [Monostable 555 timer](#monostable-555-timer)
       - [Schematic](#schematic-1)
+      - [Step response](#step-response-1)
+      - [Noise](#noise-1)
+      - [Tinkercad](#tinkercad-1)
 
 ## Introduction
 Ben Eater is an online educator on computer-related topics from which I'm following his 8-bit computer project. [https://eater.net/8bit](https://eater.net/8bit). The computer is composed of different modules, which are built on breadboards. The modules are the clock module, registers and ALU (arithmetic and logic unit) module, RAM (random access memory) and program counter module, and output and control logic module.
@@ -162,7 +165,6 @@ The clock coordinates everything, it sets the timing of everything.
   * The frequency (of oscillation) is \\(\frac{1}{T}=\frac{1}{0.139}=7.19\\) which means that the LED is flashing about 7 times per second
 * We can replace the 100k resistor with a 1k resistor and a potentiometer in series (so when the potentiometer has 0 resistance there's at least a 1k ressitor between pin 6 and 7) to manually adjust the speed of the clock
 
-
 #### Noise
 * Adding a \\(.01\mu F\\) capacitor from ground to pin 5 is recommended by the 555 timer datasheet as it clears the noise from low to high
 ![404]({{ site.url }}/images/8bit/clock/noise.PNG)
@@ -207,7 +209,39 @@ When we add all the noise and manual speed adjustments we end up with the follow
    * The duration of the high signal is determined by the capacitance times resitance of the two components on the right.
 
 #### Schematic
-![404]({{ site.url }}/images/8bit/clock/555_circuit.PNG)
-* 
+![404]({{ site.url }}/images/8bit/clock/555_circuit2.PNG)
+* Like the previous 555 timer circuit, there's a resistor connected to pin 7 (discharge), but here it is also directly connected to pin 6 (threshold) as there is no resitor "b".
+* The capacitor (which determines the duration of the signal together with resistor a (the \\(1M\Omega\\) one), is also connected directly to pin 6 and 7
+* The output lights a LED in series with a \\(220\Omega\\) resistor.
+* Pin 2 is connected to a node that has a \\(1k\Omega\\) resistor directly connected to \\(V_{cc}\\) on the positive terminal and a push button directly connected to ground on the negative terminal
+  * I'ts like a [voltage divider]({{ site.url }}/hardware/2021/06/26/8-EE-cheatsheet.html#voltage-divider-circuits) with \\(R_1\\) being 1k resistor and \\(R_2\\) the switch.
+    * \\(v_0=v_s\frac{R_2}{R_1+R_2}\\)
+    * When \\(R_2\\) is an open circuit it has infinity resistance, which gives \\(v_0=v_s\frac{\frac{R_2}{R_2}}{\frac{R_1}{R_2}+\frac{R_2}{R_2}}=v_s\frac{1}{\frac{1}{\infty}+1}=v_s\\)
+    * When \\(R_2\\) is a short circuit then \\(v_0=v_s\frac{0}{R_1+0}=0\\)
+  * When the push button is open, the voltage of pin 2 is \\(v_{cc}\\)
+    * The bottom comparator sends output 0 = S (which either resets or leaves current state)
+  * When the push button is closed, the voltage of pin 2 is 0
+    * The bottom comparator sends output 1 = S (which then sets the SR latch and triggers a high output
 
+#### Step response
+* Initally the push button is open so the bottom comparator sets S = 0, the LED is off and so is \\(\overline{Q}\\) high, which enables the discharge transistor. The capacitor which has 0V, is not able to charge, therefore the top comparator will mantain R = 0. The current state is kept (led off) until we intervene
+* Only after pushing (and release) the button we can triger SR = 10 as we made the voltage of pin 2 to be 0 and hence the bottom comparator is able to set S = 1, which makes Q high and \\(\overline{Q}\\) low.
+  * This disables the discharge transistor and allows the capacitor to increase its voltage, the capacitor increases its voltage and when it's above 3.34V it will reset the clock (given that the pusshbutton is not held on, otherwise we encounter SR = 11 which in an SR latch is an illegal configuration (it gives unpredictable output))
+  * As long as we dont deliberately hold the push button for too long this implementation should deal with the noise from the push button bounces
+  * After the capacitor triggers the reset, \\(\overline{Q}\\) becomes high and enables the discharge again, since there is no resistor between discharge and the capacitor it will bleed out it's voltage very quickly, which immideately sets R back to 0.
+    * Therefore it's very unlikely to achieve SR = 11 by doing very fast clicks (or rebounds), it should only possible by deliberately holding the button
+![404]({{ site.url }}/images/8bit/clock/monostable2.PNG)
 
+#### Noise
+Datasheet recomends:
+* \\(.01\mu F\\) capacitor from ground to pin 5
+* 5V to pin 4
+
+#### Tinkercad
+* Tinkercad of the [original schematic]({{ site.url }}/hardware/2021/06/26/8-bit-computer.html#schematic-1)
+![404]({{ site.url }}/images/8bit/clock/clock4.PNG)
+[Open tinkercad](https://www.tinkercad.com/things/c5hBciREsFx-555-timer-p5)
+
+* Ben replica (with noise upgrade)
+![404]({{ site.url }}/images/8bit/clock/clock5.PNG)
+[Open tinkercad](https://www.tinkercad.com/things/cBU2bNvFG8y-555-timer-p6)
