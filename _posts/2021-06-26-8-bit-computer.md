@@ -30,11 +30,21 @@ tags: project
     - [Bistable 555 timer](#bistable-555-timer)
       - [Schematic](#schematic-2)
       - [Tinkercad](#tinkercad-2)
+    - [Clock logic](#clock-logic)
+      - [Logic circuit](#logic-circuit)
+      - [Components](#components)
+      - [Tinkercad](#tinkercad-3)
+  - [Registers](#registers)
+    - [Bus architecture and how registers transfers work](#bus-architecture-and-how-registers-transfers-work)
+    - [Connecting multiple outputs together](#connecting-multiple-outputs-together)
+      - [Tri-state logic](#tri-state-logic)
+    - [Designing and building a 1-bit register](#designing-and-building-a-1-bit-register)
 
 ## Introduction
 Ben Eater is an online educator on computer-related topics from which I'm following his 8-bit computer project. [https://eater.net/8bit](https://eater.net/8bit). The computer is composed of different modules, which are built on breadboards. The modules are the clock module, registers and ALU (arithmetic and logic unit) module, RAM (random access memory) and program counter module, and output and control logic module.
 
-To refresh circuit analysis basics check [this post]({{ site.url }}/hardware/2021/06/26/8-EE-cheatsheet.html).
+* To refresh circuit analysis basics check [this post]({{ site.url }}/hardware/2021/06/26/8-EE-cheatsheet.html).
+* You can also check my [CSE1400 Computer Organization notes]({{ site.url }}/downloads/CSE1400_(history-logic_circuits-data_representation-isa-assembly-cpu-io-memory-pipelining).pdf)
 
 ### Power supply
 We will be using a 5V (volt) power source, which Ben has crafted by cutting off the wires of a cellphone charger.
@@ -284,3 +294,149 @@ Datasheet recomends:
 * Ben replica
 ![404]({{ site.url }}/images/8bit/clock/clock9.PNG)
 [Open tinkercad](https://www.tinkercad.com/things/lFTIiefIzFf-555-timer-p8)
+  * Sometimes the switch icon might have an off starting image but tinkercad starts by default in the on position, so if things don't seem to match at first glance just click once and the switch image will match the switch value
+
+### Clock logic
+* We want to have one single clock output terminal that can be configured to either be a copy of the astable (automatic) or monostoable (manual) clock signal.
+
+#### Logic circuit
+![404]({{ site.url }}/images/8bit/clock/clock_logic.PNG)
+* HLT stands for halt signal (which can be send by programs) to stop the clock
+  * Latches low clock signal when we send a high voltage in HLT
+  * Low voltage does not interfere with the regular clock logic (described below)
+* The logic circuit uses the bistable (called "select" in the schematic) clock just as a debounced switch, so the circuit is just to alternate between using the monostable clock (manual) and the astable clock (automatic)
+* Because of the inverter of the select signal, exclusively and always one of the AND gates feeding from the clock signals will output a high voltage
+* Take away:
+  * High bistable switch = astable
+    * High bistable and monosstable push = astable signal (the push is ignored)
+  * Low bistable switch = monostable
+  * high HLT (halt) = low clock signal until unhalted (then back to the previous clock setting)
+
+#### Components
+* 1 74LS04 hex inverter
+  * Contains 6 inverters (we need 2)
+* 1 74LS08 quad AND gate
+  * Contains 4 and gates (we need 3)
+* 1 74LS32 quad OR gate
+  * Contains 4 or gates (we need 1)
+* It would have been more efficient to rewrite the circuit with NAND gates and just use 2 74LS00 NAND chips (to use 7 out of 8 nand gates) but we're not trying to optimize for power nor space but for understanding and maintanence.
+* Tinkercad uses 74HC chips, which are slightly different than the 74LS chips shipped by Ben:
+  * 74LS need 5V \\(V_{cc}\\) and output a high voltage of 3.4V and a low voltage of 0.2V
+  * 74HC accepts from 2V to 6V and outputs with an output between 0 and \\(V_{cc}\\)
+  * Both have the same pin outs and most 74LS logic chips have internal resistors that let you connect LEDS directly to the outputs without a resistor. However, 74HC generally not.
+    * Therefore the tinkercad implementations have a \\(220\Omega\\) resistor in series with output LEDs.
+
+#### Tinkercad
+* Tinkercad of the [logic circuit]({{ site.url }}/hardware/2021/06/26/8-bit-computer.html#logic-circuit) without the HLT inverter and last AND gate.
+![404]({{ site.url }}/images/8bit/clock/clock10.PNG)
+[Open tinkercad](https://www.tinkercad.com/things/28oIl6FzuZA-555-timer-p9)
+
+* Tinkercad with the HLT inverter and last AND gate.
+  * Just plugs the output of the OR gate into an AND gate that for now takes the other input from a jumper cable either to ground (halt) or \\(V_{cc}\\) (not halt).
+![404]({{ site.url }}/images/8bit/clock/clock11.PNG)
+[Open tinkercad](https://www.tinkercad.com/things/9YBrEzYt1cS-555-timer-p10)
+
+* Simplified aesthetic circuit(with 74HC and \\(220\Omega\\) resistors) has the same logic connections:
+  * (Astable out, AND gate In 1A) - orange
+  * (Bistable out, AND gate IN 1B) - yellow
+  * (Bistable out (or AND gate in 1B), Inverter gate In 1) - yellow
+  * (Inverter gate Out 1, AND gate In 4B) - brown
+  * (Monostable out, AND gate In 4A) - green
+  * (AND gate out 1, OR gate In 1B) - dark blue
+  * (AND gate out 4, OR gate In 1A) - light blue
+  * (OR gate out 1, AND gate in 3A) - purple
+
+![404]({{ site.url }}/images/8bit/clock/clock12.PNG)
+[Open tinkercad](https://www.tinkercad.com/things/0oDN7oQGoQR-555-timer-p11)
+
+## Registers
+* Most CPUs (central processing unit) have a number of registers which store small amounts of data that the CPU is processing. In our breadboard CPU, we'll build three 8-bit registers: A, B, and IR (instruction register)
+  * A and B are general-purpose registers
+  * IR will be used for storing the current instruction that's being executed.
+* The arithmetic logic unit (ALU) part of a CPU is usually capable of performing various arithmetic, bitwise, and comparision operations on binary numbers.
+  * Our ALU is just able to add amd substract
+  * It's connected to the A and B registers
+  * Outputs either A+B or A-B
+* Components included in the kit (including the components for ALU)
+  * 4 Breadboards
+  * 1 Jumper wire kit
+  * 6 25 foot hookup wire spools
+    * white
+    * blue
+    * green
+    * red
+    * yellow
+    * black
+  * 2 74LS86 quad XOR gate
+  * 6 74LS173 4-bit D register
+  * 4 74LS245 8-bit bus transceiver
+  * 2 74LS83 4-bit binary adder
+  * 40 \\(220\Omega\\) resistors
+  * 30 Red LEDs
+  * 10 Yellow LEDs
+  * 5 Blue LEDs
+  * 10 \\(0.1\mu F\\) capacitors
+
+### Bus architecture and how registers transfers work
+* Our registers store 8 bits of data and interfaces (as in "provides interaction features") to the BUS
+* Most computers are organized around a BUS (or multiple)
+  * The BUS is basically a network of cables that connect multiple components within a computer.
+  * It's a rather simple network, as the BUS serves primarly as a common connection point for multiple components within the computer
+  * For the 8 bit BUS we use 8 wires, and 4 snapped (+ -) power rails from 2 breadboards
+![404]({{ site.url }}/images/8bit/clock/bus.PNG)
+* The way we use the bus is by one module writting data onto the BUS and another module reading data from the BUS
+  * Only 1 module can write data on the BUS at a time, otherwise the data carried on the bus is corrupted
+* One of the main things a register does next to storing data is loading data onto the bus so other components can read it from the bus
+  * Registers have pins that when triggered with high/low voltage they can either read data from the bus or write it onto the bus.
+    * When "Enable" is high, the current data stored in the register is written (and overwrites) onto the bus. Then it's visible to all the other modules (but they dont necessarily need to do anything with it)
+    * When "Load" is high, the register overwrites it's current value with whatever value appears on the bus.
+* The timing of each Load/Enable operation with the bus is synchronised by the clock signals as Load/Enable is gated with AND clock.
+![404]({{ site.url }}/images/8bit/clock/bus2.PNG)
+* Everything connected to the bus can potentially talk between all of them.
+
+### Connecting multiple outputs together
+* The "Enable" output gates have some sort of transistor network that manages to either have an output that emits current from the pullup network (\\(v_{cc}\\) or an output that sinks current to the pull-down network (ground).
+![404]({{ site.url }}/images/8bit/clock/tri1.PNG)
+* The transistors above are NMOS (incomming high voltage closes the circuit)
+* If top is high and bottom is low the output sources current
+* If top is low and bottom is high the output sinsk current
+* The load pins detect the current of the input pins connected to the BUS (which are connected to the register/component that is enabling its output pins) to determine whether the pin is a 0 (sinks) or a 1 (emits)
+  * This works well when only 1 component is emmiting/sinking current from the bus
+  * If component A emits all 1's but component B is sinking all 0's then component C will read a corrupted version of A's data.
+  * Instead, the pull-up/pull-down transistor network for the outputs rather than having always closed circuit (either to ground or to \\(v_{cc}\\)), we can have a tri-state logic where we can just disconnect the output and leave an open circuit such that the outputs do not interfere with the BUS (unless enable is turned on, which shall be enabled by at most 1 component)
+
+#### Tri-state logic
+![404]({{ site.url }}/images/8bit/clock/tri2.PNG)
+* If IN = 1, then switch is connected to \\(V_{cc}\\)
+* If IN = 0, then switch is connected to ground
+* If and only if enable is on, the output (a copy of IN) is connected to the bus
+* So we end up with:
+  * Out = 0
+  * Out = 1
+  * Out = disconnected (does not overwrite the BUS)
+    * It is technically "high impedence" (with high resistance) as mechanically opening the circuit takes much more time and energy
+* The input and output pins of the 74LS245 bus transceiver are connected to the enable pin a similar fashion
+* We generally hide the pullup and pulldown network in the tri-state gate symbol
+
+### Designing and building a 1-bit register
+* We can use an S-R latch with an enable button that specifies when SR can be fed into the SR latch
+![404]({{ site.url }}/images/8bit/clock/srlatch.PNG)
+  * When EN is 0, both AND gated output SR = 0, so the SR latch holds the previous state
+  * When EN is 1, the SR latch will get whichever values for S and R exist.
+  * We can create one single variable called D that feeds S and another branch of the same variable can be inverted and feed R. Therefore if D is 0 we get SR = 01, and if D is 1 we get SR = 10
+![404]({{ site.url }}/images/8bit/clock/srlatch2.PNG)
+* This is called a D-latch because it latches a single bit of data
+![404]({{ site.url }}/images/8bit/clock/srlatch3.PNG)
+* A D-flip flop would only latch a D value specifically when Enable is ON and when the clock switches from low voltage to high voltage (this prevents any other D changes during the same high clock signal cycle)
+![404]({{ site.url }}/images/8bit/clock/dlatch.PNG)
+  * This is technecally enabling at each clock pulse
+  * We need an edge detector circuit to produce a signal with very short high cycles (pulses)
+![404]({{ site.url }}/images/8bit/clock/edge.PNG)
+* The circuit above is such a circuit, which basically has a voltage as high as the source and behaves as the step response of a conductor-resistor circuit.
+  * Although at \\(t_0\\) (step from 0 to high voltage) the capacitor has 0V and behaves like a wire (\\(I_s\\) current), the voltage we are interested about is of the node connecting to the positive terminal of the resistor, which at \\(t_0\\) looks like \\(R_2\\) from a [voltage divider]({{ site.url }}/hardware/2021/06/26/8-EE-cheatsheet.html#voltage-divider-circuits) where the inductor looks like \\(R_1\\) with \\(0\Omega\\) resistance, and thus \\(V_0=V_s\\) (high)
+  * The smaller the capacitance of the capacitor, the less it takes for the capacitor to charge, (and decrease it's current), and thus the sooner the voltage drop of the capacitor reaches \\(V_{s}\\) and since it's in series with the source the sooner it decreases the available voltage for all branches connected to \\(V_{s}\\) (KVL)
+    * Resistance * capacitance gives you the seconds it takes for the voltage to drop (pulse time)
+    * \\(0.1\mu F\cdot 1k\Omega\\ = 0.1\cdot 10^6 F \cdot 10^3 \Omega = 0.1 ms\\)
+
+![404]({{ site.url }}/images/8bit/clock/dflipflop.PNG)
+![404]({{ site.url }}/images/8bit/clock/dflipflop2.PNG)
