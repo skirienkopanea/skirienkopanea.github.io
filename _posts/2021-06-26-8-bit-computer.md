@@ -355,6 +355,8 @@ Datasheet recomends:
 ![404]({{ site.url }}/images/8bit/clock/clock12.PNG)
 [Open tinkercad](https://www.tinkercad.com/things/0oDN7oQGoQR-555-timer-p11)
 
+![404]({{ site.url }}/images/8bit/clock/schematic.PNG)
+
 ## Registers
 * Most CPUs (central processing unit) have a number of registers which store small amounts of data that the CPU is processing. In our breadboard CPU, we'll build three 8-bit registers: A, B, and IR (instruction register)
   * A and B are general-purpose registers
@@ -389,7 +391,7 @@ Datasheet recomends:
   * The BUS is basically a network of cables that connect multiple components within a computer.
   * It's a rather simple network, as the BUS serves primarly as a common connection point for multiple components within the computer
   * For the 8 bit BUS we use 8 wires, and 4 snapped (+ -) power rails from 2 breadboards
-![404]({{ site.url }}/images/8bit/clock/bus.PNG)
+![404]({{ site.url }}/images/8bit/register/bus.PNG)
 * The way we use the bus is by one module writting data onto the BUS and another module reading data from the BUS
   * Only 1 module can write data on the BUS at a time, otherwise the data carried on the bus is corrupted
 * One of the main things a register does next to storing data is loading data onto the bus so other components can read it from the bus
@@ -397,12 +399,12 @@ Datasheet recomends:
     * When "Enable" is high, the current data stored in the register is written (and overwrites) onto the bus. Then it's visible to all the other modules (but they dont necessarily need to do anything with it)
     * When "Load" is high, the register overwrites it's current value with whatever value appears on the bus.
 * The timing of each Load/Enable operation with the bus is synchronised by the clock signals as Load/Enable is gated with AND clock.
-![404]({{ site.url }}/images/8bit/clock/bus2.PNG)
+![404]({{ site.url }}/images/8bit/register/bus2.PNG)
 * Everything connected to the bus can potentially talk between all of them.
 
 ### Connecting multiple outputs together
 * The "Enable" output gates have some sort of transistor network that manages to either have an output that emits current from the pullup network (\\(v_{cc}\\) or an output that sinks current to the pull-down network (ground).
-![404]({{ site.url }}/images/8bit/clock/tri1.PNG)
+![404]({{ site.url }}/images/8bit/register/tri1.PNG)
 * The transistors above are NMOS (incomming high voltage closes the circuit)
 * If top is high and bottom is low the output sources current
 * If top is low and bottom is high the output sinsk current
@@ -412,7 +414,7 @@ Datasheet recomends:
   * Instead, the pull-up/pull-down transistor network for the outputs rather than having always closed circuit (either to ground or to \\(v_{cc}\\)), we can have a tri-state logic where we can just disconnect the output and leave an open circuit such that the outputs do not interfere with the BUS (unless enable is turned on, which shall be enabled by at most 1 component)
 
 #### Tri-state logic
-![404]({{ site.url }}/images/8bit/clock/tri2.PNG)
+![404]({{ site.url }}/images/8bit/register/tri2.PNG)
 * If IN = 1, then switch is connected to \\(V_{cc}\\)
 * If IN = 0, then switch is connected to ground
 * If and only if enable is on, the output (a copy of IN) is connected to the bus
@@ -427,37 +429,37 @@ Datasheet recomends:
 ### Designing and building a register
 #### SR latch (store 1 bit)
 * We can use an S-R latch with an enable button that specifies when SR can be fed into the SR latch
-![404]({{ site.url }}/images/8bit/clock/srlatch.PNG)
+![404]({{ site.url }}/images/8bit/register/srlatch.PNG)
   * When EN is 0, both AND gated output SR = 0, so the SR latch holds the previous state
   * When EN is 1, the SR latch will get whichever values for S and R exist.
   * We can create one single variable called D that feeds S and another branch of the same variable can be inverted and feed R. Therefore if D is 0 we get SR = 01, and if D is 1 we get SR = 10
 
 #### D latch (just use 1 input)
-![404]({{ site.url }}/images/8bit/clock/srlatch2.PNG)
+![404]({{ site.url }}/images/8bit/register/srlatch2.PNG)
 * This is called a D-latch because it latches a single bit of data
-![404]({{ site.url }}/images/8bit/clock/srlatch3.PNG)
+![404]({{ site.url }}/images/8bit/register/srlatch3.PNG)
 
 #### D flip flop (latch at clock pulse)
 * A D-flip flop would only latch a D value specifically when Enable is ON and when the clock switches from low voltage to high voltage (this prevents any other D changes during the same high clock signal cycle)
-![404]({{ site.url }}/images/8bit/clock/dlatch.PNG)
+![404]({{ site.url }}/images/8bit/register/dlatch.PNG)
   * This is technically enabling at each clock pulse
   * We need an edge detector circuit to produce a signal with very short high cycles (pulses)
-![404]({{ site.url }}/images/8bit/clock/edge.PNG)
+![404]({{ site.url }}/images/8bit/register/edge.PNG)
 * The circuit above is such a circuit, which basically has a voltage as high as the source and behaves as the step response of a conductor-resistor circuit.
   * Although at \\(t_0\\) (step from 0 to high voltage) the capacitor has 0V and behaves like a wire (\\(I_s\\) current), the voltage we are interested about is of the node connecting to the positive terminal of the resistor, which at \\(t_0\\) looks like \\(R_2\\) from a [voltage divider]({{ site.url }}/hardware/2021/06/26/8-EE-cheatsheet.html#voltage-divider-circuits) where the inductor looks like \\(R_1\\) with \\(0\Omega\\) resistance, and thus \\(V_0=V_s\\) (high)
   * The smaller the capacitance of the capacitor, the less it takes for the capacitor to charge, (and decrease it's current), and thus the sooner the voltage drop of the capacitor reaches \\(V_{s}\\) and since it's in series with the source the sooner it decreases the available voltage for all branches connected to \\(V_{s}\\) (KVL)
     * Resistance * capacitance gives you the seconds it takes for the voltage to drop (pulse time)
     * \\(0.1\mu F\cdot 1k\Omega\\ = 0.1\cdot 10^6 F \cdot 10^3 \Omega = 0.1 ms\\)
 
-![404]({{ site.url }}/images/8bit/clock/dflipflop.PNG)
-![404]({{ site.url }}/images/8bit/clock/dflipflop2.PNG)
+![404]({{ site.url }}/images/8bit/register/dflipflop.PNG)
+![404]({{ site.url }}/images/8bit/register/dflipflop2.PNG)
  
 #### 74LS74 (Two D flip-flops) and a load signal
 * We can put several D flip flops together with some additional logic that write the contents of the bus when "Load" is high
-![404]({{ site.url }}/images/8bit/clock/register1.PNG)
+![404]({{ site.url }}/images/8bit/register/register1.PNG)
   * We can see that via the inverterter and the 2 AND gates linked to the load signal, the D bit fed to the D-latch is either the one of the bus when load is high, or the one latched when the load is low
 * We can use 4 74LS74 chip which have 2 d-flip flops each built into it to make an 8-bit register
-![404]({{ site.url }}/images/8bit/clock/74.PNG)
+![404]({{ site.url }}/images/8bit/register/74.PNG)
   * GND: ground
   * \\(V_{cc}\\): positive supply terminal
   * CLRn: overwrites Bit n to 0
@@ -474,7 +476,7 @@ Datasheet recomends:
 * Alternatively we can use the 74LS245.
 
 #### 74LS245 (Octal bus transceiver used as tri-state logic gate)
-![404]({{ site.url }}/images/8bit/clock/245.PNG)
+![404]({{ site.url }}/images/8bit/register/245.PNG)
 * Useful for sending bus data in both directions
 * Pin 1 is for direction control (whether the register sends data or whether the bus sends data)
   * Because we already use the load variable to determine when to read from the bus we just need to use the feature to send (An pin to Bn pin), so we set pin 1 high.
