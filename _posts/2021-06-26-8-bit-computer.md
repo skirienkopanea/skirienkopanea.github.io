@@ -38,7 +38,14 @@ tags: project
     - [Bus architecture and how registers transfers work](#bus-architecture-and-how-registers-transfers-work)
     - [Connecting multiple outputs together](#connecting-multiple-outputs-together)
       - [Tri-state logic](#tri-state-logic)
-    - [Designing and building a 1-bit register](#designing-and-building-a-1-bit-register)
+    - [Designing and building a register](#designing-and-building-a-register)
+      - [SR latch (store 1 bit)](#sr-latch-store-1-bit)
+      - [D latch (just use 1 input)](#d-latch-just-use-1-input)
+      - [D flip flop (latch at clock pulse)](#d-flip-flop-latch-at-clock-pulse)
+      - [74LS74 (Two D flip-flops) and a load signal](#74ls74-two-d-flip-flops-and-a-load-signal)
+      - [74LS245 (Octal bus transceiver used as tri-state logic gate)](#74ls245-octal-bus-transceiver-used-as-tri-state-logic-gate)
+      - [74LS173A (4 bit registers)](#74ls173a-4-bit-registers)
+    - [Building an 8-bit register](#building-an-8-bit-register)
 
 ## Introduction
 Ben Eater is an online educator on computer-related topics from which I'm following his 8-bit computer project. [https://eater.net/8bit](https://eater.net/8bit). The computer is composed of different modules, which are built on breadboards. The modules are the clock module, registers and ALU (arithmetic and logic unit) module, RAM (random access memory) and program counter module, and output and control logic module.
@@ -184,7 +191,7 @@ The clock coordinates everything, it sets the timing of everything.
 ![404]({{ site.url }}/images/8bit/clock/noise.PNG)
 * Our power supply (typically with curled wires) may act "not perfect" (i.e. as an inductor sometimes) and sometimes components (specially transistors) might get more volts than they actually desire at times.
 ![404]({{ site.url }}/images/8bit/clock/noise2.PNG)
-  * Adding another \\(.01\mu F\\) capacitor parallel to the power supply (i.e each leg on a + and - hole respectively in the breadboard) may help reduce dangerous voltage jumps.
+  * Adding a \\(.1\mu F\\) capacitor parallel to the power supply (i.e each leg on a + and - hole respectively in the breadboard) may help reduce dangerous voltage jumps.
   * Ideally you'd want to have this capacitor right next to the power pins of the chip but there aint that much space in a breadboard.
 * Low voltage on pin number 4 triggers a SR = 01 that overwrites whatever is going on with the comparators and resets (turns off) the SR latch. Therefore the datasheet recomends to hookup pin 4 directly to 5V power supply
 
@@ -199,7 +206,7 @@ When we add all the noise and manual speed adjustments we end up with the follow
 
 * Tinkercad of the upgraded circuit
   * \\(1M\Omega\\) Potentiometer in series with Resistor B, which it decreases from \\(100k\Omega\\) to \\(1k\Omega\\) to manually adjust the speed.
-  * \\(.01\mu F\\) capacitor parallel to power supply to control voltage spike noise
+  * \\(.1\mu F\\) capacitor parallel to power supply to control voltage spike noise
   * \\(.01\mu F\\) capacitor from ground to pin 5 to control low to high clock signal noise
   * \\(V_{cc}\\) to pin 4 to avoid unvoluntary clock resets
 ![404]({{ site.url }}/images/8bit/clock/clock2.PNG)
@@ -215,7 +222,6 @@ When we add all the noise and manual speed adjustments we end up with the follow
 ### Monostable 555 timer
 * We want to be able to manually advance 1 clock cycle
 * Although a simple pushbutton seems to be enough to create cycles
-![404]({{ site.url }}/images/8bit/clock/pushbutton.PNG)
   * In reality the push button mechanics might unvoluntarily create additional clock cycles as the metal bounces additional times, not susceptible to the human eye
 ![404]({{ site.url }}/images/8bit/clock/bounce.PNG)
 * A debouncing circuit deals with this issue
@@ -418,18 +424,23 @@ Datasheet recomends:
 * The input and output pins of the 74LS245 bus transceiver are connected to the enable pin a similar fashion
 * We generally hide the pullup and pulldown network in the tri-state gate symbol
 
-### Designing and building a 1-bit register
+### Designing and building a register
+#### SR latch (store 1 bit)
 * We can use an S-R latch with an enable button that specifies when SR can be fed into the SR latch
 ![404]({{ site.url }}/images/8bit/clock/srlatch.PNG)
   * When EN is 0, both AND gated output SR = 0, so the SR latch holds the previous state
   * When EN is 1, the SR latch will get whichever values for S and R exist.
   * We can create one single variable called D that feeds S and another branch of the same variable can be inverted and feed R. Therefore if D is 0 we get SR = 01, and if D is 1 we get SR = 10
+
+#### D latch (just use 1 input)
 ![404]({{ site.url }}/images/8bit/clock/srlatch2.PNG)
 * This is called a D-latch because it latches a single bit of data
 ![404]({{ site.url }}/images/8bit/clock/srlatch3.PNG)
+
+#### D flip flop (latch at clock pulse)
 * A D-flip flop would only latch a D value specifically when Enable is ON and when the clock switches from low voltage to high voltage (this prevents any other D changes during the same high clock signal cycle)
 ![404]({{ site.url }}/images/8bit/clock/dlatch.PNG)
-  * This is technecally enabling at each clock pulse
+  * This is technically enabling at each clock pulse
   * We need an edge detector circuit to produce a signal with very short high cycles (pulses)
 ![404]({{ site.url }}/images/8bit/clock/edge.PNG)
 * The circuit above is such a circuit, which basically has a voltage as high as the source and behaves as the step response of a conductor-resistor circuit.
@@ -440,3 +451,39 @@ Datasheet recomends:
 
 ![404]({{ site.url }}/images/8bit/clock/dflipflop.PNG)
 ![404]({{ site.url }}/images/8bit/clock/dflipflop2.PNG)
+ 
+#### 74LS74 (Two D flip-flops) and a load signal
+* We can put several D flip flops together with some additional logic that write the contents of the bus when "Load" is high
+![404]({{ site.url }}/images/8bit/clock/register1.PNG)
+  * We can see that via the inverterter and the 2 AND gates linked to the load signal, the D bit fed to the D-latch is either the one of the bus when load is high, or the one latched when the load is low
+* We can use 4 74LS74 chip which have 2 d-flip flops each built into it to make an 8-bit register
+![404]({{ site.url }}/images/8bit/clock/74.PNG)
+  * GND: ground
+  * \\(V_{cc}\\): positive supply terminal
+  * CLRn: overwrites Bit n to 0
+  * PRn: overwrites Bit n to 1
+  * Flip flop pins: Dn (bus' n bit), CLKn, Qn, \\(\overline{Qn}\\)
+
+* Tinkercad [implementation of 1 bit register](https://www.tinkercad.com/things/1HDToQEodKD-1-bit-register)
+![404]({{ site.url }}/images/8bit/register/1bitregister.PNG)
+  * It only allows register changes at clock rise (blue led on) and when load is high
+
+* We still need to add the tri-state buffer to the output of the register to ensure we dont corrupt the bus when we're not using it
+![404]({{ site.url }}/images/8bit/register/tri_output.PNG)
+
+* Alternatively we can use the 74LS245.
+
+#### 74LS245 (Octal bus transceiver used as tri-state logic gate)
+![404]({{ site.url }}/images/8bit/clock/245.PNG)
+* Useful for sending bus data in both directions
+* Pin 1 is for direction control (whether the register sends data or whether the bus sends data)
+  * Because we already use the load variable to determine when to read from the bus we just need to use the feature to send (An pin to Bn pin), so we set pin 1 high.
+* Pin 19 is "enable", which is the tri-state logic "switch" that connects/disconnects us from the bus
+
+#### 74LS173A (4 bit registers)
+* 4 built-in D flip flops
+* Uses similar logic of having a sequence of flip-flops connected to the bus and written when a load signal (called enable) is high
+* Built-in tri-state output with output control pin
+* Used in this project as building multiple 8 bit registers with just basic logic gates is a cumbersome repetitive process not necessarily in line with the goal of the project.
+
+### Building an 8-bit register
