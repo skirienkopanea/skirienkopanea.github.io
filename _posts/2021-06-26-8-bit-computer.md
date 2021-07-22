@@ -46,6 +46,8 @@ tags: project
       - [74LS245 (Octal bus transceiver used as tri-state logic gate)](#74ls245-octal-bus-transceiver-used-as-tri-state-logic-gate)
       - [74LS173A (4 bit registers)](#74ls173a-4-bit-registers)
     - [Building an 8-bit register](#building-an-8-bit-register)
+      - [Testing the register with a temporary bus](#testing-the-register-with-a-temporary-bus)
+    - [Instruction register](#instruction-register)
 
 ## Introduction
 Ben Eater is an online educator on computer-related topics from which I'm following his 8-bit computer project. [https://eater.net/8bit](https://eater.net/8bit). The computer is composed of different modules, which are built on breadboards. The modules are the clock module, registers and ALU (arithmetic and logic unit) module, RAM (random access memory) and program counter module, and output and control logic module.
@@ -483,9 +485,47 @@ Datasheet recomends:
 * Pin 19 is "enable", which is the tri-state logic "switch" that connects/disconnects us from the bus
 
 #### 74LS173A (4 bit registers)
+![404]({{ site.url }}/images/8bit/register/74LS173A.PNG)
 * 4 built-in D flip flops
 * Uses similar logic of having a sequence of flip-flops connected to the bus and written when a load signal (called enable) is high
 * Built-in tri-state output with output control pin
 * Used in this project as building multiple 8 bit registers with just basic logic gates is a cumbersome repetitive process not necessarily in line with the goal of the project.
 
 ### Building an 8-bit register
+* We will be using 2 [74LS173A]({{ site.url }}/hardware/2021/06/26/8-bit-computer.html#74ls173a-4-bit-registers) chips for each 8 bit register
+* It has a built-in tri-state logic gate with the default output set to be disconnected unless the output control is enabled
+  * Since we want to be able to see at all times what's the value of the register, we will turn the output cotroll to be always enabled, put a LED in series, and then manually add another tri-state logic gate with the [74LS245]({{ site.url }}/hardware/2021/06/26/8-bit-computer.html#74ls245-octal-bus-transceiver-used-as-tri-state-logic-gate).
+
+![404]({{ site.url }}/images/8bit/register/8bitregister.PNG)
+* The 74LS173A requires both M and N to have 0V (grounded) to output the contents of the 4-bit
+* The 74LS173A also has 2 inverted load inputs per pin, so does the enable pin of the 74LS245.
+  * Low \\(\overline{\text{ENABLE}}\\): register output is sent to the bus
+  * High \\(\overline{\text{ENABLE}}\\): register output is not sent to the bus
+  * Low \\(\overline{\text{LOAD}}\\): bus content is sent to the register
+  * High \\(\overline{\text{LOAD}}\\): bus content is not sent to the register
+  * If you do things right, you will never have a high load and a high enable at the same time (that is, sending to the bus and reading from the bus at the same time is an unlikely scenario)
+* CLR: resets bits to 0, should be set to ground rather than open.
+* DIR: we always set it high such as the the direction of the tri-state logic gate is always from 
+
+* Tinkercad [implementation](https://www.tinkercad.com/things/bljhgWwFIZf-8-bit-register).
+![404]({{ site.url }}/images/8bit/register/register4.PNG)
+  * **BUS to register**: The inputs of the registers (who have not  load pin low (load = 1) in this context) are connected to the outputs of the tri-state logic gate (who has not enable pin high (enable = 0)) that connects to the bus (light blue cables)
+  * **Register to BUS**: The outputs of the registers are always connected (M, N, pins to ground so we can see the register contents with the LEDs) to the tri-state logic gate (who has not enable pin low (enable = 1) in this context) such that it can be sent to the bus (green cables)
+
+#### Testing the register with a temporary bus
+* If there's no connection to a bus and you set load high, the 74LS173A chip will default the inputs as high voltage as there's typically a pull-up resistor, therefore all the bits of the register will set to 1 if there's an open circuit with the bus
+![404]({{ site.url }}/images/8bit/register/disconnectedbus.PNG)
+  * This happened because load was high and enable was low (and since there's only this register there's literally no enabled bits in the bus, thus the bus is an open circuit)
+* If we set the load low and the enable high we should be able to move the contents of the register to the bus
+![404]({{ site.url }}/images/8bit/register/loadlowenablehigh.PNG)
+* Try to load a bus with some pins connected to ground such that the received load is a combination of 1s and 0s.
+![404]({{ site.url }}/images/8bit/register/move1.PNG)
+* Then connect another register to the bus and transfer the contents (which should appear in the next clock cycle).
+![404]({{ site.url }}/images/8bit/register/move2.PNG)
+
+### Instruction register
+* The instruction register is identical besides that it is aestethically mirrored as we will place it on the left side of the computer
+* Also it will only connect the 4 least significant bits (yellow) to the BUS, as the other 4 will connect to into the instruction decoder (next chapters)
+![404]({{ site.url }}/images/8bit/register/ir.PNG)
+
+
