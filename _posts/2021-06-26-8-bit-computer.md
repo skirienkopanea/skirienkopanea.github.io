@@ -11,7 +11,9 @@ tags: project
 # Table of Contents
 - [Table of Contents](#table-of-contents)
   - [Introduction](#introduction)
-    - [Power supply](#power-supply)
+    - [TODO: Chips compatibility, LEDS and other tips/disclaimers](#todo-chips-compatibility-leds-and-other-tipsdisclaimers)
+    - [TODO: Add appendix with datasheet of all the chips](#todo-add-appendix-with-datasheet-of-all-the-chips)
+    - [Power supply (TODO check power supply tips)](#power-supply-todo-check-power-supply-tips)
     - [Breadboards](#breadboards)
       - [Sample closed circuit](#sample-closed-circuit)
       - [Common mistakes](#common-mistakes)
@@ -46,8 +48,19 @@ tags: project
       - [74LS245 (Octal bus transceiver used as tri-state logic gate)](#74ls245-octal-bus-transceiver-used-as-tri-state-logic-gate)
       - [74LS173A (4 bit registers)](#74ls173a-4-bit-registers)
     - [Building an 8-bit register](#building-an-8-bit-register)
+      - [Tinkercad](#tinkercad-4)
+      - [Schematic for Register A (same as B)](#schematic-for-register-a-same-as-b)
+      - [Schematic for Instruction Register](#schematic-for-instruction-register)
       - [Testing the register with a temporary bus](#testing-the-register-with-a-temporary-bus)
+      - [My testing experience](#my-testing-experience)
     - [Instruction register](#instruction-register)
+  - [Arithmetic Logic Unit (ALU)](#arithmetic-logic-unit-alu)
+    - [Adding numbers](#adding-numbers)
+    - [4-bit adder (74LS283)](#4-bit-adder-74ls283)
+    - [Negative numbers](#negative-numbers)
+    - [ALU design](#alu-design)
+    - [Building the ALU](#building-the-alu)
+      - [Tinkercad](#tinkercad-5)
 
 ## Introduction
 Ben Eater is an online educator on computer-related topics from which I'm following his 8-bit computer project. [https://eater.net/8bit](https://eater.net/8bit). The computer is composed of different modules, which are built on breadboards. The modules are the clock module, registers and ALU (arithmetic and logic unit) module, RAM (random access memory) and program counter module, and output and control logic module.
@@ -55,7 +68,11 @@ Ben Eater is an online educator on computer-related topics from which I'm follow
 * To refresh circuit analysis basics check [this post]({{ site.url }}/hardware/2021/06/26/8-EE-cheatsheet.html).
 * You can also check my [CSE1400 Computer Organization notes]({{ site.url }}/downloads/CSE1400_(history-logic_circuits-data_representation-isa-assembly-cpu-io-memory-pipelining).pdf)
 
-### Power supply
+### TODO: Chips compatibility, LEDS and other tips/disclaimers
+
+### TODO: Add appendix with datasheet of all the chips
+
+### Power supply (TODO check power supply tips)
 We will be using a 5V (volt) power source, which Ben has crafted by cutting off the wires of a cellphone charger.
 * Safety rules before using anything related to electricity:
   * Dont plug a lot of stuff into a single extension cord
@@ -202,7 +219,7 @@ When we add all the noise and manual speed adjustments we end up with the follow
 ![404]({{ site.url }}/images/8bit/clock/555_final.PNG)
 
 #### Tinkercad
-* Tinkercad of the [original schematic]({{ site.url }}/hardware/2021/06/26/8-bit-computer.html#schematic)
+* Tinkercad of the [original schematic]({{ page.url }}#schematic)
 ![404]({{ site.url }}/images/8bit/clock/clock1.png)
 [Open tinkercad](https://www.tinkercad.com/things/kRi8HItiSbm-555-timer-p1/)
 
@@ -261,7 +278,7 @@ Datasheet recomends:
 * 5V to pin 4
 
 #### Tinkercad
-* Tinkercad of the [original schematic]({{ site.url }}/hardware/2021/06/26/8-bit-computer.html#schematic-1)
+* Tinkercad of the [original schematic]({{ page.url }}#schematic-1)
 ![404]({{ site.url }}/images/8bit/clock/clock4.PNG)
 [Open tinkercad](https://www.tinkercad.com/things/c5hBciREsFx-555-timer-p5)
 
@@ -295,7 +312,7 @@ Datasheet recomends:
 * Not included in the schematic is the \\(.01\mu F\\) capacitor from ground to pin 5
 
 #### Tinkercad
-* Tinkercad of the [original schematic]({{ site.url }}/hardware/2021/06/26/8-bit-computer.html#schematic-2)
+* Tinkercad of the [original schematic]({{ page.url }}#schematic-2)
 ![404]({{ site.url }}/images/8bit/clock/clock8.PNG)
 [Open tinkercad](https://www.tinkercad.com/things/j2aXkFz1LPm-555-timer-p7)
 
@@ -335,7 +352,7 @@ Datasheet recomends:
     * Therefore the tinkercad implementations have a \\(220\Omega\\) resistor in series with output LEDs.
 
 #### Tinkercad
-* Tinkercad of the [logic circuit]({{ site.url }}/hardware/2021/06/26/8-bit-computer.html#logic-circuit) without the HLT inverter and last AND gate.
+* Tinkercad of the [logic circuit]({{ page.url }}#logic-circuit) without the HLT inverter and last AND gate.
 ![404]({{ site.url }}/images/8bit/clock/clock10.PNG)
 [Open tinkercad](https://www.tinkercad.com/things/28oIl6FzuZA-555-timer-p9)
 
@@ -492,9 +509,9 @@ Datasheet recomends:
 * Used in this project as building multiple 8 bit registers with just basic logic gates is a cumbersome repetitive process not necessarily in line with the goal of the project.
 
 ### Building an 8-bit register
-* We will be using 2 [74LS173A]({{ site.url }}/hardware/2021/06/26/8-bit-computer.html#74ls173a-4-bit-registers) chips for each 8 bit register
+* We will be using 2 [74LS173A]({{ page.url }}#74ls173a-4-bit-registers) chips for each 8 bit register
 * It has a built-in tri-state logic gate with the default output set to be disconnected unless the output control is enabled
-  * Since we want to be able to see at all times what's the value of the register, we will turn the output cotroll to be always enabled, put a LED in series, and then manually add another tri-state logic gate with the [74LS245]({{ site.url }}/hardware/2021/06/26/8-bit-computer.html#74ls245-octal-bus-transceiver-used-as-tri-state-logic-gate).
+  * Since we want to be able to see at all times what's the value of the register, we will turn the output cotroll to be always enabled, put a LED in series, and then manually add another tri-state logic gate with the [74LS245]({{ page.url }}#74ls245-octal-bus-transceiver-used-as-tri-state-logic-gate).
 
 ![404]({{ site.url }}/images/8bit/register/8bitregister.PNG)
 * The 74LS173A requires both M and N to have 0V (grounded) to output the contents of the 4-bit
@@ -507,10 +524,22 @@ Datasheet recomends:
 * CLR: resets bits to 0, should be set to ground rather than open.
 * DIR: we always set it high such as the the direction of the tri-state logic gate is always from 
 
+#### Tinkercad
 * Tinkercad [implementation](https://www.tinkercad.com/things/bljhgWwFIZf-8-bit-register).
 ![404]({{ site.url }}/images/8bit/register/register4.PNG)
   * **BUS to register**: The inputs of the registers (who have not  load pin low (load = 1) in this context) are connected to the outputs of the tri-state logic gate (who has not enable pin high (enable = 0)) that connects to the bus (light blue cables)
+![404]({{ site.url }}/images/8bit/register/bus3.PNG)
   * **Register to BUS**: The outputs of the registers are always connected (M, N, pins to ground so we can see the register contents with the LEDs) to the tri-state logic gate (who has not enable pin low (enable = 1) in this context) such that it can be sent to the bus (green cables)
+
+#### Schematic for Register A (same as B)
+![404]({{ site.url }}/images/8bit/register/schematic.PNG)
+  * Perhaps remove the LEDs or increase the resistor resistance to \\(1k\Omega\\)
+  * AI = Load
+  * AO = Enable
+  * \\(A_n\\) = input for the [ALU]({{ page.url }}#arithmetic-logic-unit-alu) A's n input
+
+#### Schematic for Instruction Register
+![404]({{ site.url }}/images/8bit/register/schematic2.PNG)
 
 #### Testing the register with a temporary bus
 * If there's no connection to a bus and you set load high, the 74LS173A chip will default the inputs as high voltage as there's typically a pull-up resistor, therefore all the bits of the register will set to 1 if there's an open circuit with the bus
@@ -523,9 +552,101 @@ Datasheet recomends:
 * Then connect another register to the bus and transfer the contents (which should appear in the next clock cycle).
 ![404]({{ site.url }}/images/8bit/register/move2.PNG)
 
+#### My testing experience
+* The register outputs and BUS LEDs without resistors, although allowed by the LS chips, seemed to sink too much current due to their low resistance (and that next they are connected to ground), and I wasn't able to send 8 ON bits from one register to the other until I removed the bits from the outputs and added a series \\(220\Omega\\) resistor to each LED in the BUS.
+* Therefore my 8-bit computer won't have register LEDs, the only way to debug the register contents will be by enabling its contents to the BUS.
+
 ### Instruction register
 * The instruction register is identical besides that it is aestethically mirrored as we will place it on the left side of the computer
 * Also it will only connect the 4 least significant bits (yellow) to the BUS, as the other 4 will connect to into the instruction decoder (next chapters)
 ![404]({{ site.url }}/images/8bit/register/ir.PNG)
+
+## Arithmetic Logic Unit (ALU)
+### Adding numbers
+* Adding 2 bits has 4 logic variables:
+  * bit \\(A_n\\)
+  * bit \\(B_n\\)
+  * carry \\(C_n\\) also known as "carry in"
+  * carry \\(C_{n+1}\\), also known as "carry out" for \\(A_{n+1} + B_{n+1}\\) (and implicitly \\(+ C_{n+1}\\))
+
+![404]({{ site.url }}/images/8bit/alu/full-adder-circuit.png)
+* You can replicate the same circuit k times to have a k-bit full adder (and use the last carry out bit to eventually display the most significant bit to not overlfow the result)
+  * The carry out of the adder \\(n\\) is the carry in of the adder \\(n+1\\)
+
+### 4-bit adder (74LS283)
+![404]({{ site.url }}/images/8bit/alu/4bitadder.PNG)
+* The 74LS283 chip implements the same logic as above.
+![404]({{ site.url }}/images/8bit/alu/74LS283.PNG)
+  * C0 is the carry in
+  * C4 is the carry out, which we can use to cascade another 74LS283 4-bit adder
+
+### Negative numbers
+* There are multiple ways to represent binary negative numbers
+![404]({{ site.url }}/images/8bit/alu/negatives.png)
+  * **Sign and magnitud**: uses the most significant bit (MSB) as a sign bit, when such bit is 0 the number is positive, when the MSB is 1 the number is the same \\(\cdot -1\\)
+  * **1's complement**: Flips zeros and 1s (XOR all 1's) to make the negative version
+  * **2's complement**: To make the negative version you XOR all 1's  and then XOR the least significant bit (LSB) with 1 (so 1 C's negative + 1)
+* 2's complement is our choice to represent negative numbers since subtraction can use the same algorithm as addition.
+  * We just have to always ignore the last carry bit
+  * **Overflow example:** When 4 bit full adders sum 0111 (7) + 0001 (1) we end up with 1000 (-8)
+    * MSB is 1, so it's negative
+      * flip(1000) = 0111
+      * XOR(1,0111) = 1000 = \\(2^3\\) = 8
+      * 1000 = -8
+  * Therefore the range of 2's complement is \\([-2^{k-1}, 2^{k-1}-1]\\)
+
+### ALU design
+* Our ALU will only do addition and subtraction
+* We will also connect the output of registers A and B directly to the inputs of the ALU
+* It will output to the BUS either:
+  * A+B (\\(EO\\))
+    * E symbolizes \\(\Sigma\\), which is the sum
+  * A-B (\\(SU\\))
+    * S symbolizes "subtraction"
+
+![404]({{ site.url }}/images/8bit/alu/design.PNG)
+* AI/BI stands for load bus to A/B 
+* AO/BO stands for enable A/B onto the BUS
+
+* Just like with the registers, we don't want to connect (and sink current) to the BUS at all times. We therefore also use tri-state logic gates to output to the bus (high, low or disconnect (aka not interact))
+![404]({{ site.url }}/images/8bit/alu/design2.PNG)
+* The XORs gates for B outputs can be triggered with a unique signal that XORs B with all 1's such that B is inverted, then to subract A-B we only need to do A + inverted B + 1 (2's complement sum = subtraction)
+  * It'd be cumbersome to implement another full adder just to sum 1.
+  * Instead we can use the carry in bit of the least significant 4-bits adder and connect it together with the signal to XOR all 1's such that the adder already takes care of finishing the negation in 2's complement of B by summing 1 each time we decide to XOR all B's outputs
+* Therefore \\(EO\\) and \\(SU\\) are not exclusive instructions:
+  * \\(EO\\) high and \\(SU\\) low = output A+B
+  * \\(EO\\) high and \\(SU\\) high = output A-B
+  * \\(EO\\) low = disconnect from BUS
+
+### Building the ALU
+* Components:
+  * 2 4-bit adders chips (74LS283)
+  * 2 XOR gates chips (74LS86)
+  * 1 tri-state buffer chip (74LS245)
+* Steps:
+  1. Connect power and ground pins
+  2. Connect carry out of LSB adder (right) to carry in of MSB adder (left)
+  3. Connect outputs of A register to ALU's \\(A_n\\):
+     * Since the outputs are bloated with LEDs, we can also take the inputs of the tristate buffer of register A (which is connected to outputs of register A)
+     * The tri-state buffer pins are BIG endian (the most significant bit (leftmost number) has the smallest address (A1)) while the adder is little endian (the least significant bit has the smallest address (A1))
+       * \\(\text{Buffer } A_8 = \text{LSB adder (right) } A_1\\)
+       * \\(\text{Buffer } A_7 = \text{LSB adder (right) } A_2\\)
+       * \\(\text{Buffer } A_6 = \text{LSB adder (right) } A_3\\)
+       * \\(\text{Buffer } A_5 = \text{LSB adder (right) } A_4\\)
+       * \\(\text{Buffer } A_4 = \text{MSB adder (left) } A_1\\)
+       * \\(\text{Buffer } A_3 = \text{MSB adder (left) } A_2\\)
+       * \\(\text{Buffer } A_2 = \text{MSB adder (left) } A_3\\)
+       * \\(\text{Buffer } A_1 = \text{MSB adder (left) } A_4\\)
+  4. Connect outputs of the adders to the tri-state gate inputs:
+    * \\(\text{Buffer } A_8 = \text{LSB adder (right) } \Sigma 1\\)
+    * \\(\text{Buffer } A_7 = \text{LSB adder (right) } \Sigma  2\\)
+    * \\(\text{Buffer } A_6 = \text{LSB adder (right) } \Sigma 3\\)
+    * \\(\text{Buffer } A_5 = \text{LSB adder (right) } \Sigma 4\\)
+    * \\(\text{Buffer } A_4 = \text{MSB adder (left) } \Sigma 1\\)
+    * \\(\text{Buffer } A_3 = \text{MSB adder (left) } \Sigma 2\\)
+    * \\(\text{Buffer } A_2 = \text{MSB adder (left) } \Sigma 3\\)
+    * \\(\text{Buffer } A_1 = \text{MSB adder (left) } \Sigma 4\\)
+
+#### Tinkercad
 
 
