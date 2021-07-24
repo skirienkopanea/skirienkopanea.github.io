@@ -375,7 +375,7 @@ Datasheet recomends:
 ![404]({{ site.url }}/images/8bit/clock/clock12.PNG)
 [Open tinkercad](https://www.tinkercad.com/things/0oDN7oQGoQR-555-timer-p11)
 
-![404]({{ site.url }}/images/8bit/clock/schematic.PNG)
+![404]({{ site.url }}/images/8bit/clock/schematic.png)
 
 ## Registers
 * Most CPUs (central processing unit) have a number of registers which store small amounts of data that the CPU is processing. In our breadboard CPU, we'll build three 8-bit registers: A, B, and IR (instruction register)
@@ -533,13 +533,13 @@ Datasheet recomends:
   * **Register to BUS**: The outputs of the registers are always connected (M, N, pins to ground so we can see the register contents with the LEDs) to the tri-state logic gate (who has not enable pin low (enable = 1) in this context) such that it can be sent to the bus (green cables)
 
 #### Schematic for Register A (same as B)
-![404]({{ site.url }}/images/8bit/register/schematic.PNG)
+![404]({{ site.url }}/images/8bit/register/schematic.png)
   * AI = Load
   * AO = Enable
   * \\(A_n\\) = input for the [ALU]({{ page.url }}#arithmetic-logic-unit-alu) A's n input
 
 #### Schematic for Instruction Register
-![404]({{ site.url }}/images/8bit/register/schematic2.PNG)
+![404]({{ site.url }}/images/8bit/register/schematic2.png)
 
 #### Testing the register with a temporary bus
 * If there's no connection to a bus and you set load high, the 74LS173A chip will default the inputs as high voltage as there's typically a pull-up resistor, therefore all the bits of the register will set to 1 if there's an open circuit with the bus
