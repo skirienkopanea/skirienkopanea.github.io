@@ -61,6 +61,7 @@ tags: project
     - [ALU design](#alu-design)
     - [Building the ALU](#building-the-alu)
       - [Tinkercad](#tinkercad-5)
+    - [Testing the ALU](#testing-the-alu)
 
 ## Introduction
 Ben Eater is an online educator on computer-related topics from which I'm following his 8-bit computer project. [https://eater.net/8bit](https://eater.net/8bit). The computer is composed of different modules, which are built on breadboards. The modules are the clock module, registers and ALU (arithmetic and logic unit) module, RAM (random access memory) and program counter module, and output and control logic module.
@@ -533,7 +534,6 @@ Datasheet recomends:
 
 #### Schematic for Register A (same as B)
 ![404]({{ site.url }}/images/8bit/register/schematic.PNG)
-  * Perhaps remove the LEDs or increase the resistor resistance to \\(1k\Omega\\)
   * AI = Load
   * AO = Enable
   * \\(A_n\\) = input for the [ALU]({{ page.url }}#arithmetic-logic-unit-alu) A's n input
@@ -554,7 +554,7 @@ Datasheet recomends:
 
 #### My testing experience
 * The register outputs and BUS LEDs without resistors, although allowed by the LS chips, seemed to sink too much current due to their low resistance (and that next they are connected to ground), and I wasn't able to send 8 ON bits from one register to the other until I removed the bits from the outputs and added a series \\(220\Omega\\) resistor to each LED in the BUS.
-* Therefore my 8-bit computer won't have register LEDs, the only way to debug the register contents will be by enabling its contents to the BUS.
+* Therefore my 8-bit computer will always have a resistor in series with each LED.
 
 ### Instruction register
 * The instruction register is identical besides that it is aestethically mirrored as we will place it on the left side of the computer
@@ -625,28 +625,63 @@ Datasheet recomends:
   * 1 tri-state buffer chip (74LS245)
 * Steps:
   1. Connect power and ground pins
-  2. Connect carry out of LSB adder (right) to carry in of MSB adder (left)
+  2. Connect carry out of LSB adder (right C4) to carry in of MSB adder (left C0)
   3. Connect outputs of A register to ALU's \\(A_n\\):
      * Since the outputs are bloated with LEDs, we can also take the inputs of the tristate buffer of register A (which is connected to outputs of register A)
-     * The tri-state buffer pins are BIG endian (the most significant bit (leftmost number) has the smallest address (A1)) while the adder is little endian (the least significant bit has the smallest address (A1))
-       * \\(\text{Buffer } A_8 = \text{LSB adder (right) } A_1\\)
-       * \\(\text{Buffer } A_7 = \text{LSB adder (right) } A_2\\)
-       * \\(\text{Buffer } A_6 = \text{LSB adder (right) } A_3\\)
-       * \\(\text{Buffer } A_5 = \text{LSB adder (right) } A_4\\)
-       * \\(\text{Buffer } A_4 = \text{MSB adder (left) } A_1\\)
-       * \\(\text{Buffer } A_3 = \text{MSB adder (left) } A_2\\)
-       * \\(\text{Buffer } A_2 = \text{MSB adder (left) } A_3\\)
-       * \\(\text{Buffer } A_1 = \text{MSB adder (left) } A_4\\)
-  4. Connect outputs of the adders to the tri-state gate inputs:
-    * \\(\text{Buffer } A_8 = \text{LSB adder (right) } \Sigma 1\\)
-    * \\(\text{Buffer } A_7 = \text{LSB adder (right) } \Sigma  2\\)
-    * \\(\text{Buffer } A_6 = \text{LSB adder (right) } \Sigma 3\\)
-    * \\(\text{Buffer } A_5 = \text{LSB adder (right) } \Sigma 4\\)
-    * \\(\text{Buffer } A_4 = \text{MSB adder (left) } \Sigma 1\\)
-    * \\(\text{Buffer } A_3 = \text{MSB adder (left) } \Sigma 2\\)
-    * \\(\text{Buffer } A_2 = \text{MSB adder (left) } \Sigma 3\\)
-    * \\(\text{Buffer } A_1 = \text{MSB adder (left) } \Sigma 4\\)
+     * The [tri-state buffer]({{ page.url }}#74ls245-octal-bus-transceiver-used-as-tri-state-logic-gate) pins are BIG endian (the most significant bit (leftmost number) has the smallest address (A1)) while the [adder]({{ page.url }}#4-bit-adder-74ls283) is little endian (the least significant bit has the smallest address (A1))
+       * \\(\text{Buffer}_A A_8\ (pin\ 9) = \text{LSB adder (right) } A_1\ (pin\ 5)\\)
+       * \\(\text{Buffer}_A A_7\ (pin\ 8) = \text{LSB adder (right) } A_2\ (pin\ 3)\\)
+       * \\(\text{Buffer}_A A_6\ (pin\ 7) = \text{LSB adder (right) } A_3\ (pin\ 14)\\)
+       * \\(\text{Buffer}_A A_5\ (pin\ 6) = \text{LSB adder (right) } A_4\ (pin\ 12)\\)
+       * \\(\text{Buffer}_A A_4\ (pin\ 5) = \text{MSB adder (left) } A_1\ (pin\ 5)\\)
+       * \\(\text{Buffer}_A A_3\ (pin\ 4) = \text{MSB adder (left) } A_2\ (pin\ 3)\\)
+       * \\(\text{Buffer}_A A_2\ (pin\ 3) = \text{MSB adder (left) } A_3\ (pin\ 14)\\)
+       * \\(\text{Buffer}_A A_1\ (pin\ 2) = \text{MSB adder (left) } A_4\ (pin\ 12)\\)
+  4. Connect outputs of the adders to the tri-state gate inputs (of the ALU module):
+    * \\(\text{Buffer}_{ALU} A_8\ (pin\ 9) = \text{LSB adder (right) } \Sigma 1\ (pin\ 4)\\)
+    * \\(\text{Buffer}_{ALU} A_7\ (pin\ 8) = \text{LSB adder (right) } \Sigma  2\ (pin\ 1)\\)
+    * \\(\text{Buffer}_{ALU} A_6\ (pin\ 7) = \text{LSB adder (right) } \Sigma 3\ (pin\ 13)\\)
+    * \\(\text{Buffer}_{ALU} A_5\ (pin\ 6) = \text{LSB adder (right) } \Sigma 4\ (pin\ 10)\\)
+    * \\(\text{Buffer}_{ALU} A_4\ (pin\ 5) = \text{MSB adder (left) } \Sigma 1\ (pin\ 4)\\)
+    * \\(\text{Buffer}_{ALU} A_3\ (pin\ 4) = \text{MSB adder (left) } \Sigma 2\ (pin\ 1)\\)
+    * \\(\text{Buffer}_{ALU} A_2\ (pin\ 3) = \text{MSB adder (left) } \Sigma 3\ (pin\ 13)\\)
+    * \\(\text{Buffer}_{ALU} A_1\ (pin\ 2) = \text{MSB adder (left) } \Sigma 4\ (pin\ 10)\\)
+  5. Connect outputs of B register to one of the inputs of XOR gates
+  6. Connect all other inputs of the gates together, as well as the carry in of the least significant adder (right C0)
+     * Connect a hookup cable connected to these conections to either \\(V_{cc}\\) or ground (this is our subtract signal)  
+  7. Connect outputs of XOR gates to ALU's \\(B_n\\):
+     * Remember to pair whichever XOR gate had Buffer B1 as an input with the MSB (left) adder B4 pin, etc.:
+       * \\(\text{Buffer}_B A_8\ (pin\ 9) = \text{XOR output with input from LSB adder (right) } B_1\ (pin\ 5)\\)
+       * \\(\text{Buffer}_B A_7\ (pin\ 8) = \text{XOR output with input from LSB adder (right) } B_2\ (pin\ 3)\\)
+       * \\(\text{Buffer}_B A_6\ (pin\ 7) = \text{XOR output with input from LSB adder (right) } B_3\ (pin\ 14)\\)
+       * \\(\text{Buffer}_B A_5\ (pin\ 6) = \text{XOR output with input from LSB adder (right) } B_4\ (pin\ 12)\\)
+       * \\(\text{Buffer}_B A_4\ (pin\ 5) = \text{XOR output with input from MSB adder (left) } B_1\ (pin\ 5)\\)
+       * \\(\text{Buffer}_B A_3\ (pin\ 4) = \text{XOR output with input from MSB adder (left) } B_2\ (pin\ 3)\\)
+       * \\(\text{Buffer}_B A_2\ (pin\ 3) = \text{XOR output with input from MSB adder (left) } B_3\ (pin\ 14)\\)
+       * \\(\text{Buffer}_B A_1\ (pin\ 2) = \text{XOR output with input from MSB adder (left) } B_4\ (pin\ 12)\\)
+  8. Connect enable hookup cable for the tri-state buffer 
+  9. Set the direction pin of the tri-state buffer high
+  10. Connect the output of the tristate buffer of the ALU to the BUS
+  11. Optional: hookup LEDs to the tristate buffer inputs of the ALU
 
 #### Tinkercad
 
+### Testing the ALU
+* Because the registers only load from the BUS at clock rise, if we ENABLE the ALU onto the BUS and LOAD the BUS onto a register, when we advance 1 clock cycle this will happens. If we are adding:
+  * at t0 (before advancing clock cycle) the BUS shows A+B (let's say)
+  * then at t1:
+    * register A = ALU at t0
+    * ALU = A (which is ALU at t0) + B
+    * BUS = ALU (which is ALU at t0) + B
+  * This is basically BUS += b at each clock cycle
+* If we only have LEDs hooked up to the bus, we can debug B++, A++, B--, A-- in a similar fashion
+  * 1 clear the contents of both registers
+  * Load all 1s to one register (by having high load and nobody enabling the bus)
+  * Load all 1s except the least significant bit (by connecting that bit on the bus to ground) of the other register
+  * The sum should be 00000001
+  * Clear both registers and load the BUS onto the register that you want to test (and its connection with the ALU)
+  * Peform the steps mentioned at the beginning of this section, and do all permutations of (A/B clear, the other with 1) x sum/subtract
+* Then you can also utilize the random D-latch starting values to generate test cases from those random boot register values with almost no setup costs.
+
+![404]({{ site.url }}/images/8bit/alu/test.PNG)
 
