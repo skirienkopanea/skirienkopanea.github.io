@@ -624,11 +624,10 @@ Datasheet recomends:
   * 2 XOR gates chips (74LS86)
   * 1 tri-state buffer chip (74LS245)
 * Steps:
-  1. Connect power and ground pins
+  1. Connect power/ground pins of all ALU chips and DIR (\\(V_{cc}\\) to pin 1) of the tri-state buffer of the ALU 
   2. Connect carry out of LSB adder (right C4) to carry in of MSB adder (left C0)
-  3. Connect outputs of A register to ALU's \\(A_n\\):
-     * Since the outputs are bloated with LEDs, we can also take the inputs of the tristate buffer of register A (which is connected to outputs of register A)
-     * The [tri-state buffer]({{ page.url }}#74ls245-octal-bus-transceiver-used-as-tri-state-logic-gate) pins are BIG endian (the most significant bit (leftmost number) has the smallest address (A1)) while the [adder]({{ page.url }}#4-bit-adder-74ls283) is little endian (the least significant bit has the smallest address (A1))
+  3. Connect outputs of A register to ALU's adders \\(A_n\\) inputs:
+     * The [tri-state buffer]({{ page.url }}#74ls245-octal-bus-transceiver-used-as-tri-state-logic-gate) pins of register A are BIG endian (the most significant bit (leftmost number) has the smallest address (A1)) while the [adder]({{ page.url }}#4-bit-adder-74ls283) is little endian (the least significant bit has the smallest address (A1))
        * \\(\text{Buffer}_A A_8\ (pin\ 9) = \text{LSB adder (right) } A_1\ (pin\ 5)\\)
        * \\(\text{Buffer}_A A_7\ (pin\ 8) = \text{LSB adder (right) } A_2\ (pin\ 3)\\)
        * \\(\text{Buffer}_A A_6\ (pin\ 7) = \text{LSB adder (right) } A_3\ (pin\ 14)\\)
@@ -647,24 +646,35 @@ Datasheet recomends:
     * \\(\text{Buffer}_{ALU} A_2\ (pin\ 3) = \text{MSB adder (left) } \Sigma 3\ (pin\ 13)\\)
     * \\(\text{Buffer}_{ALU} A_1\ (pin\ 2) = \text{MSB adder (left) } \Sigma 4\ (pin\ 10)\\)
   5. Connect outputs of B register to one of the inputs of XOR gates
-  6. Connect all other inputs of the gates together, as well as the carry in of the least significant adder (right C0)
+     * For simplicity, connect MSB bit with left XOR input B4:
+       * \\(\text{Buffer}_B A_8\ (pin\ 9) = \text{right XOR input } 1B\\)
+       * \\(\text{Buffer}_B A_7\ (pin\ 8) = \text{right XOR input } 2B\\)
+       * \\(\text{Buffer}_B A_6\ (pin\ 7) = \text{right XOR input } 3B\\)
+       * \\(\text{Buffer}_B A_5\ (pin\ 6) = \text{right XOR input } 4B\\)
+       * \\(\text{Buffer}_B A_4\ (pin\ 5) = \text{left XOR input } 1B\\)
+       * \\(\text{Buffer}_B A_3\ (pin\ 4) = \text{left XOR input } 2B\\)
+       * \\(\text{Buffer}_B A_2\ (pin\ 3) = \text{left XOR input } 3B\\)
+       * \\(\text{Buffer}_B A_1\ (pin\ 2) = \text{left XOR input } 4B\\)
+  6. Connect all other inputs of the gates together (A inputs), as well as the "carry in" of the least significant adder (right C0)
      * Connect a hookup cable connected to these conections to either \\(V_{cc}\\) or ground (this is our subtract signal)  
-  7. Connect outputs of XOR gates to ALU's \\(B_n\\):
+  7. Connect outputs of XOR gates to adders \\(B_n\\):
      * Remember to pair whichever XOR gate had Buffer B1 as an input with the MSB (left) adder B4 pin, etc.:
-       * \\(\text{Buffer}_B A_8\ (pin\ 9) = \text{XOR output with input from LSB adder (right) } B_1\ (pin\ 5)\\)
-       * \\(\text{Buffer}_B A_7\ (pin\ 8) = \text{XOR output with input from LSB adder (right) } B_2\ (pin\ 3)\\)
-       * \\(\text{Buffer}_B A_6\ (pin\ 7) = \text{XOR output with input from LSB adder (right) } B_3\ (pin\ 14)\\)
-       * \\(\text{Buffer}_B A_5\ (pin\ 6) = \text{XOR output with input from LSB adder (right) } B_4\ (pin\ 12)\\)
-       * \\(\text{Buffer}_B A_4\ (pin\ 5) = \text{XOR output with input from MSB adder (left) } B_1\ (pin\ 5)\\)
-       * \\(\text{Buffer}_B A_3\ (pin\ 4) = \text{XOR output with input from MSB adder (left) } B_2\ (pin\ 3)\\)
-       * \\(\text{Buffer}_B A_2\ (pin\ 3) = \text{XOR output with input from MSB adder (left) } B_3\ (pin\ 14)\\)
-       * \\(\text{Buffer}_B A_1\ (pin\ 2) = \text{XOR output with input from MSB adder (left) } B_4\ (pin\ 12)\\)
+       * \\(\text{left XOR output 1} = \text{LSB adder (right) input } B_1\ (pin\ 6)\\)
+       * \\(\text{left XOR output 2} = \text{LSB adder (right) input } B_2\ (pin\ 2)\\)
+       * \\(\text{left XOR output 3} = \text{LSB adder (right) input } B_3\ (pin\ 15)\\)
+       * \\(\text{left XOR output 4} = \text{LSB adder (right) input } B_4\ (pin\ 11)\\)
+       * \\(\text{left XOR output 1} = \text{MSB adder (left) input } B_1\ (pin\ 6)\\)
+       * \\(\text{left XOR output 2} = \text{MSB adder (left) input } B_2\ (pin\ 2)\\)
+       * \\(\text{left XOR output 3} = \text{MSB adder (left) input } B_3\ (pin\ 15)\\)
+       * \\(\text{left XOR output 4} = \text{MSB adder (left) input } B_4\ (pin\ 11)\\)
   8. Connect enable hookup cable for the tri-state buffer 
-  9. Set the direction pin of the tri-state buffer high
+  9.  Set the direction pin of the tri-state buffer high
   10. Connect the output of the tristate buffer of the ALU to the BUS
   11. Optional: hookup LEDs to the tristate buffer inputs of the ALU
 
 #### Tinkercad
+![404]({{ site.url }}/images/8bit/alu/tinker.PNG)
+Open [tinkercad](https://www.tinkercad.com/things/4PaTMquHAzK-8-bit-alu-sum-and-subtract).
 
 ### Testing the ALU
 * Because the registers only load from the BUS at clock rise, if we ENABLE the ALU onto the BUS and LOAD the BUS onto a register, when we advance 1 clock cycle this will happens. If we are adding:
