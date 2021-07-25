@@ -602,11 +602,11 @@ Datasheet recomends:
   * A+B (\\(EO\\))
     * E symbolizes \\(\Sigma\\), which is the sum
   * A-B (\\(SU\\))
-    * S symbolizes "subtraction"
+    * SU symbolizes "subtraction"
 
 ![404]({{ site.url }}/images/8bit/alu/design.PNG)
-* AI/BI stands for load bus to A/B 
-* AO/BO stands for enable A/B onto the BUS
+* AI/BI stands for load bus to A/B (load *A/B input* from BUS)
+* AO/BO stands for enable A/B onto the BUS (enable *A/B output* to BUS)
 
 * Just like with the registers, we don't want to connect (and sink current) to the BUS at all times. We therefore also use tri-state logic gates to output to the bus (high, low or disconnect (aka not interact))
 ![404]({{ site.url }}/images/8bit/alu/design2.PNG)
@@ -684,13 +684,14 @@ Open [tinkercad](https://www.tinkercad.com/things/4PaTMquHAzK-8-bit-alu-sum-and-
     * ALU = A (which is ALU at t0) + B
     * BUS = ALU (which is ALU at t0) + B
   * This is basically BUS += b at each clock cycle
-* If we only have LEDs hooked up to the bus, we can debug B++, A++, B--, A-- in a similar fashion
+* If we only have LEDs hooked up to the bus, we can debug B++, A++, and B-- in a similar fashion
   * 1 clear the contents of both registers
-  * Load all 1s to one register (by having high load and nobody enabling the bus)
-  * Load all 1s except the least significant bit (by connecting that bit on the bus to ground) of the other register
-  * The sum should be 00000001
-  * Clear both registers and load the BUS onto the register that you want to test (and its connection with the ALU)
+  * Load all 1s to register A (by having high load and nobody enabling the bus)
+  * Load all 1s except the least significant bit (by connecting that bit on the bus to ground) in register B
+  * The subtraction should be \\(-1 --2 = 1\\)
+  * Clear both registers and load the BUS (which has number 1) onto the register that you want to test (and its connection with the ALU)
   * Peform the steps mentioned at the beginning of this section, and do all permutations of (A/B clear, the other with 1) x sum/subtract
+  * A-- cannot be tested since only the sign of B can be changed with the SU signal
 * Then you can also utilize the random D-latch starting values to generate test cases from those random boot register values with almost no setup costs.
 
 ![404]({{ site.url }}/images/8bit/alu/test.PNG)
