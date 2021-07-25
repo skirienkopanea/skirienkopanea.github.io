@@ -69,6 +69,9 @@ tags: project
     - [Difference between registers and memory](#difference-between-registers-and-memory)
     - [Address decoder](#address-decoder)
     - [74LS189 (16 4-word address RAM)](#74ls189-16-4-word-address-ram)
+    - [Building the RAM](#building-the-ram)
+      - [Fixing the outputs and merging signal pins](#fixing-the-outputs-and-merging-signal-pins)
+      - [Replacing hookup wires for switches](#replacing-hookup-wires-for-switches)
   - [Program counter (PC)](#program-counter-pc)
 
 ## Introduction
@@ -809,19 +812,39 @@ Open [tinkercad](https://www.tinkercad.com/things/4PaTMquHAzK-8-bit-alu-sum-and-
 ![404]({{ site.url }}/images/8bit/ram/decoder3.PNG)
 * The additional variable of the AND gates is reserved to the ENABLE signal (not shown in the picture) such that to enable a memory address we just need to provide the address signals and the enable signal
 
-
 ### 74LS189 (16 4-word address RAM)
-![404]({{ site.url }}/images/8bit/register/74LS189.PNG)
+![404]({{ site.url }}/images/8bit/ram/74LS189.PNG)
 * 64 bit random access memory
 * This static RAM holds 16 4-bit words
 * There are 4  An pins to address one of the 16 words (it includes an address decoder)
 * We can hookup the address pins of 2 74189 4-bit word RAMs such that they share the same address signals and one chip stores the 4 MSB and the other one the 4 LSB making it a 8-bit word x 16 addresses RAM (16 byte RAM)
 * The data inputs are Dn
 * Output inputs are \\(\overline{O_n}\\), indeed they are inverted
+* WE = write enable (loads data from the input pins and saves it to the memory given to the address pins), the pin is inverted.
 * CS = chip select (enable to BUS)
-  * The pin is inverted, so we will connect it to ground (such that it is always enabled) and connect it to a tri-state buffer like we did with the registers. This is necessary because everytime we are not writing we are outputting, so we can at least use a tri-state buffer to prevent it from altering the BUS when it's not loading it (a register could be NOT LOAD & NOT ENABLE (and all other 3 permutations) but this RAM is either NOT LOAD & ENABLE OR LOAD & NOT ENABLE)
-* WE = write enable (loads data from the input pins and saves it to the memory given to the address pins)
-![404]({{ site.url }}/images/8bit/register/74LS189_2.PNG)
+  * The pin is also inverted, so we will connect it to ground (such that it is always enabled so we can hookup LEDs and see its contents) and connect it to a tri-state buffer like we did with the registers. If we don't want to hookup LEDs to the RAM, we can just use the tri-state output logic that the chip itself includes:
+    * \\(\overline{CS}\\) low & \\(\overline{WE}\\) low = Write
+    * \\(\overline{CS}\\) low & \\(\overline{WE}\\) high = Read
+    * \\(\overline{CS}\\) high = disconnect output to BUS
+  * I'm assuming that the inputs don't need a tri-state buffer and can be connected all the time to the BUS since they don't sink that much current anyway as input pins usually have around ten mega ohms of resistance.
+![404]({{ site.url }}/images/8bit/ram/74LS189_2.PNG)
+
+### Building the RAM
+#### Fixing the outputs and merging signal pins
+1. Insert chips 2 74LS189 and 2 74LS04 inverters on the breadboard and hookup the power and ground pins
+2. Hookup outputs of the RAM to the inverter inputs
+3. Hook up resistors and LEDS to the inverted-inverted outputs
+4. Hook up \\(\overline{CS}\\) to ground on both RAMS
+5. Insert 3-state buffer and connect power, ground and dir (to \\(V_{cc}\\)) pins
+6. Connect inverted-inverted outputs to the tri-state bottom pins
+7. Connect same address pins together from both RAMs
+  * Then use a hookup cable for each grouped address pin and connect it to ground as a temporary signal cable
+8. Connect hookup wires to each data pin as a temporary signal (later it will be connected to the DIP switches rather than to the BUS)
+9. Connect both \\(\overline{WE}\\) pins together and a hookup cable to use it as temporary signal
+![404]({{ site.url }}/images/8bit/ram/tinker1.PNG)
+Open [tinkercad](https://www.tinkercad.com/things/arn0aljUBhY-ram-p1)
+
+#### Replacing hookup wires for switches
 
 
 
