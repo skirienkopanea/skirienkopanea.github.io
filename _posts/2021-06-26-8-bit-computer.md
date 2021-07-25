@@ -17,7 +17,7 @@ tags: project
     - [Breadboards](#breadboards)
       - [Sample closed circuit](#sample-closed-circuit)
       - [Common mistakes](#common-mistakes)
-  - [Clock module](#clock-module)
+  - [Clock](#clock)
     - [Astable 555 timer](#astable-555-timer)
       - [Schematic](#schematic)
       - [Step response](#step-response)
@@ -61,7 +61,15 @@ tags: project
     - [ALU design](#alu-design)
     - [Building the ALU](#building-the-alu)
       - [Tinkercad](#tinkercad-5)
+      - [Schematic](#schematic-3)
     - [Testing the ALU](#testing-the-alu)
+  - [Random Access Memory (RAM)](#random-access-memory-ram)
+    - [Register recap](#register-recap)
+      - [DRAM vs SRAM](#dram-vs-sram)
+    - [Difference between registers and memory](#difference-between-registers-and-memory)
+    - [Address decoder](#address-decoder)
+    - [74LS189 (16 4-word address RAM)](#74ls189-16-4-word-address-ram)
+  - [Program counter (PC)](#program-counter-pc)
 
 ## Introduction
 Ben Eater is an online educator on computer-related topics from which I'm following his 8-bit computer project. [https://eater.net/8bit](https://eater.net/8bit). The computer is composed of different modules, which are built on breadboards. The modules are the clock module, registers and ALU (arithmetic and logic unit) module, RAM (random access memory) and program counter module, and output and control logic module.
@@ -116,8 +124,7 @@ We will be using a 5V (volt) power source, which Ben has crafted by cutting off 
 * Integrated circuits:
   * Not connecting an integrated circuit in the middle of the board as that will connect both ends of the IC (making a shortircuit)
 
-##  Clock module
-The clock coordinates everything, it sets the timing of everything.
+##  Clock
 * Components included in the kit:
   * 1 Breadboard
     * Great for experiencing circuits, not intended for permanent ones.
@@ -146,9 +153,9 @@ The clock coordinates everything, it sets the timing of everything.
   * 5 \\(0.1\mu F\\) capacitors
   * 5 \\(1\mu F\\) capacitors
   * 5 \\(10\mu F\\) capacitors
+* The clock coordinates everything, it sets the timing of everything.
 * We are using the 555 timer IC (integrated circuit (chip) below)
 ![404]({{ site.url }}/images/8bit/clock/555.png)
-
 * Our clock is adjustable-speed (from less than 1Hz to a few hundred Hz).
 ![Hertz]({{ site.url }}/images/8bit/clock/1hz.jpg)
    *  One Hertz (Hz) is defined as one cycle per second
@@ -378,13 +385,6 @@ Datasheet recomends:
 ![404]({{ site.url }}/images/8bit/clock/schematic.png)
 
 ## Registers
-* Most CPUs (central processing unit) have a number of registers which store small amounts of data that the CPU is processing. In our breadboard CPU, we'll build three 8-bit registers: A, B, and IR (instruction register)
-  * A and B are general-purpose registers
-  * IR will be used for storing the current instruction that's being executed.
-* The arithmetic logic unit (ALU) part of a CPU is usually capable of performing various arithmetic, bitwise, and comparision operations on binary numbers.
-  * Our ALU is just able to add amd substract
-  * It's connected to the A and B registers
-  * Outputs either A+B or A-B
 * Components included in the kit (including the components for ALU)
   * 4 Breadboards
   * 1 Jumper wire kit
@@ -404,6 +404,13 @@ Datasheet recomends:
   * 10 Yellow LEDs
   * 5 Blue LEDs
   * 10 \\(0.1\mu F\\) capacitors
+* Most CPUs (central processing unit) have a number of registers which store small amounts of data that the CPU is processing. In our breadboard CPU, we'll build three 8-bit registers: A, B, and IR (instruction register)
+  * A and B are general-purpose registers
+  * IR will be used for storing the current instruction that's being executed.
+* The arithmetic logic unit (ALU) part of a CPU is usually capable of performing various arithmetic, bitwise, and comparision operations on binary numbers.
+  * Our ALU is just able to add amd substract
+  * It's connected to the A and B registers
+  * Outputs either A+B or A-B
 
 ### Bus architecture and how registers transfers work
 * Our registers store 8 bits of data and interfaces (as in "provides interaction features") to the BUS
@@ -676,6 +683,10 @@ Datasheet recomends:
 ![404]({{ site.url }}/images/8bit/alu/tinker.PNG)
 Open [tinkercad](https://www.tinkercad.com/things/4PaTMquHAzK-8-bit-alu-sum-and-subtract).
 
+#### Schematic
+![404]({{ site.url }}/images/8bit/alu/schematic.png)
+* The flags register portion of the schematic is described later on as part of the CPU control logic.
+
 ### Testing the ALU
 * Because the registers only load from the BUS at clock rise, if we ENABLE the ALU onto the BUS and LOAD the BUS onto a register, when we advance 1 clock cycle this will happens. If we are adding:
   * at t0 (before advancing clock cycle) the BUS shows A+B (let's say)
@@ -696,3 +707,123 @@ Open [tinkercad](https://www.tinkercad.com/things/4PaTMquHAzK-8-bit-alu-sum-and-
 
 ![404]({{ site.url }}/images/8bit/alu/test.PNG)
 
+## Random Access Memory (RAM)
+* Components in the kit (including the program counter)
+  * 4 Breadboards
+  * 1 74LS00 quad NAND gate
+  * 2 74LS04 hex inverter
+  * 4 74LS157 quad 2-1 line mux (multiplexer)
+  * 1 74LS161 4-bit binary counter
+  * 1 74LS173 4-bit D register
+  * 2 74LS189 64-bit RAM
+  * 2 74LS245 8-bit bus transceiver
+  * 1 Pushbutton
+  * 1 Slide switch
+  * 1 4-position DIP switch
+  * 1 8-position DIP switch
+  * 20 \\(220\Omega\\) resistors
+  * 5 \\(1k\Omega\\) resistors
+  * 10 Red LEDs
+  * 10 Green LEDs
+  * 10 Yellow LEDs
+  * 5 \\(0.01\mu F\\) capacitors (103 code)
+  * 5 \\(0.1\mu F\\) capacitors (104 code)
+* The random access memory (RAM) stores the program the computer is executing as well as any data that the program needs
+
+### Register recap
+* We could store 1 bit of data with an SR latch, and on top of that, require an enable signal together with S and R signals
+  * SR 00 = keep value
+  * SR 01 = 0
+  * SR 10 = 1
+  * SR 11 = illegal state
+  * If not enable the two AND gates always yield SR 00 (keep value)
+![404]({{ site.url }}/images/8bit/register/srlatch.PNG)
+* A D-latch replaces the SR signals with a single data signal (D) which has 2 branches, the one that keeps the same signal goes to S gate, the inverted one goes to R. On top of that we can keep the enable signal with the same logic as before.
+![404]({{ site.url }}/images/8bit/register/srlatch3.PNG)
+  * This logic means that now we can still do SR 00 (low enable), SR 01 and SR 10 as before but not the illegal state SR 11 (which is a good thing to avoid that scenario as it serves no purposes and it's impredictible).
+* A D flip flop is an upgraed D-latch that only sets/resets a bit at a clock pulse (useful feature for better synchronization and less noise bugs)
+![404]({{ site.url }}/images/8bit/register/dflipflop.PNG)
+* We can group several flip flops together to make a register
+![404]({{ site.url }}/images/8bit/register/register1.PNG)
+  * \\(D_n\\) = Input for bit n (usually connected to the BUS)
+  * \\(\text{LOAD}\\) = write onto the register signal (a separate "enable" signal independent from the clock signal, as the latter is already given explicitly by the arrow in the bottom left corner of the D flip flop box symbol)
+  * To finalyze the register we need an output signal that generally allows the register to output each of its bits to the BUS, to do so we use tri-state gates as we want all other outputs of the components not loading the bus to be disconnected from the BUS to avoid conflicts (we dont want a high signal from B overloading a low signal from A nor a low signal B sinking a high signal from A)
+  ![404]({{ site.url }}/images/8bit/register/tri2.PNG)
+    * In this context "IN" would be Q of a D flip flop of a register.
+* A one bit register can be summarized with the symbol below
+![404]({{ site.url }}/images/8bit/ram/1bitregister.PNG)
+* An 8 bit register:
+![404]({{ site.url }}/images/8bit/ram/8bitregister.PNG)
+* A 16 byte ram would essentially be sixteen 8-bit registers packed into 1 chip
+![404]({{ site.url }}/images/8bit/ram/ram.PNG)
+   * With 16 write/enable (y-axis) and 8 (8 bits = 1 byte) data signals (x-axis)
+   * Each of those 16 registers (row), can be given a binary address and together with a decoder we can provide the high voltage signal to the specific register only.
+     * The decoder logic is great because in the context of chips, we can have a decoder inside and limit the amount of external pins needed for the users to specify an address.
+
+#### DRAM vs SRAM
+* Each of the bit cells that make up our RAM can be stored in a simpler circuit than a flip flop with just a transistor and a capacitor
+![404]({{ site.url }}/images/8bit/ram/cell.PNG)
+  * When the capacitor is charged and the address is enabled (word line) the bit voltage is high
+  * When the address is enabled and the capacitor is not charged it behaves like a piece of wire with 0 voltage drop, and since it's connected to ground the bit voltage is low
+  * Drawback: Overtime the capacitor discharges and can only store bits for a few seconds. It also has destructive read as each time we read the content of the bit we are sinking the voltage of the capacitor, so it must be recharged immedeately after reading
+  * Workaround: have a seperate circuit that constantly reads and rewrites the value of the cells.
+    * From here comes the name Dynamic RAM or DRAM (it dynamically refreshes the data each time)
+    * On the other hand a D-latch keeps the data all the time just by keeping the enable signal low, which guarantees SR 00 and the NOR gates will keep the same value (even if the bit is 1, and we have SR and enable to be 0 the NOR gates have an implicit connection to \\(V_{cc}\\) to output 1 if the logic circuit says so without violating the principle of conservation of energy). This is regarded as static RAM or SRAM, and it's the one our computer uses
+* SRAM is generally more expensive than DRAM because you need more transistors (because of the more complex circuit logic)
+* SRAM is generally faster than DRAM
+* We are using SRAM because we dont want to build the refresh circuit (although in a larger scale computer it is more convinient to have a cheaper DRAM and a refresh circuit)
+
+### Difference between registers and memory
+* "Memory" generally regards to RAM
+* The basic difference between the register and memory is that the register holds the data that CPU is currently processing whereas the memory (RAM) holds program instruction and data that the program requires for execution.
+  * Furthermore, typical registers are:
+    * Data register: holds the operands to be operated by the processor.
+      * Such as our A and B registers
+    * Memory Address register: holds the adress of a memory location
+    * Accumulator: holds the result computed by the processor
+      * For us the output of the ALU itself is already connected to the bus
+    * Instruction register: holds the instruction code that is currently being executed. (i.e. ENABLE ALU, LOAD A)
+    * Program Counter: holds the address of instruction that is to be executed by the processor. (TO DO: clarify this)
+    * Temporary Register: holds the temporary intermediate result computed by the processor.
+    * Input Register: holds the input character received from an input device and delivered it to the Accumulator.
+      * Not implemented
+    * Output Register: holds the output character received from Accumulator and deliver it to the output device.
+      * The register for our decimal display
+* Usually the RAM is deliberately placed close or inside the "processor" (what physically constitutes being inside/outside the processor chips depends on the manufacturer and it changes over the years), but historically the RAM would be farther from the CPU than the registers, the RAM is also bigger and slower.
+  * RAM is called "random" because if you choose a random address (via the multiplexer) it will take the same time to read/write for all addresses as opposite to secondary memory (magnetic,  optical  and  flash), where the time required to read and write data varies depending on the physical location of the address due to mechanical limitations such as media rotation speeds and arm movement. 
+    * Secondary memory keeps data even when there's no power (as opposed to the SR latches that the registers use that start with a new random value at every circuit step response). It can only be processed by the CPU by copying it first into primary memory (as opposed to RAM that can be accessed directly via the BUS) via I/O channels.
+
+### Address decoder
+* With a decoder the total number of address selection pins required is \\(log_2(\text{total address count}\\)), i.e. (the 16th address, starting at 1st address = 0000, would be 1111)
+![404]({{ site.url }}/images/8bit/ram/decoder1.PNG)
+![404]({{ site.url }}/images/8bit/ram/decoder2.PNG)
+* Do not confuse a decoder with a multiplexer. The multpilexer has \\(n\\) selection inputs with at most \\(2^n\\) data inputs for which then the multiplexer outputs just 1 of the data inputs (looks like a decoder with a final OR gate to just have 1 output line. It also looks to make sense in circuits where the data signal is sinusodial)
+![404]({{ site.url }}/images/8bit/ram/mux.PNG)
+![404]({{ site.url }}/images/8bit/ram/mux2.PNG)
+* The decoder on the other hand has n inputs and at most (and generally close to) \\(2^n\\) outputs
+* To build a decoder follow these 3 steps
+  1. Provide a selection pin for each address bit and immedeately breanch out it's inverse
+  2. Build the output AND gates based on binary order:
+     * Smallest address has all inverted pins (0s), biggest address has all non-inverted pins (1s)
+  3. Fill the gap and map the inverted and non-inverted pins with the relevant AND gates
+![404]({{ site.url }}/images/8bit/ram/decoder3.PNG)
+* The additional variable of the AND gates is reserved to the ENABLE signal (not shown in the picture) such that to enable a memory address we just need to provide the address signals and the enable signal
+
+
+### 74LS189 (16 4-word address RAM)
+![404]({{ site.url }}/images/8bit/register/74LS189.PNG)
+* 64 bit random access memory
+* This static RAM holds 16 4-bit words
+* There are 4  An pins to address one of the 16 words (it includes an address decoder)
+* We can hookup the address pins of 2 74189 4-bit word RAMs such that they share the same address signals and one chip stores the 4 MSB and the other one the 4 LSB making it a 8-bit word x 16 addresses RAM (16 byte RAM)
+* The data inputs are Dn
+* Output inputs are \\(\overline{O_n}\\), indeed they are inverted
+* CS = chip select (enable to BUS)
+  * The pin is inverted, so we will connect it to ground (such that it is always enabled) and connect it to a tri-state buffer like we did with the registers. This is necessary because everytime we are not writing we are outputting, so we can at least use a tri-state buffer to prevent it from altering the BUS when it's not loading it (a register could be NOT LOAD & NOT ENABLE (and all other 3 permutations) but this RAM is either NOT LOAD & ENABLE OR LOAD & NOT ENABLE)
+* WE = write enable (loads data from the input pins and saves it to the memory given to the address pins)
+![404]({{ site.url }}/images/8bit/register/74LS189_2.PNG)
+
+
+
+## Program counter (PC)
+* Counts in binary to keep track of which instruction the computer is currently executing
