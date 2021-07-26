@@ -71,7 +71,10 @@ tags: project
     - [74LS189 (16 4-word address RAM)](#74ls189-16-4-word-address-ram)
     - [Building the RAM](#building-the-ram)
       - [Fixing the outputs and merging signal pins](#fixing-the-outputs-and-merging-signal-pins)
-      - [Replacing hookup wires for switches](#replacing-hookup-wires-for-switches)
+    - [Building the memory access register (and a "programming mode" version)](#building-the-memory-access-register-and-a-programming-mode-version)
+    - [Building an 8-bit input terminal for the RAM (to manually store a program)](#building-an-8-bit-input-terminal-for-the-ram-to-manually-store-a-program)
+    - [Relabeling jumperwire signals](#relabeling-jumperwire-signals)
+    - [todo before program counter](#todo-before-program-counter)
   - [Program counter (PC)](#program-counter-pc)
 
 ## Introduction
@@ -119,8 +122,8 @@ We will be using a 5V (volt) power source, which Ben has crafted by cutting off 
   * Resistors don't have polarity
 * Jumper wires:
   * Long flexible wires are convinient for simple circuits but will spagetti-like mess up complex circuits
-  * Pre-cut jump wires have predefined lengths which limit customization
-  * hookup wire and wire strippers to make your own jumper wires:
+  * Pre-cut wires have predefined lengths which limit customization
+  * hookup wire and wire strippers to make your own wires:
     * Make sure to buy solid-core wire and not stranded wire as the latter is made up of multiple individual strands which makes the ends much harder to push into a breadboard
     * As a last resort if stranded wired cannot be solded it can be twisted to increase its tightness.
     * To leave enough space for bending the wires and plug them into the board leave a room of 3 more wholes.
@@ -666,7 +669,7 @@ Datasheet recomends:
        * \\(\text{Buffer}_B A_2\ (pin\ 3) = \text{left XOR input } 3B\\)
        * \\(\text{Buffer}_B A_1\ (pin\ 2) = \text{left XOR input } 4B\\)
   6. Connect all other inputs of the gates together (A inputs), as well as the "carry in" of the least significant adder (right C0)
-     * Connect a hookup cable connected to these conections to either \\(V_{cc}\\) or ground (this is our subtract signal)  
+     * Connect a jumper wire connected to these conections to either \\(V_{cc}\\) or ground (this is our subtract signal)  
   7. Connect outputs of XOR gates to adders \\(B_n\\):
      * Remember to pair whichever XOR gate had Buffer B1 as an input with the MSB (left) adder B4 pin, etc.:
        * \\(\text{left XOR output 1} = \text{LSB adder (right) input } B_1\ (pin\ 6)\\)
@@ -677,7 +680,7 @@ Datasheet recomends:
        * \\(\text{left XOR output 2} = \text{MSB adder (left) input } B_2\ (pin\ 2)\\)
        * \\(\text{left XOR output 3} = \text{MSB adder (left) input } B_3\ (pin\ 15)\\)
        * \\(\text{left XOR output 4} = \text{MSB adder (left) input } B_4\ (pin\ 11)\\)
-  8. Connect enable hookup cable for the tri-state buffer 
+  8. Connect enable jumper wire for the tri-state buffer 
   9.  Set the direction pin of the tri-state buffer high
   10. Connect the output of the tristate buffer of the ALU to the BUS
   11. Optional: hookup LEDs to the tristate buffer inputs of the ALU
@@ -800,7 +803,7 @@ Open [tinkercad](https://www.tinkercad.com/things/4PaTMquHAzK-8-bit-alu-sum-and-
 * With a decoder the total number of address selection pins required is \\(log_2(\text{total address count}\\)), i.e. (the 16th address, starting at 1st address = 0000, would be 1111)
 ![404]({{ site.url }}/images/8bit/ram/decoder1.PNG)
 ![404]({{ site.url }}/images/8bit/ram/decoder2.PNG)
-* Do not confuse a decoder with a multiplexer. The multpilexer has \\(n\\) selection inputs with at most \\(2^n\\) data inputs for which then the multiplexer outputs just 1 of the data inputs (looks like a decoder with a final OR gate to just have 1 output line. It also looks to make sense in circuits where the data signal is sinusodial)
+* Do not confuse a decoder with a multiplexer. The multpilexer has \\(n\\) selection inputs with at most \\(2^n\\) data inputs for which then the multiplexer outputs just 1 of the data inputs (looks like a decoder with a final OR gate to just have 1 output line)
 ![404]({{ site.url }}/images/8bit/ram/mux.PNG)
 ![404]({{ site.url }}/images/8bit/ram/mux2.PNG)
 * The decoder on the other hand has n inputs and at most (and generally close to) \\(2^n\\) outputs
@@ -838,15 +841,33 @@ Open [tinkercad](https://www.tinkercad.com/things/4PaTMquHAzK-8-bit-alu-sum-and-
 5. Insert 3-state buffer and connect power, ground and dir (to \\(V_{cc}\\)) pins
 6. Connect inverted-inverted outputs to the tri-state bottom pins
 7. Connect same address pins together from both RAMs
-  * Then use a hookup cable for each grouped address pin and connect it to ground as a temporary signal cable
-8. Connect hookup wires to each data pin as a temporary signal (later it will be connected to the DIP switches rather than to the BUS)
-9. Connect both \\(\overline{WE}\\) pins together and a hookup cable to use it as temporary signal
+  * Then use a jumper wire for each grouped address pin and connect it to ground as a temporary signal cable
+8. Connect jumper wires to each data pin as a temporary signal (later it will be connected to the DIP switches rather than to the BUS)
+9. Connect both \\(\overline{WE}\\) pins together and a jumper wire to use it as temporary signal
 ![404]({{ site.url }}/images/8bit/ram/tinker1.PNG)
 Open [tinkercad](https://www.tinkercad.com/things/arn0aljUBhY-ram-p1)
 
-#### Replacing hookup wires for switches
+### Building the memory access register (and a "programming mode" version)
+1. The jumper wires for the address will be connected to the outputs of the memory address register, the register that contains the current location of the RAM we've readily available to use
+2. Remove the power rails of a new breadboard and fit it between the clock breadboard and the RAM breadboard
 
+### Building an 8-bit input terminal for the RAM (to manually store a program)
+1. Breadboard
+2. It's only enabled if the programing mode of the address register is enabled
+   1. We use a 2 data input MUX (with 1 select input) for each of the 8 bits that make up a word
+   2. One of the inputs is a bit from the BUS, the other input is a bit from the DIP switch
+   3. All selection pins (of all the bits) are merged and connected to the memory access register switch that toggles between "running mode" (BUS) and "programming mode" (switch)
+3. When we use the "running mode" BEN is loading the inputs from the tri-state buffer at the RAM module that connects to the BUS, and connects it to the B (xor A) inputs of the multiplexer that outputs the data inputs for the RAM. Those cables are long and go over already busy breadboard locations, it'd be easier to just connect it directly to the BUS (horizontal lines)
 
+### Relabeling jumperwire signals
+
+### todo before program counter
+* ram 
+* ir
+* labels
+* bus highway
+* move bus lights to the left of the program counter breadboard
+  * the pc chips will just be shifted to the right
 
 ## Program counter (PC)
 * Counts in binary to keep track of which instruction the computer is currently executing
