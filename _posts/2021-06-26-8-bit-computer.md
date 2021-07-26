@@ -70,9 +70,8 @@ tags: project
     - [Address decoder](#address-decoder)
     - [74LS189 (16 4-word address RAM)](#74ls189-16-4-word-address-ram)
     - [Building the RAM](#building-the-ram)
-      - [Fixing the outputs and merging signal pins](#fixing-the-outputs-and-merging-signal-pins)
     - [Building the memory access register (and a "programming mode" version)](#building-the-memory-access-register-and-a-programming-mode-version)
-    - [Building an 8-bit input terminal for the RAM (to manually store a program)](#building-an-8-bit-input-terminal-for-the-ram-to-manually-store-a-program)
+      - [Building an 8-bit input terminal for the RAM (to manually store a program)](#building-an-8-bit-input-terminal-for-the-ram-to-manually-store-a-program)
     - [Relabeling jumperwire signals](#relabeling-jumperwire-signals)
     - [todo before program counter](#todo-before-program-counter)
   - [Program counter (PC)](#program-counter-pc)
@@ -833,7 +832,6 @@ Open [tinkercad](https://www.tinkercad.com/things/4PaTMquHAzK-8-bit-alu-sum-and-
 ![404]({{ site.url }}/images/8bit/ram/74LS189_2.PNG)
 
 ### Building the RAM
-#### Fixing the outputs and merging signal pins
 1. Insert chips 2 74LS189 and 2 74LS04 inverters on the breadboard and hookup the power and ground pins
 2. Hookup outputs of the RAM to the inverter inputs
 3. Hook up resistors and LEDS to the inverted-inverted outputs
@@ -851,7 +849,7 @@ Open [tinkercad](https://www.tinkercad.com/things/arn0aljUBhY-ram-p1)
 1. The jumper wires for the address will be connected to the outputs of the memory address register, the register that contains the current location of the RAM we've readily available to use
 2. Remove the power rails of a new breadboard and fit it between the clock breadboard and the RAM breadboard
 
-### Building an 8-bit input terminal for the RAM (to manually store a program)
+#### Building an 8-bit input terminal for the RAM (to manually store a program)
 1. Breadboard
 2. It's only enabled if the programing mode of the address register is enabled
    1. We use a 2 data input MUX (with 1 select input) for each of the 8 bits that make up a word
