@@ -60,8 +60,8 @@ tags: project
     - [Negative numbers](#negative-numbers)
     - [ALU design](#alu-design)
     - [Building the ALU](#building-the-alu)
-      - [Tinkercad](#tinkercad-5)
-      - [Schematic](#schematic-3)
+    - [Tinkercad](#tinkercad-5)
+    - [Schematic](#schematic-3)
     - [Testing the ALU](#testing-the-alu)
   - [Random Access Memory (RAM)](#random-access-memory-ram)
     - [Register recap](#register-recap)
@@ -70,8 +70,10 @@ tags: project
     - [Address decoder](#address-decoder)
     - [74LS189 (16 4-word address RAM)](#74ls189-16-4-word-address-ram)
     - [Building the RAM](#building-the-ram)
-    - [Building the memory access register (and a "programming mode" version)](#building-the-memory-access-register-and-a-programming-mode-version)
-      - [Building an 8-bit input terminal for the RAM (to manually store a program)](#building-an-8-bit-input-terminal-for-the-ram-to-manually-store-a-program)
+      - [Tinkercad](#tinkercad-6)
+    - [Building the memory address register (and a "programming mode" version)](#building-the-memory-address-register-and-a-programming-mode-version)
+      - [Tinkercad](#tinkercad-7)
+    - [Building an 8-bit input terminal for the RAM (to manually store a program)](#building-an-8-bit-input-terminal-for-the-ram-to-manually-store-a-program)
     - [Relabeling jumperwire signals](#relabeling-jumperwire-signals)
     - [todo before program counter](#todo-before-program-counter)
   - [Program counter (PC)](#program-counter-pc)
@@ -684,11 +686,11 @@ Datasheet recomends:
   10. Connect the output of the tristate buffer of the ALU to the BUS
   11. Optional: hookup LEDs to the tristate buffer inputs of the ALU
 
-#### Tinkercad
+### Tinkercad
 ![404]({{ site.url }}/images/8bit/alu/tinker.PNG)
 Open [tinkercad](https://www.tinkercad.com/things/4PaTMquHAzK-8-bit-alu-sum-and-subtract).
 
-#### Schematic
+### Schematic
 ![404]({{ site.url }}/images/8bit/alu/schematic.png)
 * The flags register portion of the schematic is described later on as part of the CPU control logic.
 
@@ -844,10 +846,12 @@ Open [tinkercad](https://www.tinkercad.com/things/4PaTMquHAzK-8-bit-alu-sum-and-
   * Then use a jumper wire for each grouped address pin and connect it to ground as a temporary signal cable
 8. Connect jumper wires to each data pin as a temporary signal (later it will be connected to the DIP switches rather than to the BUS)
 9. Connect both \\(\overline{WE}\\) pins together and a jumper wire to use it as temporary signal
+
+#### Tinkercad
 ![404]({{ site.url }}/images/8bit/ram/tinker1.PNG)
 Open [tinkercad](https://www.tinkercad.com/things/arn0aljUBhY-ram-p1)
 
-### Building the memory access register (and a "programming mode" version)
+### Building the memory address register (and a "programming mode" version)
 * The jumper wires for the address will be connected to the outputs of the memory address register, the register that contains the current location of the RAM we've readily available to use
 * Remove the power rails of a new breadboard and fit it between the clock breadboard and the RAM breadboard
 * We'll use a single 74LS173A (4 bit register) for the memory address register
@@ -880,13 +884,16 @@ Open [tinkercad](https://www.tinkercad.com/things/arn0aljUBhY-ram-p1)
   11. Connect the outputs of the 74LS157 to 4 address LEDs (with 220 resistors)
   12. Connect the outputs of the 74LS157 to the RAM address pins
 
+#### Tinkercad
+![404]({{ site.url }}/images/8bit/ram/tinker2.PNG)
+Open [tinkercad](https://www.tinkercad.com/things/1OJ76IBEtn8-ram-p2)
 
-#### Building an 8-bit input terminal for the RAM (to manually store a program)
+### Building an 8-bit input terminal for the RAM (to manually store a program)
 1. Breadboard
 2. It's only enabled if the programing mode of the address register is enabled
    1. We use a 2 data input MUX (with 1 select input) for each of the 8 bits that make up a word
    2. One of the inputs is a bit from the BUS, the other input is a bit from the DIP switch
-   3. All selection pins (of all the bits) are merged and connected to the memory access register switch that toggles between "running mode" (BUS) and "programming mode" (switch)
+   3. All selection pins (of all the bits) are merged and connected to the memory address register switch that toggles between "running mode" (BUS) and "programming mode" (switch)
 3. When we use the "running mode" BEN is loading the inputs from the tri-state buffer at the RAM module that connects to the BUS, and connects it to the B (xor A) inputs of the multiplexer that outputs the data inputs for the RAM. Those cables are long and go over already busy breadboard locations, it'd be easier to just connect it directly to the BUS (horizontal lines)
 
 ### Relabeling jumperwire signals
