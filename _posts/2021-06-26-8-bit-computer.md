@@ -805,7 +805,8 @@ Open [tinkercad](https://www.tinkercad.com/things/4PaTMquHAzK-8-bit-alu-sum-and-
 * Do not confuse a decoder with a multiplexer. The multpilexer has \\(n\\) selection inputs with at most \\(2^n\\) data inputs for which then the multiplexer outputs just 1 of the data inputs (looks like a decoder with a final OR gate to just have 1 output line)
 ![404]({{ site.url }}/images/8bit/ram/mux.PNG)
 ![404]({{ site.url }}/images/8bit/ram/mux2.PNG)
-* The decoder on the other hand has n inputs and at most (and generally close to) \\(2^n\\) outputs
+* The decoder on the other hand only has selection inputs, i.e. n, and at and at most (and generally close to) \\(2^n\\) outputs.
+* The decoder is like if a multiplexer had all selection inputs to be high and the last XOR get gets removed and replaced by each of the incoming signals into separate output pins, of which all but one will be low.
 * To build a decoder follow these 3 steps
   1. Provide a selection pin for each address bit and immedeately breanch out it's inverse
   2. Build the output AND gates based on binary order:
@@ -813,6 +814,7 @@ Open [tinkercad](https://www.tinkercad.com/things/4PaTMquHAzK-8-bit-alu-sum-and-
   3. Fill the gap and map the inverted and non-inverted pins with the relevant AND gates
 ![404]({{ site.url }}/images/8bit/ram/decoder3.PNG)
 * The additional variable of the AND gates is reserved to the ENABLE signal (not shown in the picture) such that to enable a memory address we just need to provide the address signals and the enable signal
+* To build a multiplexer you follow the same steps but on each AND gate you add a unique data input and then you XOR all the AND gates into one output signal
 
 ### 74LS189 (16 4-word address RAM)
 ![404]({{ site.url }}/images/8bit/ram/74LS189.PNG)
@@ -836,7 +838,7 @@ Open [tinkercad](https://www.tinkercad.com/things/4PaTMquHAzK-8-bit-alu-sum-and-
 2. Hookup outputs of the RAM to the inverter inputs
 3. Hook up resistors and LEDS to the inverted-inverted outputs
 4. Hook up \\(\overline{CS}\\) to ground on both RAMS
-5. Insert 3-state buffer and connect power, ground and dir (to \\(V_{cc}\\)) pins
+5. Insert 3-state buffer (74LS245) and connect power, ground and dir (to \\(V_{cc}\\)) pins
 6. Connect inverted-inverted outputs to the tri-state bottom pins
 7. Connect same address pins together from both RAMs
   * Then use a jumper wire for each grouped address pin and connect it to ground as a temporary signal cable
@@ -846,8 +848,38 @@ Open [tinkercad](https://www.tinkercad.com/things/4PaTMquHAzK-8-bit-alu-sum-and-
 Open [tinkercad](https://www.tinkercad.com/things/arn0aljUBhY-ram-p1)
 
 ### Building the memory access register (and a "programming mode" version)
-1. The jumper wires for the address will be connected to the outputs of the memory address register, the register that contains the current location of the RAM we've readily available to use
-2. Remove the power rails of a new breadboard and fit it between the clock breadboard and the RAM breadboard
+* The jumper wires for the address will be connected to the outputs of the memory address register, the register that contains the current location of the RAM we've readily available to use
+* Remove the power rails of a new breadboard and fit it between the clock breadboard and the RAM breadboard
+* We'll use a single 74LS173A (4 bit register) for the memory address register
+    * This register will be connected to the BUS, as we expect the computer on "running" mode to share memory addresses via the BUS, and store that value there 
+    * The outputs of this register will be connected (via a multiplexer) to the RAM address pins
+      * The multiplexer would allow to chose between the memory address register and a manual switch to feed the RAM address pins
+    * The reason we don't connect the BUS directly to the address pins of the RAM is that the bus can only hold 8 bits of information and if we wanted to write something on a given memory address we'd just have lost 4 bits to determine the address and thus 4 information bits to write are gonna be truncated
+      * Just reading the contents of a RAM address by just relying on the BUS to get the address is pin feed is problematic too as in that same clock pulse the BUS is supposed to hold the RAM address then whoever outputed that to the BUS must disable its outputs and to allow the RAM at the address specified by the BUS to output its contents. Thus getting the address and outputting the contents to the BUS just right as the other module disables its BUS output looks very complicated to implement in a reliable way, therefore we use the address register to store which ever address we need to use.
+* We use a 4-bit DIP switch as the "programming mode" alternative to feed the address pins of the RAM (via the multiplexer)
+* The multiplexer logic to select between 1 bit of register address (run mode or "A") and 1 bit of manual address (programming mode or "B") can be described by the logic circuit below.
+![404]({{ site.url }}/images/8bit/ram/mux3.PNG)
+   * The 74LS157 does that for us, and it has four 2-data/1-selection pins multiplexers
+   ![404]({{ site.url }}/images/8bit/ram/74LS157.PNG)
+     * The strobe pin is just an additional (inverted) control input to all AND gates, we just hook it up to ground to make the chip behave as the previosly shown multiplexer logic circuit.
+* Implementation steps:
+  1. Insert the DIP switch, the 74LS157 multiplexer (mux) and the 74LS173 register.
+  2. Set power and ground pins
+  3. Set strobe to low (mux)
+  4. Output control (pins 1 and 2 of register, which you have to merge) to low as well (we want to always see the lights
+  5. Connect pins 9 and 10 (not load) and a jumperwire cable to use it as a temporary signal
+  6. Connect register clear to ground
+  7. Connect clock pin to the clock
+  8. Connect the outputs of the register to the B inputs of the mux
+  9. Connect one end of the DIP switches to the A inputs of the mux, the other end to ground.
+     * We'll be utilizing the fact that the default value of floating pins for the 74LS157 mux is high, therefore we alternate between ground and floating (high)
+  10. Connect a slideswitch with common (midle pin) to ground (this is best practice), and the 2 terminals to \\(V_{cc}\\), each with a  \\(1k\Omega\\) resistor and a LED
+      * Then the slideswitch determines which of the terminal gets to be connected to ground and thus has 0V, while the non-selected terminal has the voltage it'd have as if the slideswitch didn't exist.
+      * Connect one of the terminals to the select pin of the mux, such that the terminal that you chose matches the LED pattern that you want. When the LED is shining, it actually means that the voltage of that terminal is 0V (the terminal is grounded and no more current will flow to any other branch other than back to the power source, had it not be grounded, then the votlage would have been high)
+      * The datasheet of the 74LS157 shows that the select pin is inverted, so a lighting LED terminal (with 0V) is eventually a high select, which then selects A inputs (DIP switch). Therefore programming mode will be equal to the (lighting) LED whose terminal is connected to the select pin of the mux (pin 1)
+  11. Connect the outputs of the 74LS157 to 4 address LEDs (with 220 resistors)
+  12. Connect the outputs of the 74LS157 to the RAM address pins
+
 
 #### Building an 8-bit input terminal for the RAM (to manually store a program)
 1. Breadboard
