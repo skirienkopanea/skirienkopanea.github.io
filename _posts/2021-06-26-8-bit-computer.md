@@ -73,7 +73,11 @@ tags: project
       - [Tinkercad](#tinkercad-6)
     - [Building the memory address register (and a "programming mode" version)](#building-the-memory-address-register-and-a-programming-mode-version)
       - [Tinkercad](#tinkercad-7)
+    - [Schematic](#schematic-4)
     - [Building an 8-bit input terminal for the RAM (to manually store a program) and the alternative of inputs from the BUS](#building-an-8-bit-input-terminal-for-the-ram-to-manually-store-a-program-and-the-alternative-of-inputs-from-the-bus)
+      - [Tinkercad](#tinkercad-8)
+    - [Schematic](#schematic-5)
+    - [Testing the RAM](#testing-the-ram)
     - [Relabeling jumperwire signals](#relabeling-jumperwire-signals)
     - [todo before program counter](#todo-before-program-counter)
   - [Program counter (PC)](#program-counter-pc)
@@ -852,7 +856,7 @@ Open [tinkercad](https://www.tinkercad.com/things/4PaTMquHAzK-8-bit-alu-sum-and-
 
 #### Tinkercad
 ![404]({{ site.url }}/images/8bit/ram/tinker1.PNG)
-Open [tinkercad](https://www.tinkercad.com/things/arn0aljUBhY-ram-p1)
+Open [tinkercad](https://www.tinkercad.com/things/aEBNrUN51YQ-ram-p3)
 
 ### Building the memory address register (and a "programming mode" version)
 * The jumper wires for the address will be connected to the outputs of the memory address register, the register that contains the current location of the RAM we've readily available to use
@@ -889,15 +893,54 @@ Open [tinkercad](https://www.tinkercad.com/things/arn0aljUBhY-ram-p1)
 
 #### Tinkercad
 ![404]({{ site.url }}/images/8bit/ram/tinker2.PNG)
-Open [tinkercad](https://www.tinkercad.com/things/1OJ76IBEtn8-ram-p2)
+Open [tinkercad](https://www.tinkercad.com/things/aEBNrUN51YQ-ram-p3)
+
+### Schematic
+![404]({{ site.url }}/images/8bit/ram/schematic2.PNG)
 
 ### Building an 8-bit input terminal for the RAM (to manually store a program) and the alternative of inputs from the BUS
-1. Breadboard
-2. It's only enabled if the programing mode of the address register is enabled
-   1. We use a 2 data input MUX (with 1 select input) for each of the 8 bits that make up a word
-   2. One of the inputs is a bit from the BUS, the other input is a bit from the DIP switch
-   3. All selection pins (of all the bits) are merged and connected to the memory address register switch that toggles between "running mode" (BUS) and "programming mode" (switch)
-3. When we use the "running mode" BEN is loading the inputs from the tri-state buffer at the RAM module that connects to the BUS, and connects it to the B (xor A) inputs of the multiplexer that outputs the data inputs for the RAM. Those cables are long and go over already busy breadboard locations, it'd be easier to just connect it directly to the BUS (horizontal lines)
+* We'll stick a breadboard under the RAM module and above the instruction register
+* We'll use the same signal for "programming mode"/"running mode" that the address register mux uses for the input mux, where A inputs come from the 8 bit DIP switch and the B inputs come from the BUS.
+  * For 8 bits we need to deploy two mux chips (74LS157)
+* Building steps:
+  1. Insert the 8 bit DIP switch and the 2 mux
+  2. Hookup power and ground pins, and both strobes of the multiplexers (pin 15) to low
+  3. Connect one of the DIP terminals to the mux A inputs (Big Endian, MSB goes to A1, pin 2), the other terminal to ground (because then the bit is either grounded (low) or floating (high in LS chips))
+     * We did BIG endian for the address (most significant bit was output 1 of the MUX, pin 4), so we're gonna do BIG endian with the data pins too. 
+  5. Connect A inputs to the bus (Big Endian)
+  6. Connect the outputs of the mux into the data pins of the RAM (Big Endian)
+  7. Tie both select pins (1) of both data muxes together
+  8. Replace the RAM "Not Load" signal (\\(\overline{WE}\\)) with the output of yet another mux
+     1. Tie this mux select to both, the programming/run mode switch signal and the select pin of the 2 data multiplexers.
+     2. The purpose of this mux is to provide the adequate write signal to the RAM depending on which mode we are (programing or run):
+        * Manual pushbutton (for programming mode)
+        * Clock pulse and "instruction signal" (for run mode)
+     3. Manual pushbutton:
+        1. Insert DIP push button and mux chip next to each other
+        2. Connect power/ground pins, then strobe to ground
+        3. Connect one of the outputs, i.e. output Y4, to the \\(\overline{WE}\\ pin of the RAM
+        4. Connect one pushbutton terminal to the ground and the other one to the A4 input of the mux
+     4. Control logic (clock):
+        1. We don't want to let the control logic trigger an immediate write signal, we want to synchronise that write signal for the next clock cycle, therefore we'll use a NAND gate (\\(\overline{WE}\\ is inverted tha'ts why we use a NAND gate so that the output is also negated) that takes two signals, the clock pulse and logic signal from "control world". Therefore, insert the NAND gate on the breadboard.
+        2. Hookup the power/ground pins of the NAND gate
+        3. Connect the output Y1 of the NAND gate to the B4 input pin
+        4. Connect the input B1 of the NAND gate to ground/\\(V_{cc}\\) via a jumperwire that we will use as a temporary signal until we build "Control world"
+           * Now this write signal is no longer inverted and a high signal means write, low signal means not write.
+        5. Connect input A1 of the NAND gate to the following edge detector circuit:
+           1. Connect \\(1k\Omega\\) resistor from ground to pin 1
+           2. Connect one leg of a \\(0.01\mu F\\) capacitor to the resistor (basically to pin 1)
+           3. Connect the other leg of the capacitor to the CLOCK signal 
+
+#### Tinkercad
+![404]({{ site.url }}/images/8bit/ram/tinker3.PNG)
+Open [tinkercad](https://www.tinkercad.com/things/aEBNrUN51YQ-ram-p3)
+
+### Schematic
+![404]({{ site.url }}/images/8bit/ram/schematic.PNG)
+
+### Testing the RAM
+https://www.youtube.com/watch?v=Vw3uDOUJRGw
+* Check that the implementation matches the schematic
 
 ### Relabeling jumperwire signals
 
