@@ -73,7 +73,7 @@ tags: project
       - [Tinkercad](#tinkercad-6)
     - [Building the memory address register (and a "programming mode" version)](#building-the-memory-address-register-and-a-programming-mode-version)
       - [Tinkercad](#tinkercad-7)
-    - [Building an 8-bit input terminal for the RAM (to manually store a program)](#building-an-8-bit-input-terminal-for-the-ram-to-manually-store-a-program)
+    - [Building an 8-bit input terminal for the RAM (to manually store a program) and the alternative of inputs from the BUS](#building-an-8-bit-input-terminal-for-the-ram-to-manually-store-a-program-and-the-alternative-of-inputs-from-the-bus)
     - [Relabeling jumperwire signals](#relabeling-jumperwire-signals)
     - [todo before program counter](#todo-before-program-counter)
   - [Program counter (PC)](#program-counter-pc)
@@ -826,6 +826,7 @@ Open [tinkercad](https://www.tinkercad.com/things/4PaTMquHAzK-8-bit-alu-sum-and-
 * We can hookup the address pins of 2 74189 4-bit word RAMs such that they share the same address signals and one chip stores the 4 MSB and the other one the 4 LSB making it a 8-bit word x 16 addresses RAM (16 byte RAM)
 * The data inputs are Dn
 * Output inputs are \\(\overline{O_n}\\), indeed they are inverted
+  * The outputs are active only in the Read mode, therefore while \\(\overline{WE}\\) is low the output LEDS might behave weirdly
 * WE = write enable (loads data from the input pins and saves it to the memory given to the address pins), the pin is inverted.
 * CS = chip select (enable to BUS)
   * The pin is also inverted, so we will connect it to ground (such that it is always enabled so we can hookup LEDs and see its contents) and connect it to a tri-state buffer like we did with the registers. If we don't want to hookup LEDs to the RAM, we can just use the tri-state output logic that the chip itself includes:
@@ -833,7 +834,9 @@ Open [tinkercad](https://www.tinkercad.com/things/4PaTMquHAzK-8-bit-alu-sum-and-
     * \\(\overline{CS}\\) low & \\(\overline{WE}\\) high = Read
     * \\(\overline{CS}\\) high = disconnect output to BUS
   * I'm assuming that the inputs don't need a tri-state buffer and can be connected all the time to the BUS since they don't sink that much current anyway as input pins usually have around ten mega ohms of resistance.
+    * This part is covered [here]({{{{ page.url }}#building-an-8-bit-input-terminal-for-the-ram-to-manually-store-a-program-and-the-alternative-of-inputs-from-the-bus)
 ![404]({{ site.url }}/images/8bit/ram/74LS189_2.PNG)
+* The chip that came in the kit did not have "LS" family explcitily written and it seemed to get pretty hot during some tests with floating pins. Therefore make sure to not leave floating pins and those that are high should and be connected to \\(V_{cc}\\) should be with a \\(1k\Omega\\) pull-up resistor.
 
 ### Building the RAM
 1. Insert chips 2 74LS189 and 2 74LS04 inverters on the breadboard and hookup the power and ground pins
@@ -888,7 +891,7 @@ Open [tinkercad](https://www.tinkercad.com/things/arn0aljUBhY-ram-p1)
 ![404]({{ site.url }}/images/8bit/ram/tinker2.PNG)
 Open [tinkercad](https://www.tinkercad.com/things/1OJ76IBEtn8-ram-p2)
 
-### Building an 8-bit input terminal for the RAM (to manually store a program)
+### Building an 8-bit input terminal for the RAM (to manually store a program) and the alternative of inputs from the BUS
 1. Breadboard
 2. It's only enabled if the programing mode of the address register is enabled
    1. We use a 2 data input MUX (with 1 select input) for each of the 8 bits that make up a word
