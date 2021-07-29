@@ -918,10 +918,10 @@ Open [tinkercad](https://www.tinkercad.com/things/aEBNrUN51YQ-ram-p3)
      3. Manual pushbutton:
         1. Insert DIP push button and mux chip next to each other
         2. Connect power/ground pins, then strobe to ground
-        3. Connect one of the outputs, i.e. output Y4, to the \\(\overline{WE}\\ pin of the RAM
+        3. Connect one of the outputs, i.e. output Y4, to the \\(\overline{WE}\\) pin of the RAM
         4. Connect one pushbutton terminal to the ground and the other one to the A4 input of the mux
      4. Control logic (clock):
-        1. We don't want to let the control logic trigger an immediate write signal, we want to synchronise that write signal for the next clock cycle, therefore we'll use a NAND gate (\\(\overline{WE}\\ is inverted tha'ts why we use a NAND gate so that the output is also negated) that takes two signals, the clock pulse and logic signal from "control world". Therefore, insert the NAND gate on the breadboard.
+        1. We don't want to let the control logic trigger an immediate write signal, we want to synchronise that write signal for the next clock cycle, therefore we'll use a NAND gate (\\(\overline{WE}\\)) is inverted tha'ts why we use a NAND gate so that the output is also negated) that takes two signals, the clock pulse and logic signal from "control world". Therefore, insert the NAND gate on the breadboard.
         2. Hookup the power/ground pins of the NAND gate
         3. Connect the output Y1 of the NAND gate to the B4 input pin
         4. Connect the input B1 of the NAND gate to ground/\\(V_{cc}\\) via a jumperwire that we will use as a temporary signal until we build "Control world"
@@ -940,7 +940,9 @@ Open [tinkercad](https://www.tinkercad.com/things/aEBNrUN51YQ-ram-p3)
 
 ### Testing the RAM
 https://www.youtube.com/watch?v=Vw3uDOUJRGw
-* Check that the implementation matches the schematic
+* Floating inputs from the bus to the mux B inputs for storing data on the RAM behave randomly and not as expected (float = high)
+* While you mantain the push button to write data manually the LEDs behave weirdly as earlier observed, therefore it might be better to press the button quickly and not hold it for too long.
+* If the capacitor at the ram input module affects the clock signal to the rest of the circuit (especially to the program counter if the capacitor discharges via the clock signal ), instead of having a resistor + capacitor circuit for the clock signal, let the inputs of the NAND gate be the unaltered clock signal and the logic signal and then create a resistor + capacitor circuit for the output of the NAND gate, and then feed that signal to the multiplexer (this should work well as the resistance of the output pin is much higher than the pull-down resistor and the capacitor should be fully discharged via the resistor)
 
 ### Relabeling jumperwire signals
 
