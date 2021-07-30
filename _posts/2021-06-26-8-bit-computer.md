@@ -13,6 +13,7 @@ tags: project
   - [Introduction](#introduction)
     - [TODO: Chips compatibility, LEDS and other tips/disclaimers](#todo-chips-compatibility-leds-and-other-tipsdisclaimers)
     - [TODO: Add appendix with datasheet of all the chips](#todo-add-appendix-with-datasheet-of-all-the-chips)
+    - [TODO: Turing completeness](#todo-turing-completeness)
     - [Power supply (TODO check power supply tips)](#power-supply-todo-check-power-supply-tips)
     - [Breadboards](#breadboards)
       - [Sample closed circuit](#sample-closed-circuit)
@@ -36,6 +37,7 @@ tags: project
       - [Logic circuit](#logic-circuit)
       - [Components](#components)
       - [Tinkercad](#tinkercad-3)
+      - [Schematic](#schematic-3)
   - [Registers](#registers)
     - [Bus architecture and how registers transfers work](#bus-architecture-and-how-registers-transfers-work)
     - [Connecting multiple outputs together](#connecting-multiple-outputs-together)
@@ -52,7 +54,6 @@ tags: project
       - [Schematic for Register A (same as B)](#schematic-for-register-a-same-as-b)
       - [Schematic for Instruction Register](#schematic-for-instruction-register)
       - [Testing the register with a temporary bus](#testing-the-register-with-a-temporary-bus)
-      - [My testing experience](#my-testing-experience)
     - [Instruction register](#instruction-register)
   - [Arithmetic Logic Unit (ALU)](#arithmetic-logic-unit-alu)
     - [Adding numbers](#adding-numbers)
@@ -60,8 +61,8 @@ tags: project
     - [Negative numbers](#negative-numbers)
     - [ALU design](#alu-design)
     - [Building the ALU](#building-the-alu)
-    - [Tinkercad](#tinkercad-5)
-    - [Schematic](#schematic-3)
+      - [Tinkercad](#tinkercad-5)
+      - [Schematic](#schematic-4)
     - [Testing the ALU](#testing-the-alu)
   - [Random Access Memory (RAM)](#random-access-memory-ram)
     - [Register recap](#register-recap)
@@ -73,14 +74,23 @@ tags: project
       - [Tinkercad](#tinkercad-6)
     - [Building the memory address register (and a "programming mode" version)](#building-the-memory-address-register-and-a-programming-mode-version)
       - [Tinkercad](#tinkercad-7)
-    - [Schematic](#schematic-4)
+      - [Schematic](#schematic-5)
     - [Building an 8-bit input terminal for the RAM (to manually store a program) and the alternative of inputs from the BUS](#building-an-8-bit-input-terminal-for-the-ram-to-manually-store-a-program-and-the-alternative-of-inputs-from-the-bus)
       - [Tinkercad](#tinkercad-8)
-    - [Schematic](#schematic-5)
+      - [Schematic](#schematic-6)
     - [Testing the RAM](#testing-the-ram)
-    - [Relabeling jumperwire signals](#relabeling-jumperwire-signals)
-    - [todo before program counter](#todo-before-program-counter)
+  - [Labeling jumperwire signals and architecture overview](#labeling-jumperwire-signals-and-architecture-overview)
+  - [todo before program counter](#todo-before-program-counter)
   - [Program counter (PC)](#program-counter-pc)
+    - [JK flip-flops](#jk-flip-flops)
+      - [JK flip-flop racing](#jk-flip-flop-racing)
+    - [Master-slave JK flip-flop](#master-slave-jk-flip-flop)
+    - [74LS76](#74ls76)
+    - [Binary counter](#binary-counter)
+    - [74LS161](#74ls161)
+    - [Building the program counter](#building-the-program-counter)
+      - [Tinkercad](#tinkercad-9)
+      - [Schematic](#schematic-7)
 
 ## Introduction
 Ben Eater is an online educator on computer-related topics from which I'm following his 8-bit computer project. [https://eater.net/8bit](https://eater.net/8bit). The computer is composed of different modules, which are built on breadboards. The modules are the clock module, registers and ALU (arithmetic and logic unit) module, RAM (random access memory) and program counter module, and output and control logic module.
@@ -91,6 +101,8 @@ Ben Eater is an online educator on computer-related topics from which I'm follow
 ### TODO: Chips compatibility, LEDS and other tips/disclaimers
 
 ### TODO: Add appendix with datasheet of all the chips
+
+### TODO: Turing completeness
 
 ### Power supply (TODO check power supply tips)
 We will be using a 5V (volt) power source, which Ben has crafted by cutting off the wires of a cellphone charger.
@@ -393,6 +405,7 @@ Datasheet recomends:
 ![404]({{ site.url }}/images/8bit/clock/clock12.PNG)
 [Open tinkercad](https://www.tinkercad.com/things/0oDN7oQGoQR-555-timer-p11)
 
+#### Schematic
 ![404]({{ site.url }}/images/8bit/clock/schematic.png)
 
 ## Registers
@@ -570,9 +583,9 @@ Datasheet recomends:
 * Then connect another register to the bus and transfer the contents (which should appear in the next clock cycle).
 ![404]({{ site.url }}/images/8bit/register/move2.PNG)
 
-#### My testing experience
-* The register outputs and BUS LEDs without resistors, although allowed by the LS chips, seemed to sink too much current due to their low resistance (and that next they are connected to ground), and I wasn't able to send 8 ON bits from one register to the other until I removed the bits from the outputs and added a series \\(220\Omega\\) resistor to each LED in the BUS.
-* Therefore my 8-bit computer will always have a resistor in series with each LED.
+* **My testing experience:**
+  * The register outputs and BUS LEDs without resistors, although allowed by the LS chips, seemed to sink too much current due to their low resistance (and that next they are connected to ground), and I wasn't able to send 8 ON bits from one register to the other until I removed the bits from the outputs and added a series \\(220\Omega\\) resistor to each LED in the BUS.
+  * Therefore my 8-bit computer will always have a resistor in series with each LED.
 
 ### Instruction register
 * The instruction register is identical besides that it is aestethically mirrored as we will place it on the left side of the computer
@@ -690,11 +703,11 @@ Datasheet recomends:
   10. Connect the output of the tristate buffer of the ALU to the BUS
   11. Optional: hookup LEDs to the tristate buffer inputs of the ALU
 
-### Tinkercad
+#### Tinkercad
 ![404]({{ site.url }}/images/8bit/alu/tinker.PNG)
 Open [tinkercad](https://www.tinkercad.com/things/4PaTMquHAzK-8-bit-alu-sum-and-subtract).
 
-### Schematic
+#### Schematic
 ![404]({{ site.url }}/images/8bit/alu/schematic.png)
 * The flags register portion of the schematic is described later on as part of the CPU control logic.
 
@@ -838,7 +851,7 @@ Open [tinkercad](https://www.tinkercad.com/things/4PaTMquHAzK-8-bit-alu-sum-and-
     * \\(\overline{CS}\\) low & \\(\overline{WE}\\) high = Read
     * \\(\overline{CS}\\) high = disconnect output to BUS
   * I'm assuming that the inputs don't need a tri-state buffer and can be connected all the time to the BUS since they don't sink that much current anyway as input pins usually have around ten mega ohms of resistance.
-    * This part is covered [here]({{{{ page.url }}#building-an-8-bit-input-terminal-for-the-ram-to-manually-store-a-program-and-the-alternative-of-inputs-from-the-bus)
+    * This part is covered [here]({{ page.url }}#building-an-8-bit-input-terminal-for-the-ram-to-manually-store-a-program-and-the-alternative-of-inputs-from-the-bus)
 ![404]({{ site.url }}/images/8bit/ram/74LS189_2.PNG)
 * The chip that came in the kit did not have "LS" family explcitily written and it seemed to get pretty hot during some tests with floating pins. Therefore make sure to not leave floating pins and those that are high should and be connected to \\(V_{cc}\\) should be with a \\(1k\Omega\\) pull-up resistor.
 
@@ -895,7 +908,7 @@ Open [tinkercad](https://www.tinkercad.com/things/aEBNrUN51YQ-ram-p3)
 ![404]({{ site.url }}/images/8bit/ram/tinker2.PNG)
 Open [tinkercad](https://www.tinkercad.com/things/aEBNrUN51YQ-ram-p3)
 
-### Schematic
+#### Schematic
 ![404]({{ site.url }}/images/8bit/ram/schematic2.PNG)
 
 ### Building an 8-bit input terminal for the RAM (to manually store a program) and the alternative of inputs from the BUS
@@ -935,24 +948,96 @@ Open [tinkercad](https://www.tinkercad.com/things/aEBNrUN51YQ-ram-p3)
 ![404]({{ site.url }}/images/8bit/ram/tinker3.PNG)
 Open [tinkercad](https://www.tinkercad.com/things/aEBNrUN51YQ-ram-p3)
 
-### Schematic
+#### Schematic
 ![404]({{ site.url }}/images/8bit/ram/schematic.PNG)
 
 ### Testing the RAM
-https://www.youtube.com/watch?v=Vw3uDOUJRGw
 * Floating inputs from the bus to the mux B inputs for storing data on the RAM behave randomly and not as expected (float = high)
 * While you mantain the push button to write data manually the LEDs behave weirdly as earlier observed, therefore it might be better to press the button quickly and not hold it for too long.
 * If the capacitor at the ram input module affects the clock signal to the rest of the circuit (especially to the program counter if the capacitor discharges via the clock signal ), instead of having a resistor + capacitor circuit for the clock signal, let the inputs of the NAND gate be the unaltered clock signal and the logic signal and then create a resistor + capacitor circuit for the output of the NAND gate, and then feed that signal to the multiplexer (this should work well as the resistance of the output pin is much higher than the pull-down resistor and the capacitor should be fully discharged via the resistor)
+  * However the capacitor should take \\(0.01\mu F \cdot 1k\Omega = 10\mu s\\) to charge (so a 10 microseconds pulse), and then it should discharge via the resistor while the clock signal is still high (so it's very unlikely that current will want to discharge in the direction where high voltage is coming from)
 
-### Relabeling jumperwire signals
+## Labeling jumperwire signals and architecture overview
+![404]({{ site.url }}/images/8bit/counter/arch.PNG)
 
-### todo before program counter
-* ram 
-* ir
+## todo before program counter
 * labels
+  * https://www.youtube.com/watch?v=Vw3uDOUJRGw (min 10)
 * bus highway
 * move bus lights to the left of the program counter breadboard
   * the pc chips will just be shifted to the right
+* ir
 
 ## Program counter (PC)
-* Counts in binary to keep track of which instruction the computer is currently executing
+* The programs that we run are stored in the RAM
+  * We have a maximum of 16 addresses that contain 1 byte of data each
+  * In each of those bytes we store a set of instructions in binary
+  * Our programs first instruction will start at address 0
+    * And unless a jump or conditional is faced, the program will generally move to the next address
+* In order to execute any instruction, we have to do the fetching process to extract that info from the RAM
+  * That RAM info is moved from RAM to the instruction register
+* We use a **program counter** to keep track of which (instruction/program) address we're on
+  * In many ways the program counter works as register
+    * stores a value
+    * can put it on the bus
+    * can load a value from the bus
+  * However the value of the program counter register has a very specific meaning, which is the address of the next instruction we're gonna execute
+  * The control logic signals of the program counter are:
+    * CO = (Program) counter out = put stored value on the BUS.
+    * J = jump = essentialy load the value (4 least significant bits) in the BUS like any other "in" signal.
+    * CE = Count Enable = increment the counter
+      * We do not want to increase the program counter (which points to the the next address that we will execute) at every clock cycle but at the eand of each whole programmed instruction (as those take a couple of clock cycles to complete) (it still need to be synchronized with the clock nevertheless)
+* Sections below introduce the the logic behind a program counter and it's implementation in our computer
+
+### JK flip-flops
+* It's an upgraded version of a [SR flip-flop]({{ page.url}}#sr-latch-store-1-bit)
+* Enable signal replaced by a clock edge circuit (clock signal + capacitor + resitor circuit), hence "flip-flop"
+* Furthermore, the outputs are fed back into the AND gates such that it produces the following truth table
+![404]({{ site.url }}/images/8bit/counter/jk.jpg)
+* Not only gets rid of the unpredictable (and hence illegal) 11 state, but also makes it an interesting feature, to output the opposite value it previously had (toggle)
+
+#### JK flip-flop racing
+* It happens that in a regular JK flip-flop, the clock pulse is actually long enough such that if we set JK to 11 (toggle), the outputs will toggle continously during the whole duration of the pulse, which may not necesarily be consistently long and hence sometimes having an odd number of toggles and other times an even number of toggles, leaving us with an impredictable result after all
+![404]({{ site.url }}/images/8bit/counter/racing.PNG)
+
+### Master-slave JK flip-flop
+* Gets rid of the racing problem
+* Trying to get a very short clock pulse such that there's not enough time for the output to race back into the AND gate with a now low clock signal is almost impossible to do with reliably with breadboards, instead we use 2 JK flip-flops together in the following way:
+![404]({{ site.url }}/images/8bit/counter/master.PNG)
+* We no longer need a pulse signal, just the clock signal.
+* We can identify some sort of 2 SR latches inside the circuit
+  * The first (left) SR latch will not be high unless the clock is high, whereas the second one (right) would be active while the first SR latch is not, as it uses an inverted clock signal.
+  * Therefore we will never have an scenario where both SR latches are active.
+* To pass a value (set or reset) to the second latch (right one, the one that eventually has the Q and \\(\overline{Q}\\) outputs), we first need to pass it to the first latch and wait till the clock is high, then once is stored in the first latch we have to wait for the clock signal to get to low such that the second SR becomes active. This works well for all combinatons of J and K, including JK = 11, as the racing problem doesn't occur since when the second SR latch is active and has fliped Q, it doesnt matter how fast Q races back to the first SR latch because that one is inactive until the clock rises anyway.
+  * Therefore JK = 11 with a master-slave toggles Q at each clock cycle
+
+### 74LS76
+* IC implementation of 2 indepedent master-slave JK flip-flops
+![404]({{ site.url }}/images/8bit/counter/74LS76.PNG)
+  * PR and CLR bypasses the clock signal and it forces either a 1 or a 0.
+  * The buble before the clock signal indicates that the masterslave indeeds is triggered at the falling edge of the clock
+
+### Binary counter
+* One JK master-slave flip-flop feeding its clock signal from the clock, with JK = 11, toggles at every (falling edge) of a high clock
+  * The toggle means that half of the times we have high output, the other half we have low output.
+  * So for every 2 high clocks, we just had 1 high output
+  * This is called a "divide by 2" circuit
+* We can hookup another JK master-slave flip flop, whose clock signal is ANDed with the output signal of the previously mentioned JK master-slave flip-flop, which we can interpret as being the least significant bit.
+  * This n bit will toggle every \\(2^n\\) clock pulses, with n being the bit it represents.
+  * This means it will be \\(2^{-(n+1)\\}) as fast as the clock pulse
+* By connecting more master-slaves in this fashion we can create a simple binary counter.
+  * Example of a counter with teh 74LS76
+  ![404]({{ site.url }}/images/8bit/counter/counter1.PNG)
+
+### 74LS161
+* This IC is a synchronous (uses the clock) 4-bit binary counter implemented in a similar way as the counter we described earlier, but with some other features:
+  * The clock pin is inverted such that now the counter is triggered at the rising edge of the clock like in all other modules pulse logic.
+  * It comes with data pins that allows us to easily load a value in the next clock pulse
+  * It comes with an enable input that can let continue or freeze the counter
+![404]({{ site.url }}/images/8bit/counter/74LS161.PNG)
+  * Ripple carry out is to cascade more counters into larger bit counters and clear is to set it to 0
+
+### Building the program counter
+
+#### Tinkercad
+#### Schematic
