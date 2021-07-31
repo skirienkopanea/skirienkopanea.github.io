@@ -79,8 +79,10 @@ tags: project
       - [Tinkercad](#tinkercad-8)
       - [Schematic](#schematic-6)
     - [Testing the RAM](#testing-the-ram)
-  - [Labeling jumperwire signals and architecture overview](#labeling-jumperwire-signals-and-architecture-overview)
-  - [todo before program counter](#todo-before-program-counter)
+  - [Labeling jumperwires (control signals) and architecture overview](#labeling-jumperwires-control-signals-and-architecture-overview)
+    - [Architecture](#architecture)
+    - [Control signals](#control-signals)
+  - [Testing RAM with Registers and ALU](#testing-ram-with-registers-and-alu)
   - [Program counter (PC)](#program-counter-pc)
     - [JK flip-flops](#jk-flip-flops)
       - [JK flip-flop racing](#jk-flip-flop-racing)
@@ -407,6 +409,7 @@ Datasheet recomends:
 
 #### Schematic
 ![404]({{ site.url }}/images/8bit/clock/schematic.png)
+* Note: I ended up not inverting the halt input as opposed to the schematic, therefore my halt signal remains inverted (\\(\overline{HLT}\\))
 
 ## Registers
 * Components included in the kit (including the components for ALU)
@@ -575,7 +578,9 @@ Datasheet recomends:
 #### Testing the register with a temporary bus
 * If there's no connection to a bus and you set load high, the 74LS173A chip will default the inputs as high voltage as there's typically a pull-up resistor, therefore all the bits of the register will set to 1 if there's an open circuit with the bus
 ![404]({{ site.url }}/images/8bit/register/disconnectedbus.PNG)
-  * This happened because load was high and enable was low (and since there's only this register there's literally no enabled bits in the bus, thus the bus is an open circuit)
+  * This happened because load was high and enable was low (and since there's only this register there's literally no enabled bits in the bus, thus the bus is an open circuit (the input is floating and not grounded as although the BUS LEDs are connected to ground they are a diode, meaning that they are designed such that current only goes in one direction. Since the LEDs are aligned in a way to expect the current to come from the BUS, they are disallowing the situation where there are no current comming from the BUS and an input pin pull-up resistor wants to sink via the BUS leds connected to ground (that is not allowed as the LED blocks the current going that way, it essentially behaves then as an open circuit)))
+    * Later we will add a set of 8 \\(10k\Omega\\) resistors connected to the BUS and to ground to default the value of the BUS to 00000000 when there's no party enabling the BUS.
+      * Since their resistane is significantly high, they should not sink in much current when the bus is enabled, thus not affecting the normal behavour of the BUS.
 * If we set the load low and the enable high we should be able to move the contents of the register to the bus
 ![404]({{ site.url }}/images/8bit/register/loadlowenablehigh.PNG)
 * Try to load a bus with some pins connected to ground such that the received load is a combination of 1s and 0s.
@@ -957,16 +962,56 @@ Open [tinkercad](https://www.tinkercad.com/things/aEBNrUN51YQ-ram-p3)
 * If the capacitor at the ram input module affects the clock signal to the rest of the circuit (especially to the program counter if the capacitor discharges via the clock signal ), instead of having a resistor + capacitor circuit for the clock signal, let the inputs of the NAND gate be the unaltered clock signal and the logic signal and then create a resistor + capacitor circuit for the output of the NAND gate, and then feed that signal to the multiplexer (this should work well as the resistance of the output pin is much higher than the pull-down resistor and the capacitor should be fully discharged via the resistor)
   * However the capacitor should take \\(0.01\mu F \cdot 1k\Omega = 10\mu s\\) to charge (so a 10 microseconds pulse), and then it should discharge via the resistor while the clock signal is still high (so it's very unlikely that current will want to discharge in the direction where high voltage is coming from)
 
-## Labeling jumperwire signals and architecture overview
-![404]({{ site.url }}/images/8bit/counter/arch.PNG)
+## Labeling jumperwires (control signals) and architecture overview
+* At this point of the project we have reached a large number of signals, and some of these are regarded by the pin name given by the manufacturer while others have been nicknamed by it's purpose.
+* While these names were clear within the context of their modules, they need to be better differentiated when looking at all of the signals from the bigger picture.
+  * We'll provide the final version of the control signal names, which will later be used to develop our own machine code.
 
-## todo before program counter
-* labels
-  * https://www.youtube.com/watch?v=Vw3uDOUJRGw (min 10)
-* bus highway
-* move bus lights to the left of the program counter breadboard
-  * the pc chips will just be shifted to the right
-* ir
+### Architecture
+![404]({{ site.url }}/images/8bit/counter/arch.PNG)
+* Disclaimer: The program counter, output & display, and the instruction decoder have not been implemented yet
+
+### Control signals
+* Special note: "Not" means that the signal is inverted
+  * These signals are formally regarded as "active low"
+* \\(\overline{HLT}\\) = not halt (not freeze) clock signal = the last [input of the last AND gate of the clock logic circuit]({{ page.url }}#logic-circuit)
+  * Reminder that the inverter is not implemented and thus HLT is active low (which is the opposite Ben Eater has)
+* \\(\overline{MI}\\) = Not Memory address register in = "Not load" signal of the [memory address register]({{ page.url }}#tinkercad-7)
+* \\(\overline{RO}\\) = Not RAM out = ["Not enable" signal of the RAM's  tri-state buffer]({{ page.url }}#tinkercad-6) that controls whether to output to the content of the RAM (at the address pointed by the memory address register/DIP switch) to the BUS or not.
+* \\(RI\\) = RAM in = ["Load (BUS)" input signal of the NAND gate in the RAM input module that takes the pulse detector circuit as other input]({{ page.url }}#tinkercad-8) and feeds it to the programming mode/run mode multiplexed signal for the RAM's \\(\overline{Write\ Enable}\\) pin.
+  * Since the NAND chip inverts the output, the signal is active high.
+* \\(\overline{IO}\\) = Not instruction register out = "Not enable" signal of the [instruction register]({{ page.url }}#instruction-register) tri-state buffer (located on the right, mirroring the design of the A & B registers with respect to the BUS) to output the bus.
+* \\(\overline{II}\\) = Not instruction register in = "Not load" signal of the instruction register to save the inputs (from the bus) into the instruction register.
+* \\(\overline{AO}\\) = Not register A out = "Not enable" signal of [register]({{ page.url }}#tinkercad-4)'s A tri-state buffer that controls outputting to the BUS.
+* \\(\overline{AI}\\) = Not register A in = "Not load" signal of [register]({{ page.url }}#tinkercad-4) A pin to store the inputs (from the BUS, who is always listening)
+* \\(\overline{BO}\\) = Not register B out = "Not enable" signal of [register]({{ page.url }}#tinkercad-4)'s B tri-state buffer that controls outputting to the BUS.
+* \\(\overline{BI}\\) = Not register B in = "Not load" signal of [register]({{ page.url }}#tinkercad-4) B pin to store the inputs (from the BUS, who is always listening)
+* \\(\overline{EO}\\) = Not ALU's \\(\Sigma\\) (operation outcome) out = "Not enable" signal of [ALU]({{ page.url }}#tinkercad-5)'s tri-state buffer that controls outputting to the BUS.
+* \\(SU\\) = Substract = [ALU]({{ page.url }}#tinkercad-5)'s active high signal to make the operation be A-B instead of A+B when it's low
+* TODO:
+  * CY
+  * OI
+  * CO
+  * J
+  * CE
+  * JC
+  * Perhaps make HLT active high like Ben's
+
+## Testing RAM with Registers and ALU
+* Everything seems to work fine except for the following bugs
+  * In programing mode, if you have \\(\overline{RO}\\) low and either \\(\overline{AI}\\) or \\(\overline{BI}\\) and you manually change a value in the RAM, the contents of the register are sometimes changed with random values.
+    * Workaround: don't have registers loading from the BUS while you're saving inputs into the RAM
+    * Origin: the bug might be linked to the weird behavour of the outputs of the RAM when they RAM inputs are being saved. This might affect the BUS and the registers connected to it. So take the workaround as a safety guideline until the bug is fixed.
+    * Solution: Power/ground rail connection between clock and counter module seems to fix this problem
+  * In running mode both registers and RAM, when they load something from the BUS, they don't load the default 00000000 but random values if there's nobody outputting to the BUS.
+    * Workaround: do not rely on the BUS being 0000000 if nobody is outputting
+    * It seems to greatly reduce the probability of not saving all zeros when you connect the bottom power/ground rail the clock module and the counter module. It will occasionally give a random value.
+* In run mode as long as there is 1 party outputting to the bus you can have register A and RAM both loading the BUS at the same time without problems.
+* The ALU doesn't seem to work well when the clock speed is too fast
+  * When I removed the jumperwires of the RAM that I was no longer using and the pulldown resistors of the BUS it seemed to work perfectly.
+* Decision: replaced remaining jumperwires with hookup wires and test the same scenarios with and without 10k resistors
+  * If it doesnt work wth 10k but it works withou resistors try to replace the 10k resistors with 1k resistors
+* Another solution for the potential problem of the capacitor travelling back the clock signal to the PC is to insert a LED in between that forces the current to only go in the desired direction (from the clock module to the RAM input module only)
 
 ## Program counter (PC)
 * The programs that we run are stored in the RAM
@@ -990,7 +1035,7 @@ Open [tinkercad](https://www.tinkercad.com/things/aEBNrUN51YQ-ram-p3)
 * Sections below introduce the the logic behind a program counter and it's implementation in our computer
 
 ### JK flip-flops
-* It's an upgraded version of a [SR flip-flop]({{ page.url}}#sr-latch-store-1-bit)
+* It's an upgraded version of a [SR flip-flop]({{ page.url }}#sr-latch-store-1-bit)
 * Enable signal replaced by a clock edge circuit (clock signal + capacitor + resitor circuit), hence "flip-flop"
 * Furthermore, the outputs are fed back into the AND gates such that it produces the following truth table
 ![404]({{ site.url }}/images/8bit/counter/jk.jpg)
