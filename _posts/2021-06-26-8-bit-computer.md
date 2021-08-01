@@ -1012,6 +1012,12 @@ Open [tinkercad](https://www.tinkercad.com/things/aEBNrUN51YQ-ram-p3)
 * Decision: replaced remaining jumperwires with hookup wires and test the same scenarios with and without 10k resistors
   * If it doesnt work wth 10k but it works withou resistors try to replace the 10k resistors with 1k resistors
 * Another solution for the potential problem of the capacitor travelling back the clock signal to the PC is to insert a LED in between that forces the current to only go in the desired direction (from the clock module to the RAM input module only)
+  * Tried it, and it turns out to drop too much voltage and the RAM doesnt write at all
+* **Final solution**:
+  * I put the clock signal for the RC circuit (resistor capacitor edge detector circuit)  into the inverter chip of the clock module, then put the output again in the inverter and used the second inversion (double negation cancels out) into the RC circuit, which now no longer creates double clock pulse to the reigsters and ALU.
+    * \\(\overline{MI}\\) shares the same signal with the RC circuit, but I don't care if \\(\overline{MI}\\) get's double clock pulses, (it just saves the same thing twice), as it does not cause any harm and breadboard real estate is expensive.
+  * I've also trimed the power supply cables as they were a bit burnt in the top, I might have accidentally removed them from the breadboard before disconnecting the power supply and I might have shortcircuit them. This could have created resistance and limit the power supplied to the breadboards
+  * At this stage, I haven't repalced the RAM tri-state buffer jumperwires for hookupuwires, so the RAM loads random values when nobody is outputting to the BUS, but both registers A and B seem to load 00000000 default values, so whether using hookup wires for the RAM buffer fixes the issue or not is not a big deal since we can work around this issue by loading the registers first, then moving that value to the RAM.
 
 ## Program counter (PC)
 * The programs that we run are stored in the RAM
