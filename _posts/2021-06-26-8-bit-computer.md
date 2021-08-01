@@ -38,6 +38,7 @@ tags: project
       - [Components](#components)
       - [Tinkercad](#tinkercad-3)
       - [Schematic](#schematic-3)
+    - [Testing the clock](#testing-the-clock)
   - [Registers](#registers)
     - [Bus architecture and how registers transfers work](#bus-architecture-and-how-registers-transfers-work)
     - [Connecting multiple outputs together](#connecting-multiple-outputs-together)
@@ -53,7 +54,7 @@ tags: project
       - [Tinkercad](#tinkercad-4)
       - [Schematic for Register A (same as B)](#schematic-for-register-a-same-as-b)
       - [Schematic for Instruction Register](#schematic-for-instruction-register)
-      - [Testing the register with a temporary bus](#testing-the-register-with-a-temporary-bus)
+    - [Testing the register with a temporary bus](#testing-the-register-with-a-temporary-bus)
     - [Instruction register](#instruction-register)
   - [Arithmetic Logic Unit (ALU)](#arithmetic-logic-unit-alu)
     - [Adding numbers](#adding-numbers)
@@ -411,6 +412,11 @@ Datasheet recomends:
 ![404]({{ site.url }}/images/8bit/clock/schematic.png)
 * Note: I ended up not inverting the halt input as opposed to the schematic, therefore my halt signal remains inverted (\\(\overline{HLT}\\))
 
+### Testing the clock
+* The clock can be fully tested in [tinkercad](https://www.tinkercad.com/things/0oDN7oQGoQR-555-timer-p11) by starting a simulation
+* In real life the only adjustment I might need is to fix double bouncing of the push button, which happens occasionally.
+  * However it doesnt seem to be a capacitor resistor/555 timer issue as I can clearly notice the double clock pulse with the naked eye. It seems to be a mechanical issue, maybe I should replace the \\(1k\Omega\\) capacitor for a 10k one if the issue bothers me too much.
+
 ## Registers
 * Components included in the kit (including the components for ALU)
   * 4 Breadboards
@@ -575,7 +581,7 @@ Datasheet recomends:
 #### Schematic for Instruction Register
 ![404]({{ site.url }}/images/8bit/register/schematic2.png)
 
-#### Testing the register with a temporary bus
+### Testing the register with a temporary bus
 * If there's no connection to a bus and you set load high, the 74LS173A chip will default the inputs as high voltage as there's typically a pull-up resistor, therefore all the bits of the register will set to 1 if there's an open circuit with the bus
 ![404]({{ site.url }}/images/8bit/register/disconnectedbus.PNG)
   * This happened because load was high and enable was low (and since there's only this register there's literally no enabled bits in the bus, thus the bus is an open circuit (the input is floating and not grounded as although the BUS LEDs are connected to ground they are a diode, meaning that they are designed such that current only goes in one direction. Since the LEDs are aligned in a way to expect the current to come from the BUS, they are disallowing the situation where there are no current comming from the BUS and an input pin pull-up resistor wants to sink via the BUS leds connected to ground (that is not allowed as the LED blocks the current going that way, it essentially behaves then as an open circuit)))
