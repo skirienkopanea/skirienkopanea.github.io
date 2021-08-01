@@ -83,7 +83,7 @@ tags: project
   - [Labeling jumperwires (control signals) and architecture overview](#labeling-jumperwires-control-signals-and-architecture-overview)
     - [Architecture](#architecture)
     - [Control signals](#control-signals)
-  - [Testing RAM with Registers and ALU](#testing-ram-with-registers-and-alu)
+    - [Testing RAM with Registers and ALU](#testing-ram-with-registers-and-alu)
   - [Program counter (PC)](#program-counter-pc)
     - [JK flip-flops](#jk-flip-flops)
       - [JK flip-flop racing](#jk-flip-flop-racing)
@@ -94,6 +94,7 @@ tags: project
     - [Building the program counter](#building-the-program-counter)
       - [Tinkercad](#tinkercad-9)
       - [Schematic](#schematic-7)
+    - [Testing the program counter](#testing-the-program-counter)
 
 ## Introduction
 Ben Eater is an online educator on computer-related topics from which I'm following his 8-bit computer project. [https://eater.net/8bit](https://eater.net/8bit). The computer is composed of different modules, which are built on breadboards. The modules are the clock module, registers and ALU (arithmetic and logic unit) module, RAM (random access memory) and program counter module, and output and control logic module.
@@ -410,7 +411,7 @@ Datasheet recomends:
 
 #### Schematic
 ![404]({{ site.url }}/images/8bit/clock/schematic.png)
-* Note: I ended up not inverting the halt input as opposed to the schematic, therefore my halt signal remains inverted (\\(\overline{HLT}\\))
+* Note: I ended up inverting the halt input as suggested by the schematic [here]({{ page.url }}#testing-ram-with-registers-and-alu)
 
 ### Testing the clock
 * The clock can be fully tested in [tinkercad](https://www.tinkercad.com/things/0oDN7oQGoQR-555-timer-p11) by starting a simulation
@@ -980,7 +981,7 @@ Open [tinkercad](https://www.tinkercad.com/things/aEBNrUN51YQ-ram-p3)
 ### Control signals
 * Special note: "Not" means that the signal is inverted
   * These signals are formally regarded as "active low"
-* \\(\overline{HLT}\\) = not halt (not freeze) clock signal = the last [input of the last AND gate of the clock logic circuit]({{ page.url }}#logic-circuit)
+* \\(HLT\\) = halt (makes low) clock signal = the last [input of the last AND gate of the clock logic circuit]({{ page.url }}#logic-circuit).
   * Reminder that the inverter is not implemented and thus HLT is active low (which is the opposite Ben Eater has)
 * \\(\overline{MI}\\) = Not Memory address register in = "Not load" signal of the [memory address register]({{ page.url }}#tinkercad-7)
 * \\(\overline{RO}\\) = Not RAM out = ["Not enable" signal of the RAM's  tri-state buffer]({{ page.url }}#tinkercad-6) that controls whether to output to the content of the RAM (at the address pointed by the memory address register/DIP switch) to the BUS or not.
@@ -1003,8 +1004,8 @@ Open [tinkercad](https://www.tinkercad.com/things/aEBNrUN51YQ-ram-p3)
   * JC
   * Perhaps make HLT active high like Ben's
 
-## Testing RAM with Registers and ALU
-* Everything seems to work fine except for the following bugs
+### Testing RAM with Registers and ALU
+* I started to put the modules I have into the final layout, with a BUS line in the middle. For the BUS line I used jumperwires for the RAM and register B and hookup wire for register A, the ALU, and the BUS lights (yep, I decided to placed them on the below the instruction register breadboard as it had some available space and I did not have soldering equipment as Ben did). Everything seems to work fine except for the following bugs
   * In programing mode, if you have \\(\overline{RO}\\) low and either \\(\overline{AI}\\) or \\(\overline{BI}\\) and you manually change a value in the RAM, the contents of the register are sometimes changed with random values.
     * Workaround: don't have registers loading from the BUS while you're saving inputs into the RAM
     * Origin: the bug might be linked to the weird behavour of the outputs of the RAM when they RAM inputs are being saved. This might affect the BUS and the registers connected to it. So take the workaround as a safety guideline until the bug is fixed.
@@ -1021,9 +1022,24 @@ Open [tinkercad](https://www.tinkercad.com/things/aEBNrUN51YQ-ram-p3)
   * Tried it, and it turns out to drop too much voltage and the RAM doesnt write at all
 * **Final solution**:
   * I put the clock signal for the RC circuit (resistor capacitor edge detector circuit)  into the inverter chip of the clock module, then put the output again in the inverter and used the second inversion (double negation cancels out) into the RC circuit, which now no longer creates double clock pulse to the reigsters and ALU.
+    * The reason I did it was because the previous attempt at preventing the RC circuit from feeding current back to the clock signal (and hence to the other modules and disrupting the clock cycles) using a LED (a diode, which forces current to go one way only) was unsuccessful as the LED seemed to drop too much voltage and the RAM couldn't write anything at all (here I'm assuming that the reason it didn't write was because the voltage to the mux input was too low, did not have equipment to assert it). Luckily the inverter outputs seem to include diodes as the datasheet sugested, and the output pin allowed a voltage from 0 up to \\(V_{cc}\\), so I did not have to worry about the capacitor damaging the inverter, apparently the diodes of chip had a smaller voltage drop than the yellow LED I used.
     * \\(\overline{MI}\\) shares the same signal with the RC circuit, but I don't care if \\(\overline{MI}\\) get's double clock pulses, (it just saves the same thing twice), as it does not cause any harm and breadboard real estate is expensive.
   * I've also trimed the power supply cables as they were a bit burnt in the top, I might have accidentally removed them from the breadboard before disconnecting the power supply and I might have shortcircuit them. This could have created resistance and limit the power supplied to the breadboards
   * At this stage, I haven't repalced the RAM tri-state buffer jumperwires for hookupuwires, so the RAM loads random values when nobody is outputting to the BUS, but both registers A and B seem to load 00000000 default values, so whether using hookup wires for the RAM buffer fixes the issue or not is not a big deal since we can work around this issue by loading the registers first, then moving that value to the RAM.
+  * In hindishgt, the issues seemed to be power bugs
+
+![404]({{ site.url }}/images/8bit/ram/clock.PNG)
+[Open tinkercad](https://www.tinkercad.com/things/lQOtIEjyHny-555-timer-p12)
+* This doesnt fix the problem when inserting manual data to the RAM and having a register listening to the BUS, which regardless receiving not clock pulse, writes some garbage (so always disconnect registers from the BUS when writting manual input into the RAM)
+  * Apparently got fixed after replacing jumperwires with hookup wires and moving the BUS leds and pull-down resistors to the bottom of the computer
+* I have also also decided to invert HLT and make it active high like Ben, it may make the instruction decoder easier if I have the same signals as him.
+* After replacing the jumperwires with hookup wires everything seems to work fine besides writing to the RAM
+  * Loading an empty bus gives random values for the RAM only (registers A and B seem to store all 0's)
+    * However, if both A and B are listening, then only one gets all 0's and the other gets all 1's. Seems that all the current sinks through the input pins of one register and the other register input pins can only interpret an open circuit. Perhaps the 10k ohm resistors don't sink enough current for the RAM to recognise the low voltage?
+  * Even if you are in programing mode, if you leave the \\(RI\\) signal high every 100th pulse of so it will write the contents of the DIPs without pressing the button
+    * I dont think the \\(RI\\) signal itself has nothing to do, but rather the fact that the logic behind the push button is that Write Enable of the RAM is active low, the button either connects the pin to ground or leaves it floating.
+    * Since the breadboard computer has gotten very large, the powerrails might have quite some noise and floating inputs are no longer reliable.
+    * Luckily we only use the floating inputs for manual logic. Therefore this bug will be ignored until it causes larger problems.
 
 ## Program counter (PC)
 * The programs that we run are stored in the RAM
@@ -1095,6 +1111,29 @@ Open [tinkercad](https://www.tinkercad.com/things/aEBNrUN51YQ-ram-p3)
   * Ripple carry out is to cascade more counters into larger bit counters and clear is to set it to 0
 
 ### Building the program counter
+1. Place breadboard on top of the A register
+2. Place one 74LS161 (4-bit binary counter) and a tri-state buffer (74LS245) to its left (close to the BUS).
+3. Hook up power and ground pins for both chips.
+4. Set the DIR pin low of the tri-state buffer (we always use the buffer one way only, namely to output stuff)
+   * This time we will use B->A direction because of the location of the output pins of the counter chip (above)
+5. Use a jumperwire signal for pin 19 of the tri-state buffer (\\(\overline{E}\\)) with the label "\\(\overline{CO}\\)"
+6. Connect MSB of the output buffer (B1, B2, B3, B4) to ground 
+7. Connect the output bits of the 4-bit counter (\\(Q_A, Q_B, Q_C, Q_D\\)) to the 4 least significant B pins of the tri-state buffer (B5, B6, B7, B8)
+   * Connect the outputs to green LEDs with 220 ohms resistors
+8. Pin 9 (LOAD) is for the "JUMP" jumperwire signal (add lable "J"), which basically stores the inputs into the counter.
+9.  \\(CE\\) jumperwire signal is acheived by connecting pins 7 and 10 and from there the jumperwire (active high).
+10. Connect the clock signal (the normal one, not the one for the RC circuit) to pin 2
+11. Connect the 4 least significant A pins of the tri-state buffer (A5, A6, A7, A8) to the inputs of 4-bit counter  (A, B, C, D)
+12. Connect all A pins of the tri-state buffer to the BUS.
+13. Set the clear pin of the counter to ground
 
 #### Tinkercad
+![404]({{ site.url }}/images/8bit/counter/tinker.PNG)
+[Open tinkercad](https://www.tinkercad.com/things/h4tkgaZXnL6-program-counter)
+
 #### Schematic
+![404]({{ site.url }}/images/8bit/counter/schematic.PNG)
+
+### Testing the program counter
+* Reading test: do the i++ ALU test
+* Writting test: Load contents to another register/RAM in combination with CE (counter enable) high
