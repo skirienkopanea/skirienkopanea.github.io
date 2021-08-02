@@ -96,6 +96,11 @@ tags: project
       - [Schematic](#schematic-7)
     - [Testing the program counter](#testing-the-program-counter)
   - [Output register](#output-register)
+    - [LTS547R (Jameco 7-segment LED display)](#lts547r-jameco-7-segment-led-display)
+    - [7-segment hex decoder](#7-segment-hex-decoder)
+      - [Karnaugh maps](#karnaugh-maps)
+    - [EEPROM](#eeprom)
+    - [Using the EEPROM to replace combinational logic](#using-the-eeprom-to-replace-combinational-logic)
   - [Control unit](#control-unit)
     - [Control signals](#control-signals-1)
     - [Microcode EEPROM (Instruction decoder)](#microcode-eeprom-instruction-decoder)
@@ -534,12 +539,20 @@ Datasheet recomends:
 * A D-flip flop would only latch a D value specifically when Enable is ON and when the clock switches from low voltage to high voltage (this prevents any other D changes during the same high clock signal cycle)
 ![404]({{ site.url }}/images/8bit/register/dlatch.PNG)
   * This is technically enabling at each clock pulse
-  * We need an edge detector circuit to produce a signal with very short high cycles (pulses)
+  * We need an (edge detector) [resistor capacitor (RC) circuit]({{ site.url }}/hardware/2021/06/26/8-EE-cheatsheet.html#time-constant-of-an-rc-capacitor-circuit) to produce a signal with very short high cycles (pulses)
 ![404]({{ site.url }}/images/8bit/register/edge.PNG)
 * The circuit above is such a circuit, which basically has a voltage as high as the source and behaves as the step response of a conductor-resistor circuit.
   * Although at \\(t_0\\) (step from 0 to high voltage) the capacitor has 0V and behaves like a wire (\\(I_s\\) current), the voltage we are interested about is of the node connecting to the positive terminal of the resistor, which at \\(t_0\\) looks like \\(R_2\\) from a [voltage divider]({{ site.url }}/hardware/2021/06/26/8-EE-cheatsheet.html#voltage-divider-circuits) where the inductor looks like \\(R_1\\) with \\(0\Omega\\) resistance, and thus \\(V_0=V_s\\) (high)
   * The smaller the capacitance of the capacitor, the less it takes for the capacitor to charge, (and decrease it's current), and thus the sooner the voltage drop of the capacitor reaches \\(V_{s}\\) and since it's in series with the source the sooner it decreases the available voltage for all branches connected to \\(V_{s}\\) (KVL)
-    * Resistance * capacitance gives you the seconds it takes for the voltage to drop (pulse time)
+    * According to to the [RC constant]({{ site.url }}/hardware/2021/06/26/8-EE-cheatsheet.html#time-constant-of-an-rc-capacitor-circuit): 
+      * T = RC
+      * At 1T the voltage drop of fully charged capacitor in a natural response circuit is -37% (it's providing voltage) of the initial voltage of the capacitor. The voltage drop of an empty capacitor in a step response circuit is therefore 63% of the source voltage (the resistor gets 37%)
+        * These are already considered significant enough to change a signal from logic high to logic low and viceversa
+      * After 5t the voltage drop is -1% of the initial source value in a natural response circuit (almost has no voltage to provide). In a step response circuit 5t makes the capacitor drop 99% of the source voltage (the resistor gets 1%)
+      * In a step response circuit the available voltage to the input pin will be the same as the one for the pull-down resistor, which will be \\(V_{clock}\\) minus the voltage drop of the capacitor. Overtime (5t) we see that the circuit is monostable until the clock signal is low again, but then the capacitor should discharge via the resistor (but when this happens it should not trigger a logic high because the voltage is not large enough for the chip to be considered high)
+        * AND gate output voltage (clock signal voltage) is typically 3.4V
+        * At 1T capacitor drops 63% of the voltage, which makes it \\(3.4V \cdot .63 = 2.04V\\). The mux high level input voltage is 2V, so 1T is a good approximation for the time it takes to switch from high to low, but it's slightly more than 1T as we could see.
+        * At 5T capacitor has 99% of the 3.4V, which when discharged should give another high signal. This explains the double clock pulse that other components experienced when this RC circuit shared the same clock signal, but then we used a diode for the branch of this RC circuit. It may be the case that in practice the RAM is doing double clock pulses, but it does not affect the functionality of the computer.
     * \\(0.1\mu F\cdot 1k\Omega\\ = 0.1\cdot 10^6 F \cdot 10^3 \Omega = 0.1 ms\\)
 
 ![404]({{ site.url }}/images/8bit/register/dflipflop.PNG)
@@ -1171,7 +1184,149 @@ Open [tinkercad](https://www.tinkercad.com/things/aEBNrUN51YQ-ram-p3)
 * Writting test: Load contents to another register/RAM in combination with CE (counter enable) high
 
 ## Output register
+* Components in the kit (including control logic):
+  *  6 breabdoards
+  *  1 Arduino Nano
+  *  1 555 timer
+  *  1 74LS00 Quad NAND gate
+  *  1 74LS02 Quad NOR gate
+  *  2 74LS04 Hex inverters
+  *  2 74LS08 Quad AND gates
+  *  1 74LS107 Dual J-k flip-flops
+     *  Ben's videos use the 74LS76, it has the same functionality but different pins! So checkout the datasheet
+  *  3 28C16 EEPROMs
+  *  1 74LS138 3-8 line decoder
+  *  1 74LS139 2-4 line decoder
+  *  1 74LS161 4-bit counter
+  *  1 74LS173 4-bit D register
+  *  1 74LS273 8-bit D register
+  *  2 74HC595 8-bit shift register
+  *  1 Momentary pushbutton
+  *  1 Slide switch
+  *  40 \\(220\Omega\\) resistors
+  *  5 \\(1k\Omega\\) resistors
+  *  10 \\(10k\Omega\\) resistors
+  *  5 \\(100k\Omega\\) resistors
+  *  20 Red LEDs
+  *  10 Green LEDs
+  *  4 7-segment LED display (LTS547R)
+  *  5 \\(0.01\mu F\\) capacitors (103)
+  *  5 \\(0.1\mu F\\) capacitors (104)
 * The output reigser is similar to any other register, but we want it to have a (7-segment) decimal display.
+
+### LTS547R (Jameco 7-segment LED display)
+![404]({{ site.url }}/images/8bit/output/LTS547R.jpg)
+ * Red
+ * Common cathode
+![404]({{ site.url }}/images/8bit/output/common.PNG)
+![404]({{ site.url }}/images/8bit/output/leg.PNG)
+ * Maximum Forward Voltage: 1.6 V (@ 20 mA)
+ * Maximum forward current: 20mA
+   * We need a series resistor to limit the current.
+   * \\(V=IR\\)
+   * \\(5V = 0.02 A \cdot R\\)
+   * \\(R = \frac{5V}{0.02A} = 250 \Omega\\)
+   * Two \\(220\Omega\\) resistors should do the trick
+     * \\(I = \frac{V}{R} = \frac{5}{440} = 11.36 mA\\)
+     * Less than half the maximum current, it should light it up enough.
+
+### 7-segment hex decoder
+![404]({{ site.url }}/images/8bit/output/pins.jpg)
+* Below a common cathode representation for 4 bits
+  * A common annode would just be "off"  (20 amps to ground) instead of "on" (20 amps from \\(V_{cc}\\))
+
+| Binary | Digit | Display | a (7) | b (6) | c (4)  | d (2) | e (1)  | f (9) | g (10) |
+| -- | ----- | -- | -- | -- | -- | -- | -- | -- | -- |
+| 0000 | 0     | ![404]({{ site.url }}/images/8bit/output/0.png) | on | on | on | on | on | on |    |
+| 0001 | 1     | ![404]({{ site.url }}/images/8bit/output/1.png) |    | on | on |    |    |    |    |
+| 0010 | 2     | ![404]({{ site.url }}/images/8bit/output/2.png) | on | on |    | on | on |    | on |
+| 0011 | 3     | ![404]({{ site.url }}/images/8bit/output/3.png) | on | on | on | on |    |    | on |
+| 0100 | 4     | ![404]({{ site.url }}/images/8bit/output/4.png) |    | on | on |    |    | on | on |
+| 0101 | 5     | ![404]({{ site.url }}/images/8bit/output/5.png) | on |    | on | on |    | on | on |
+| 0110 | 6     | ![404]({{ site.url }}/images/8bit/output/6.png) | on |    | on | on | on | on | on |
+| 0111 | 7     | ![404]({{ site.url }}/images/8bit/output/7.png) | on | on | on |    |    |    |    |
+| 1000 | 8     | ![404]({{ site.url }}/images/8bit/output/8.png) | on | on | on | on | on | on | on |
+| 1001 | 9     | ![404]({{ site.url }}/images/8bit/output/9.png) | on | on | on | on |    | on | on |
+| 1010 | A     | ![404]({{ site.url }}/images/8bit/output/A.png) | on | on | on |    | on | on | on |
+| 1011 | B     | ![404]({{ site.url }}/images/8bit/output/B.png) |    |    | on | on | on | on | on |
+| 1100 | C     | ![404]({{ site.url }}/images/8bit/output/C.png) | on |    |    | on | on | on |    |
+| 1101 | D     | ![404]({{ site.url }}/images/8bit/output/D.png) |    | on | on | on | on |    | on |
+| 1110 | E     | ![404]({{ site.url }}/images/8bit/output/E.png) | on |    |    | on | on | on | on |
+| 1111 | F     | ![404]({{ site.url }}/images/8bit/output/F.png) | on |    |    |    | on | on | on |
+
+* Alternative characters for hello world implementation:
+  * H = all on except a and d (and DP, this is implicitly assumed for the rest)
+  * E = all on except b and c
+  * L = use number 1
+  * L = use number 1
+  * O = use number 0
+  * W = use two characters:
+    * f, e, d and c
+    * e, d, c and b
+  * 0 = use number 0
+  * R = e and g
+  * L = use number 1
+  * D = b, g, e, d, and c
+
+#### Karnaugh maps
+
+* We could implement a decoder logic circuit with the same style as described in the [address decoder]({{ page.url }}#address-decoder) section (which made sense since we were using all 16 addresses from those 4 bit combinations). Or we could just focus on one segment at a time and simplify it's truth table with a karnaugh map (a technique to simplify boolean expressions), since we just want to use 16 "addresses" (7 segment display representation) out of the \\(2^7=128\\) possible representations.
+  * If we name the 4 bit inputs A, B, C and D, you'll see that sometimes instead of writting \\(\overline{A}\overline{B}\overline{C}\overline{D}\\) and \\(ABCD\\) we will just write the decimal version of 0000 and 1111 respectively i.e. \\(\overline{A}B\overline{C}D\\) is 5 
+* Karnaugh map for segment "a"
+  * ![404]({{ site.url }}/images/8bit/output/ka.png)
+  * The truth table can be expressed as a single boolean expression by "ORing" each row with "a" equal to 1. So "a" will be true/high/on If we have 0,2,3,5,6,7,8,9,10,12,14, or 15
+  * The karnaugh map simplifies this expression from 12 terms to 6!
+    * ![404]({{ site.url }}/images/8bit/output/map.png) 
+    * \\(a=A\overline{B}\overline{C} + \overline{A}BD + A \overline{D} + \overline{A}C + BC + \overline{B}\ \overline{D}\\)
+      * a = red + dark green + light green + dark blue + yellow + light blue
+* Now we can make a logic circuit out of the expression
+  * ![404]({{ site.url }}/images/8bit/output/la.png)
+* Repeat the process for the remaining segments and then you can combine the circuits to complete the decoder
+  * ![404]({{ site.url }}/images/8bit/output/lc.png)
+
+Explanation source: [electronics-fun.com]([/](https://electronics-fun.com/7-segment-hex-decoder/))
+
+* This process is an example of combinational logic circuits, which unlike sequential logic circuits (i.e. flip-flops), these do not have states, so they are much simpler and we could replace them with a lookup table in the form of an EEPROM
+  * The inputs act as addresses and the outputs are the contents that we programemd such that it returns the decoded value that we want
+  * In runtime this memory is "read only" as it is intended just for lookups, and it saves us the hurdle of creating complex decoders
+
+### EEPROM
+* ROM stands for read only memory
+  * It's contents are manufactured and cannot be changed
+* PROM stands for programmable read only memory
+  * Let's you programm it once and read it multiple times
+* EPROM stands for erasable programmable read only memory
+  * Let's you program it multiple times by first erasing via ultra violet light
+* EEPROM stands for electric erasable programmable read only memory
+  * You can re-program them electronically multiple times without needing to expose them to ultra violet light
+* We'll be using the AT28C16 EEPROM
+  * 7 input/output (I/O) pins
+  * 11 address lines (to specify which address we want to program/read)
+  * \\(\overline{WE}\\) = active low write enable
+  * \\(\overline{OE}\\) = active low output enable
+  * \\(\overline{CE}\\) = active low chip enable
+* When the EEPROM are erased/brand new, they are erased with all 1's
+* To program the contents of the EEPROM you set \\(\overline{WE}\\) or \\(\overline{CE}\\) low and \\(\overline{OE}\\) high and the I/O pins now behave as input pins
+  * We're gonna go with \\(\overline{WE}\\)
+![404]({{ site.url }}/images/8bit/output/write.png)
+  * The datasheet specifies the timing of certaing pulses (when and for how long should paramaters values be inputted to the chip) to trigger a writting
+  * We need to keep the write pulse signal between 100 and 1000 nanoseconds
+  * When the write enables goes low, it will latch the addres for at least 50 ns (\\(t_{AH}\\))
+    * The address has to be set up to \\(t_{AS}\\) ns prior to that 
+  * The inputted data will be latched when the write enables goes back high again for 10 ns (\\(t_{DH}\\)).
+    * the data should have been inputted prior to that for up to \\(t_{DS}\\) ns to that
+  * We don't have to worry about setting the address/data in advance since there is no limit for how much time in advance we set up those pins.
+  * The only timings we should be aware of are the write pulse and the write cycle time, for which we will use the RC circuit to generage a pulse
+    * Remember that as we observed in the [D flip-flop]({{ page.url }}#d-flip-flop-latch-at-clock-pulse), with the voltages that we're using \\(RC\\) was a good estimation for high/low logic swaps.
+    * We shouldn't worry too much about \\(\overline{WE}\\) double clock pulses (the second after the clock signal is low) as long as \\(\overline{OE}\\) goes low before that happens. If it happens is not a big deal since the double pulse to write wouldn't change the content being written since the double pulse happens when the clock is low and no other component should have had changed the state of the machine
+
+### Using the EEPROM to replace combinational logic
+* Set up power/ground pins
+* Set \\(\overline{CE}\\) to ground
+* Hook up LEDs to the I/O pins with resistors in series
+* Use an 8-bit with one terminal connected to the EEPROM addresses and to ground with 10k ohm resistors and the other terminal connect it to \\(V{cc}\\)
+* Use a 4-bit DIP switch to do the same with the remaining 3 addresses, note that the \\(V_{cc}\\) and pull-down resistors are swapped to other side and the top switch should be left unused.
+
 
 ## Control unit
 ### Control signals
