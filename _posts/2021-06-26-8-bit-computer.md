@@ -11,9 +11,9 @@ tags: project
 # Table of Contents
 - [Table of Contents](#table-of-contents)
   - [Introduction](#introduction)
-    - [TODO: Chips compatibility, LEDS and other tips/disclaimers](#todo-chips-compatibility-leds-and-other-tipsdisclaimers)
-    - [TODO: Add appendix with datasheet of all the chips](#todo-add-appendix-with-datasheet-of-all-the-chips)
-    - [TODO: Turing completeness](#todo-turing-completeness)
+    - [TODO Improve this section: Chips compatibility, LEDS and other tips/disclaimers](#todo-improve-this-section-chips-compatibility-leds-and-other-tipsdisclaimers)
+    - [TODO: Add appendix at the end with datasheet of all the chips (just links to all pdf datasheets)](#todo-add-appendix-at-the-end-with-datasheet-of-all-the-chips-just-links-to-all-pdf-datasheets)
+    - [TODO: review this after completing the computer. Computer features and Turing completeness](#todo-review-this-after-completing-the-computer-computer-features-and-turing-completeness)
     - [Power supply (TODO check power supply tips)](#power-supply-todo-check-power-supply-tips)
     - [Breadboards](#breadboards)
       - [Sample closed circuit](#sample-closed-circuit)
@@ -95,6 +95,10 @@ tags: project
       - [Tinkercad](#tinkercad-9)
       - [Schematic](#schematic-7)
     - [Testing the program counter](#testing-the-program-counter)
+  - [Output register](#output-register)
+  - [Control unit](#control-unit)
+    - [Control signals](#control-signals-1)
+    - [Microcode EEPROM (Instruction decoder)](#microcode-eeprom-instruction-decoder)
 
 ## Introduction
 Ben Eater is an online educator on computer-related topics from which I'm following his 8-bit computer project. [https://eater.net/8bit](https://eater.net/8bit). The computer is composed of different modules, which are built on breadboards. The modules are the clock module, registers and ALU (arithmetic and logic unit) module, RAM (random access memory) and program counter module, and output and control logic module.
@@ -102,11 +106,37 @@ Ben Eater is an online educator on computer-related topics from which I'm follow
 * To refresh circuit analysis basics check [this post]({{ site.url }}/hardware/2021/06/26/8-EE-cheatsheet.html).
 * You can also check my [CSE1400 Computer Organization notes]({{ site.url }}/downloads/CSE1400_(history-logic_circuits-data_representation-isa-assembly-cpu-io-memory-pipelining).pdf)
 
-### TODO: Chips compatibility, LEDS and other tips/disclaimers
+### TODO Improve this section: Chips compatibility, LEDS and other tips/disclaimers
+* Not all chips families are compatible, apparently HC and LS are.
+* Ben Eater videos often don't have resistors in series with the LEDs because of the LS chip family have limited current outputs.
+  * In practice LEDs did sink too much current and not adding resistors caused weird behavour for input pins relying on the current from those outputs.
+  * Ben's schematic does include resistors.
+* Often the schematic will ignore the \\(V_{cc}\\) and ground pins of the chips and you should implicitly take care of those by looking at the datasheet of the chip
 
-### TODO: Add appendix with datasheet of all the chips
+### TODO: Add appendix at the end with datasheet of all the chips (just links to all pdf datasheets)
 
-### TODO: Turing completeness
+### TODO: review this after completing the computer. Computer features and Turing completeness
+* This 8-bit computer has:
+  * clock (synchronises control unit instructions by executing them into separate clock pulses)
+  * RAM (main memory that stores the programs we can run)
+  * CPU (central processing unit) which is just the electronic circuitry that regards:
+    * Registers:
+      * Memory addres register (specifies the RAM data that the CPU can directly use)
+      * Program counter (specifies next program line (in terms of memory addresses))
+      * Operand reigsters (named here as A and B)
+      * Output register
+      * Flags register
+    * ALU (arithmetic and logic unit)
+    * Control unit
+      * Reads the instructions stored in the RAM and decodes them with high/low voltages for each component interface input (control signals)
+        * opcodes are text-based aliases for the inputs of the decoded outputs (and the outputs should essentially execute (often in several clock cycles) what the opcode is supposed to define i.e. Move A to to output register" = "MOV A O" = 0010 (opcode for MOV) 00 (operand for the A register) 11 (operando for the output register)= 00100011 decoder input which should output a series of high/low signal for all control, as many times as needed, until getting the desired outcome.
+          * Both the opcode name and the binary number of the opcode are arbitrary choices that we made.
+            * The alphanumeric representation of opcodes (alpha) and operands (data) is what we call "assembly code"
+            * The decoded output for each input are essentially "microcode" lines, where each line has a high/low configuration for each control signal
+    * The CPU does not have input/output in terms of "interrupts" (where at a given frequency the CPU halts, listens and acknoweldges i/o devices, executes their requests, and then continues).
+      * It only has the LED display that updates it's output as defined by the program.
+      * All inputs of the user shall be written in the program itself before run time
+* The computer is "turing complete" because it allows the execution of a program (whose inputs are already defined before runtime) and the computer supports addition, subtraction and conditional jumps, form which any computable problem, given infinite memory, could be computed.      
 
 ### Power supply (TODO check power supply tips)
 We will be using a 5V (volt) power source, which Ben has crafted by cutting off the wires of a cellphone charger.
@@ -995,12 +1025,12 @@ Open [tinkercad](https://www.tinkercad.com/things/aEBNrUN51YQ-ram-p3)
 * \\(\overline{BI}\\) = Not register B in = "Not load" signal of [register]({{ page.url }}#tinkercad-4) B pin to store the inputs (from the BUS, who is always listening)
 * \\(\overline{EO}\\) = Not ALU's \\(\Sigma\\) (operation outcome) out = "Not enable" signal of [ALU]({{ page.url }}#tinkercad-5)'s tri-state buffer that controls outputting to the BUS.
 * \\(SU\\) = Substract = [ALU]({{ page.url }}#tinkercad-5)'s active high signal to make the operation be A-B instead of A+B when it's low
+* \\(CE\\) = Count Enable = Enable pins of the 4-bit counter = Allow the counter to increment by 1 at each clock pulse
+* \\(\overline{CO}\\) = Counter out = active low enable signal of the output tri-state buffer of the counter that determines whether the outputs are sent to the BUS or are disconnected.
+* \\(\overline{J}\\) = jump = active low load signal of the 4-bit counter to store the contents from the inputs (BUS)
 * TODO:
   * CY
   * OI
-  * CO
-  * J
-  * CE
   * JC
   * Perhaps make HLT active high like Ben's
 
@@ -1118,14 +1148,16 @@ Open [tinkercad](https://www.tinkercad.com/things/aEBNrUN51YQ-ram-p3)
    * This time we will use B->A direction because of the location of the output pins of the counter chip (above)
 5. Use a jumperwire signal for pin 19 of the tri-state buffer (\\(\overline{E}\\)) with the label "\\(\overline{CO}\\)"
 6. Connect MSB of the output buffer (B1, B2, B3, B4) to ground 
-7. Connect the output bits of the 4-bit counter (\\(Q_A, Q_B, Q_C, Q_D\\)) to the 4 least significant B pins of the tri-state buffer (B5, B6, B7, B8)
+7. Connect the output bits of the 4-bit counter (little endian) to the 4 least significant B pins of the tri-state buffer (big endian)
+   * \\((Q_A, B8), (Q_B, B7), (Q_C, B6), (Q_D, B5)\\)
    * Connect the outputs to green LEDs with 220 ohms resistors
-8. Pin 9 (LOAD) is for the "JUMP" jumperwire signal (add lable "J"), which basically stores the inputs into the counter.
+8. Pin 9 (LOAD) is for the "JUMP" jumperwire signal, which the circle of the diagram indicates that is inverted (so add lable "\\(\overline{J}\\)"), which basically stores the inputs into the counter.
 9.  \\(CE\\) jumperwire signal is acheived by connecting pins 7 and 10 and from there the jumperwire (active high).
 10. Connect the clock signal (the normal one, not the one for the RC circuit) to pin 2
-11. Connect the 4 least significant A pins of the tri-state buffer (A5, A6, A7, A8) to the inputs of 4-bit counter  (A, B, C, D)
+11. Connect the 4 least significant A pins of the tri-state buffer (big endian) to the inputs of 4-bit counter  (little endian)
+    * \\((A, A8), (B, A7), (C, A6), (D, A5)\\)
 12. Connect all A pins of the tri-state buffer to the BUS.
-13. Set the clear pin of the counter to ground
+13. Set the clear pin of the counter to high as that one is active low
 
 #### Tinkercad
 ![404]({{ site.url }}/images/8bit/counter/tinker.PNG)
@@ -1137,3 +1169,11 @@ Open [tinkercad](https://www.tinkercad.com/things/aEBNrUN51YQ-ram-p3)
 ### Testing the program counter
 * Reading test: do the i++ ALU test
 * Writting test: Load contents to another register/RAM in combination with CE (counter enable) high
+
+## Output register
+* The output reigser is similar to any other register, but we want it to have a (7-segment) decimal display.
+
+## Control unit
+### Control signals
+### Microcode EEPROM (Instruction decoder)
+* 
