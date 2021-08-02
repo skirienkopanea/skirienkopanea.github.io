@@ -100,7 +100,7 @@ tags: project
     - [7-segment hex decoder](#7-segment-hex-decoder)
       - [Karnaugh maps](#karnaugh-maps)
     - [EEPROM](#eeprom)
-    - [Using the EEPROM to replace combinational logic](#using-the-eeprom-to-replace-combinational-logic)
+    - [Using Ardunio to program the EEPROM](#using-ardunio-to-program-the-eeprom)
   - [Control unit](#control-unit)
     - [Control signals](#control-signals-1)
     - [Microcode EEPROM (Instruction decoder)](#microcode-eeprom-instruction-decoder)
@@ -112,6 +112,9 @@ Ben Eater is an online educator on computer-related topics from which I'm follow
 * You can also check my [CSE1400 Computer Organization notes]({{ site.url }}/downloads/CSE1400_(history-logic_circuits-data_representation-isa-assembly-cpu-io-memory-pipelining).pdf)
 
 ### TODO Improve this section: Chips compatibility, LEDS and other tips/disclaimers
+* https://www.reddit.com/r/beneater/comments/dskbug/what_i_have_learned_a_master_list_of_what_to_do/
+* https://www.reddit.com/r/beneater/comments/ii113p/helpful_tips_and_recommendations_for_ben_eaters/
+* https://www.youtube.com/watch?v=HtFro0UKqkk
 * Not all chips families are compatible, apparently HC and LS are.
 * Ben Eater videos often don't have resistors in series with the LEDs because of the LS chip family have limited current outputs.
   * In practice LEDs did sink too much current and not adding resistors caused weird behavour for input pins relying on the current from those outputs.
@@ -1269,7 +1272,6 @@ Open [tinkercad](https://www.tinkercad.com/things/aEBNrUN51YQ-ram-p3)
   * D = b, g, e, d, and c
 
 #### Karnaugh maps
-
 * We could implement a decoder logic circuit with the same style as described in the [address decoder]({{ page.url }}#address-decoder) section (which made sense since we were using all 16 addresses from those 4 bit combinations). Or we could just focus on one segment at a time and simplify it's truth table with a karnaugh map (a technique to simplify boolean expressions), since we just want to use 16 "addresses" (7 segment display representation) out of the \\(2^7=128\\) possible representations.
   * If we name the 4 bit inputs A, B, C and D, you'll see that sometimes instead of writting \\(\overline{A}\overline{B}\overline{C}\overline{D}\\) and \\(ABCD\\) we will just write the decimal version of 0000 and 1111 respectively i.e. \\(\overline{A}B\overline{C}D\\) is 5 
 * Karnaugh map for segment "a"
@@ -1287,10 +1289,11 @@ Open [tinkercad](https://www.tinkercad.com/things/aEBNrUN51YQ-ram-p3)
 Explanation source: [electronics-fun.com]([/](https://electronics-fun.com/7-segment-hex-decoder/))
 
 * This process is an example of combinational logic circuits, which unlike sequential logic circuits (i.e. flip-flops), these do not have states, so they are much simpler and we could replace them with a lookup table in the form of an EEPROM
-  * The inputs act as addresses and the outputs are the contents that we programemd such that it returns the decoded value that we want
+  * The ABCD variables act as the address bits and the a, b, c, d, e, f, g outcomes are the data contents that we program into the EEPROM such that it returns the decoded value that we want
   * In runtime this memory is "read only" as it is intended just for lookups, and it saves us the hurdle of creating complex decoders
 
 ### EEPROM
+![404]({{ site.url }}/images/8bit/output/eeprom.PNG)
 * ROM stands for read only memory
   * It's contents are manufactured and cannot be changed
 * PROM stands for programmable read only memory
@@ -1316,11 +1319,13 @@ Explanation source: [electronics-fun.com]([/](https://electronics-fun.com/7-segm
   * The inputted data will be latched when the write enables goes back high again for 10 ns (\\(t_{DH}\\)).
     * the data should have been inputted prior to that for up to \\(t_{DS}\\) ns to that
   * We don't have to worry about setting the address/data in advance since there is no limit for how much time in advance we set up those pins.
-  * The only timings we should be aware of are the write pulse and the write cycle time, for which we will use the RC circuit to generage a pulse
+  * The only timings we should be aware of are the write pulse and the write cycle time, for which we will use the RC circuit to generate a pulse
     * Remember that as we observed in the [D flip-flop]({{ page.url }}#d-flip-flop-latch-at-clock-pulse), with the voltages that we're using \\(RC\\) was a good estimation for high/low logic swaps.
-    * We shouldn't worry too much about \\(\overline{WE}\\) double clock pulses (the second after the clock signal is low) as long as \\(\overline{OE}\\) goes low before that happens. If it happens is not a big deal since the double pulse to write wouldn't change the content being written since the double pulse happens when the clock is low and no other component should have had changed the state of the machine
+    * We shouldn't worry too much about \\(\overline{WE}\\) double clock pulses (the second after the clock signal is low) as long as \\(\overline{OE}\\) goes low before that happens. If it happens is not a big deal since the double pulse to write wouldn't change the content being written since the double pulse happens when the clock is low and no other component should have had changed the state of the machine.
+    * We have to achieve an RC circuit with T between 100 and 1000 ns
+      * A capacitor in the nano farad get's us in the nano seconds range, together a resistor between 100 and 1k Ohm should do the trick.
 
-### Using the EEPROM to replace combinational logic
+### Using Ardunio to program the EEPROM
 * Set up power/ground pins
 * Set \\(\overline{CE}\\) to ground
 * Hook up LEDs to the I/O pins with resistors in series
