@@ -11,13 +11,17 @@ tags: project
 # Table of Contents
 - [Table of Contents](#table-of-contents)
   - [Introduction](#introduction)
-    - [TODO Improve this section: Chips compatibility, LEDS and other tips/disclaimers](#todo-improve-this-section-chips-compatibility-leds-and-other-tipsdisclaimers)
-    - [TODO: Add appendix at the end with datasheet of all the chips (just links to all pdf datasheets)](#todo-add-appendix-at-the-end-with-datasheet-of-all-the-chips-just-links-to-all-pdf-datasheets)
-    - [TODO: review this after completing the computer. Computer features and Turing completeness](#todo-review-this-after-completing-the-computer-computer-features-and-turing-completeness)
-    - [Power supply (TODO check power supply tips)](#power-supply-todo-check-power-supply-tips)
+    - [Computer features and Turing completeness (TODO)](#computer-features-and-turing-completeness-todo)
+    - [Power supply](#power-supply)
     - [Breadboards](#breadboards)
       - [Sample closed circuit](#sample-closed-circuit)
       - [Common mistakes](#common-mistakes)
+    - [Disclaimers](#disclaimers)
+      - [IC numbers and logic families](#ic-numbers-and-logic-families)
+      - [Pull-up/down resistors](#pull-updown-resistors)
+      - [Power](#power)
+      - [LEDs](#leds)
+    - [Datasheets (TODO)](#datasheets-todo)
   - [Clock](#clock)
     - [Astable 555 timer](#astable-555-timer)
       - [Schematic](#schematic)
@@ -100,7 +104,8 @@ tags: project
     - [7-segment hex decoder](#7-segment-hex-decoder)
       - [Karnaugh maps](#karnaugh-maps)
     - [EEPROM](#eeprom)
-    - [Using Ardunio to program the EEPROM](#using-ardunio-to-program-the-eeprom)
+    - [How to program the EEPROM](#how-to-program-the-eeprom)
+    - [Potential Output module bug](#potential-output-module-bug)
   - [Control unit](#control-unit)
     - [Control signals](#control-signals-1)
     - [Microcode EEPROM (Instruction decoder)](#microcode-eeprom-instruction-decoder)
@@ -111,19 +116,7 @@ Ben Eater is an online educator on computer-related topics from which I'm follow
 * To refresh circuit analysis basics check [this post]({{ site.url }}/hardware/2021/06/26/8-EE-cheatsheet.html).
 * You can also check my [CSE1400 Computer Organization notes]({{ site.url }}/downloads/CSE1400_(history-logic_circuits-data_representation-isa-assembly-cpu-io-memory-pipelining).pdf)
 
-### TODO Improve this section: Chips compatibility, LEDS and other tips/disclaimers
-* https://www.reddit.com/r/beneater/comments/dskbug/what_i_have_learned_a_master_list_of_what_to_do/
-* https://www.reddit.com/r/beneater/comments/ii113p/helpful_tips_and_recommendations_for_ben_eaters/
-* https://www.youtube.com/watch?v=HtFro0UKqkk
-* Not all chips families are compatible, apparently HC and LS are.
-* Ben Eater videos often don't have resistors in series with the LEDs because of the LS chip family have limited current outputs.
-  * In practice LEDs did sink too much current and not adding resistors caused weird behavour for input pins relying on the current from those outputs.
-  * Ben's schematic does include resistors.
-* Often the schematic will ignore the \\(V_{cc}\\) and ground pins of the chips and you should implicitly take care of those by looking at the datasheet of the chip
-
-### TODO: Add appendix at the end with datasheet of all the chips (just links to all pdf datasheets)
-
-### TODO: review this after completing the computer. Computer features and Turing completeness
+### Computer features and Turing completeness (TODO)
 * This 8-bit computer has:
   * clock (synchronises control unit instructions by executing them into separate clock pulses)
   * RAM (main memory that stores the programs we can run)
@@ -146,7 +139,7 @@ Ben Eater is an online educator on computer-related topics from which I'm follow
       * All inputs of the user shall be written in the program itself before run time
 * The computer is "turing complete" because it allows the execution of a program (whose inputs are already defined before runtime) and the computer supports addition, subtraction and conditional jumps, form which any computable problem, given infinite memory, could be computed.      
 
-### Power supply (TODO check power supply tips)
+### Power supply
 We will be using a 5V (volt) power source, which Ben has crafted by cutting off the wires of a cellphone charger.
 * Safety rules before using anything related to electricity:
   * Dont plug a lot of stuff into a single extension cord
@@ -188,6 +181,51 @@ We will be using a 5V (volt) power source, which Ben has crafted by cutting off 
     * To leave enough space for bending the wires and plug them into the board leave a room of 3 more wholes.
 * Integrated circuits:
   * Not connecting an integrated circuit in the middle of the board as that will connect both ends of the IC (making a shortircuit)
+
+### Disclaimers
+#### IC numbers and logic families
+For example, let's break down SN74LS161A.:
+* SN - these prefixes typically just tell you what manufacturer it is. For example, SN is used by Texas Instruments. As far as I know, you can ignore this.
+* 74 - denotes that it's a standard consumer chip. There are a few other types, like military and automotive
+* LS - this is the logic family. Do not mix chips from different logic families unless you know they are compatible (i.e. LS and HCT)
+  * LS - Low-power schottky. Built with transistor-transistor logic (TTL). What Ben uses. Old. Not really that low-power compared to newer chips. Pretty damned resilient. Not compatible with HC.
+  * HC - CMOS. Uses much less power. A bit less forgiving and not compatible with LS or other TTL chips.
+  * HCT - A special kind of CMOS designed to work with TTL chips.
+  * You may also find chips without a logic family (i.e. 74161). They are regular TTL chips.
+* 161 - the actual chip number. This one is a synchronous 4-bit binary counter.
+* A - this depends on the chip, but may denote the form factor - i.e. 40-pin DIP. Information may be in the datasheet.
+
+#### Pull-up/down resistors
+* You should never leave an input pin unconnected (floating). All inputs on LS chips must be connected either to another chip, or tied to VCC/GND with a resistor. If you tie a pin to VCC with a resistor, it's said to be "pulling the pin up", and if you tie it to GND it's "pulling the pin down", hence the terms pull-up and pull-down.
+  * A Ben follower suggested to use **10k resistors**, other suggested **1k**, also for the BUS default pull-down resistors (instead of the 10k of Ben's build).
+  * Unused LS-series inputs should typically be tied in a way such that the corresponding output is always high. (this is to consume less power, the arch-rival of the project)
+  * Some of the push buttons also need resistors so that they aren’t “floating” when they’re disconnected. For example, I added a 1K pull-up to the RAM write button.
+
+#### Power
+* The LS series chips are designed to run with no less than 4.75 volts. That gives you very little wiggle room. You absolutely need to have good power distribution. 
+  * Run "main" power rails down both sides of the computer and connect every regular power rail on your computer directly to the main power rails. This will eliminate the daisy-chaining completely and ensure (nearly) optimal power distribution.
+![404]({{ site.url }}/images/8bit/appendix/tip1.PNG)
+   * Alternatively connect power rails from left side of the BUS breadboards with right side of the BUS breadboards, at least once for each breadboard.
+* The LS series of chips are TTL (transistor-transistor logic), which use quite a bit of power and are noisy when switching. They can cause voltage fluctuations which can make other chips do strange things.
+  *  A **decoupling capacitor** sits directly across your power rails and serves to smooth out fluctuations in your power lines.
+  * Spread the 100nF capacitors (104) accross power rails of the entire project  (for every few chips up to 1 capacitor for each chip).
+  * Put the \\(10\mu F\\) capacitors at least once on each breadboard
+* Try to use BB830 breadoards and 22-gauge wire.
+* Often the schematic will ignore the \\(V_{cc}\\) and ground pins of the chips and you should implicitly take care of those by looking at the datasheet of the chip.
+* Use a high quality power adapter. People report to have more reliable results with the Apple iPad adapter than the one that comes with the kit.
+
+#### LEDs
+* Ben Eater videos often don't have resistors in series with the LEDs because of the LS chip family have limited current outputs.
+  * In practice LEDs did sink too much current and not adding resistors caused weird behavour for input pins relying on the current from those outputs.
+  * Ben's schematic does include resistors.
+* Each LED color has a different brightness, and these resistor values will reduce the brightness levels so that they’re similar. Specifically, 2.2k resistors for the red LEDs and 4.7k for the blue.
+  * (The kits don't include none of those resistor values)
+
+Sources:
+* [https://www.reddit.com/r/beneater/comments/dskbug/what_i_have_learned_a_master_list_of_what_to_do/](https://www.reddit.com/r/beneater/comments/dskbug/what_i_have_learned_a_master_list_of_what_to_do/)
+* [https://www.reddit.com/r/beneater/comments/ii113p/helpful_tips_and_recommendations_for_ben_eaters/](https://www.reddit.com/r/beneater/comments/ii113p/helpful_tips_and_recommendations_for_ben_eaters/)
+
+### Datasheets (TODO)
 
 ##  Clock
 * Components included in the kit:
@@ -1072,6 +1110,7 @@ Open [tinkercad](https://www.tinkercad.com/things/aEBNrUN51YQ-ram-p3)
     * \\(\overline{MI}\\) shares the same signal with the RC circuit, but I don't care if \\(\overline{MI}\\) get's double clock pulses, (it just saves the same thing twice), as it does not cause any harm and breadboard real estate is expensive.
   * I've also trimed the power supply cables as they were a bit burnt in the top, I might have accidentally removed them from the breadboard before disconnecting the power supply and I might have shortcircuit them. This could have created resistance and limit the power supplied to the breadboards
   * At this stage, I haven't repalced the RAM tri-state buffer jumperwires for hookupuwires, so the RAM loads random values when nobody is outputting to the BUS, but both registers A and B seem to load 00000000 default values, so whether using hookup wires for the RAM buffer fixes the issue or not is not a big deal since we can work around this issue by loading the registers first, then moving that value to the RAM.
+  * The problem of the RAM writting things at random times on programming mode without pressing the button is because Ben's default schematic leaves the input floating when the button is unpushed, hoping that the active low pin will recognise the floating input as high, but since power is not reliable is better not to have it as a floating input and use a pull-up resistor instead, a 1k should do the trick.
   * In hindishgt, the issues seemed to be power bugs
 
 ![404]({{ site.url }}/images/8bit/ram/clock.PNG)
@@ -1325,13 +1364,25 @@ Explanation source: [electronics-fun.com]([/](https://electronics-fun.com/7-segm
     * We have to achieve an RC circuit with T between 100 and 1000 ns
       * A capacitor in the nano farad get's us in the nano seconds range, together a resistor between 100 and 1k Ohm should do the trick.
 
-### Using Ardunio to program the EEPROM
+### How to program the EEPROM
+With a breaboard and jumperwires:
 * Set up power/ground pins
 * Set \\(\overline{CE}\\) to ground
 * Hook up LEDs to the I/O pins with resistors in series
 * Use an 8-bit with one terminal connected to the EEPROM addresses and to ground with 10k ohm resistors and the other terminal connect it to \\(V{cc}\\)
 * Use a 4-bit DIP switch to do the same with the remaining 3 addresses, note that the \\(V_{cc}\\) and pull-down resistors are swapped to other side and the top switch should be left unused.
+* Set the address and data contents before hand (i.e. with jumperwires to \\(V_{cc}\\) or ground)
+* Make an RC circuit where one of the legs of the capcitor is connected to one of the terminals of a push button and to a pull-up resistor, and the other leg with the \\(\overline{WE}\\) pin. Set the other terminal of the button to ground.
 
+<iframe width="100%" height="415" src="https://www.youtube.com/embed/BA12Z7gQ4P0" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+
+* Alternatively, check how to build an [Arduino EEPROM programmer]({{ site.url }}arduino/2021/08/03/eeprom.html) 
+
+### Potential Output module bug
+
+For the other registers, Ben uses two '173s (4-bit registers) to make a single 8-bit register. I'm not sure why, but on the output board, he uses a single '273, which is an 8-bit register. Why is that a bad thing, you ask? The '173 has an input enable AND a clock pin, whereas the '273 only has a clock pin. This means that every time the clock pulses, the '273 will latch in whatever is on the bus, no matter what. This was "solved" by AND'ing the clock signal with the input enable signal. The problem here is that EEPROMs are used to control the "input enable" signal. When EEPROMs are switching to a different address, they make no guarantees about their outputs - you will most likely get random voltage spikes on your control lines. Since that signal is AND'ed with the clock signal, if you happen to get a random voltage fluctuation on the "output register in" control line while the clock signal is high, the output of the AND gate will go high, and the output register will latch in whatever data is on the bus.
+
+I solved this problem by replacing the '273 with two '173s (like the other registers) and completely doing away with the AND gate. You could also use an 8-bit register chip that has an input enable.
 
 ## Control unit
 ### Control signals

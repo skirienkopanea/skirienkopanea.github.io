@@ -2,7 +2,7 @@
 layout: post
 title:  "Engineering Circuits Analysis (DC)"
 date:   2021-06-26 00:51:00 +0200
-categories: hardware
+categories: electronics
 tags: cheatsheet
 ---
 {% include math.html %}
