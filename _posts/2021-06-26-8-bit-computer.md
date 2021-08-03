@@ -105,6 +105,7 @@ tags: project
       - [Karnaugh maps](#karnaugh-maps)
     - [EEPROM](#eeprom)
     - [How to program the EEPROM](#how-to-program-the-eeprom)
+    - [8-bit decimal display](#8-bit-decimal-display)
     - [Potential Output module bug](#potential-output-module-bug)
   - [Control unit](#control-unit)
     - [Control signals](#control-signals-1)
@@ -1376,7 +1377,10 @@ With a breaboard and jumperwires:
 
 <iframe width="100%" height="415" src="https://www.youtube.com/embed/BA12Z7gQ4P0" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
 
-* Alternatively, check how to build an [Arduino EEPROM programmer]({{ site.url }}arduino/2021/08/03/eeprom.html) 
+* Alternatively, check how to build an [Arduino EEPROM programmer]({{ site.url }}/arduino/2021/08/03/eeprom.html) 
+
+### 8-bit decimal display
+
 
 ### Potential Output module bug
 

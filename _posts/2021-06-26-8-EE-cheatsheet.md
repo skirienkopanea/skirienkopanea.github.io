@@ -60,11 +60,10 @@ tags: cheatsheet
     - [Integrating amplifier circuit](#integrating-amplifier-circuit)
     - [Common mode rejection ratio](#common-mode-rejection-ratio)
   - [Transistors, Logic gates and logic circuits](#transistors-logic-gates-and-logic-circuits)
-    - [Bjt](#bjt)
-    - [p](#p)
-    - [n](#n)
+    - [NMOS](#nmos)
+    - [PMOS](#pmos)
     - [Logic gates](#logic-gates)
-    - [NOR gate](#nor-gate)
+      - [NOR gate](#nor-gate)
     - [Latches (CO stuff)](#latches-co-stuff)
     - [SR latch](#sr-latch)
 
@@ -667,15 +666,15 @@ Example to solve for \\(V_0\\):
   * CMMR is usually \\(10^3\\) to \\(10^6\\) and it is usually expressed in decibels
 
 ## Transistors, Logic gates and logic circuits
-* Use CO book and/or notes
-### Bjt
-### p
-### n
+* Use CO book and/or notes only
+### NMOS
+### PMOS
 ### Logic gates
-### NOR gate
+#### NOR gate
 * Logic symbol
 * Truth table
 * Transistor circuit implementation
+* IC used by ben
 
 ### Latches (CO stuff)
 ### SR latch
