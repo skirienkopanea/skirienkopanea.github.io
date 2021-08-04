@@ -18,7 +18,7 @@ tags: project
       - [Common mistakes](#common-mistakes)
     - [Disclaimers](#disclaimers)
       - [IC numbers and logic families](#ic-numbers-and-logic-families)
-      - [Pull-up/down resistors](#pull-updown-resistors)
+      - [Pulling resistors](#pulling-resistors)
       - [Power](#power)
       - [LEDs](#leds)
     - [Datasheets (TODO)](#datasheets-todo)
@@ -104,7 +104,8 @@ tags: project
     - [7-segment hex decoder](#7-segment-hex-decoder)
       - [Karnaugh maps](#karnaugh-maps)
     - [EEPROM](#eeprom)
-    - [How to program the EEPROM](#how-to-program-the-eeprom)
+    - [Breadboard circuit to program/debug the EEPROM](#breadboard-circuit-to-programdebug-the-eeprom)
+      - [Tinkercad](#tinkercad-10)
     - [8-bit decimal display](#8-bit-decimal-display)
     - [Potential Output module bug](#potential-output-module-bug)
   - [Control unit](#control-unit)
@@ -196,11 +197,49 @@ For example, let's break down SN74LS161A.:
 * 161 - the actual chip number. This one is a synchronous 4-bit binary counter.
 * A - this depends on the chip, but may denote the form factor - i.e. 40-pin DIP. Information may be in the datasheet.
 
-#### Pull-up/down resistors
-* You should never leave an input pin unconnected (floating). All inputs on LS chips must be connected either to another chip, or tied to VCC/GND with a resistor. If you tie a pin to VCC with a resistor, it's said to be "pulling the pin up", and if you tie it to GND it's "pulling the pin down", hence the terms pull-up and pull-down.
-  * A Ben follower suggested to use **10k resistors**, other suggested **1k**, also for the BUS default pull-down resistors (instead of the 10k of Ben's build).
+#### Pulling resistors
+* Pull-up and Pull-down resistors are used to correct bias the inputs of digital gates to stop them from having inpredctable high/low values when there is no input condition.
+  * If you tie a pin to VCC with a resistor, it's said to be "pulling the pin up", and if you tie it to GND it's "pulling the pin down", hence the terms pull-up and pull-down.
   * Unused LS-series inputs should typically be tied in a way such that the corresponding output is always high. (this is to consume less power, the arch-rival of the project)
   * Some of the push buttons also need resistors so that they aren’t “floating” when they’re disconnected. For example, I added a 1K pull-up to the RAM write button.
+  * Some chips families are less forgiving about floating inputs, so as a thumb rule you should never leave an input pin unconnected (floating).
+    * An open CMOS input pin is in a "high impedance" state, which means there won't be any substantial opportunity for a charge built up on the pin to dissipate and the Voltage of the pin will drift around due to internal and external leakage.
+  * In TTL 74LS serie, a input signal between 0 and 0.8V is considered “LOW”, and a input signal between 2.0 and 5.0V is considered “HIGH”. Any voltage between 0.8 and 2.0 volts is undefined. Therefore, you have to guarantee in your design that you will never enter in the uncertainty zone.
+  * A Ben follower suggested to use **10k resistors**, other suggested **1k**, also for the BUS default pull-down resistors (instead of the 10k of Ben's build). So use 10k for pull-up and 1k for pull-down.
+  * But there's actually an [accurate way to calculate them](https://www.electronics-tutorials.ws/logic/pull-up-resistor.html)
+* Connecting directly to VCC (or even ground) might be a bad idea because a high current will flow through the pull-up resistor, heating the device and using up an unnecessary amount of power when the switch is closed. So **the idea is to calculate the MAX resistor value, and then round it down to the nearest standard commercial resistor value out there**.
+* A rule of thumb is to use a resistor that is at least 10 times smaller than the value of the input pin impedance. In bipolar logic families which operate at operating at 5V, the typical pull-up resistor value is 1-5 kΩ. For switch and resistive sensor applications, the typical pull-up resistor value is 1-10 kΩ. If in doubt, a good starting point when using a switch is 4.7 kΩ. Some digital circuits, such as CMOS families, have a small input leakage current, allowing much higher resistance values, from around 10kΩ up to 1MΩ. The disadvantage when using a larger resistance value is that the input pin responses to voltage changes slower.
+
+
+**Max Pull-up Resistor Value**
+
+$$
+Rmax = \frac{V_{CC}-V_{IH(MIN)}}{I_{IH(MAX)}}
+$$
+
+where: $$V_{IH(MIN)}$$ is the minimum input voltage guaranteed to be recognized as a logic “1” (2V approx., but see in datasheet).
+$$I_{IH(MAX)}$$ is the max current flows into the TTL input when the input is a 'HIGH' (see in datasheet).
+
+If you use a higher resistor, you will have a voltage within the undefined zone.
+
+For the pull-down resistor,  the analysis is similar.
+
+
+
+**Max Pull-down Resistor Value**
+
+
+$$
+Rmax = \frac{V_{IL(MAX)}-V_{IL(MIN)}}{I_{IL(MAX)}}
+$$
+
+where: $$V_{IL(MAX)}$$ is the maximum input voltage guaranteed to be recognized as a logic '0'.(0.8V approx., but see in datasheet).
+where: $$V_{IL(MIN)}$$ is the minimum input voltage guaranteed to be recognized as a logic '0'. (0V approx., but see in datasheet).
+$$I_{IL(MAX)}$$ is the max current flows into the TTL input when the input is a 'LOW' (see datasheet).
+
+Again, if you use a higher resistor, you will have a voltage within the undefined zone.
+
+[Stack overflow answer](https://electronics.stackexchange.com/a/360830/293291)
 
 #### Power
 * The LS series chips are designed to run with no less than 4.75 volts. That gives you very little wiggle room. You absolutely need to have good power distribution. 
@@ -1343,6 +1382,7 @@ Explanation source: [electronics-fun.com]([/](https://electronics-fun.com/7-segm
 * EEPROM stands for electric erasable programmable read only memory
   * You can re-program them electronically multiple times without needing to expose them to ultra violet light
 * We'll be using the AT28C16 EEPROM
+  * CMOS based but CMOS & TTL Compatible Inputs and Outputs
   * 7 input/output (I/O) pins
   * 11 address lines (to specify which address we want to program/read)
   * \\(\overline{WE}\\) = active low write enable
@@ -1365,7 +1405,7 @@ Explanation source: [electronics-fun.com]([/](https://electronics-fun.com/7-segm
     * We have to achieve an RC circuit with T between 100 and 1000 ns
       * A capacitor in the nano farad get's us in the nano seconds range, together a resistor between 100 and 1k Ohm should do the trick.
 
-### How to program the EEPROM
+### Breadboard circuit to program/debug the EEPROM
 With a breaboard and jumperwires:
 * Set up power/ground pins
 * Set \\(\overline{CE}\\) to ground
@@ -1374,7 +1414,10 @@ With a breaboard and jumperwires:
 * Use a 4-bit DIP switch to do the same with the remaining 3 addresses, note that the \\(V_{cc}\\) and pull-down resistors are swapped to other side and the top switch should be left unused.
 * Set the address and data contents before hand (i.e. with jumperwires to \\(V_{cc}\\) or ground)
 * Make an RC circuit where one of the legs of the capcitor is connected to one of the terminals of a push button and to a pull-up resistor, and the other leg with the \\(\overline{WE}\\) pin. Set the other terminal of the button to ground.
+* Then you can store data by setting the address with the DIP switches and the contents with the I/O jumperwires before pressing the pushbutton, then press the pushbutton to save.
 
+#### Tinkercad
+ 
 <iframe width="100%" height="415" src="https://www.youtube.com/embed/BA12Z7gQ4P0" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
 
 * Alternatively, check how to build an [Arduino EEPROM programmer]({{ site.url }}/arduino/2021/08/03/eeprom.html) 
