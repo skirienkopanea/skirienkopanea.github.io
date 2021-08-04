@@ -1412,12 +1412,15 @@ With a breaboard and jumperwires:
 * Hook up LEDs to the I/O pins with resistors in series
 * Use an 8-bit with one terminal connected to the EEPROM addresses and to ground with 10k ohm resistors and the other terminal connect it to \\(V{cc}\\)
 * Use a 4-bit DIP switch to do the same with the remaining 3 addresses, note that the \\(V_{cc}\\) and pull-down resistors are swapped to other side and the top switch should be left unused.
-* Set the address and data contents before hand (i.e. with jumperwires to \\(V_{cc}\\) or ground)
+* Set the address and data contents beforehand (i.e. with jumperwires to \\(V_{cc}\\) or ground)
 * Make an RC circuit where one of the legs of the capcitor is connected to one of the terminals of a push button and to a pull-up resistor, and the other leg with the \\(\overline{WE}\\) pin. Set the other terminal of the button to ground.
 * Then you can store data by setting the address with the DIP switches and the contents with the I/O jumperwires before pressing the pushbutton, then press the pushbutton to save.
 
 #### Tinkercad
- 
+![404]({{ site.url }}/images/8bit/output/eeprom2.PNG)
+[Open tinkercad](https://www.tinkercad.com/things/1NAGZ3Yxxzh-eeprom-programmer)
+
+
 <iframe width="100%" height="415" src="https://www.youtube.com/embed/BA12Z7gQ4P0" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
 
 * Alternatively, check how to build an [Arduino EEPROM programmer]({{ site.url }}/arduino/2021/08/03/eeprom.html) 
