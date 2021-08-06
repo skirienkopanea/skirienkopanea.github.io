@@ -1380,6 +1380,9 @@ Explanation source: [electronics-fun.com]([/](https://electronics-fun.com/7-segm
 * EPROM stands for erasable programmable read only memory
   * Let's you program it multiple times by first erasing via ultra violet light
 * EEPROM stands for electric erasable programmable read only memory
+  * Organized as arrays of floating-gate transistors
+    * the gates are completely surrounded by highly resistive material
+    * the charge contained in it remains unchanged for long periods of time, nowadays typically longer than 10 years
   * You can re-program them electronically multiple times without needing to expose them to ultra violet light
 * We'll be using the AT28C16 EEPROM
   * CMOS based but CMOS & TTL Compatible Inputs and Outputs
@@ -1400,21 +1403,47 @@ Explanation source: [electronics-fun.com]([/](https://electronics-fun.com/7-segm
     * the data should have been inputted prior to that for up to \\(t_{DS}\\) ns to that
   * We don't have to worry about setting the address/data in advance since there is no limit for how much time in advance we set up those pins.
   * The only timings we should be aware of are the write pulse and the write cycle time, for which we will use the RC circuit to generate a pulse
+    * Since we are inputting the changes manually, we can actually ignore the write cycle time as there's no human way to insert new data and press the pushbutton before \\(t_{WC}\\) max time.
     * Remember that as we observed in the [D flip-flop]({{ page.url }}#d-flip-flop-latch-at-clock-pulse), with the voltages that we're using \\(RC\\) was a good estimation for high/low logic swaps.
-    * We shouldn't worry too much about \\(\overline{WE}\\) double clock pulses (the second after the clock signal is low) as long as \\(\overline{OE}\\) goes low before that happens. If it happens is not a big deal since the double pulse to write wouldn't change the content being written since the double pulse happens when the clock is low and no other component should have had changed the state of the machine.
+    * We shouldn't worry about \\(\overline{WE}\\) double clock pulses either because the reason it happened was from the capacitor discharging in the direction from where it got charged, that affected other modules connected to the clock signal before. However, in this scenario there is no other module connected to the same signal feeding the capacitor, and the only component connected to the capacitor is on the side that won't receive the discharging signal.
     * We have to achieve an RC circuit with T between 100 and 1000 ns
       * A capacitor in the nano farad get's us in the nano seconds range, together a resistor between 100 and 1k Ohm should do the trick.
+      * Check this useful [table for capacitor values]({{ site.url }}/downloads/Capacitor-Codes.pdf)
+      * This "edge" detector circuit has to actually be negative. Stable high and then a sharp decrease to low that bounces back to high. It can be achieved in 2 ways:
+        * Using a smiliar RC logic we used for the RAM (and we can borrow ahead from the kit either a NAND gate or a hex inverter to invert the signal like for the RAM), see the circuit below with the left 1 Mega ohm resistor * 100nF  (104 capacitor) = 0.1s pulse resistor circuit:
+        ![404]({{ site.url }}/images/8bit/output/buttonedge1.PNG)
+          * The circuit is stable low because the capacitor gets charged quickly and the input draws the current from the pull-down resistor on the right.
+          * When the button is pressed the capacitor decharges via the left resistor and the input remains low
+          * Upon release the capacitor starts to get charged again, while it's charging (up to a thertain threshold) the input briefly becomes high
+          * The right resistor is for when the capacitor is empty the 5V go to that resistor and we want to limit the current from 5V to GND
+          * The capacitor actually decharges via the left resistor, which is the one we use to calculate the pulse seconds.
+        * Alternatively, instead of using an inverter gate we could swap the pull-down resistors for pull-up resistors (and the 5V connection to the button with ground)
+        ![404]({{ site.url }}/images/8bit/output/buttonedge2.PNG)
+           * The circuit is stable high as the capacitor charges via the left pull-up resistor, becomes an open circuit and the right pull-up resistor feeds the input
+           * When the pushbutton is pressed everybody, including the capacitor, decharge via the ground terminal of the pushbutton and the circuit has low input until the capacitor charges up and becomes an open circuit and the circuit goes back to high input as the input gets the volts from the right pull-up resistor
+           * When the push button is released the capacitor decharges via the input, keeping it high.
 
 ### Breadboard circuit to program/debug the EEPROM
 With a breaboard and jumperwires:
 * Set up power/ground pins
 * Set \\(\overline{CE}\\) to ground
 * Hook up LEDs to the I/O pins with resistors in series
-* Use an 8-bit with one terminal connected to the EEPROM addresses and to ground with 10k ohm resistors and the other terminal connect it to \\(V{cc}\\)
+  * I/O0 = least signicant output LED
+* Use an 8-bit DIP switch with one terminal connected to the EEPROM addresses and to ground with 10k ohm resistors and the other terminal connect it to \\(V{cc}\\)
+  * LSB of 8-bit switch = A0 (pin 8)
 * Use a 4-bit DIP switch to do the same with the remaining 3 addresses, note that the \\(V_{cc}\\) and pull-down resistors are swapped to other side and the top switch should be left unused.
+  * MSB of 4-bit siwtch = A10 (pin 19)
 * Set the address and data contents beforehand (i.e. with jumperwires to \\(V_{cc}\\) or ground)
-* Make an RC circuit where one of the legs of the capcitor is connected to one of the terminals of a push button and to a pull-up resistor, and the other leg with the \\(\overline{WE}\\) pin. Set the other terminal of the button to ground.
+* Make an RC circuit with 2 pull-up, resistors a capacitor, and a pushbutton
+  * In practice, it may still work if we exceed the time specified by the datasheet, so we might just try to use or smallest resistor and capacitor values available in the kit.
+  * Connect the left leg of the pushbutton to ground
+  * Connect the right leg of the pushbutton to pull-up resistor A
+  * Connect the capacitor with one leg connected to pull-up resistor A and the other leg connected to pull-up resistor B and the \\(\overline{WE}\\) pin.
+  * pull-up resistor A value:
+  * pull-up resistor B value:
+  * capacitor value:
 * Then you can store data by setting the address with the DIP switches and the contents with the I/O jumperwires before pressing the pushbutton, then press the pushbutton to save.
+  * You need to have \\(\overline{OE}\\) high, otherwise it would not let you save (it'll just output the contents of the EEPROM at the selected address)
 
 #### Tinkercad
 ![404]({{ site.url }}/images/8bit/output/eeprom2.PNG)
