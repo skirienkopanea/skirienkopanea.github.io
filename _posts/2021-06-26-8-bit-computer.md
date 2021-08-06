@@ -1410,18 +1410,26 @@ Explanation source: [electronics-fun.com]([/](https://electronics-fun.com/7-segm
       * A capacitor in the nano farad get's us in the nano seconds range, together a resistor between 100 and 1k Ohm should do the trick.
       * Check this useful [table for capacitor values]({{ site.url }}/downloads/Capacitor-Codes.pdf)
       * This "edge" detector circuit has to actually be negative. Stable high and then a sharp decrease to low that bounces back to high. It can be achieved in 2 ways:
+      #### Positive RC edge detector circuit
         * Using a smiliar RC logic we used for the RAM (and we can borrow ahead from the kit either a NAND gate or a hex inverter to invert the signal like for the RAM), see the circuit below with the left 1 Mega ohm resistor * 100nF  (104 capacitor) = 0.1s pulse resistor circuit:
         ![404]({{ site.url }}/images/8bit/output/buttonedge1.PNG)
-          * The circuit is stable low because the capacitor gets charged quickly and the input draws the current from the pull-down resistor on the right.
-          * When the button is pressed the capacitor decharges via the left resistor and the input remains low
-          * Upon release the capacitor starts to get charged again, while it's charging (up to a thertain threshold) the input briefly becomes high
-          * The right resistor is for when the capacitor is empty the 5V go to that resistor and we want to limit the current from 5V to GND
-          * The capacitor actually decharges via the left resistor, which is the one we use to calculate the pulse seconds.
-        * Alternatively, instead of using an inverter gate we could swap the pull-down resistors for pull-up resistors (and the 5V connection to the button with ground)
+          * The circuit is stable low because the capacitor gets charged quickly via the RC resistor (A) (and becomes open circuit) and the input draws (or rather, sinks) the current from the pull-down resistor on the right (B).
+          * When the button is pressed the capacitor decharges fast to ground via the pushbutton (the input remains low)
+          * Upon release the capacitor starts to get charged again via the RC resistor (A) connected to VCC, while it's charging (up to a thertain threshold) the input briefly becomes high. The charge time is the pulse time, until the capacitor becomes open circuit again and the input is stable low.
+          * It's very hard to test long pulses with a LED since as the RC resistor increases (to check for a pulse visible to the human eye) the brightness decreases, you can see the tinkercad simulation below (which is slower than in real life) and the oscilloscope results:
+          ![404]({{ site.url }}/images/8bit/output/tinker1.PNG)
+          [Open tinkercad](https://www.tinkercad.com/things/hPJn0fUh2Rh-postive-edge)
+          * Note that we still need to invert the output (i.e. with a NAND, NOR or inverter chip)
+          * Note that generally the pull-down resistor has a much higher value than the RC resistor (the pull-down resistor has high resistance to keep power consumption low, the RC resistor has low resistance to keep the pulse short)
+        #### Negative RC edge detector circuit
+        * Alternatively, instead of using an inverter gate, we could just turn the pull-down resistor into a pull-up resistor (then this one becomes the RC resistor for the charge time)
         ![404]({{ site.url }}/images/8bit/output/buttonedge2.PNG)
-           * The circuit is stable high as the capacitor charges via the left pull-up resistor, becomes an open circuit and the right pull-up resistor feeds the input
-           * When the pushbutton is pressed everybody, including the capacitor, decharge via the ground terminal of the pushbutton and the circuit has low input until the capacitor charges up and becomes an open circuit and the circuit goes back to high input as the input gets the volts from the right pull-up resistor
-           * When the push button is released the capacitor decharges via the input, keeping it high.
+           * The circuit is stable high as the capacitor charges via resistor A, immedieately becomes an open circuit, and resistor B feeds the input with high logic value.
+           * When the pushbutton is pressed, the capacitor will quickly decharge to ground, and subsequently for that time the circuit has low input. While still pressing, the capacitor eventually gets charged by resistor B, and when that happens the capacitor becomes an open circuit and the pull-up resistor feeds the input again. (high) That time is the negative pulse time, therefore resistor B is the RC resistor.
+           * After release, the capacitor decharges via the input (keeps it high)
+           * You don't want to have RA as a pull-down resistor because then the current comming from resistor B will very unlikely diverge any to the capacitor, making the whole pushbutton useless and the state always high.
+           ![404]({{ site.url }}/images/8bit/output/tinker2.PNG)
+           [Open tinkercad](https://www.tinkercad.com/things/61QtdBhkgSe-negative-edge)
 
 ### Breadboard circuit to program/debug the EEPROM
 With a breaboard and jumperwires:
@@ -1438,10 +1446,10 @@ With a breaboard and jumperwires:
   * In practice, it may still work if we exceed the time specified by the datasheet, so we might just try to use or smallest resistor and capacitor values available in the kit.
   * Connect the left leg of the pushbutton to ground
   * Connect the right leg of the pushbutton to pull-up resistor A
-  * Connect the capacitor with one leg connected to pull-up resistor A and the other leg connected to pull-up resistor B and the \\(\overline{WE}\\) pin.
-  * pull-up resistor A value:
-  * pull-up resistor B value:
-  * capacitor value:
+  * Connect the capacitor with one leg connected to pull-up resistor A and the other leg connected to RC (pull-up) resistor B and the \\(\overline{WE}\\) pin.
+  * pull-up resistor A value: standard pull-up value such as 10k
+  * (pull-up) RC resistor B value: anything between 100 and 1000 ohm if you use a 1nF capacitor, such as 680 ohm. Only 220 is included in the kit (can put 2-4 in series)
+  * capacitor value: 1nF (102 capacitor code), not included in the kit. Often this capacitor has a variable value depending on the temperature, the 0.1nF (101) capacitor is more stable and could be combined with a 2k-8k resistors.
 * Then you can store data by setting the address with the DIP switches and the contents with the I/O jumperwires before pressing the pushbutton, then press the pushbutton to save.
   * You need to have \\(\overline{OE}\\) high, otherwise it would not let you save (it'll just output the contents of the EEPROM at the selected address)
 
