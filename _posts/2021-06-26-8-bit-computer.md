@@ -1457,9 +1457,6 @@ With a breaboard and jumperwires:
 ![404]({{ site.url }}/images/8bit/output/eeprom2.PNG)
 [Open tinkercad](https://www.tinkercad.com/things/1NAGZ3Yxxzh-eeprom-programmer)
 
-
-<iframe width="100%" height="415" src="https://www.youtube.com/embed/BA12Z7gQ4P0" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
-
 * Alternatively, check how to build an [Arduino EEPROM programmer]({{ site.url }}/arduino/2021/08/03/eeprom.html) 
 
 ### 8-bit decimal display
