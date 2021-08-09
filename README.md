@@ -4,6 +4,7 @@ My personal blog made with Jekyll
 [Link](https://skirienkopanea.github.io/)
 
 ## Backlog
+* JS to click images to enlarge them
 * Organize images folder
 * Finish bash scripts cheat sheet
 * upgrade python cheat sheet

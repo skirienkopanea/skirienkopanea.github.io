@@ -99,7 +99,7 @@ tags: project
       - [Tinkercad](#tinkercad-9)
       - [Schematic](#schematic-7)
     - [Testing the program counter](#testing-the-program-counter)
-  - [Output register](#output-register)
+  - [Output module](#output-module)
     - [LTS547R (Jameco 7-segment LED display)](#lts547r-jameco-7-segment-led-display)
     - [7-segment hex decoder](#7-segment-hex-decoder)
       - [Karnaugh maps](#karnaugh-maps)
@@ -107,7 +107,10 @@ tags: project
     - [Breadboard circuit to program/debug the EEPROM](#breadboard-circuit-to-programdebug-the-eeprom)
       - [Tinkercad](#tinkercad-10)
     - [8-bit decimal display](#8-bit-decimal-display)
-    - [Potential Output module bug](#potential-output-module-bug)
+      - ["Tinkercad"](#tinkercad-11)
+    - [Output register](#output-register)
+      - [Potential output register bug and solution](#potential-output-register-bug-and-solution)
+    - [Schematic](#schematic-8)
   - [Control unit](#control-unit)
     - [Control signals](#control-signals-1)
     - [Microcode EEPROM (Instruction decoder)](#microcode-eeprom-instruction-decoder)
@@ -1222,9 +1225,9 @@ Open [tinkercad](https://www.tinkercad.com/things/aEBNrUN51YQ-ram-p3)
   * This is called a "divide by 2" circuit
 * We can hookup another JK master-slave flip flop, whose clock signal is ANDed with the output signal of the previously mentioned JK master-slave flip-flop, which we can interpret as being the least significant bit.
   * This n bit will toggle every \\(2^n\\) clock pulses, with n being the bit it represents.
-  * This means it will be \\(2^{-(n+1)\\}) as fast as the clock pulse
+  * This means it will be \\(2^{-(n+1)}\\) as fast as the clock pulse
 * By connecting more master-slaves in this fashion we can create a simple binary counter.
-  * Example of a counter with teh 74LS76
+  * Example of a counter with the 74LS76
   ![404]({{ site.url }}/images/8bit/counter/counter1.PNG)
 
 ### 74LS161
@@ -1265,7 +1268,7 @@ Open [tinkercad](https://www.tinkercad.com/things/aEBNrUN51YQ-ram-p3)
 * Reading test: do the i++ ALU test
 * Writting test: Load contents to another register/RAM in combination with CE (counter enable) high
 
-## Output register
+## Output module
 * Components in the kit (including control logic):
   *  6 breabdoards
   *  1 Arduino Nano
@@ -1460,13 +1463,85 @@ With a breaboard and jumperwires:
 * Alternatively, check how to build an [Arduino EEPROM programmer]({{ site.url }}/arduino/2021/08/03/eeprom.html) 
 
 ### 8-bit decimal display
+* We'll use the EEPROM as a binary to decimal decoder for 1 byte to 3 decimal digits and a minus sign (4 LED displays) 
+  * EEPROM "look up table": we'll use the outputs of a decoded binary counter and a 2's C signal as the MSB bits of the EEPROM address, which has another 8 bits of inputs (namely an 8 bit binary number) for which we can program the following outputs:
+![404]({{ site.url }}/images/8bit/output/lookup.PNG)
+  * Example for 123:
+![404]({{ site.url }}/images/8bit/output/123.PNG)
+* All 4 LED displays will get virtually the same address signal (i.e. the binary number stored at the output register), but only the 8 LSB address bits are the same.
+* The remaining 3 MSB address bits will be used to decode the unit's place, the tenth's place, the hundreadth's place and the negative sign.
+* We will tie each common cathode/anode of the LED to a uniquely decoded pin out of a 2-bit binary counter made from JK flip-flops, each LED is on average "on" only a fourth of the time.
+* The cycle (clock) speed will be so fast, that the human eye wont be able to see that the numbers are being powered on and off, it'll look as if both 4 LED displays are on at the same time.
+* Evenutally what we are doing is cyclying through displaying only the units, only the tenths, only the hundreads, only the negative sign.
 
 
-### Potential Output module bug
+Steps:
+1. Program the EEPROM and conect its pins
+   * An example can be found in this [forked repository](https://github.com/skirienkopanea/eeprom-programmer/blob/master/multiplexed-display/multiplexed-display.ino)
+   * Chip enable to ground
+   * Output enable to ground
+   * Write enable high
+   * I/O0-7 as jumperwire signals until building output register
+2. Insert 3 LEDs and its common cathode to ground with a 1k resistor. 
+3. Connect the 8 EEPROM I/O pins (although here they will just be regarded as outputs) to the first 7 segment display as given in Ben's [schematic](#schematic-8)
+   * A goes to 7th bit (I/O 6)
+   * B goes to 6th bit (I/O 5)
+   * ...
+   * G goes to D0
+   * DP (decimal point) goes to 8th bit I/O 7
+     * I might have damaged D7 of the EEPROM and always have a high value for D7 and we don't use decimals anyway so I'll tie them both to ground.
+     * Update: it was a bug in the code that always skept 
+4. Connect all 7-display segments A's with A's, B's with B's... such that all 3 LEDs are getting the same EEPROM signals
+5. Build a [astable 555 timer](#astable-555-timer) clock that we will use to cycle through the LED displays
+   * Connect ground and power
+   * Connect \\(2\mu F\\) capacitor from pin 2 to ground
+   * Connect pin 2 to pin 6
+   * Connect pin 5 to ground with a 10nF capacitor (103)
+   * Put a 100k resistor between pin 6 and 7
+   * Put a 1k resistor between pin 7 and \\(V_{cc}\\) (or 8, which also is VCC)
+6. Build a [binary counter](#binary-counter) out of the 74LS107 Dual (master-slave based, so no racing problem) JK flip flops
+   * 74LS107 toggles at high clock pulse
+   * Set power and ground pins
+   * Set clear high (for both flip flops)
+   * Set J high (for both flip flops)
+   * Connect the output of the 555 timer into the the CLK of the first flip flop
+   * Connect the output of the first flip flop into the CLK of the 2nd flip flop/
+7. Connect the outputs of the binary counter we just built to the the address pins of the EEPROM:
+   * A8 = Q2
+   * A9 = Q1
+   * A10 = 2's Complement signal
+8. Use Q2 and Q1 also to control which LED display to light up by making them inputs of the 74LS139 [decoder](#address-decoder) and connecting the cathodes to each decoded output:
+![404]({{ site.url }}/images/8bit/output/74LS139.PNG)
+   * Connect power/ground pins
+   * Connect counter Q1 to A, counter Q2 to B
+   * Connect Y0 with units LED cathode, Y1 with tens, Y2 with hundreads, Y3 with minus sign
 
-For the other registers, Ben uses two '173s (4-bit registers) to make a single 8-bit register. I'm not sure why, but on the output board, he uses a single '273, which is an 8-bit register. Why is that a bad thing, you ask? The '173 has an input enable AND a clock pin, whereas the '273 only has a clock pin. This means that every time the clock pulses, the '273 will latch in whatever is on the bus, no matter what. This was "solved" by AND'ing the clock signal with the input enable signal. The problem here is that EEPROMs are used to control the "input enable" signal. When EEPROMs are switching to a different address, they make no guarantees about their outputs - you will most likely get random voltage spikes on your control lines. Since that signal is AND'ed with the clock signal, if you happen to get a random voltage fluctuation on the "output register in" control line while the clock signal is high, the output of the AND gate will go high, and the output register will latch in whatever data is on the bus.
+| Q2 (B) | Q1 (A) | Y3 | Y2 | Y1 | Y0 | active LED |
+| ------ | ------ | -- | -- | -- | -- | ---------- |
+| 0      | 0      | H  | H  | H  | L  | units      |
+| 0      | 1      | H  | H  | L  | H  | tens       |
+| 1      | 0      | H  | L  | H  | H  | hundreads  |
+| 1      | 1      | L  | H  | H  | H  | minus sign |
 
-I solved this problem by replacing the '273 with two '173s (like the other registers) and completely doing away with the AND gate. You could also use an 8-bit register chip that has an input enable.
+* Result: we're both, displaying the correct LED, and inputting the correct EEPROM address at the same time
+* After debugging, you should speed up the clock speed by changing the rc values. Replace the \\(2\mu F\\) with a 10nf (103)
+
+#### "Tinkercad"
+![404]({{ site.url }}/images/8bit/output/tinker5.PNG)
+* Ben is using a 74LS76 as the dual JK flip-flop but the kit comes with the 74LS107, which is functionally the same, **but has a different pinout**:
+![404]({{ site.url }}/images/8bit/output/74LS107.PNG)
+(74LS107 pinout)
+
+
+
+
+### Output register
+
+#### Potential output register bug and solution
+From a community member: *"For the other registers, Ben uses two '173s (4-bit registers) to make a single 8-bit register. I'm not sure why, but on the output board, he uses a single '273, which is an 8-bit register. Why is that a bad thing, you ask? The '173 has an input enable AND a clock pin, whereas the '273 only has a clock pin. This means that every time the clock pulses, the '273 will latch in whatever is on the bus, no matter what. This was "solved" by AND'ing the clock signal with the input enable signal. The problem here is that EEPROMs are used to control the "input enable" signal. When EEPROMs are switching to a different address, they make no guarantees about their outputs - you will most likely get random voltage spikes on your control lines. Since that signal is AND'ed with the clock signal, if you happen to get a random voltage fluctuation on the "output register in" control line while the clock signal is high, the output of the AND gate will go high, and the output register will latch in whatever data is on the bus. I solved this problem by replacing the '273 with two '173s (like the other registers) and completely doing away with the AND gate. You could also use an 8-bit register chip that has an input enable.*"
+
+### Schematic
+![404]({{ site.url }}/images/8bit/output/schematic.PNG)
 
 ## Control unit
 ### Control signals
