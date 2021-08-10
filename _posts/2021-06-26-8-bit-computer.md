@@ -109,10 +109,9 @@ tags: project
     - [8-bit decimal display](#8-bit-decimal-display)
       - ["Tinkercad"](#tinkercad-11)
     - [Output register](#output-register)
-      - [Potential output register bug and solution](#potential-output-register-bug-and-solution)
     - [Schematic](#schematic-8)
   - [Control unit](#control-unit)
-    - [Control signals](#control-signals-1)
+    - [Cleaning control signals](#cleaning-control-signals)
     - [Microcode EEPROM (Instruction decoder)](#microcode-eeprom-instruction-decoder)
 
 ## Introduction
@@ -1531,18 +1530,32 @@ Steps:
 ![404]({{ site.url }}/images/8bit/output/74LS107.PNG)
 (74LS107 pinout)
 
-
-
-
 ### Output register
-
-#### Potential output register bug and solution
-From a community member: *"For the other registers, Ben uses two '173s (4-bit registers) to make a single 8-bit register. I'm not sure why, but on the output board, he uses a single '273, which is an 8-bit register. Why is that a bad thing, you ask? The '173 has an input enable AND a clock pin, whereas the '273 only has a clock pin. This means that every time the clock pulses, the '273 will latch in whatever is on the bus, no matter what. This was "solved" by AND'ing the clock signal with the input enable signal. The problem here is that EEPROMs are used to control the "input enable" signal. When EEPROMs are switching to a different address, they make no guarantees about their outputs - you will most likely get random voltage spikes on your control lines. Since that signal is AND'ed with the clock signal, if you happen to get a random voltage fluctuation on the "output register in" control line while the clock signal is high, the output of the AND gate will go high, and the output register will latch in whatever data is on the bus. I solved this problem by replacing the '273 with two '173s (like the other registers) and completely doing away with the AND gate. You could also use an 8-bit register chip that has an input enable.*"
+* It doesn't need to drive the BUS, it only needs to read from the BUS, therefore the tri-state buffer gate wont be needed
+* Instead of using two 74LS173 (4-bit registers) we're gonna use the 74LS273, which is an 8 bit register.
+  * The '173 has an input enable AND a clock pin, whereas the '273 only has a clock pin.
+  * This means that every time the clock pulses, the '273 will latch in whatever is on the bus, no matter what.
+  * We solve this by AND'ing the clock signal with the input enable signal.
+    * Potential problem: you may get random voltage spikes on your control lines
+    * Potential solution: Replace the '273 with two '173s (like the other registers) and (completely doing away with the AND gate). You could also use an 8-bit register chip that has an input enable.
+* 74LS273 pinout:
+![404]({{ site.url }}/images/8bit/output/74LS273.PNG)
+  * Connect power/ground pins
+  * Connect outputs of the register to EEPROM address inputs A0-A7
+  * Use a jumperwire signal for MR (master reset), connect it high
+  * insert an and gate (74LS08) and its power/ground pins
+  * Connect AND gate output to register CLK
+  * Hookup a control signal jumperwire to one of the AND inputs
+  * The other input is the system clock signal
+  * Connect all output register inputs to the bus
 
 ### Schematic
 ![404]({{ site.url }}/images/8bit/output/schematic.PNG)
 
 ## Control unit
-### Control signals
+* Picture of counter/arch.PNG
+### Cleaning control signals
+* Invert active lows
+* 
 ### Microcode EEPROM (Instruction decoder)
 * 
