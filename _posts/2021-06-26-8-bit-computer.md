@@ -1474,14 +1474,13 @@ With a breaboard and jumperwires:
 * The cycle (clock) speed will be so fast, that the human eye wont be able to see that the numbers are being powered on and off, it'll look as if both 4 LED displays are on at the same time.
 * Evenutally what we are doing is cyclying through displaying only the units, only the tenths, only the hundreads, only the negative sign.
 
-
 Steps:
 1. Program the EEPROM and conect its pins
    * An example can be found in this [forked repository](https://github.com/skirienkopanea/eeprom-programmer/blob/master/multiplexed-display/multiplexed-display.ino)
    * Chip enable to ground
    * Output enable to ground
    * Write enable high
-   * I/O0-7 as jumperwire signals until building output register
+   * A0-7 as jumperwire signals until building output register
 2. Insert 3 LEDs and its common cathode to ground with a 1k resistor. 
 3. Connect the 8 EEPROM I/O pins (although here they will just be regarded as outputs) to the first 7 segment display as given in Ben's [schematic](#schematic-8)
    * A goes to 7th bit (I/O 6)
@@ -1490,7 +1489,7 @@ Steps:
    * G goes to D0
    * DP (decimal point) goes to 8th bit I/O 7
      * I might have damaged D7 of the EEPROM and always have a high value for D7 and we don't use decimals anyway so I'll tie them both to ground.
-     * Update: it was a bug in the code that always skept 
+     * Update: it was a bug in the code that always skept the msb, just had to fix the "foor loop" boundaries.
 4. Connect all 7-display segments A's with A's, B's with B's... such that all 3 LEDs are getting the same EEPROM signals
 5. Build a [astable 555 timer](#astable-555-timer) clock that we will use to cycle through the LED displays
    * Connect ground and power
@@ -1503,9 +1502,9 @@ Steps:
    * 74LS107 toggles at high clock pulse
    * Set power and ground pins
    * Set clear high (for both flip flops)
-   * Set J high (for both flip flops)
+   * Set J and K high (for both flip flops)
    * Connect the output of the 555 timer into the the CLK of the first flip flop
-   * Connect the output of the first flip flop into the CLK of the 2nd flip flop/
+   * Connect the output of the first flip flop into the CLK of the 2nd flip flop
 7. Connect the outputs of the binary counter we just built to the the address pins of the EEPROM:
    * A8 = Q2
    * A9 = Q1
