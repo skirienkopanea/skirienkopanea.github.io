@@ -112,9 +112,15 @@ tags: project
     - [Schematic](#schematic-8)
       - [Output module](#output-module-1)
       - [Computer High Level overview](#computer-high-level-overview)
-  - [Control unit](#control-unit)
-    - [Preparing control signals for the CPU instruction decoder](#preparing-control-signals-for-the-cpu-instruction-decoder)
-    - [Microcode EEPROM (CPU instruction decoder)](#microcode-eeprom-cpu-instruction-decoder)
+  - [Instruction set architecture](#instruction-set-architecture)
+    - [Memory layout](#memory-layout)
+    - [CPU vs Control unit](#cpu-vs-control-unit)
+      - [Cleaning up control circuitry](#cleaning-up-control-circuitry)
+    - [Defining our own instruction set (machine language)](#defining-our-own-instruction-set-machine-language)
+    - [Microcode EEPROM (instruction decoder)](#microcode-eeprom-instruction-decoder)
+  - [Programs](#programs)
+    - [Fibonacci](#fibonacci)
+    - [Hello world hack](#hello-world-hack)
 
 ## Introduction
 Ben Eater is an online educator on computer-related topics from which I'm following his 8-bit computer project. [https://eater.net/8bit](https://eater.net/8bit). The computer is composed of different modules, which are built on breadboards. The modules are the clock module, registers and ALU (arithmetic and logic unit) module, RAM (random access memory) and program counter module, and output and control logic module.
@@ -123,6 +129,8 @@ Ben Eater is an online educator on computer-related topics from which I'm follow
 * You can also check my [CSE1400 Computer Organization notes]({{ site.url }}/downloads/CSE1400_(history-logic_circuits-data_representation-isa-assembly-cpu-io-memory-pipelining).pdf)
 
 ### Computer features and Turing completeness (TODO)
+Review http://localhost:3000/downloads/CSE1400_(history-logic_circuits-data_representation-isa-assembly-cpu-io-memory-pipelining).pdf#page=11(http://localhost:3000/downloads/CSE1400_(history-logic_circuits-data_representation-isa-assembly-cpu-io-memory-pipelining).pdf#page=11) and re-write this section after finishing the computer
+
 * This 8-bit computer has:
   * clock (synchronises control unit instructions by executing them into separate clock pulses)
   * RAM (main memory that stores the programs we can run)
@@ -1561,20 +1569,102 @@ Steps:
 #### Computer High Level overview
 ![404]({{ site.url }}/images/8bit/control/schematic1.PNG)
 
-## Control unit
-![404]({{ site.url }}/images/8bit/counter/arch.PNG)
-* Before we start building the control unit (module that translates RAM opcode into control signals for t0, t1, t2, t3, and t4), we will first "fix" the active low signals into active high, such that all control signals have active high interfaces like the ones displayed in the architecture overview above.
+## Instruction set architecture
+* *"An instruction set architecture (ISA) is an abstract model of a computer that serves as the interface between software and hardware"*
+  * Basically it's a set of definitions and graphs that help the user understand the hardware behind the software features provided
+* The ISA provides:
+  * supported data types (in our case only 8 bit integers)
+  * memory layout (we have von Neumann)
+  * addressing modes (we have 16 "byte addressable" addresses)
+  * instruction set (implicit meaning of all the bits that we program at each byte of the RAM)
+    * This is arbitrary and we will create our own instruction set language (which we will refer to as machine language)
+    * While "**binary instruction/opcode**" refers to the meaning that we free willingly assign to a binary string, an **assembly language opcode** is the human readable version of it.
+    * "**Instruction set/machine language**" then refers to all the meanings that we give to our programmable bits.
+    * Our instruction set is of fixed length, namely one instruction takes one RAM address of space, this makes it very simple to fetch for next instructions (just increment the address).
+  * input/output model (ours doesn't have "interrupts" besides input halts, which are determined by the program)
+* There are various types of ISA's, such as CISC (stack based) and RISC (register based). Ours is so limited we can't really compare it to any commercial ISA, it's our own ISA.
 
-### Preparing control signals for the CPU instruction decoder
-* Replace all jumperwires with long cables that we will connect to a "hub" of control signals, in which we will connect each signal to a LED and resistor (that connects to ground) in series to be able to see it's state (high or low) and eventually connect them (before the anode) to the output pins of the "Microcode EEPROMs", which act basically as RAM opcode decoders, and control wether a signal is high or low.
+### Memory layout
+* Below a review of the von Neumann architecture that we'll use to establish some terminology
+![404]({{ site.url }}/images/8bit/control/vn.PNG)
+* the von Neumann architecture describes a design architecture for an electronic digital computer with these components:
+  * A processing unit (CPU) that contains an arithmetic logic unit and processor registers (A, B and flag registers)
+  * A control unit that contains an instruction register and program counter
+  * Memory that stores data and instructions
+  * External mass storage (we don't have this)
+  * Input and output mechanisms
+    * Note on "Live" Input feature: 
+      1. Just reserve address 1111 of the RAM to store the "live" input.
+      2. Make that the program loads that RAM address, empties the bus, enables RAM out, then halts
+        * Now whenever you see a halted program with RAM address 1111 (all green), it means the program is waiting for your input.
+      3. Then all we need is a pushbutton which upon activation the program  unhalts, and proceeds with a loaded bus with the user "live" input
+* The most characteristic property of a von Neumann architecture is that program instructions and data share the same memory and bus.
+  * In a Harvard architecture you would have one bus for the data (red LEDs) and one bus for the instructions (green LEDs), you'd be able to load the opcode into the instruction register and the data into the ALU registers at the same time.
+  * We clearly have a von Neumman computer as there's only 1 bus and we need to have different clock cycles for each of those tasks.
+
+### CPU vs Control unit
+* Looking at the [von Neumann architecture](#memory-layout) that we have, we can see at a higher level that "CPU" (central processing unit) is composed of the [ALU](#arithmetic-logic-unit-alu) (the module that does all the calculations) and the **Control Unit**, which is responsible for **fetching**, **decoding** and **executing** instructions stored in the program.
+  * PC = [program counter](#program-counter-pc)
+  * IR = [instruction register](#instruction-register)
+  * CC = [control circuitry](#cleaning-up-control-circuitry) (called "control world" by Ben)
+* Taking von Neumann terminology into account, this is the what the architecture and terminology of our 8 bit computer looks like:
+![404]({{ site.url }}/images/8bit/control/arch.PNG)
+  * "CPU" would consist of the red and blue bordered areas, with the read one being the control unit and the blue one the ALU.
+  * The RAM is the memory that contains the program and variables, but as described in the [memory layout](#memory-layout) section, we could define address 1111 and a halt/unhalt mechanism to integrate "live" user inputs by explicitly storing them in the last RAM address.
+* What it's left to do is the control circuitry and integrating the components of the control unit:
+  * Brush up active low signals
+  * Invent a machine language/instruction set
+  * Implement instruction decoders and their integration with the program counter and instruction register.
+
+#### Cleaning up control circuitry
+* Before we start integrating the control unit, we will first "fix" the active low signals into active high to keep things consistent which then make it easier to integrate and debug.
+* Replace all jumperwires with long cables that we will connect to a "hub" of control signals, which are part of the "control circuitry" in [CSE1400](localhost:3000/downloads/CSE1400_(history-logic_circuits-data_representation-isa-assembly-cpu-io-memory-pipelining).pdf#page=32) or ("control world" by Ben) together with the instruction decoder (called EEPROM microcode by Ben) to which all these signals connect.
+* We will also connect these signals to LED and resistors (that connects to ground) in series to be able to see their state (high or low) and eventually connect them (before the anode) to the output pins of the "Microcode EEPROMs", which act basically as instruction register opcode decoders, and control whether a signal is high or low.
   * With the active low signals, we will invert active lows with an HEX inverter chip to make "microcode" easier
-* This way we can control the computer just by "coding" the program via the RAM inputs and then switching it to run mode
-* I burned one hex inverter so I decided to use un-used inputs of other NAND and hex inverter chips
-* TODO: connect counter out and jump
-* replace blue led resistors with 1K resistors (all black iirc)
-* comprar babibel plastic para el output display
+* *I burned one hex inverter so I decided to use un-used inputs of other NAND and hex inverter chips used in other modules*
+* Replacing the jumperwires with long wires should look like this:
 
-### Microcode EEPROM (CPU instruction decoder)
+![404]({{ site.url }}/images/8bit/control/clean.PNG)
+
+### Defining our own instruction set (machine language)
+
+
+
+### Microcode EEPROM (instruction decoder)
 * Takes the opcode as the address input for the 4 least siginficant address pins
 * Appends \\(t_n\\) to the most significant address bits
 * Outputs the value for all control signals at a specific \\(t_n\\)
+
+
+## Programs
+
+### Fibonacci
+
+### Hello world hack
+* Update the output EEPROM with the following code:
+
+```c++
+arduino stuff
+```
+
+* Run the following program
+
+```
+LOAD 1
+SUM 1
+...
+```
+
+* The strategy was to see the 4 digit display as a movie frame and just run a program that increments the frame number each clock cycle. We can then program a unique display for each frame:
+  * Frame 1: `....`
+  * Frame 2: `...H`
+  * Frame 3: `..HE`
+  * Frame 4: `.HEL`
+  * Frame 5: `HELL`
+  * Frame 6: `ELLO`
+  * Frame 7: `LLO.`
+  * ...
+  * Frame x: `RLD.`
+  * Frame x: `LD..`
+  * Frame x: `D...`
+  * Frame x: `....`
