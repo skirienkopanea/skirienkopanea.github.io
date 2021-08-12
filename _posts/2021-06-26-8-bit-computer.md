@@ -110,9 +110,11 @@ tags: project
       - ["Tinkercad"](#tinkercad-11)
     - [Output register](#output-register)
     - [Schematic](#schematic-8)
+      - [Output module](#output-module-1)
+      - [Computer High Level overview](#computer-high-level-overview)
   - [Control unit](#control-unit)
-    - [Cleaning control signals](#cleaning-control-signals)
-    - [Microcode EEPROM (Instruction decoder)](#microcode-eeprom-instruction-decoder)
+    - [Preparing control signals for the CPU instruction decoder](#preparing-control-signals-for-the-cpu-instruction-decoder)
+    - [Microcode EEPROM (CPU instruction decoder)](#microcode-eeprom-cpu-instruction-decoder)
 
 ## Introduction
 Ben Eater is an online educator on computer-related topics from which I'm following his 8-bit computer project. [https://eater.net/8bit](https://eater.net/8bit). The computer is composed of different modules, which are built on breadboards. The modules are the clock module, registers and ALU (arithmetic and logic unit) module, RAM (random access memory) and program counter module, and output and control logic module.
@@ -676,6 +678,8 @@ Datasheet recomends:
 * Built-in tri-state output with output control pin
 * Used in this project as building multiple 8 bit registers with just basic logic gates is a cumbersome repetitive process not necessarily in line with the goal of the project.
 
+![404]({{ site.url }}/images/8bit/register/74LS173.png)
+
 ### Building an 8-bit register
 * We will be using 2 [74LS173A]({{ page.url }}#74ls173a-4-bit-registers) chips for each 8 bit register
 * It has a built-in tri-state logic gate with the default output set to be disconnected unless the output control is enabled
@@ -728,6 +732,8 @@ Datasheet recomends:
 ### Instruction register
 * The instruction register is identical besides that it is aestethically mirrored as we will place it on the left side of the computer
 * Also it will only connect the 4 least significant bits (yellow) to the BUS, as the other 4 will connect to into the instruction decoder (next chapters)
+  * So you should connect A1-A4 (4 most significant bits) of the buffer to ground
+  * Make sure to connect to use the clock signal, which is the left leg of the RC capacitor of the RAM input module, and not the pull-down resistor.
 ![404]({{ site.url }}/images/8bit/register/ir.PNG)
 
 ## Arithmetic Logic Unit (ALU)
@@ -1550,12 +1556,25 @@ Steps:
   * Connect all output register inputs to the bus
 
 ### Schematic
+#### Output module
 ![404]({{ site.url }}/images/8bit/output/schematic.PNG)
+#### Computer High Level overview
+![404]({{ site.url }}/images/8bit/control/schematic1.PNG)
 
 ## Control unit
-* Picture of counter/arch.PNG
-### Cleaning control signals
-* Invert active lows
-* 
-### Microcode EEPROM (Instruction decoder)
-* 
+![404]({{ site.url }}/images/8bit/counter/arch.PNG)
+* Before we start building the control unit (module that translates RAM opcode into control signals for t0, t1, t2, t3, and t4), we will first "fix" the active low signals into active high, such that all control signals have active high interfaces like the ones displayed in the architecture overview above.
+
+### Preparing control signals for the CPU instruction decoder
+* Replace all jumperwires with long cables that we will connect to a "hub" of control signals, in which we will connect each signal to a LED and resistor (that connects to ground) in series to be able to see it's state (high or low) and eventually connect them (before the anode) to the output pins of the "Microcode EEPROMs", which act basically as RAM opcode decoders, and control wether a signal is high or low.
+  * With the active low signals, we will invert active lows with an HEX inverter chip to make "microcode" easier
+* This way we can control the computer just by "coding" the program via the RAM inputs and then switching it to run mode
+* I burned one hex inverter so I decided to use un-used inputs of other NAND and hex inverter chips
+* TODO: connect counter out and jump
+* replace blue led resistors with 1K resistors (all black iirc)
+* comprar babibel plastic para el output display
+
+### Microcode EEPROM (CPU instruction decoder)
+* Takes the opcode as the address input for the 4 least siginficant address pins
+* Appends \\(t_n\\) to the most significant address bits
+* Outputs the value for all control signals at a specific \\(t_n\\)
