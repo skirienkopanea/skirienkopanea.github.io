@@ -111,13 +111,21 @@ tags: project
     - [Output register](#output-register)
     - [Schematic](#schematic-8)
       - [Output module](#output-module-1)
-      - [Computer High Level overview](#computer-high-level-overview)
-  - [Instruction set architecture](#instruction-set-architecture)
-    - [Memory layout](#memory-layout)
+      - [Computer High Level overview so far](#computer-high-level-overview-so-far)
+  - [Terminology review](#terminology-review)
+    - [Instruction set architecture](#instruction-set-architecture)
+    - [Memory layout of a stored-program digital computer](#memory-layout-of-a-stored-program-digital-computer)
     - [CPU vs Control unit](#cpu-vs-control-unit)
-      - [Cleaning up control circuitry](#cleaning-up-control-circuitry)
-    - [Defining our own instruction set (machine language)](#defining-our-own-instruction-set-machine-language)
-    - [Microcode EEPROM (instruction decoder)](#microcode-eeprom-instruction-decoder)
+  - [Control unit](#control-unit)
+    - [Cleaning up control circuitry](#cleaning-up-control-circuitry)
+    - [Defining our own assembly language](#defining-our-own-assembly-language)
+      - [Example](#example)
+      - [Instruction format](#instruction-format)
+      - [Instruction set](#instruction-set)
+    - [Control logic](#control-logic)
+      - [Building the control logic counter](#building-the-control-logic-counter)
+      - [Building the fetch cycle](#building-the-fetch-cycle)
+      - [Building the instruction decoder](#building-the-instruction-decoder)
   - [Programs](#programs)
     - [Fibonacci](#fibonacci)
     - [Hello world hack](#hello-world-hack)
@@ -1543,6 +1551,8 @@ Steps:
 * Ben is using a 74LS76 as the dual JK flip-flop but the kit comes with the 74LS107, which is functionally the same, **but has a different pinout**:
 ![404]({{ site.url }}/images/8bit/output/74LS107.PNG)
 (74LS107 pinout)
+* We can cover the output LEDs with a transparent red plastic to improve its readability
+![404]({{ site.url }}/images/8bit/output/red.jpg)
 
 ### Output register
 * It doesn't need to drive the BUS, it only needs to read from the BUS, therefore the tri-state buffer gate wont be needed
@@ -1566,15 +1576,16 @@ Steps:
 ### Schematic
 #### Output module
 ![404]({{ site.url }}/images/8bit/output/schematic.PNG)
-#### Computer High Level overview
+#### Computer High Level overview so far
 ![404]({{ site.url }}/images/8bit/control/schematic1.PNG)
 
-## Instruction set architecture
+## Terminology review
+### Instruction set architecture
 * *"An instruction set architecture (ISA) is an abstract model of a computer that serves as the interface between software and hardware"*
   * Basically it's a set of definitions and graphs that help the user understand the hardware behind the software features provided
 * The ISA provides:
   * supported data types (in our case only 8 bit integers)
-  * memory layout (we have von Neumann)
+  * memory layout
   * addressing modes (we have 16 "byte addressable" addresses)
   * instruction set (implicit meaning of all the bits that we program at each byte of the RAM)
     * This is arbitrary and we will create our own instruction set language (which we will refer to as machine language)
@@ -1584,8 +1595,8 @@ Steps:
   * input/output model (ours doesn't have "interrupts" besides input halts, which are determined by the program)
 * There are various types of ISA's, such as CISC (stack based) and RISC (register based). Ours is so limited we can't really compare it to any commercial ISA, it's our own ISA.
 
-### Memory layout
-* Below a review of the von Neumann architecture that we'll use to establish some terminology
+### Memory layout of a stored-program digital computer
+* Below a review of the von Neumann architecture that we'll use to establish some terminology (especially CPU terminology) and see how our computer compares to this established framework of "stored-program digital computer"
 ![404]({{ site.url }}/images/8bit/control/vn.PNG)
 * the von Neumann architecture describes a design architecture for an electronic digital computer with these components:
   * A processing unit (CPU) that contains an arithmetic logic unit and processor registers (A, B and flag registers)
@@ -1598,16 +1609,15 @@ Steps:
       2. Make that the program loads that RAM address, empties the bus, enables RAM out, then halts
         * Now whenever you see a halted program with RAM address 1111 (all green), it means the program is waiting for your input.
       3. Then all we need is a pushbutton which upon activation the program  unhalts, and proceeds with a loaded bus with the user "live" input
-* The most characteristic property of a von Neumann architecture is that program instructions and data share the same memory and bus.
-  * In a Harvard architecture you would have one bus for the data (red LEDs) and one bus for the instructions (green LEDs), you'd be able to load the opcode into the instruction register and the data into the ALU registers at the same time.
-  * We clearly have a von Neumman computer as there's only 1 bus and we need to have different clock cycles for each of those tasks.
+      * We will skip it for now as some assembly language examples use address 15 like Ben Eater, without having it as an input address. If I eventually implement this feature I will dedicate a separate section.
+* Although these are formal definitions beyond Ben's project goal, it was a goal of mine to understand computer jargon, hence this slight theory detour.
 
 ### CPU vs Control unit
-* Looking at the [von Neumann architecture](#memory-layout) that we have, we can see at a higher level that "CPU" (central processing unit) is composed of the [ALU](#arithmetic-logic-unit-alu) (the module that does all the calculations) and the **Control Unit**, which is responsible for **fetching**, **decoding** and **executing** instructions stored in the program.
+* Looking at the [von Neumann architecture](#memory-layout-of-a-stored-program-digital-computer) that we have, we can see at a higher level that "CPU" (central processing unit) is composed of the [ALU](#arithmetic-logic-unit-alu) (the module that does all the calculations) and the **Control Unit**, which is responsible for **fetching**, **decoding** and **executing** instructions stored in the program.
   * PC = [program counter](#program-counter-pc)
   * IR = [instruction register](#instruction-register)
-  * CC = [control circuitry](#cleaning-up-control-circuitry) (called "control world" by Ben)
-* Taking von Neumann terminology into account, this is the what the architecture and terminology of our 8 bit computer looks like:
+  * CC = [control circuitry](#cleaning-up-control-circuitry) (partially called "control world" by Ben)
+* Taking von Neumann terminology into account, this is what the architecture and terminology of our 8 bit computer looks like:
 ![404]({{ site.url }}/images/8bit/control/arch.PNG)
   * "CPU" would consist of the red and blue bordered areas, with the read one being the control unit and the blue one the ALU.
   * The RAM is the memory that contains the program and variables, but as described in the [memory layout](#memory-layout) section, we could define address 1111 and a halt/unhalt mechanism to integrate "live" user inputs by explicitly storing them in the last RAM address.
@@ -1616,7 +1626,8 @@ Steps:
   * Invent a machine language/instruction set
   * Implement instruction decoders and their integration with the program counter and instruction register.
 
-#### Cleaning up control circuitry
+## Control unit
+### Cleaning up control circuitry
 * Before we start integrating the control unit, we will first "fix" the active low signals into active high to keep things consistent which then make it easier to integrate and debug.
 * Replace all jumperwires with long cables that we will connect to a "hub" of control signals, which are part of the "control circuitry" in [CSE1400](localhost:3000/downloads/CSE1400_(history-logic_circuits-data_representation-isa-assembly-cpu-io-memory-pipelining).pdf#page=32) or ("control world" by Ben) together with the instruction decoder (called EEPROM microcode by Ben) to which all these signals connect.
 * We will also connect these signals to LED and resistors (that connects to ground) in series to be able to see their state (high or low) and eventually connect them (before the anode) to the output pins of the "Microcode EEPROMs", which act basically as instruction register opcode decoders, and control whether a signal is high or low.
@@ -1626,15 +1637,116 @@ Steps:
 
 ![404]({{ site.url }}/images/8bit/control/clean.PNG)
 
-### Defining our own instruction set (machine language)
+### Defining our own assembly language
+#### Example
+* Recall that machine language/instruction set is the binary code that we will input in the RAM and that assembly language is the human readable version.
+* Let's come up with an example of a 3 word command pseudocode for our "machine language" and define how we would execute it:
 
+```
+  0. LDA 14
+  1. ADD 15
+  2. OUT
+```
 
+* All of our programs implicitly start at RAM address 0, and since our instruction length matches the byte addressable memory locations, each line of code number literally represents the RAM address in which we will store that "line of code" or rather **instruction**.
+* This means that first we load the contents of memory address 14 into register A
+* Then we load the contents at address 15 into register B
+* Then we load the contents of the ALU into the output register
 
-### Microcode EEPROM (instruction decoder)
-* Takes the opcode as the address input for the 4 least siginficant address pins
-* Appends \\(t_n\\) to the most significant address bits
-* Outputs the value for all control signals at a specific \\(t_n\\)
+#### Instruction format
+![404]({{ site.url }}/images/8bit/control/layout.PNG)
+* All of our instructions would have the following layout in memory: `[4-bit instruction (known to humans as opcode)] (4-bit operand)` with [] defining mandatory and () defining optional.
+  * This already tells us that we have a maximum of 16 opcodes
+* The optional operand may not be used (whatever is on the 4 LSB is ignored) because the address/register is implicitly known or because it does not regard any storage, such as halting the clock.
+* This is known as one-address instructions, where the implicit register in commands such as `SUM OUT` and `STORE 10` is the so called "accumulator" (holds temporary results of the ALU), which in our case is not a seperate register but the actual contents of the two 4-bit adders that make up our ALU, and the operand generally stands for a register, constant or memory address.
+* All of our **operands will regard a memory address**
 
+#### Instruction set
+* The table below shows the complete list 4-bit binary instructions and human readable opcodes
+
+binary instruction | assembly opcode | has operand | meaning
+---|---|---
+`0001`|LDA|yes| Load contents of operand address into register A
+`0010`|ADD|yes| Load contents of operand address into register B, and set ALU to sum (default), then store them into register A
+`1110`|OUT|yes| Load contents of register A into output register
+
+### Control logic
+* In order to execute an instruction such as `00011111` (LDA 15), which stands for *"Load contents of operand address into register A"*, we have to to trigger certain signals high (the rest are implicitly low) to ensure we move the data that we want in the correct places without corrupting it.
+* Steps to run any instruction (`00011111` as an example):
+  1. Fetch cycle: We fetch the instruction from memory and put it in the instruction register.
+     1. Go to next instruction (pointed by the program counter): Program counter out -> Memory address register in
+     2. Send opcode to instruction decoder: RAM out -> Instruction register in
+     3. Increment program counter already for next instruction: Counter Enable
+       * Although it has a seperate logical purpose, we will include Counter Enable into the previous clock cycle as it does not interfere with the BUS, so we save up 1 micro clock cycle.
+  2. [Decode instruction](#microcode-eeprom-instruction-decoder): Here the instruction decoder will know that `00011111` means take the contents of memory address `1111` and put it on register A
+  3. Execute instruction `00011111`:
+     1. Instruction register out (this outputs the lower significant bits that contain the address of the operand) -> Memory address register in
+     2. Ram out -> Register A in
+* In practice the decode will be done by using an EEPROM (we can replace combinatorial logic with a EEPROM) and the execution takes multiple clock cycles. In this case we saw that it took 2 clock cycles for the execution.
+* In practice the execution is not necessarily a different process from decoding, they go hand in hand and as at each clock cycle the EEPROM will decode a different set of control signals that get executed within the same rising edge of the clock.
+* Splitting one instruction/opcode into different clock cycles results in multiple "**micro instructions**" that take 1 clock pulse each.
+
+#### Building the control logic counter
+* we need to be able to know in which micro instruction number we are and start from 0 again when we're done executing all the microinstructions
+* We build a separate program counter but for micro instructions.
+  * This one is much simpler than the program counter as micro instructions do not have jumps
+  * Every micro instruction takes 1 clock cycle so there's no need to have a counter enable signal (it's always on)
+  * When we're done we can just reset the clock to 0. (which immedeately starts the next fetch cycle)
+* The values of this separate counter indicate the micro instruction number that is being executed, and we call those numbers T0, T1...
+  * we're just gonna use the lower 3 bits out of the 4 that the 74LS161 4-bit binary counter has)
+  * As a matter of fact, we're just gonna have a total of 5 micro instruction clock cycles and all microinstructions will have the same length (we just padd the remaining cycles with no operation at all). We will reset the micro clock after the 5th cycle, this is easier to implement than to have an extra control signal that resets the micro clock.
+
+* Implementation:
+  1. Insert the [74LS161](#74ls161) 4-bit binary counter
+     * Connect power and ground
+     * Tie clear (for now) and load high, as well as 7 and 10 (enable)
+     * Connect the global computer clock signal to the clock pin after offsetting it
+  2. Offset the control logic counter:
+     * We need some buffer time to prepare the control signals before the next clock cycle comes in. If we just use the same clock pulse as the global computer, the control signals may or may not be updated for the clock pulses that we need.
+     * By using an inverted global clock signal for the micro instructions clock we then can prepare the control signals while the global clock is low (as ours will be high). *Eventually the micro instruction clock gets incremented at the falling edge of the global clock.*
+     * We already inverted the global clock twice for the RAM RC circuit. Just use the first inversion also for the micro instruction clock.
+  3. Use the 74LS138, which is a 3-8 line decoder, because we want to convert the 3 bit input of the micro clock into 8 separate signals, of which we will use just 6 (5 to light up LEDs that help us debug), and the 6th bit (bit Q5 if we start counting at Q0) will be used to reset the micro clock (since T5, T6 and T7 will never be used) (recall that the decoder has all H except 1 L)
+      * so basically we have 8 T's for each opcode for which we can program a microcode instruction (a set of high and low control signals)!
+   ![404]({{ site.url }}/images/8bit/control/74LS138.PNG)  
+      * Hookup ground and power
+      * \\(E_1\\) and \\(E_2\\) are active low while \\(E_3\\) is active high, connect the first 2 to ground and the third one to \\(V_{cc}\\)
+      * Hookup the inputs to the micro code clock outputs (both chips are big endian (LSB pins start on the left))
+      * Connect clear of the micro clock to the 7th output bit (Q6) of the decoder 
+
+#### Building the fetch cycle
+* The first 3 micro instructions that constitute the fetch cycle are the same for all opcodes.
+* Altough we don't need to know the instruction register opcode, it's easier to implement the fetch cycle micro instructions decoder together with the instruction decoder EEPROMs.
+
+#### Building the instruction decoder
+* In order to decode a whole instruction (including the fetch cycle) we will append the micro clock cycle outputs together with the opcode and connect them to the address pins of the EEPROMs, which should return, for each T, a set of high/low control signals.
+* The lookup table below summarizes what we expect the EEPROM to output for each control signal based on the [instruction opcode](#instruction-set) (and micro-clock step value)
+
+* Use excel to html converter or something
+
+<div style="overflow-x:auto">
+ <table>
+  <tr>
+    <th>Assembly opcode</th>
+    <th>Binary opcode</th>
+    <th>Microclock Step</th>
+    <th>HLT</th>
+    <th>MI</th>
+    <th>RI</th>
+    <th>RO</th>
+    <th>IO</th>
+    <th>II</th>
+    <th>AI</th>
+    <th>AO</th>
+    <th>EO</th>
+    <th>SU</th>
+    <th>BI</th>
+    <th>OI</th>
+    <th>CE</th>
+    <th>CO</th>
+    <th>J</th>
+  </tr>
+</table> 
+</div>
 
 ## Programs
 
