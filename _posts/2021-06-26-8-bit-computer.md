@@ -127,6 +127,7 @@ tags: project
       - [Building the fetch cycle](#building-the-fetch-cycle)
       - [Building the instruction decoder](#building-the-instruction-decoder)
   - [Programs](#programs)
+    - [Assembly compiler](#assembly-compiler)
     - [Fibonacci](#fibonacci)
     - [Hello world hack](#hello-world-hack)
 
@@ -1659,16 +1660,26 @@ Steps:
   * This already tells us that we have a maximum of 16 opcodes
 * The optional operand may not be used (whatever is on the 4 LSB is ignored) because the address/register is implicitly known or because it does not regard any storage, such as halting the clock.
 * This is known as one-address instructions, where the implicit register in commands such as `SUM OUT` and `STORE 10` is the so called "accumulator" (holds temporary results of the ALU), which in our case is not a seperate register but the actual contents of the two 4-bit adders that make up our ALU, and the operand generally stands for a register, constant or memory address.
-* All of our **operands will regard a memory address**
+* Our operands will regard either a memory address or an immediate value (a 4 bit integer)
 
 #### Instruction set
-* The table below shows the complete list 4-bit binary instructions and human readable opcodes
+* The table below shows the complete list of 4-bit binary instructions and their human readable opcodes
 
 binary instruction | assembly opcode | has operand | meaning
 ---|---|---
+`0000`|NOP|no| Do nothing (no operation)
 `0001`|LDA|yes| Load contents of operand address into register A
-`0010`|ADD|yes| Load contents of operand address into register B, and set ALU to sum (default), then store them into register A
-`1110`|OUT|yes| Load contents of register A into output register
+`0010`|ADD|yes| Load contents of operand address into register B, and set ALU to sum (default), then store result into register A
+`0011`|SUB|yes| Load contents of operand address into register B and set ALU to subtract, then store result into register A
+`0100`|STA|yes| Store the contents of register A into the address of the operand
+`0101`|LDI|yes| Load immediate value of the operand into register A
+`0110`|JMP|yes| Jump to the memory address of the operand (aka code line)
+`0110`|JPC|yes| Jump carry **TO DO**
+`0111`|JPZ|yes| JUmp zero **TODO**
+`1110`|OUT|no| Load contents of register A into output register
+`1111`|HLT|no| Halt the system
+`1100`|+++|no| Do A++ constantly each micro clock cycle (skips fetch and counter enable, it's an endless loop)
+`1101`|\-\-\-|no| Do A\-\- constantly each micro clock cycle (same type of loop)
 
 ### Control logic
 * In order to execute an instruction such as `00011111` (LDA 15), which stands for *"Load contents of operand address into register A"*, we have to to trigger certain signals high (the rest are implicitly low) to ensure we move the data that we want in the correct places without corrupting it.
@@ -1706,12 +1717,14 @@ binary instruction | assembly opcode | has operand | meaning
      * By using an inverted global clock signal for the micro instructions clock we then can prepare the control signals while the global clock is low (as ours will be high). *Eventually the micro instruction clock gets incremented at the falling edge of the global clock.*
      * We already inverted the global clock twice for the RAM RC circuit. Just use the first inversion also for the micro instruction clock.
   3. Use the 74LS138, which is a 3-8 line decoder, because we want to convert the 3 bit input of the micro clock into 8 separate signals, of which we will use just 6 (5 to light up LEDs that help us debug), and the 6th bit (bit Q5 if we start counting at Q0) will be used to reset the micro clock (since T5, T6 and T7 will never be used) (recall that the decoder has all H except 1 L)
-      * so basically we have 8 T's for each opcode for which we can program a microcode instruction (a set of high and low control signals)!
+      * so basically we have 5 T's for each opcode for which we can program a microcode instruction (a set of high and low control signals)!
    ![404]({{ site.url }}/images/8bit/control/74LS138.PNG)  
       * Hookup ground and power
       * \\(E_1\\) and \\(E_2\\) are active low while \\(E_3\\) is active high, connect the first 2 to ground and the third one to \\(V_{cc}\\)
       * Hookup the inputs to the micro code clock outputs (both chips are big endian (LSB pins start on the left))
-      * Connect clear of the micro clock to the 7th output bit (Q6) of the decoder 
+      * Connect clear of the micro clock to the 6th output bit (Q5) of the decoder
+
+![404]({{ site.url }}/images/8bit/control/tinker1.PNG)  
 
 #### Building the fetch cycle
 * The first 3 micro instructions that constitute the fetch cycle are the same for all opcodes.
@@ -1748,7 +1761,12 @@ binary instruction | assembly opcode | has operand | meaning
 </table> 
 </div>
 
+* [Repo with the EEPROM code](https://github.com/skirienkopanea/eeprom-programmer/blob/master/microcode-eeprom-with-flags/microcode-eeprom-with-flags.ino)
 ## Programs
+### Assembly compiler
+* Do a java program that turns a txt into another txt in binary
+  * Do it in such a way that you can pass the paramaters javaprogram -i assembly_file_name -o binary_file_name
+  * where i is the input file and o is the output file
 
 ### Fibonacci
 
