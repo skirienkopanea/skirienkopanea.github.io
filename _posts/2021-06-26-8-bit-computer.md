@@ -124,8 +124,10 @@ tags: project
       - [Instruction set](#instruction-set)
     - [Control logic](#control-logic)
       - [Building the control logic counter](#building-the-control-logic-counter)
+      - [Building the flags register](#building-the-flags-register)
       - [Building the fetch cycle](#building-the-fetch-cycle)
       - [Building the instruction decoder](#building-the-instruction-decoder)
+      - [Building the reset circuit (resume clock and clear data)](#building-the-reset-circuit-resume-clock-and-clear-data)
   - [Programs](#programs)
     - [Assembly compiler](#assembly-compiler)
     - [Fibonacci](#fibonacci)
@@ -982,7 +984,7 @@ Open [tinkercad](https://www.tinkercad.com/things/4PaTMquHAzK-8-bit-alu-sum-and-
 * With a decoder the total number of address selection pins required is \\(log_2(\text{total address count}\\)), i.e. (the 16th address, starting at 1st address = 0000, would be 1111)
 ![404]({{ site.url }}/images/8bit/ram/decoder1.PNG)
 ![404]({{ site.url }}/images/8bit/ram/decoder2.PNG)
-* Do not confuse a decoder with a multiplexer. The multpilexer has \\(n\\) selection inputs with at most \\(2^n\\) data inputs for which then the multiplexer outputs just 1 of the data inputs (looks like a decoder with a final OR gate to just have 1 output line)
+* Do not confuse a decoder with a multiplexer. The multpilexer has \\(n\\) selection inputs with at most \\(2^n\\) data inputs for which then the multiplexer outputs just 1 of the data inputs (looks like a decoder with a final OR gate to just have 1 output line) (or simply said, the multiplexer is a "selector", out of many *data* inputs, you only output one of 'em (based on *selector* input pin(s)))
 ![404]({{ site.url }}/images/8bit/ram/mux.PNG)
 ![404]({{ site.url }}/images/8bit/ram/mux2.PNG)
 * The decoder on the other hand only has selection inputs, i.e. n, and at and at most (and generally close to) \\(2^n\\) outputs.
@@ -1605,12 +1607,7 @@ Steps:
   * Memory that stores data and instructions
   * External mass storage (we don't have this)
   * Input and output mechanisms
-    * Note on "Live" Input feature: 
-      1. Just reserve address 1111 of the RAM to store the "live" input.
-      2. Make that the program loads that RAM address, empties the bus, enables RAM out, then halts
-        * Now whenever you see a halted program with RAM address 1111 (all green), it means the program is waiting for your input.
-      3. Then all we need is a pushbutton which upon activation the program  unhalts, and proceeds with a loaded bus with the user "live" input
-      * We will skip it for now as some assembly language examples use address 15 like Ben Eater, without having it as an input address. If I eventually implement this feature I will dedicate a separate section.
+    * Note that although a "live" input during run mode was not a feature of Ben's build I've decided to do a poorman's "live" input implementation just by adding one extra [switch](#building-the-reset-circuit-resume-clock-and-clear-data) and an Input "protocol" based on the operand of the HLT command (see the footnote at the [instruction set](#instruction-set) section).
 * Although these are formal definitions beyond Ben's project goal, it was a goal of mine to understand computer jargon, hence this slight theory detour.
 
 ### CPU vs Control unit
@@ -1677,9 +1674,9 @@ binary instruction | assembly opcode | has operand | meaning
 `0110`|JPC|yes| Jump carry **TO DO**
 `0111`|JPZ|yes| JUmp zero **TODO**
 `1110`|OUT|no| Load contents of register A into output register
-`1111`|HLT|no| Halt the system
-`1100`|+++|no| Do A++ constantly each micro clock cycle (skips fetch and counter enable, it's an endless loop)
-`1101`|\-\-\-|no| Do A\-\- constantly each micro clock cycle (same type of loop)
+`1111`|HLT|yes\\(^{[1]}\\)| Halt the system
+
+\[1\]: To implement a cheap "live input" feature we can establish that HLT with 0000 operand means the normal HLT that Ben implemented (Usually end of the program and everything has to be reseted/cleared). However, when there is a non-zero operand we can establish that HLT is prompting the user to store an input (thus switching back to program mode) in the memory address pointed by the operand, then the user has to switch back to run mode and hit the reset button with the "[clear switch](#building-the-reset-circuit-resume-clock-and-clear-data)" off (this is my own modification to Ben's build).
 
 ### Control logic
 * In order to execute an instruction such as `00011111` (LDA 15), which stands for *"Load contents of operand address into register A"*, we have to to trigger certain signals high (the rest are implicitly low) to ensure we move the data that we want in the correct places without corrupting it.
@@ -1726,42 +1723,125 @@ binary instruction | assembly opcode | has operand | meaning
 
 ![404]({{ site.url }}/images/8bit/control/tinker1.PNG)  
 
+#### Building the flags register
+* Yada
+
 #### Building the fetch cycle
-* The first 3 micro instructions that constitute the fetch cycle are the same for all opcodes.
-* Altough we don't need to know the instruction register opcode, it's easier to implement the fetch cycle micro instructions decoder together with the instruction decoder EEPROMs.
+* The first 2 microinstructions that constitute the fetch cycle are the same for all opcodes.
+* Altough we don't need to know the instruction register opcode, it's easier to implement the fetch cycle microinstructions decoder together with the instruction decoder EEPROMs.
 
 #### Building the instruction decoder
 * In order to decode a whole instruction (including the fetch cycle) we will append the micro clock cycle outputs together with the opcode and connect them to the address pins of the EEPROMs, which should return, for each T, a set of high/low control signals.
 * The lookup table below summarizes what we expect the EEPROM to output for each control signal based on the [instruction opcode](#instruction-set) (and micro-clock step value)
+* [Repo with the EEPROM code](https://github.com/skirienkopanea/eeprom-programmer/blob/master/microcode-eeprom-with-flags/microcode-eeprom-with-flags.ino) to [program (store) the table below with arduino]({{ site.url }}/arduino/2021/08/03/eeprom.html)
 
-* Use excel to html converter or something
-
+https://tableizer.journalistopia.com/tableizer.php
 <div style="overflow-x:auto">
- <table>
-  <tr>
-    <th>Assembly opcode</th>
-    <th>Binary opcode</th>
-    <th>Microclock Step</th>
-    <th>HLT</th>
-    <th>MI</th>
-    <th>RI</th>
-    <th>RO</th>
-    <th>IO</th>
-    <th>II</th>
-    <th>AI</th>
-    <th>AO</th>
-    <th>EO</th>
-    <th>SU</th>
-    <th>BI</th>
-    <th>OI</th>
-    <th>CE</th>
-    <th>CO</th>
-    <th>J</th>
-  </tr>
-</table> 
+<table class="tableizer-table">
+<thead><tr class="tableizer-firstrow"><th>Assembly opcode</th><th>Binary opcode</th><th>Microclock Step</th><th>HLT</th><th>MI</th><th>RI</th><th>RO</th><th>IO</th><th>II</th><th>AI</th><th>AO</th><th>EO</th><th>SU</th><th>BI</th><th>OI</th><th>CE</th><th>CO</th><th>J</th></tr></thead><tbody>
+ <tr><td>(Fetch)</td><td>xxxx</td><td>000</td><td>0</td><td>1</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0</td><td>1</td><td>0</td></tr>
+ <tr><td>&nbsp;</td><td>xxxx</td><td>001</td><td>0</td><td>0</td><td>0</td><td>1</td><td>0</td><td>1</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0</td><td>1</td><td>0</td><td>0</td></tr>
+ <tr><td>LDA</td><td>0001</td><td>010</td><td>0</td><td>1</td><td>0</td><td>0</td><td>1</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0</td></tr>
+ <tr><td>&nbsp;</td><td>0001</td><td>011</td><td>0</td><td>0</td><td>0</td><td>1</td><td>0</td><td>0</td><td>1</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0</td></tr>
+ <tr><td>&nbsp;</td><td>0001</td><td>100</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0</td></tr>
+ <tr><td>ADD</td><td>0010</td><td>010</td><td>0</td><td>1</td><td>0</td><td>0</td><td>1</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0</td></tr>
+ <tr><td>&nbsp;</td><td>0010</td><td>011</td><td>0</td><td>0</td><td>0</td><td>1</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0</td><td>1</td><td>0</td><td>0</td><td>0</td><td>0</td></tr>
+ <tr><td>&nbsp;</td><td>0010</td><td>100</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0</td><td>1</td><td>0</td><td>1</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0</td></tr>
+ <tr><td>OUT</td><td>1110</td><td>010</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0</td><td>1</td><td>0</td><td>0</td><td>0</td><td>1</td><td>0</td><td>0</td><td>0</td></tr>
+ <tr><td>&nbsp;</td><td>1110</td><td>011</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0</td></tr>
+ <tr><td>&nbsp;</td><td>1110</td><td>100</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0</td></tr>
+ <tr><td>HLT</td><td>1111</td><td>010</td><td>1</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0</td></tr>
+ <tr><td>&nbsp;</td><td>1111</td><td>011</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0</td></tr>
+ <tr><td>&nbsp;</td><td>1111</td><td>100</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0</td></tr>
+</tbody></table>
 </div>
 
-* [Repo with the EEPROM code](https://github.com/skirienkopanea/eeprom-programmer/blob/master/microcode-eeprom-with-flags/microcode-eeprom-with-flags.ino)
+* Each of the outputs (row with 16 bits of high/low values for the control signals) are called control words.
+  * Since a control word is 16 bit long, we will need one EEPROM to output the 8 MSB signals and another EEPROM to output the 8 LSB signals.
+* Breadboard circuit steps for the EEPROM instruction decoders:
+  1. Get rid of the control signal jumperwires in the control hub
+  2. Insert the EEPROMs and power/ground pins
+  3. Set write enable high, output enable and chip enable low
+  4. A7 to A10 won't be used (we only have 4 bit opcode + 3 bit micro clock), so tie them to ground
+  5. Connect the remaining address pins in the following way
+     * A0 = Micro clock Q0
+     * A1 = Micro clock Q1
+     * A2 = Micro clock Q2
+     * A3 = IR Q4
+     * A4 = IR Q5
+     * A5 = IR Q6
+     * A6 = IR Q7
+  6. Connect the I/O pins to the control signals in the following way:
+     * LEFT EEPROM:
+       * I/O0 = AO
+       * I/O1 = AI
+       * I/O2 = II
+       * I/O3 = IO
+       * I/O4 = RO
+       * I/O5 = RI
+       * I/O6 = MI
+       * I/O7 = HLT
+     * RIGHT EEPROM:
+       * I/O0 = FI (it'll come later, skip for now)
+       * I/O1 = J
+       * I/O2 = CO
+       * I/O3 = CE
+       * I/O4 = OI
+       * I/O5 = BI
+       * I/O6 = SU
+       * I/O7 = EO
+
+#### Building the reset circuit (resume clock and clear data)
+* Because we also add a fetch cycle in the HLT opcode, an easy way to resume the program is to reset the microclock.
+  * The program counter has already been increased to the memory address next after the HLT codeline
+  * Ressetting the microclock puts T at 000 and the microinstruction is counter out & memory address register in, followed by T 001 (which has ram out, instruction register in and clock enable) which means that we successfuly moved past the HLT instruction.
+
+<div style="overflow-x:auto">
+<table class="tableizer-table">
+<thead><tr class="tableizer-firstrow"><th>Assembly opcode</th><th>Binary opcode</th><th>Microclock Step</th><th>HLT</th><th>MI</th><th>RI</th><th>RO</th><th>IO</th><th>II</th><th>AI</th><th>AO</th><th>EO</th><th>SU</th><th>BI</th><th>OI</th><th>CE</th><th>CO</th><th>J</th></tr></thead><tbody>
+<tr><td>(Fetch)</td><td>xxxx</td><td>000</td><td>0</td><td>1</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0</td><td>1</td><td>0</td></tr>
+<tr><td>&nbsp;</td><td>xxxx</td><td>001</td><td>0</td><td>0</td><td>0</td><td>1</td><td>0</td><td>1</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0</td><td>1</td><td>0</td><td>0</td></tr>
+<tr><td>HLT</td><td>1111</td><td>010</td><td>1</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0</td></tr>
+<tr><td>&nbsp;</td><td>1111</td><td>011</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0</td></tr>
+<tr><td>&nbsp;</td><td>1111</td><td>100</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0</td></tr>
+</tbody></table>
+</div>
+
+* In addition to reseting the microclock, ben uses the same pushbutton to also reset the contents of all registers.
+* I want to be able to let the user prevent the reset from clearing all values and to clear only the clock such that we can just use the unhalt feature together with a new opcode that "prompts" the user for input and halts the computer. *Naturally we wouldn't want to clear everything afterwards...*
+
+* NAND gate based circuit and truth table for resetting both register data and micro clock
+
+![404]({{ site.url }}/images/8bit/control/reset.PNG)  
+
+| Push button Reset | \\(\overline{T5}\\) | Active high resets | Active low resets | Micro clock reset |
+| ----------------- | ---------------------- | ------------------ | ----------------- | ----------------- |
+| Inactive          | 0                      | 0                  | 1                 | 0                 |
+| Inactive          | 1                      | 0                  | 1                 | 1                 |
+| Pressed           | 0                      | 1                  | 0                 | 0                 |
+| Pressed           | 1                      | 1                  | 0                 | 0                 |
+
+* The reason Ben uses a buffer (triangle) is because it will now act as a buffer, or voltage follower. The idea is that if you took the signal from before a buffer, it could draw current and potentially burn out a chip, but a buffered signal will draw very little current.
+* The reason we invert one of the resets is because some resets are active high while others are active low
+
+* With just a three terminal switch we can use it as a variable to determine whether the reset button clears the registers or not
+
+![404]({{ site.url }}/images/8bit/control/switch.PNG)  
+
+| switch common                   | Push button Reset | \\(\overline{T5}\\) | Active high resets | Active low resets | Micro clock reset |
+| ------------------------------- | ----------------- | ---------------------- | ------------------ | ----------------- | ----------------- |
+| to pullup                       | Inactive          | 0                      | 0                  | 1                 | 0                 |
+| to pullup                       | Inactive          | 1                      | 0                  | 1                 | 1                 |
+| to pullup                       | Pressed           | 0                      | 0                  | 1                 | 0                 |
+| to pullup                       | Pressed           | 1                      | 0                  | 1                 | 0                 |
+| to \\(\\overline{button}\\) | Inactive          | 0                      | 0                  | 1                 | 0                 |
+| to \\(\\overline{button}\\) | Inactive          | 1                      | 0                  | 1                 | 1                 |
+| to \\(\\overline{button}\\) | Pressed           | 0                      | 1                  | 0                 | 0                 |
+| to \\(\\overline{button}\\) | Pressed           | 1                      | 1                  | 0                 | 0                 |
+
+![404]({{ site.url }}/images/8bit/control/tinker2.PNG)  
+[Open tinkercad](https://www.tinkercad.com/things/kqEvTjJLNn1-clear-reset-circuit)
+
 ## Programs
 ### Assembly compiler
 * Do a java program that turns a txt into another txt in binary
@@ -1780,10 +1860,16 @@ arduino stuff
 * Run the following program
 
 ```
-LOAD 1
-SUM 1
-...
+LDI 0
+STA 15
+ADD 1
+OUT
+STA 15
+SUB 32
+LDA 15
+JMPC 1
 ```
+* Just run the program as long as A is smaller or equal than the last frame
 
 * The strategy was to see the 4 digit display as a movie frame and just run a program that increments the frame number each clock cycle. We can then program a unique display for each frame:
   * Frame 1: `....`

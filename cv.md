@@ -7,7 +7,7 @@ permalink: /cv/
 
 ## Sergio Kirienko
 * Email: s.kirienkopanea@student.tudelft.nl
-* Location: Remote/South Holland, the Netherlands.
+* Location: Remote/The Netherlands.
 
 ## Skills
 ### Programming languages
@@ -39,8 +39,6 @@ permalink: /cv/
 * English (full working proficency)
 * Dutch (limited working proficency)
 * Catalan (full working proficency)
-* Attempts to speak Portuguese and French after a few beers, Russian after a few shots...
-* Open to learn and acquire new romance or germanic language proficency on demand
 
 ## Education
 * Delft University of Technology: BSc Computer Science (2020 - currently enrolled)
@@ -75,11 +73,7 @@ permalink: /cv/
 * Transfermarkt: [https://www.transfermarkt.com/sergio-kirienko-panea/profil/spieler/331596](https://www.transfermarkt.com/sergio-kirienko-panea/profil/spieler/331596)
 
 <div class="noprint">
-<h3> Currently developing </h3>
-<p><img src="https://raw.githubusercontent.com/skirienkopanea/gym/main/screenshot.png" width="100%"/></p>
-
 <a onclick="window.print();" href="#print">Print this page</a>
-
 </div>
 
 [//]: # Download my [1-page-CV-Sergio.pdf]("todo")
