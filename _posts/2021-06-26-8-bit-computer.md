@@ -128,6 +128,7 @@ tags: project
       - [Building the fetch cycle](#building-the-fetch-cycle)
       - [Building the instruction decoder](#building-the-instruction-decoder)
       - [Building the reset circuit (resume clock and clear data)](#building-the-reset-circuit-resume-clock-and-clear-data)
+    - [Schematic](#schematic-9)
   - [Programs](#programs)
     - [Assembly compiler](#assembly-compiler)
     - [Fibonacci](#fibonacci)
@@ -1762,7 +1763,8 @@ https://tableizer.journalistopia.com/tableizer.php
   1. Get rid of the control signal jumperwires in the control hub
   2. Insert the EEPROMs and power/ground pins
   3. Set write enable high, output enable and chip enable low
-  4. A7 to A10 won't be used (we only have 4 bit opcode + 3 bit micro clock), so tie them to ground
+  4. A10 won't be used (we only have 3 bit micro clock + 4 bit opcode + A7 to determine 8 MS signals/8LS signals and A8 and A9 for the flags registers), so tie it to ground
+     * Tie the first EEPROM A7 to ground, the second one to \\(V_{cc}\\)
   5. Connect the remaining address pins in the following way
      * A0 = Micro clock Q0
      * A1 = Micro clock Q1
@@ -1841,6 +1843,21 @@ https://tableizer.journalistopia.com/tableizer.php
 
 ![404]({{ site.url }}/images/8bit/control/tinker2.PNG)  
 [Open tinkercad](https://www.tinkercad.com/things/kqEvTjJLNn1-clear-reset-circuit)
+
+* Now connect the micro clock reset signal to the clear pin of the micro clock
+* Connect the active high reset signal with active high clears: (TODO check min 8:10 of https://www.youtube.com/watch?v=HtFro0UKqkk as he wires it very efficiently)
+  * Instruction register
+  * Memory address register
+  * A register
+  * B register
+* Connect the active low reset signal with active low clears:
+  * Program counter
+  * Output register
+
+### Schematic
+![404]({{ site.url }}/images/8bit/control/schematic2.PNG) 
+* As you can see I added the switch, and you may add a pull-up resistor instead of connecting directly to \\(V_{cc}\\). I'm using 330 Ohms. 
+* Although they appear in the schematic, I decided to not use LEDs for the microclock decoder as they do not provide any additional information compared to the 3 LEDs of the microclock 
 
 ## Programs
 ### Assembly compiler
