@@ -80,7 +80,7 @@ tags: project
     - [Building the memory address register (and a "programming mode" version)](#building-the-memory-address-register-and-a-programming-mode-version)
       - [Tinkercad](#tinkercad-7)
       - [Schematic](#schematic-5)
-    - [Building an 8-bit input terminal for the RAM (to manually store a program) and the alternative of inputs from the BUS](#building-an-8-bit-input-terminal-for-the-ram-to-manually-store-a-program-and-the-alternative-of-inputs-from-the-bus)
+    - [Building an 8-bit input terminal for the RAM (to manually store a program) and the alternative of inputs from the Bus](#building-an-8-bit-input-terminal-for-the-ram-to-manually-store-a-program-and-the-alternative-of-inputs-from-the-bus)
       - [Tinkercad](#tinkercad-8)
       - [Schematic](#schematic-6)
     - [Testing the RAM](#testing-the-ram)
@@ -229,7 +229,7 @@ For example, let's break down SN74LS161A.:
   * Some chips families are less forgiving about floating inputs, so as a thumb rule you should never leave an input pin unconnected (floating).
     * An open CMOS input pin is in a "high impedance" state, which means there won't be any substantial opportunity for a charge built up on the pin to dissipate and the Voltage of the pin will drift around due to internal and external leakage.
   * In TTL 74LS serie, a input signal between 0 and 0.8V is considered “LOW”, and a input signal between 2.0 and 5.0V is considered “HIGH”. Any voltage between 0.8 and 2.0 volts is undefined. Therefore, you have to guarantee in your design that you will never enter in the uncertainty zone.
-  * A Ben follower suggested to use **10k resistors**, other suggested **1k**, also for the BUS default pull-down resistors (instead of the 10k of Ben's build). So use 10k for pull-up and 1k for pull-down.
+  * A Ben follower suggested to use **10k resistors**, other suggested **1k**, also for the Bus default pull-down resistors (instead of the 10k of Ben's build). So use 10k for pull-up and 1k for pull-down.
   * But there's actually an [accurate way to calculate them](https://www.electronics-tutorials.ws/logic/pull-up-resistor.html)
 * Connecting directly to VCC (or even ground) might be a bad idea because a high current will flow through the pull-up resistor, heating the device and using up an unnecessary amount of power when the switch is closed. So **the idea is to calculate the MAX resistor value, and then round it down to the nearest standard commercial resistor value out there**.
 * A rule of thumb is to use a resistor that is at least 10 times smaller than the value of the input pin impedance. In bipolar logic families which operate at operating at 5V, the typical pull-up resistor value is 1-5 kΩ. For switch and resistive sensor applications, the typical pull-up resistor value is 1-10 kΩ. If in doubt, a good starting point when using a switch is 4.7 kΩ. Some digital circuits, such as CMOS families, have a small input leakage current, allowing much higher resistance values, from around 10kΩ up to 1MΩ. The disadvantage when using a larger resistance value is that the input pin responses to voltage changes slower.
@@ -269,7 +269,7 @@ Again, if you use a higher resistor, you will have a voltage within the undefine
 * The LS series chips are designed to run with no less than 4.75 volts. That gives you very little wiggle room. You absolutely need to have good power distribution. 
   * Run "main" power rails down both sides of the computer and connect every regular power rail on your computer directly to the main power rails. This will eliminate the daisy-chaining completely and ensure (nearly) optimal power distribution.
 ![404]({{ site.url }}/images/8bit/appendix/tip1.PNG)
-   * Alternatively connect power rails from left side of the BUS breadboards with right side of the BUS breadboards, at least once for each breadboard.
+   * Alternatively connect power rails from left side of the Bus breadboards with right side of the Bus breadboards, at least once for each breadboard.
 * The LS series of chips are TTL (transistor-transistor logic), which use quite a bit of power and are noisy when switching. They can cause voltage fluctuations which can make other chips do strange things.
   *  A **decoupling capacitor** sits directly across your power rails and serves to smooth out fluctuations in your power lines.
   * Spread the 100nF capacitors (104) accross power rails of the entire project  (for every few chips up to 1 capacitor for each chip).
@@ -328,7 +328,11 @@ Sources:
    *  One Hertz (Hz) is defined as one cycle per second
 * The clock can also be put into a manual mode where you push a button to advance each clock cycle. (Useful for debugging)
 * At this point I'm assuming that the goal of the clock module is to provide an output voltage terminal that alternates between high and low voltage with a frequency between 1-100 Herz. Then use one clock cycle as a unit of time to determine operation slots.
-  * Slots could be used to synchronise operations (i.e. to ensure that the BUS is only being used by 1 party at a time)
+  * Slots could be used to synchronise operations (i.e. to ensure that the Bus is only being used by 1 party at a time)
+* Update after finishing the control unit:
+  * We will distinguish between the system clock and the microinstruction clock. The system clock is indeed needed to synchronize all components on the breadboards (i.e. registers), which means they all do their work only if the clock is high; never when it's low. And because the clock speed is set above the longest time any signal needs to propagate through any circuit on the board, this system is preventing signals from arriving before other signals are ready and thus keeps everything safe and synchronized. 
+  * These operation slots determined by high clocks are, at the lowest level, prepared by a counter that uses an inverted system clock signal that generates 3-bit time slots \\(T_n\\) for control circuitry such that control signals for the modules are ready before the next normal clock pulse.
+  * The operations at the lowest level are called microinstructions (as stated above, they are prepared at low clock pulse but executed at high clock pulse)
 
 ### Astable 555 timer
 ![404]({{ site.url }}/images/8bit/clock/intro.PNG)
@@ -587,14 +591,14 @@ Datasheet recomends:
   * Outputs either A+B or A-B
 
 ### Bus architecture and how registers transfers work
-* Our registers store 8 bits of data and interfaces (as in "provides interaction features") to the BUS
-* Most computers are organized around a BUS (or multiple)
-  * The BUS is basically a network of cables that connect multiple components within a computer.
-  * It's a rather simple network, as the BUS serves primarly as a common connection point for multiple components within the computer
-  * For the 8 bit BUS we use 8 wires, and 4 snapped (+ -) power rails from 2 breadboards
+* Our registers store 8 bits of data and interfaces (as in "provides interaction features") to the Bus
+* Most computers are organized around a Bus (or multiple)
+  * The Bus is basically a network of cables that connect multiple components within a computer.
+  * It's a rather simple network, as the Bus serves primarly as a common connection point for multiple components within the computer
+  * For the 8 bit Bus we use 8 wires, and 4 snapped (+ -) power rails from 2 breadboards
 ![404]({{ site.url }}/images/8bit/register/bus.PNG)
-* The way we use the bus is by one module writting data onto the BUS and another module reading data from the BUS
-  * Only 1 module can write data on the BUS at a time, otherwise the data carried on the bus is corrupted
+* The way we use the bus is by one module writting data onto the Bus and another module reading data from the Bus
+  * Only 1 module can write data on the Bus at a time, otherwise the data carried on the bus is corrupted
 * One of the main things a register does next to storing data is loading data onto the bus so other components can read it from the bus
   * Registers have pins that when triggered with high/low voltage they can either read data from the bus or write it onto the bus.
     * When "Enable" is high, the current data stored in the register is written (and overwrites) onto the bus. Then it's visible to all the other modules (but they dont necessarily need to do anything with it)
@@ -609,10 +613,10 @@ Datasheet recomends:
 * The transistors above are NMOS (incomming high voltage closes the circuit)
 * If top is high and bottom is low the output sources current
 * If top is low and bottom is high the output sinsk current
-* The load pins detect the current of the input pins connected to the BUS (which are connected to the register/component that is enabling its output pins) to determine whether the pin is a 0 (sinks) or a 1 (emits)
+* The load pins detect the current of the input pins connected to the Bus (which are connected to the register/component that is enabling its output pins) to determine whether the pin is a 0 (sinks) or a 1 (emits)
   * This works well when only 1 component is emmiting/sinking current from the bus
   * If component A emits all 1's but component B is sinking all 0's then component C will read a corrupted version of A's data.
-  * Instead, the pull-up/pull-down transistor network for the outputs rather than having always closed circuit (either to ground or to \\(v_{cc}\\)), we can have a tri-state logic where we can just disconnect the output and leave an open circuit such that the outputs do not interfere with the BUS (unless enable is turned on, which shall be enabled by at most 1 component)
+  * Instead, the pull-up/pull-down transistor network for the outputs rather than having always closed circuit (either to ground or to \\(v_{cc}\\)), we can have a tri-state logic where we can just disconnect the output and leave an open circuit such that the outputs do not interfere with the Bus (unless enable is turned on, which shall be enabled by at most 1 component)
 
 #### Tri-state logic
 ![404]({{ site.url }}/images/8bit/register/tri2.PNG)
@@ -622,7 +626,7 @@ Datasheet recomends:
 * So we end up with:
   * Out = 0
   * Out = 1
-  * Out = disconnected (does not overwrite the BUS)
+  * Out = disconnected (does not overwrite the Bus)
     * It is technically "high impedence" (with high resistance) as mechanically opening the circuit takes much more time and energy
 * The input and output pins of the 74LS245 bus transceiver are connected to the enable pin a similar fashion
 * We generally hide the pullup and pulldown network in the tri-state gate symbol
@@ -719,9 +723,9 @@ Datasheet recomends:
 #### Tinkercad
 * Tinkercad [implementation](https://www.tinkercad.com/things/bljhgWwFIZf-8-bit-register).
 ![404]({{ site.url }}/images/8bit/register/register4.PNG)
-  * **BUS to register**: The inputs of the registers (who have not  load pin low (load = 1) in this context) are connected to the outputs of the tri-state logic gate (who has not enable pin high (enable = 0)) that connects to the bus (light blue cables)
+  * **Bus to register**: The inputs of the registers (who have not  load pin low (load = 1) in this context) are connected to the outputs of the tri-state logic gate (who has not enable pin high (enable = 0)) that connects to the bus (light blue cables)
 ![404]({{ site.url }}/images/8bit/register/bus3.PNG)
-  * **Register to BUS**: The outputs of the registers are always connected (M, N, pins to ground so we can see the register contents with the LEDs) to the tri-state logic gate (who has not enable pin low (enable = 1) in this context) such that it can be sent to the bus (green cables)
+  * **Register to Bus**: The outputs of the registers are always connected (M, N, pins to ground so we can see the register contents with the LEDs) to the tri-state logic gate (who has not enable pin low (enable = 1) in this context) such that it can be sent to the bus (green cables)
 
 #### Schematic for Register A (same as B)
 ![404]({{ site.url }}/images/8bit/register/schematic.png)
@@ -735,9 +739,9 @@ Datasheet recomends:
 ### Testing the register with a temporary bus
 * If there's no connection to a bus and you set load high, the 74LS173A chip will default the inputs as high voltage as there's typically a pull-up resistor, therefore all the bits of the register will set to 1 if there's an open circuit with the bus
 ![404]({{ site.url }}/images/8bit/register/disconnectedbus.PNG)
-  * This happened because load was high and enable was low (and since there's only this register there's literally no enabled bits in the bus, thus the bus is an open circuit (the input is floating and not grounded as although the BUS LEDs are connected to ground they are a diode, meaning that they are designed such that current only goes in one direction. Since the LEDs are aligned in a way to expect the current to come from the BUS, they are disallowing the situation where there are no current comming from the BUS and an input pin pull-up resistor wants to sink via the BUS leds connected to ground (that is not allowed as the LED blocks the current going that way, it essentially behaves then as an open circuit)))
-    * Later we will add a set of 8 \\(10k\Omega\\) resistors connected to the BUS and to ground to default the value of the BUS to 00000000 when there's no party enabling the BUS.
-      * Since their resistane is significantly high, they should not sink in much current when the bus is enabled, thus not affecting the normal behavour of the BUS.
+  * This happened because load was high and enable was low (and since there's only this register there's literally no enabled bits in the bus, thus the bus is an open circuit (the input is floating and not grounded as although the Bus LEDs are connected to ground they are a diode, meaning that they are designed such that current only goes in one direction. Since the LEDs are aligned in a way to expect the current to come from the Bus, they are disallowing the situation where there are no current comming from the Bus and an input pin pull-up resistor wants to sink via the Bus leds connected to ground (that is not allowed as the LED blocks the current going that way, it essentially behaves then as an open circuit)))
+    * Later we will add a set of 8 \\(10k\Omega\\) resistors connected to the Bus and to ground to default the value of the Bus to 00000000 when there's no party enabling the Bus.
+      * Since their resistane is significantly high, they should not sink in much current when the bus is enabled, thus not affecting the normal behavour of the Bus.
 * If we set the load low and the enable high we should be able to move the contents of the register to the bus
 ![404]({{ site.url }}/images/8bit/register/loadlowenablehigh.PNG)
 * Try to load a bus with some pins connected to ground such that the received load is a combination of 1s and 0s.
@@ -746,12 +750,12 @@ Datasheet recomends:
 ![404]({{ site.url }}/images/8bit/register/move2.PNG)
 
 * **My testing experience:**
-  * The register outputs and BUS LEDs without resistors, although allowed by the LS chips, seemed to sink too much current due to their low resistance (and that next they are connected to ground), and I wasn't able to send 8 ON bits from one register to the other until I removed the bits from the outputs and added a series \\(220\Omega\\) resistor to each LED in the BUS.
+  * The register outputs and Bus LEDs without resistors, although allowed by the LS chips, seemed to sink too much current due to their low resistance (and that next they are connected to ground), and I wasn't able to send 8 ON bits from one register to the other until I removed the bits from the outputs and added a series \\(220\Omega\\) resistor to each LED in the Bus.
   * Therefore my 8-bit computer will always have a resistor in series with each LED.
 
 ### Instruction register
 * The instruction register is identical besides that it is aestethically mirrored as we will place it on the left side of the computer
-* Also it will only connect the 4 least significant bits (yellow) to the BUS, as the other 4 will connect to into the instruction decoder (next chapters)
+* Also it will only connect the 4 least significant bits (yellow) to the Bus, as the other 4 will connect to into the instruction decoder (next chapters)
   * So you should connect A1-A4 (4 most significant bits) of the buffer to ground
   * Make sure to connect to use the clock signal, which is the left leg of the RC capacitor of the RAM input module, and not the pull-down resistor.
 ![404]({{ site.url }}/images/8bit/register/ir.PNG)
@@ -793,17 +797,17 @@ Datasheet recomends:
 ### ALU design
 * Our ALU will only do addition and subtraction
 * We will also connect the output of registers A and B directly to the inputs of the ALU
-* It will output to the BUS either:
+* It will output to the Bus either:
   * A+B (\\(EO\\))
     * E symbolizes \\(\Sigma\\), which is the sum
   * A-B (\\(SU\\))
     * SU symbolizes "subtraction"
 
 ![404]({{ site.url }}/images/8bit/alu/design.PNG)
-* AI/BI stands for load bus to A/B (load *A/B input* from BUS)
-* AO/BO stands for enable A/B onto the BUS (enable *A/B output* to BUS)
+* AI/BI stands for load bus to A/B (load *A/B input* from Bus)
+* AO/BO stands for enable A/B onto the Bus (enable *A/B output* to Bus)
 
-* Just like with the registers, we don't want to connect (and sink current) to the BUS at all times. We therefore also use tri-state logic gates to output to the bus (high, low or disconnect (aka not interact))
+* Just like with the registers, we don't want to connect (and sink current) to the Bus at all times. We therefore also use tri-state logic gates to output to the bus (high, low or disconnect (aka not interact))
 ![404]({{ site.url }}/images/8bit/alu/design2.PNG)
 * The XORs gates for B outputs can be triggered with a unique signal that XORs B with all 1's such that B is inverted, then to subract A-B we only need to do A + inverted B + 1 (2's complement sum = subtraction)
   * It'd be cumbersome to implement another full adder just to sum 1.
@@ -811,7 +815,7 @@ Datasheet recomends:
 * Therefore \\(EO\\) and \\(SU\\) are not exclusive instructions:
   * \\(EO\\) high and \\(SU\\) low = output A+B
   * \\(EO\\) high and \\(SU\\) high = output A-B
-  * \\(EO\\) low = disconnect from BUS
+  * \\(EO\\) low = disconnect from Bus
 
 ### Building the ALU
 * Components:
@@ -864,7 +868,7 @@ Datasheet recomends:
        * \\(\text{left XOR output 4} = \text{MSB adder (left) input } B_4\ (pin\ 11)\\)
   8. Connect enable jumper wire for the tri-state buffer 
   9.  Set the direction pin of the tri-state buffer high
-  10. Connect the output of the tristate buffer of the ALU to the BUS
+  10. Connect the output of the tristate buffer of the ALU to the Bus
   11. Optional: hookup LEDs to the tristate buffer inputs of the ALU
 
 #### Tinkercad
@@ -876,19 +880,19 @@ Open [tinkercad](https://www.tinkercad.com/things/4PaTMquHAzK-8-bit-alu-sum-and-
 * The flags register portion of the schematic is described later on as part of the CPU control logic.
 
 ### Testing the ALU
-* Because the registers only load from the BUS at clock rise, if we ENABLE the ALU onto the BUS and LOAD the BUS onto a register, when we advance 1 clock cycle this will happens. If we are adding:
-  * at t0 (before advancing clock cycle) the BUS shows A+B (let's say)
+* Because the registers only load from the Bus at clock rise, if we ENABLE the ALU onto the Bus and LOAD the Bus onto a register, when we advance 1 clock cycle this will happens. If we are adding:
+  * at t0 (before advancing clock cycle) the Bus shows A+B (let's say)
   * then at t1:
     * register A = ALU at t0
     * ALU = A (which is ALU at t0) + B
-    * BUS = ALU (which is ALU at t0) + B
-  * This is basically BUS += b at each clock cycle
+    * Bus = ALU (which is ALU at t0) + B
+  * This is basically Bus += b at each clock cycle
 * If we only have LEDs hooked up to the bus, we can debug B++, A++, and B-- in a similar fashion
   * 1 clear the contents of both registers
   * Load all 1s to register A (by having high load and nobody enabling the bus)
   * Load all 1s except the least significant bit (by connecting that bit on the bus to ground) in register B
   * The subtraction should be \\(-1 --2 = 1\\)
-  * Clear both registers and load the BUS (which has number 1) onto the register that you want to test (and its connection with the ALU)
+  * Clear both registers and load the Bus (which has number 1) onto the register that you want to test (and its connection with the ALU)
   * Peform the steps mentioned at the beginning of this section, and do all permutations of (A/B clear, the other with 1) x sum/subtract
   * A-- cannot be tested since only the sign of B can be changed with the SU signal
 * Then you can also utilize the random D-latch starting values to generate test cases from those random boot register values with almost no setup costs.
@@ -933,9 +937,9 @@ Open [tinkercad](https://www.tinkercad.com/things/4PaTMquHAzK-8-bit-alu-sum-and-
 ![404]({{ site.url }}/images/8bit/register/dflipflop.PNG)
 * We can group several flip flops together to make a register
 ![404]({{ site.url }}/images/8bit/register/register1.PNG)
-  * \\(D_n\\) = Input for bit n (usually connected to the BUS)
+  * \\(D_n\\) = Input for bit n (usually connected to the Bus)
   * \\(\text{LOAD}\\) = write onto the register signal (a separate "enable" signal independent from the clock signal, as the latter is already given explicitly by the arrow in the bottom left corner of the D flip flop box symbol)
-  * To finalyze the register we need an output signal that generally allows the register to output each of its bits to the BUS, to do so we use tri-state gates as we want all other outputs of the components not loading the bus to be disconnected from the BUS to avoid conflicts (we dont want a high signal from B overloading a low signal from A nor a low signal B sinking a high signal from A)
+  * To finalyze the register we need an output signal that generally allows the register to output each of its bits to the Bus, to do so we use tri-state gates as we want all other outputs of the components not loading the bus to be disconnected from the Bus to avoid conflicts (we dont want a high signal from B overloading a low signal from A nor a low signal B sinking a high signal from A)
   ![404]({{ site.url }}/images/8bit/register/tri2.PNG)
     * In this context "IN" would be Q of a D flip flop of a register.
 * A one bit register can be summarized with the symbol below
@@ -979,7 +983,7 @@ Open [tinkercad](https://www.tinkercad.com/things/4PaTMquHAzK-8-bit-alu-sum-and-
       * The register for our decimal display
 * Usually the RAM is deliberately placed close or inside the "processor" (what physically constitutes being inside/outside the processor chips depends on the manufacturer and it changes over the years), but historically the RAM would be farther from the CPU than the registers, the RAM is also bigger and slower.
   * RAM is called "random" because if you choose a random address (via the multiplexer) it will take the same time to read/write for all addresses as opposite to secondary memory (magnetic,  optical  and  flash), where the time required to read and write data varies depending on the physical location of the address due to mechanical limitations such as media rotation speeds and arm movement. 
-    * Secondary memory keeps data even when there's no power (as opposed to the SR latches that the registers use that start with a new random value at every circuit step response). It can only be processed by the CPU by copying it first into primary memory (as opposed to RAM that can be accessed directly via the BUS) via I/O channels.
+    * Secondary memory keeps data even when there's no power (as opposed to the SR latches that the registers use that start with a new random value at every circuit step response). It can only be processed by the CPU by copying it first into primary memory (as opposed to RAM that can be accessed directly via the Bus) via I/O channels.
 
 ### Address decoder
 * With a decoder the total number of address selection pins required is \\(log_2(\text{total address count}\\)), i.e. (the 16th address, starting at 1st address = 0000, would be 1111)
@@ -1009,12 +1013,12 @@ Open [tinkercad](https://www.tinkercad.com/things/4PaTMquHAzK-8-bit-alu-sum-and-
 * Output inputs are \\(\overline{O_n}\\), indeed they are inverted
   * The outputs are active only in the Read mode, therefore while \\(\overline{WE}\\) is low the output LEDS might behave weirdly
 * WE = write enable (loads data from the input pins and saves it to the memory given to the address pins), the pin is inverted.
-* CS = chip select (enable to BUS)
+* CS = chip select (enable to Bus)
   * The pin is also inverted, so we will connect it to ground (such that it is always enabled so we can hookup LEDs and see its contents) and connect it to a tri-state buffer like we did with the registers. If we don't want to hookup LEDs to the RAM, we can just use the tri-state output logic that the chip itself includes:
     * \\(\overline{CS}\\) low & \\(\overline{WE}\\) low = Write
     * \\(\overline{CS}\\) low & \\(\overline{WE}\\) high = Read
-    * \\(\overline{CS}\\) high = disconnect output to BUS
-  * I'm assuming that the inputs don't need a tri-state buffer and can be connected all the time to the BUS since they don't sink that much current anyway as input pins usually have around ten mega ohms of resistance.
+    * \\(\overline{CS}\\) high = disconnect output to Bus
+  * I'm assuming that the inputs don't need a tri-state buffer and can be connected all the time to the Bus since they don't sink that much current anyway as input pins usually have around ten mega ohms of resistance.
     * This part is covered [here]({{ page.url }}#building-an-8-bit-input-terminal-for-the-ram-to-manually-store-a-program-and-the-alternative-of-inputs-from-the-bus)
 ![404]({{ site.url }}/images/8bit/ram/74LS189_2.PNG)
 * The chip that came in the kit did not have "LS" family explcitily written and it seemed to get pretty hot during some tests with floating pins. Therefore make sure to not leave floating pins and those that are high should and be connected to \\(V_{cc}\\) should be with a \\(1k\Omega\\) pull-up resistor.
@@ -1028,7 +1032,7 @@ Open [tinkercad](https://www.tinkercad.com/things/4PaTMquHAzK-8-bit-alu-sum-and-
 6. Connect inverted-inverted outputs to the tri-state bottom pins
 7. Connect same address pins together from both RAMs
   * Then use a jumper wire for each grouped address pin and connect it to ground as a temporary signal cable
-8. Connect jumper wires to each data pin as a temporary signal (later it will be connected to the DIP switches rather than to the BUS)
+8. Connect jumper wires to each data pin as a temporary signal (later it will be connected to the DIP switches rather than to the Bus)
 9. Connect both \\(\overline{WE}\\) pins together and a jumper wire to use it as temporary signal
 
 #### Tinkercad
@@ -1039,11 +1043,11 @@ Open [tinkercad](https://www.tinkercad.com/things/aEBNrUN51YQ-ram-p3)
 * The jumper wires for the address will be connected to the outputs of the memory address register, the register that contains the current location of the RAM we've readily available to use
 * Remove the power rails of a new breadboard and fit it between the clock breadboard and the RAM breadboard
 * We'll use a single 74LS173A (4 bit register) for the memory address register
-    * This register will be connected to the BUS, as we expect the computer on "running" mode to share memory addresses via the BUS, and store that value there 
+    * This register will be connected to the Bus, as we expect the computer on "running" mode to share memory addresses via the Bus, and store that value there 
     * The outputs of this register will be connected (via a multiplexer) to the RAM address pins
       * The multiplexer would allow to chose between the memory address register and a manual switch to feed the RAM address pins
-    * The reason we don't connect the BUS directly to the address pins of the RAM is that the bus can only hold 8 bits of information and if we wanted to write something on a given memory address we'd just have lost 4 bits to determine the address and thus 4 information bits to write are gonna be truncated
-      * Just reading the contents of a RAM address by just relying on the BUS to get the address is pin feed is problematic too as in that same clock pulse the BUS is supposed to hold the RAM address then whoever outputed that to the BUS must disable its outputs and to allow the RAM at the address specified by the BUS to output its contents. Thus getting the address and outputting the contents to the BUS just right as the other module disables its BUS output looks very complicated to implement in a reliable way, therefore we use the address register to store which ever address we need to use.
+    * The reason we don't connect the Bus directly to the address pins of the RAM is that the bus can only hold 8 bits of information and if we wanted to write something on a given memory address we'd just have lost 4 bits to determine the address and thus 4 information bits to write are gonna be truncated
+      * Just reading the contents of a RAM address by just relying on the Bus to get the address is pin feed is problematic too as in that same clock pulse the Bus is supposed to hold the RAM address then whoever outputed that to the Bus must disable its outputs and to allow the RAM at the address specified by the Bus to output its contents. Thus getting the address and outputting the contents to the Bus just right as the other module disables its Bus output looks very complicated to implement in a reliable way, therefore we use the address register to store which ever address we need to use.
 * We use a 4-bit DIP switch as the "programming mode" alternative to feed the address pins of the RAM (via the multiplexer)
 * The multiplexer logic to select between 1 bit of register address (run mode or "A") and 1 bit of manual address (programming mode or "B") can be described by the logic circuit below.
 ![404]({{ site.url }}/images/8bit/ram/mux3.PNG)
@@ -1075,9 +1079,9 @@ Open [tinkercad](https://www.tinkercad.com/things/aEBNrUN51YQ-ram-p3)
 #### Schematic
 ![404]({{ site.url }}/images/8bit/ram/schematic2.PNG)
 
-### Building an 8-bit input terminal for the RAM (to manually store a program) and the alternative of inputs from the BUS
+### Building an 8-bit input terminal for the RAM (to manually store a program) and the alternative of inputs from the Bus
 * We'll stick a breadboard under the RAM module and above the instruction register
-* We'll use the same signal for "programming mode"/"running mode" that the address register mux uses for the input mux, where A inputs come from the 8 bit DIP switch and the B inputs come from the BUS.
+* We'll use the same signal for "programming mode"/"running mode" that the address register mux uses for the input mux, where A inputs come from the 8 bit DIP switch and the B inputs come from the Bus.
   * For 8 bits we need to deploy two mux chips (74LS157)
 * Building steps:
   1. Insert the 8 bit DIP switch and the 2 mux
@@ -1136,20 +1140,20 @@ Open [tinkercad](https://www.tinkercad.com/things/aEBNrUN51YQ-ram-p3)
 * \\(HLT\\) = halt (makes low) clock signal = the last [input of the last AND gate of the clock logic circuit]({{ page.url }}#logic-circuit).
   * Reminder that the inverter is not implemented and thus HLT is active low (which is the opposite Ben Eater has)
 * \\(\overline{MI}\\) = Not Memory address register in = "Not load" signal of the [memory address register]({{ page.url }}#tinkercad-7)
-* \\(\overline{RO}\\) = Not RAM out = ["Not enable" signal of the RAM's  tri-state buffer]({{ page.url }}#tinkercad-6) that controls whether to output to the content of the RAM (at the address pointed by the memory address register/DIP switch) to the BUS or not.
-* \\(RI\\) = RAM in = ["Load (BUS)" input signal of the NAND gate in the RAM input module that takes the pulse detector circuit as other input]({{ page.url }}#tinkercad-8) and feeds it to the programming mode/run mode multiplexed signal for the RAM's \\(\overline{Write\ Enable}\\) pin.
+* \\(\overline{RO}\\) = Not RAM out = ["Not enable" signal of the RAM's  tri-state buffer]({{ page.url }}#tinkercad-6) that controls whether to output to the content of the RAM (at the address pointed by the memory address register/DIP switch) to the Bus or not.
+* \\(RI\\) = RAM in = ["Load (Bus)" input signal of the NAND gate in the RAM input module that takes the pulse detector circuit as other input]({{ page.url }}#tinkercad-8) and feeds it to the programming mode/run mode multiplexed signal for the RAM's \\(\overline{Write\ Enable}\\) pin.
   * Since the NAND chip inverts the output, the signal is active high.
-* \\(\overline{IO}\\) = Not instruction register out = "Not enable" signal of the [instruction register]({{ page.url }}#instruction-register) tri-state buffer (located on the right, mirroring the design of the A & B registers with respect to the BUS) to output the bus.
+* \\(\overline{IO}\\) = Not instruction register out = "Not enable" signal of the [instruction register]({{ page.url }}#instruction-register) tri-state buffer (located on the right, mirroring the design of the A & B registers with respect to the Bus) to output the bus.
 * \\(\overline{II}\\) = Not instruction register in = "Not load" signal of the instruction register to save the inputs (from the bus) into the instruction register.
-* \\(\overline{AO}\\) = Not register A out = "Not enable" signal of [register]({{ page.url }}#tinkercad-4)'s A tri-state buffer that controls outputting to the BUS.
-* \\(\overline{AI}\\) = Not register A in = "Not load" signal of [register]({{ page.url }}#tinkercad-4) A pin to store the inputs (from the BUS, who is always listening)
-* \\(\overline{BO}\\) = Not register B out = "Not enable" signal of [register]({{ page.url }}#tinkercad-4)'s B tri-state buffer that controls outputting to the BUS.
-* \\(\overline{BI}\\) = Not register B in = "Not load" signal of [register]({{ page.url }}#tinkercad-4) B pin to store the inputs (from the BUS, who is always listening)
-* \\(\overline{EO}\\) = Not ALU's \\(\Sigma\\) (operation outcome) out = "Not enable" signal of [ALU]({{ page.url }}#tinkercad-5)'s tri-state buffer that controls outputting to the BUS.
+* \\(\overline{AO}\\) = Not register A out = "Not enable" signal of [register]({{ page.url }}#tinkercad-4)'s A tri-state buffer that controls outputting to the Bus.
+* \\(\overline{AI}\\) = Not register A in = "Not load" signal of [register]({{ page.url }}#tinkercad-4) A pin to store the inputs (from the Bus, who is always listening)
+* \\(\overline{BO}\\) = Not register B out = "Not enable" signal of [register]({{ page.url }}#tinkercad-4)'s B tri-state buffer that controls outputting to the Bus.
+* \\(\overline{BI}\\) = Not register B in = "Not load" signal of [register]({{ page.url }}#tinkercad-4) B pin to store the inputs (from the Bus, who is always listening)
+* \\(\overline{EO}\\) = Not ALU's \\(\Sigma\\) (operation outcome) out = "Not enable" signal of [ALU]({{ page.url }}#tinkercad-5)'s tri-state buffer that controls outputting to the Bus.
 * \\(SU\\) = Substract = [ALU]({{ page.url }}#tinkercad-5)'s active high signal to make the operation be A-B instead of A+B when it's low
 * \\(CE\\) = Count Enable = Enable pins of the 4-bit counter = Allow the counter to increment by 1 at each clock pulse
-* \\(\overline{CO}\\) = Counter out = active low enable signal of the output tri-state buffer of the counter that determines whether the outputs are sent to the BUS or are disconnected.
-* \\(\overline{J}\\) = jump = active low load signal of the 4-bit counter to store the contents from the inputs (BUS)
+* \\(\overline{CO}\\) = Counter out = active low enable signal of the output tri-state buffer of the counter that determines whether the outputs are sent to the Bus or are disconnected.
+* \\(\overline{J}\\) = jump = active low load signal of the 4-bit counter to store the contents from the inputs (Bus)
 * TODO:
   * CY
   * OI
@@ -1157,17 +1161,17 @@ Open [tinkercad](https://www.tinkercad.com/things/aEBNrUN51YQ-ram-p3)
   * Perhaps make HLT active high like Ben's
 
 ### Testing RAM with Registers and ALU
-* I started to put the modules I have into the final layout, with a BUS line in the middle. For the BUS line I used jumperwires for the RAM and register B and hookup wire for register A, the ALU, and the BUS lights (yep, I decided to placed them on the below the instruction register breadboard as it had some available space and I did not have soldering equipment as Ben did). Everything seems to work fine except for the following bugs
+* I started to put the modules I have into the final layout, with a Bus line in the middle. For the Bus line I used jumperwires for the RAM and register B and hookup wire for register A, the ALU, and the Bus lights (yep, I decided to placed them on the below the instruction register breadboard as it had some available space and I did not have soldering equipment as Ben did). Everything seems to work fine except for the following bugs
   * In programing mode, if you have \\(\overline{RO}\\) low and either \\(\overline{AI}\\) or \\(\overline{BI}\\) and you manually change a value in the RAM, the contents of the register are sometimes changed with random values.
-    * Workaround: don't have registers loading from the BUS while you're saving inputs into the RAM
-    * Origin: the bug might be linked to the weird behavour of the outputs of the RAM when they RAM inputs are being saved. This might affect the BUS and the registers connected to it. So take the workaround as a safety guideline until the bug is fixed.
+    * Workaround: don't have registers loading from the Bus while you're saving inputs into the RAM
+    * Origin: the bug might be linked to the weird behavour of the outputs of the RAM when they RAM inputs are being saved. This might affect the Bus and the registers connected to it. So take the workaround as a safety guideline until the bug is fixed.
     * Solution: Power/ground rail connection between clock and counter module seems to fix this problem
-  * In running mode both registers and RAM, when they load something from the BUS, they don't load the default 00000000 but random values if there's nobody outputting to the BUS.
-    * Workaround: do not rely on the BUS being 0000000 if nobody is outputting
+  * In running mode both registers and RAM, when they load something from the Bus, they don't load the default 00000000 but random values if there's nobody outputting to the Bus.
+    * Workaround: do not rely on the Bus being 0000000 if nobody is outputting
     * It seems to greatly reduce the probability of not saving all zeros when you connect the bottom power/ground rail the clock module and the counter module. It will occasionally give a random value.
-* In run mode as long as there is 1 party outputting to the bus you can have register A and RAM both loading the BUS at the same time without problems.
+* In run mode as long as there is 1 party outputting to the bus you can have register A and RAM both loading the Bus at the same time without problems.
 * The ALU doesn't seem to work well when the clock speed is too fast
-  * When I removed the jumperwires of the RAM that I was no longer using and the pulldown resistors of the BUS it seemed to work perfectly.
+  * When I removed the jumperwires of the RAM that I was no longer using and the pulldown resistors of the Bus it seemed to work perfectly.
 * Decision: replaced remaining jumperwires with hookup wires and test the same scenarios with and without 10k resistors
   * If it doesnt work wth 10k but it works withou resistors try to replace the 10k resistors with 1k resistors
 * Another solution for the potential problem of the capacitor travelling back the clock signal to the PC is to insert a LED in between that forces the current to only go in the desired direction (from the clock module to the RAM input module only)
@@ -1177,14 +1181,14 @@ Open [tinkercad](https://www.tinkercad.com/things/aEBNrUN51YQ-ram-p3)
     * The reason I did it was because the previous attempt at preventing the RC circuit from feeding current back to the clock signal (and hence to the other modules and disrupting the clock cycles) using a LED (a diode, which forces current to go one way only) was unsuccessful as the LED seemed to drop too much voltage and the RAM couldn't write anything at all (here I'm assuming that the reason it didn't write was because the voltage to the mux input was too low, did not have equipment to assert it). Luckily the inverter outputs seem to include diodes as the datasheet sugested, and the output pin allowed a voltage from 0 up to \\(V_{cc}\\), so I did not have to worry about the capacitor damaging the inverter, apparently the diodes of chip had a smaller voltage drop than the yellow LED I used.
     * \\(\overline{MI}\\) shares the same signal with the RC circuit, but I don't care if \\(\overline{MI}\\) get's double clock pulses, (it just saves the same thing twice), as it does not cause any harm and breadboard real estate is expensive.
   * I've also trimed the power supply cables as they were a bit burnt in the top, I might have accidentally removed them from the breadboard before disconnecting the power supply and I might have shortcircuit them. This could have created resistance and limit the power supplied to the breadboards
-  * At this stage, I haven't repalced the RAM tri-state buffer jumperwires for hookupuwires, so the RAM loads random values when nobody is outputting to the BUS, but both registers A and B seem to load 00000000 default values, so whether using hookup wires for the RAM buffer fixes the issue or not is not a big deal since we can work around this issue by loading the registers first, then moving that value to the RAM.
+  * At this stage, I haven't repalced the RAM tri-state buffer jumperwires for hookupuwires, so the RAM loads random values when nobody is outputting to the Bus, but both registers A and B seem to load 00000000 default values, so whether using hookup wires for the RAM buffer fixes the issue or not is not a big deal since we can work around this issue by loading the registers first, then moving that value to the RAM.
   * The problem of the RAM writting things at random times on programming mode without pressing the button is because Ben's default schematic leaves the input floating when the button is unpushed, hoping that the active low pin will recognise the floating input as high, but since power is not reliable is better not to have it as a floating input and use a pull-up resistor instead, a 1k should do the trick.
   * In hindishgt, the issues seemed to be power bugs
 
 ![404]({{ site.url }}/images/8bit/ram/clock.PNG)
 [Open tinkercad](https://www.tinkercad.com/things/lQOtIEjyHny-555-timer-p12)
-* This doesnt fix the problem when inserting manual data to the RAM and having a register listening to the BUS, which regardless receiving not clock pulse, writes some garbage (so always disconnect registers from the BUS when writting manual input into the RAM)
-  * Apparently got fixed after replacing jumperwires with hookup wires and moving the BUS leds and pull-down resistors to the bottom of the computer
+* This doesnt fix the problem when inserting manual data to the RAM and having a register listening to the Bus, which regardless receiving not clock pulse, writes some garbage (so always disconnect registers from the Bus when writting manual input into the RAM)
+  * Apparently got fixed after replacing jumperwires with hookup wires and moving the Bus leds and pull-down resistors to the bottom of the computer
 * I have also also decided to invert HLT and make it active high like Ben, it may make the instruction decoder easier if I have the same signals as him.
 * After replacing the jumperwires with hookup wires everything seems to work fine besides writing to the RAM
   * Loading an empty bus gives random values for the RAM only (registers A and B seem to store all 0's)
@@ -1209,8 +1213,8 @@ Open [tinkercad](https://www.tinkercad.com/things/aEBNrUN51YQ-ram-p3)
     * can load a value from the bus
   * However the value of the program counter register has a very specific meaning, which is the address of the next instruction we're gonna execute
   * The control logic signals of the program counter are:
-    * CO = (Program) counter out = put stored value on the BUS.
-    * J = jump = essentialy load the value (4 least significant bits) in the BUS like any other "in" signal.
+    * CO = (Program) counter out = put stored value on the Bus.
+    * J = jump = essentialy load the value (4 least significant bits) in the Bus like any other "in" signal.
     * CE = Count Enable = increment the counter
       * We do not want to increase the program counter (which points to the the next address that we will execute) at every clock cycle but at the eand of each whole programmed instruction (as those take a couple of clock cycles to complete) (it still need to be synchronized with the clock nevertheless)
 * Sections below introduce the the logic behind a program counter and it's implementation in our computer
@@ -1265,7 +1269,7 @@ Open [tinkercad](https://www.tinkercad.com/things/aEBNrUN51YQ-ram-p3)
 
 ### Building the program counter
 1. Place breadboard on top of the A register
-2. Place one 74LS161 (4-bit binary counter) and a tri-state buffer (74LS245) to its left (close to the BUS).
+2. Place one 74LS161 (4-bit binary counter) and a tri-state buffer (74LS245) to its left (close to the Bus).
 3. Hook up power and ground pins for both chips.
 4. Set the DIR pin low of the tri-state buffer (we always use the buffer one way only, namely to output stuff)
    * This time we will use B->A direction because of the location of the output pins of the counter chip (above)
@@ -1279,7 +1283,7 @@ Open [tinkercad](https://www.tinkercad.com/things/aEBNrUN51YQ-ram-p3)
 10. Connect the clock signal (the normal one, not the one for the RC circuit) to pin 2
 11. Connect the 4 least significant A pins of the tri-state buffer (big endian) to the inputs of 4-bit counter  (little endian)
     * \\((A, A8), (B, A7), (C, A6), (D, A5)\\)
-12. Connect all A pins of the tri-state buffer to the BUS.
+12. Connect all A pins of the tri-state buffer to the Bus.
 13. Set the clear pin of the counter to high as that one is active low
 
 #### Tinkercad
@@ -1559,7 +1563,7 @@ Steps:
 ![404]({{ site.url }}/images/8bit/output/red.jpg)
 
 ### Output register
-* It doesn't need to drive the BUS, it only needs to read from the BUS, therefore the tri-state buffer gate wont be needed
+* It doesn't need to drive the Bus, it only needs to read from the Bus, therefore the tri-state buffer gate wont be needed
 * Instead of using two 74LS173 (4-bit registers) we're gonna use the 74LS273, which is an 8 bit register.
   * The '173 has an input enable AND a clock pin, whereas the '273 only has a clock pin.
   * This means that every time the clock pulses, the '273 will latch in whatever is on the bus, no matter what.
@@ -1686,7 +1690,7 @@ binary instruction | assembly opcode | has operand | meaning
      1. Go to next instruction (pointed by the program counter): Program counter out -> Memory address register in
      2. Send opcode to instruction decoder: RAM out -> Instruction register in
      3. Increment program counter already for next instruction: Counter Enable
-       * Although it has a seperate logical purpose, we will include Counter Enable into the previous clock cycle as it does not interfere with the BUS, so we save up 1 micro clock cycle.
+       * Although it has a seperate logical purpose, we will include Counter Enable into the previous clock cycle as it does not interfere with the Bus, so we save up 1 micro clock cycle.
   2. [Decode instruction](#microcode-eeprom-instruction-decoder): Here the instruction decoder will know that `00011111` means take the contents of memory address `1111` and put it on register A
   3. Execute instruction `00011111`:
      1. Instruction register out (this outputs the lower significant bits that contain the address of the operand) -> Memory address register in
@@ -1845,7 +1849,7 @@ https://tableizer.journalistopia.com/tableizer.php
 [Open tinkercad](https://www.tinkercad.com/things/kqEvTjJLNn1-clear-reset-circuit)
 
 * Now connect the micro clock reset signal to the clear pin of the micro clock
-* Connect the active high reset signal with active high clears: (TODO check min 8:10 of https://www.youtube.com/watch?v=HtFro0UKqkk as he wires it very efficiently)
+* Connect the active high reset signal with active high clears:
   * Instruction register
   * Memory address register
   * A register
