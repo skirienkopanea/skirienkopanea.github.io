@@ -11,7 +11,7 @@ tags: project
 # Table of Contents
 - [Table of Contents](#table-of-contents)
   - [Introduction](#introduction)
-    - [Computer features and Turing completeness (TODO)](#computer-features-and-turing-completeness-todo)
+    - [Computer features](#computer-features)
     - [Power supply](#power-supply)
     - [Breadboards](#breadboards)
       - [Sample closed circuit](#sample-closed-circuit)
@@ -140,30 +140,25 @@ Ben Eater is an online educator on computer-related topics from which I'm follow
 * To refresh circuit analysis basics check [this post]({{ site.url }}/hardware/2021/06/26/8-EE-cheatsheet.html).
 * You can also check my [CSE1400 Computer Organization notes]({{ site.url }}/downloads/CSE1400_(history-logic_circuits-data_representation-isa-assembly-cpu-io-memory-pipelining).pdf)
 
-### Computer features and Turing completeness (TODO)
-Review http://localhost:3000/downloads/CSE1400_(history-logic_circuits-data_representation-isa-assembly-cpu-io-memory-pipelining).pdf#page=11(http://localhost:3000/downloads/CSE1400_(history-logic_circuits-data_representation-isa-assembly-cpu-io-memory-pipelining).pdf#page=11) and re-write this section after finishing the computer
-
-* This 8-bit computer has:
-  * clock (synchronises control unit instructions by executing them into separate clock pulses)
-  * RAM (main memory that stores the programs we can run)
-  * CPU (central processing unit) which is just the electronic circuitry that regards:
-    * Registers:
-      * Memory addres register (specifies the RAM data that the CPU can directly use)
-      * Program counter (specifies next program line (in terms of memory addresses))
-      * Operand reigsters (named here as A and B)
-      * Output register
-      * Flags register
-    * ALU (arithmetic and logic unit)
-    * Control unit
-      * Reads the instructions stored in the RAM and decodes them with high/low voltages for each component interface input (control signals)
-        * opcodes are text-based aliases for the inputs of the decoded outputs (and the outputs should essentially execute (often in several clock cycles) what the opcode is supposed to define i.e. Move A to to output register" = "MOV A O" = 0010 (opcode for MOV) 00 (operand for the A register) 11 (operando for the output register)= 00100011 decoder input which should output a series of high/low signal for all control, as many times as needed, until getting the desired outcome.
-          * Both the opcode name and the binary number of the opcode are arbitrary choices that we made.
-            * The alphanumeric representation of opcodes (alpha) and operands (data) is what we call "assembly code"
-            * The decoded output for each input are essentially "microcode" lines, where each line has a high/low configuration for each control signal
-    * The CPU does not have input/output in terms of "interrupts" (where at a given frequency the CPU halts, listens and acknoweldges i/o devices, executes their requests, and then continues).
-      * It only has the LED display that updates it's output as defined by the program.
-      * All inputs of the user shall be written in the program itself before run time
-* The computer is "turing complete" because it allows the execution of a program (whose inputs are already defined before runtime) and the computer supports addition, subtraction and conditional jumps, form which any computable problem, given infinite memory, could be computed.      
+### Computer features
+* [Specsheet]({{ site.url }}/downloads/8bit/specs.pdf)
+* How to operate (show how to do multiples of 3 until 30 program)
+* Hello world hack (not listed here) (just show hello world and in the video put a link to my blog and a description copy pasting the hello world hack part)
+* Not listed here, have fibonacci (which then resets before overflow)
+* Input and troubleshoout (this one wont be linked here): youtube video My Ben Eater 8-bit computer build with the most basic runtime input module in the world and troubleshooting review. Video script:
+  * My 8-bit build follows Ben Eater's schematics and has the same assembly language but there are a few things I had to change:
+    * Like most people I encountered power problems, so adding pull-up and pull-down resistors for floating input pins, a few more decoupling capacitors and adding resistors for all LEDs (which the schematic includes) solved most problem issues. I still have a weird RAM bug, when write enable is active, the first RAM has the output pins high while the second RAM has them all low, maybe they were manufactured differently? Besides that I don't think I have experienced any secondary effects although when I had power issues both RAMs used te get quite hot.
+    * Another problem I had was the resistor capacitor or edge detector circuit to generate a high clock pulse for the multiplexed write enable signal for the RAM when in run mode.
+      * The problem was that the capacitor of such circuit discharged back via the system clock signal onto the clock pins of other modules. I saw a comment that suggested to inverted the clock signal twice and with a hex inverter chip, whose outputs have diodes and thus the capacitor would not discharge back, and use that signal exclusively for the resistor capacitor circuit. I still think that the capacitor needs to discharge somewhere so that double inverted signal is actually shared by the RAM chips and the Memory Address Register chip, where I'm guessing the capacitor is now discharging and generating a double cock pulse onto. But a double clock pulse in the RAM register doesn't affect the functionality of the computer unlike when that happened to the program counter.
+    * The last "bug-related" modification of my build is that I burned one of the hex inverters for the microcode control signals so I had to borrow a few input pins from NAND chips and other inverters around the breadboards.
+    * The runtime input feature that I added only consists of using a slide switch in the reset button.
+      * The slide switch allows you to select whether the reset signal from the pushbutton is passed onto the "clear" circuit" overhere or whether the "clear" circuit is just feed with a pull-up resistor logic high. Even if the slideswitch is break before make and the "input" of the clear circuit is floating, because they're all the 74LS family it is still regarded as high. And yeah I guess I could have just leave it an open circuit rather than using a capacitor for this terminal of the slideswitch but I belive that it is still good practice to avoid floating inputs as much as possible.
+      * Ok so what this means is that we can now halt the program and unstop it (unhalt is not a real world apparently) with the button without clearing all the registers (unless we wanted to).
+      * The "input protocol" that my computer follows is that if HLT opcode is followed by all zeros, that means that the program is finished and the user may reset (thus by having the slide switch clearing all registers), but if the HLT opcode has an operand, although the EEPROM decoders react exactly the same, it is know, for my build, meant to prompt the user to give his input into the address pointed by the operand, in the same way you store data to program the computer, then unstop the program by having the dip switch NOT clearing all the registers.
+      * I'll show you an example. (walk them through)
+      * But Sergio, it's basically the same. Well, yes for the programmer that knows the program, but not for an "end user" that does not know the program in advance (but that knows what a HLT with green LEDs in the instruction register means). 
+      * Put the von neuman archtiecture: I know it is not the type of input that requires CPU interrupts and whose contents are send via the bus, I would have prefered to do that, but I estimate that would require to have at least an additional control signal, so I would need another EEPROM, probably another set of DIP switches or similar and another breadboard and much more time, which I don't have right now. So weighing the pro's and con's and happy to settle with this inexpensive solution.
+* The computer is "turing complete" because it allows the execution of a program and the computer supports addition, subtraction and conditional jumps, from which any computable problem, given infinite memory, could be computed.      
 
 ### Power supply
 We will be using a 5V (volt) power source, which Ben has crafted by cutting off the wires of a cellphone charger.
@@ -291,7 +286,6 @@ Sources:
 
 ### Datasheets (TODO)
 
-* [Computer specs]({{ site.url }}/downloads/8bit/specs.pdf)
 
 ##  Clock
 * Components included in the kit:
