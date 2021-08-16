@@ -1440,7 +1440,7 @@ Explanation source: [electronics-fun.com]([/](https://electronics-fun.com/7-segm
     * We shouldn't worry about \\(\overline{WE}\\) double clock pulses either because the reason it happened was from the capacitor discharging in the direction from where it got charged, that affected other modules connected to the clock signal before. However, in this scenario there is no other module connected to the same signal feeding the capacitor, and the only component connected to the capacitor is on the side that won't receive the discharging signal.
     * We have to achieve an RC circuit with T between 100 and 1000 ns
       * A capacitor in the nano farad get's us in the nano seconds range, together a resistor between 100 and 1k Ohm should do the trick.
-      * Check this useful [table for capacitor values]({{ site.url }}/downloads/Capacitor-Codes.pdf)
+      * Check this useful [table for capacitor values]({{ site.url }}/downloads/8bit/Capacitor-Codes.pdf)
       * This "edge" detector circuit has to actually be negative. Stable high and then a sharp decrease to low that bounces back to high. It can be achieved in 2 ways:
       #### Positive RC edge detector circuit
         * Using a smiliar RC logic we used for the RAM (and we can borrow ahead from the kit either a NAND gate or a hex inverter to invert the signal like for the RAM), see the circuit below with the left 1 Mega ohm resistor * 100nF  (104 capacitor) = 0.1s pulse resistor circuit:
