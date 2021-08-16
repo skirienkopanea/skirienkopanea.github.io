@@ -291,6 +291,8 @@ Sources:
 
 ### Datasheets (TODO)
 
+* [Computer specs]({{ site.url }}/downloads/8bit/specs.pdf)
+
 ##  Clock
 * Components included in the kit:
   * 1 Breadboard
