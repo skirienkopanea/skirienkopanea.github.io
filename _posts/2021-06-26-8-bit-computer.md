@@ -142,10 +142,10 @@ Ben Eater is an online educator on computer-related topics from which I'm follow
 
 ### Computer features
 * [Specsheet]({{ site.url }}/downloads/8bit/specs.pdf)
-* How to operate (show how to do multiples of 3 until 30 program)
-* Not listed here, have fibonacci (which then resets before overflow)
-* Input and troubleshoout (this one wont be linked here): youtube video My Ben Eater 8-bit computer build with the most basic runtime input module in the world and troubleshooting review. Video script:
-  * My 8-bit build follows Ben Eater's schematics and has the same assembly language but there are a few things I had to change:
+* How to operate (advance the video to show how to do sum two runtime inputs)
+* Show next the fibonacci video
+* Input and troubleshoout (this one wont be linked here): youtube video My Ben Eater 8-bit computer build with very basic runtime input in the world and troubleshooting review. Video script:
+  * My 8-bit build follows Ben Eater's schematics and has the same assembly language but there are a few things I had to change: Start the video saying "hello guys, I'm going to walk you through my Ben Eater 8-bit computer implementation, but if you're just interested to see the basic runtime input I've built you can skip over to the minute shown in the screen...
     * Like most people I encountered power problems, so adding pull-up and pull-down resistors for floating input pins, a few more decoupling capacitors and adding resistors for all LEDs (which the schematic includes) solved most problem issues. I still have a weird RAM bug, when write enable is active, the first RAM has the output pins high while the second RAM has them all low, maybe they were manufactured differently? Besides that I don't think I have experienced any secondary effects although when I had power issues both RAMs used te get quite hot.
     * Another problem I had was the resistor capacitor or edge detector circuit to generate a high clock pulse for the multiplexed write enable signal for the RAM when in run mode.
       * The problem was that the capacitor of such circuit discharged back via the system clock signal onto the clock pins of other modules. I saw a comment that suggested to inverted the clock signal twice and with a hex inverter chip, whose outputs have diodes and thus the capacitor would not discharge back, and use that signal exclusively for the resistor capacitor circuit. I still think that the capacitor needs to discharge somewhere so that double inverted signal is actually shared by the RAM chips and the Memory Address Register chip, where I'm guessing the capacitor is now discharging and generating a double cock pulse onto. But a double clock pulse in the RAM register doesn't affect the functionality of the computer unlike when that happened to the program counter.
