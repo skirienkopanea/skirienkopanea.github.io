@@ -130,9 +130,9 @@ tags: project
       - [Building the reset circuit (resume clock and clear data)](#building-the-reset-circuit-resume-clock-and-clear-data)
     - [Schematic](#schematic-9)
   - [Programs](#programs)
-    - [Assembly compiler](#assembly-compiler)
-    - [Fibonacci](#fibonacci)
-    - [Hello world hack](#hello-world-hack)
+    - [Multiplication tables](#multiplication-tables)
+    - [Sum two "runtime" inputs](#sum-two-runtime-inputs)
+    - [Fibonacci sequence](#fibonacci-sequence)
 
 ## Introduction
 Ben Eater is an online educator on computer-related topics from which I'm following his 8-bit computer project. [https://eater.net/8bit](https://eater.net/8bit). The computer is composed of different modules, which are built on breadboards. The modules are the clock module, registers and ALU (arithmetic and logic unit) module, RAM (random access memory) and program counter module, and output and control logic module.
@@ -143,7 +143,6 @@ Ben Eater is an online educator on computer-related topics from which I'm follow
 ### Computer features
 * [Specsheet]({{ site.url }}/downloads/8bit/specs.pdf)
 * How to operate (show how to do multiples of 3 until 30 program)
-* Hello world hack (not listed here) (just show hello world and in the video put a link to my blog and a description copy pasting the hello world hack part)
 * Not listed here, have fibonacci (which then resets before overflow)
 * Input and troubleshoout (this one wont be linked here): youtube video My Ben Eater 8-bit computer build with the most basic runtime input module in the world and troubleshooting review. Video script:
   * My 8-bit build follows Ben Eater's schematics and has the same assembly language but there are a few things I had to change:
@@ -968,10 +967,10 @@ Open [tinkercad](https://www.tinkercad.com/things/4PaTMquHAzK-8-bit-alu-sum-and-
     * Data register: holds the operands to be operated by the processor.
       * Such as our A and B registers
     * Memory Address register: holds the adress of a memory location
-    * Accumulator: holds the result computed by the processor
+    * Accumulator: holds the result computed by the ALU
       * For us the output of the ALU itself is already connected to the bus
-    * Instruction register: holds the instruction code that is currently being executed. (i.e. ENABLE ALU, LOAD A)
-    * Program Counter: holds the address of instruction that is to be executed by the processor. (TO DO: clarify this)
+    * Instruction register: holds the instruction code (and operand) that is currently being executed.
+    * Program Counter: holds the address of instruction that gets loaded in the fetch cycle and then points to the next address to be executed while the former one is being executed.
     * Temporary Register: holds the temporary intermediate result computed by the processor.
     * Input Register: holds the input character received from an input device and delivered it to the Accumulator.
       * Not implemented
@@ -1098,7 +1097,7 @@ Open [tinkercad](https://www.tinkercad.com/things/aEBNrUN51YQ-ram-p3)
         3. Connect one of the outputs, i.e. output Y4, to the \\(\overline{WE}\\) pin of the RAM
         4. Connect one pushbutton terminal to the ground and the other one to the A4 input of the mux
      4. Control logic (clock):
-        1. We don't want to let the control logic trigger an immediate write signal, we want to synchronise that write signal for the next clock cycle, therefore we'll use a NAND gate (\\(\overline{WE}\\)) is inverted tha'ts why we use a NAND gate so that the output is also negated) that takes two signals, the clock pulse and logic signal from "control world". Therefore, insert the NAND gate on the breadboard.
+        1. We don't want to let the control logic trigger an immediate write signal, we want to synchronise that write signal for the next clock cycle, therefore we'll use a NAND gate (\\(\overline{WE}\\)) is inverted tha'ts why we use a NAND gate so that the output is also negated) that takes two signals, the clock pulse and logic signal from "control word". Therefore, insert the NAND gate on the breadboard.
         2. Hookup the power/ground pins of the NAND gate
         3. Connect the output Y1 of the NAND gate to the B4 input pin
         4. Connect the input B1 of the NAND gate to ground/\\(V_{cc}\\) via a jumperwire that we will use as a temporary signal until we build "Control world"
@@ -1150,11 +1149,6 @@ Open [tinkercad](https://www.tinkercad.com/things/aEBNrUN51YQ-ram-p3)
 * \\(CE\\) = Count Enable = Enable pins of the 4-bit counter = Allow the counter to increment by 1 at each clock pulse
 * \\(\overline{CO}\\) = Counter out = active low enable signal of the output tri-state buffer of the counter that determines whether the outputs are sent to the Bus or are disconnected.
 * \\(\overline{J}\\) = jump = active low load signal of the 4-bit counter to store the contents from the inputs (Bus)
-* TODO:
-  * CY
-  * OI
-  * JC
-  * Perhaps make HLT active high like Ben's
 
 ### Testing RAM with Registers and ALU
 * I started to put the modules I have into the final layout, with a Bus line in the middle. For the Bus line I used jumperwires for the RAM and register B and hookup wire for register A, the ALU, and the Bus lights (yep, I decided to placed them on the below the instruction register breadboard as it had some available space and I did not have soldering equipment as Ben did). Everything seems to work fine except for the following bugs
@@ -1363,20 +1357,6 @@ Open [tinkercad](https://www.tinkercad.com/things/aEBNrUN51YQ-ram-p3)
 | 1101 | D     | ![404]({{ site.url }}/images/8bit/output/D.png) |    | on | on | on | on |    | on |
 | 1110 | E     | ![404]({{ site.url }}/images/8bit/output/E.png) | on |    |    | on | on | on | on |
 | 1111 | F     | ![404]({{ site.url }}/images/8bit/output/F.png) | on |    |    |    | on | on | on |
-
-* Alternative characters for hello world implementation:
-  * H = all on except a and d (and DP, this is implicitly assumed for the rest)
-  * E = all on except b and c
-  * L = use number 1
-  * L = use number 1
-  * O = use number 0
-  * W = use two characters:
-    * f, e, d and c
-    * e, d, c and b
-  * 0 = use number 0
-  * R = e and g
-  * L = use number 1
-  * D = b, g, e, d, and c
 
 #### Karnaugh maps
 * We could implement a decoder logic circuit with the same style as described in the [address decoder]({{ page.url }}#address-decoder) section (which made sense since we were using all 16 addresses from those 4 bit combinations). Or we could just focus on one segment at a time and simplify it's truth table with a karnaugh map (a technique to simplify boolean expressions), since we just want to use 16 "addresses" (7 segment display representation) out of the \\(2^7=128\\) possible representations.
@@ -1615,7 +1595,7 @@ Steps:
 * Looking at the [von Neumann architecture](#memory-layout-of-a-stored-program-digital-computer) that we have, we can see at a higher level that "CPU" (central processing unit) is composed of the [ALU](#arithmetic-logic-unit-alu) (the module that does all the calculations) and the **Control Unit**, which is responsible for **fetching**, **decoding** and **executing** instructions stored in the program.
   * PC = [program counter](#program-counter-pc)
   * IR = [instruction register](#instruction-register)
-  * CC = [control circuitry](#cleaning-up-control-circuitry) (partially called "control world" by Ben)
+  * CC = [control circuitry](#cleaning-up-control-circuitry) (partially called "control word" by Ben)
 * Taking von Neumann terminology into account, this is what the architecture and terminology of our 8 bit computer looks like:
 ![404]({{ site.url }}/images/8bit/control/arch.PNG)
   * "CPU" would consist of the red and blue bordered areas, with the read one being the control unit and the blue one the ALU.
@@ -1628,7 +1608,7 @@ Steps:
 ## Control unit
 ### Cleaning up control circuitry
 * Before we start integrating the control unit, we will first "fix" the active low signals into active high to keep things consistent which then make it easier to integrate and debug.
-* Replace all jumperwires with long cables that we will connect to a "hub" of control signals, which are part of the "control circuitry" in [CSE1400](localhost:3000/downloads/CSE1400_(history-logic_circuits-data_representation-isa-assembly-cpu-io-memory-pipelining).pdf#page=32) or ("control world" by Ben) together with the instruction decoder (called EEPROM microcode by Ben) to which all these signals connect.
+* Replace all jumperwires with long cables that we will connect to a "hub" of control signals, which are part of the "control circuitry" in [CSE1400](localhost:3000/downloads/CSE1400_(history-logic_circuits-data_representation-isa-assembly-cpu-io-memory-pipelining).pdf#page=32) or ("control word" by Ben) together with the instruction decoder (called EEPROM microcode by Ben) to which all these signals connect.
 * We will also connect these signals to LED and resistors (that connects to ground) in series to be able to see their state (high or low) and eventually connect them (before the anode) to the output pins of the "Microcode EEPROMs", which act basically as instruction register opcode decoders, and control whether a signal is high or low.
   * With the active low signals, we will invert active lows with an HEX inverter chip to make "microcode" easier
 * *I burned one hex inverter so I decided to use un-used inputs of other NAND and hex inverter chips used in other modules*
@@ -1672,8 +1652,8 @@ binary instruction | assembly opcode | has operand | meaning
 `0100`|STA|yes| Store the contents of register A into the address of the operand
 `0101`|LDI|yes| Load immediate value of the operand into register A
 `0110`|JMP|yes| Jump to the memory address of the operand (aka code line)
-`0110`|JPC|yes| Jump carry **TO DO**
-`0111`|JPZ|yes| JUmp zero **TODO**
+`0110`|JPC|yes| Jump to the memory address of the operand if last operation had a 9th bit carry
+`0111`|JPZ|yes| Jump to the memory address of the operand if the last operation resulted in zero
 `1110`|OUT|no| Load contents of register A into output register
 `1111`|HLT|yes\\(^{[1]}\\)| Halt the system
 
@@ -1725,35 +1705,88 @@ binary instruction | assembly opcode | has operand | meaning
 ![404]({{ site.url }}/images/8bit/control/tinker1.PNG)  
 
 #### Building the flags register
-* Yada
+* To make the computer turing complete we need a conditional signal that triggers an instruction based on a previous state state of the CPU (i.e. the last ALU operation was equal to zero) such as "JZ" (jump zero), which jumps only if the last operation was zero.
+  * If the conditional signal didn't meet the requirements, then the instruction decoder shall just move onto the next line of code just like if the instruction was a NOP.
+  * To be turing complete just 1 conditional condition is enough.
+* The flags register is the status register that contains the state of the CPU, such as `boolean` "last operation outcome is zero" and `boolean` "last operation had 9th bit carry", which are the ones that we're gonna implement.
+  * Jump carry can happen in multiple ways:
+    1. The addition of two positive bytes is greater than 255 and thus there is carry bit overflow
+    2. Subtracting A with any originally positive 8-bit number will yield 9th carry unless A is 0.
+       * So by preceeding A - 1 JC will be like jump if A != 0
+  * To enable the flags register to update the booleans we add to the last micro step of ADD and SUB instructions the "FI" (flags in) signal, which is the enable signal of the 4-bit register we will use for the flags.
+* JC implementation:
+  * Chain the carry out of the most significant 4-bit adder of the ALU to the a data pin of the flags register
+* JZ implementation
+  * Use NOR gates which are feed with the ALU output, which should be equal to 1 only if all inputs are 0.
+  * the 74LS02 NOR gate has for 2-input NOR gates, we can feed 4 pairs of the 8-bit ALU output into the chip and then AND them together with the 74LS08
+![404]({{ site.url }}/images/8bit/control/jz.PNG) 
+  * Steps:
+    1. Insert the 74LS02 and 74LS08 next to each other
+    2. Hookup power/ground pins
+    3. Hookup the outputs of the 2 NOR gates in the bottom to the inputs of the first AND gate in the bottom
+    4. Hookup the outputs of the 2 NOR gates in the top to the inputs of the first AND gate in the top
+    5. Connect the outputs of the 2 AND gates to the output of the third AND gate (also on the top)
+    ![404]({{ site.url }}/images/8bit/control/jz2.PNG)
+    [Open tinkercad](https://www.tinkercad.com/things/iX6Tvl59oiP-jump-zero)
+    6. Connect the ALU outputs to the inputs of the NOR gates (doesnt matter the order)
+    7. Insert the 74LS173 chip and connect power/ground pins
+    8. Connect the carry and the zero flags to an input pin each (MSB) of the flags register. Connect 1k pull-downs to the input pins.
+    9. We want the output of the 173 to always be enable, so connect both M and N (pins 1 and 2) to ground (active low)
+    10. Connect the 2 MSB outputs to blue LEDs with resistors in series
+        * 10b connect the Carry flag output to address pin A8 and Zero flag output to  address pin A9 of the microcode EEPROMs
+    11. Connect the clock pin to the system clock
+    12. Merge pin 9 and 10 (enable) and connect it to the output pin of the nearest hex inverter/NAND gate output available.
+        * 12.b: Connect the FI control signal to the inputs of that inverter gate
+    13. Connect the clear pin to the nearest/most accesible clear pin of another register
 
 #### Building the fetch cycle
 * The first 2 microinstructions that constitute the fetch cycle are the same for all opcodes.
 * Altough we don't need to know the instruction register opcode, it's easier to implement the fetch cycle microinstructions decoder together with the instruction decoder EEPROMs.
 
 #### Building the instruction decoder
-* In order to decode a whole instruction (including the fetch cycle) we will append the micro clock cycle outputs together with the opcode and connect them to the address pins of the EEPROMs, which should return, for each T, a set of high/low control signals.
+* In order to decode a whole instruction (including the fetch cycle) we will append the micro clock cycle outputs together with the opcode, the carry and the zero output pins of the flags register and the Left (gnd)/Right(vcc) setting and connect them to the address pins of the EEPROMs, which should return, for each T, a set of high/low control signals, which may vary depending on the conditional flags.
 * The lookup table below summarizes what we expect the EEPROM to output for each control signal based on the [instruction opcode](#instruction-set) (and micro-clock step value)
+  * The Left/Right EEPROM address pin is just to divide the 16 bit control word into the 8 MSB outputs and the 8 LSB outputs, but the lookup table skips this and just shows the full 16 bit control word regardless of the Left/Right EEPROM setting.
+  * Note that for most instructions the lookup table output will be the same regardless of the flags input and only for the conditional jumps the flags inputs will matter.
 * [Repo with the EEPROM code](https://github.com/skirienkopanea/eeprom-programmer/blob/master/microcode-eeprom-with-flags/microcode-eeprom-with-flags.ino) to [program (store) the table below with arduino]({{ site.url }}/arduino/2021/08/03/eeprom.html)
 
-https://tableizer.journalistopia.com/tableizer.php
 <div style="overflow-x:auto">
 <table class="tableizer-table">
-<thead><tr class="tableizer-firstrow"><th>Assembly opcode</th><th>Binary opcode</th><th>Microclock Step</th><th>HLT</th><th>MI</th><th>RI</th><th>RO</th><th>IO</th><th>II</th><th>AI</th><th>AO</th><th>EO</th><th>SU</th><th>BI</th><th>OI</th><th>CE</th><th>CO</th><th>J</th></tr></thead><tbody>
- <tr><td>(Fetch)</td><td>xxxx</td><td>000</td><td>0</td><td>1</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0</td><td>1</td><td>0</td></tr>
- <tr><td>&nbsp;</td><td>xxxx</td><td>001</td><td>0</td><td>0</td><td>0</td><td>1</td><td>0</td><td>1</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0</td><td>1</td><td>0</td><td>0</td></tr>
- <tr><td>LDA</td><td>0001</td><td>010</td><td>0</td><td>1</td><td>0</td><td>0</td><td>1</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0</td></tr>
- <tr><td>&nbsp;</td><td>0001</td><td>011</td><td>0</td><td>0</td><td>0</td><td>1</td><td>0</td><td>0</td><td>1</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0</td></tr>
- <tr><td>&nbsp;</td><td>0001</td><td>100</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0</td></tr>
- <tr><td>ADD</td><td>0010</td><td>010</td><td>0</td><td>1</td><td>0</td><td>0</td><td>1</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0</td></tr>
- <tr><td>&nbsp;</td><td>0010</td><td>011</td><td>0</td><td>0</td><td>0</td><td>1</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0</td><td>1</td><td>0</td><td>0</td><td>0</td><td>0</td></tr>
- <tr><td>&nbsp;</td><td>0010</td><td>100</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0</td><td>1</td><td>0</td><td>1</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0</td></tr>
- <tr><td>OUT</td><td>1110</td><td>010</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0</td><td>1</td><td>0</td><td>0</td><td>0</td><td>1</td><td>0</td><td>0</td><td>0</td></tr>
- <tr><td>&nbsp;</td><td>1110</td><td>011</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0</td></tr>
- <tr><td>&nbsp;</td><td>1110</td><td>100</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0</td></tr>
- <tr><td>HLT</td><td>1111</td><td>010</td><td>1</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0</td></tr>
- <tr><td>&nbsp;</td><td>1111</td><td>011</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0</td></tr>
- <tr><td>&nbsp;</td><td>1111</td><td>100</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0</td></tr>
+<thead><tr class="tableizer-firstrow"><th>Assembly opcode</th><th>CF</th><th>ZF</th><th>Binary opcode</th><th>Microclock Step</th><th>HLT</th><th>MI</th><th>RI</th><th>RO</th><th>IO</th><th>II</th><th>AI</th><th>AO</th><th>EO</th><th>SU</th><th>BI</th><th>OI</th><th>CE</th><th>CO</th><th>J</th><th>FI</th></tr></thead><tbody>
+ <tr><td>(Fetch)</td><td>x</td><td>x</td><td>xxxx</td><td>000</td><td>0</td><td>1</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0</td><td>1</td><td>0</td><td>0</td></tr>
+ <tr><td>&nbsp;</td><td>x</td><td>x</td><td>xxxx</td><td>001</td><td>0</td><td>0</td><td>0</td><td>1</td><td>0</td><td>1</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0</td><td>1</td><td>0</td><td>0</td><td>0</td></tr>
+ <tr><td>LDA</td><td>x</td><td>x</td><td>0001</td><td>010</td><td>0</td><td>1</td><td>0</td><td>0</td><td>1</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0</td></tr>
+ <tr><td>&nbsp;</td><td>x</td><td>x</td><td>0001</td><td>011</td><td>0</td><td>0</td><td>0</td><td>1</td><td>0</td><td>0</td><td>1</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0</td></tr>
+ <tr><td>&nbsp;</td><td>x</td><td>x</td><td>0001</td><td>100</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0</td></tr>
+ <tr><td>ADD</td><td>x</td><td>x</td><td>0010</td><td>010</td><td>0</td><td>1</td><td>0</td><td>0</td><td>1</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0</td></tr>
+ <tr><td>&nbsp;</td><td>x</td><td>x</td><td>0010</td><td>011</td><td>0</td><td>0</td><td>0</td><td>1</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0</td><td>1</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0</td></tr>
+ <tr><td>&nbsp;</td><td>x</td><td>x</td><td>0010</td><td>100</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0</td><td>1</td><td>0</td><td>1</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0</td><td>1</td></tr>
+ <tr><td>SUB</td><td>x</td><td>x</td><td>0011</td><td>010</td><td>0</td><td>1</td><td>0</td><td>0</td><td>1</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0</td></tr>
+ <tr><td>&nbsp;</td><td>x</td><td>x</td><td>0011</td><td>011</td><td>0</td><td>0</td><td>0</td><td>1</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0</td><td>1</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0</td></tr>
+ <tr><td>&nbsp;</td><td>x</td><td>x</td><td>0011</td><td>100</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0</td><td>1</td><td>0</td><td>1</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0</td><td>1</td></tr>
+ <tr><td>STA</td><td>x</td><td>x</td><td>0100</td><td>010</td><td>0</td><td>1</td><td>0</td><td>0</td><td>1</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0</td></tr>
+ <tr><td>&nbsp;</td><td>x</td><td>x</td><td>0100</td><td>011</td><td>0</td><td>0</td><td>1</td><td>0</td><td>0</td><td>0</td><td>0</td><td>1</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0</td></tr>
+ <tr><td>&nbsp;</td><td>x</td><td>x</td><td>0100</td><td>100</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0</td></tr>
+ <tr><td>LDI</td><td>x</td><td>x</td><td>0101</td><td>010</td><td>0</td><td>0</td><td>0</td><td>0</td><td>1</td><td>0</td><td>1</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0</td></tr>
+ <tr><td>&nbsp;</td><td>x</td><td>x</td><td>0101</td><td>011</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0</td></tr>
+ <tr><td>&nbsp;</td><td>x</td><td>x</td><td>0101</td><td>100</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0</td></tr>
+ <tr><td>JMP</td><td>x</td><td>x</td><td>0110</td><td>010</td><td>0</td><td>0</td><td>0</td><td>0</td><td>1</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0</td><td>1</td><td>0</td></tr>
+ <tr><td>&nbsp;</td><td>x</td><td>x</td><td>0110</td><td>011</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0</td></tr>
+ <tr><td>&nbsp;</td><td>x</td><td>x</td><td>0110</td><td>100</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0</td></tr>
+ <tr><td>JC</td><td>0</td><td>x</td><td>0111</td><td>010</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0</td></tr>
+ <tr><td>&nbsp;</td><td>1</td><td>x</td><td>0111</td><td>010</td><td>0</td><td>0</td><td>0</td><td>0</td><td>1</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0</td><td>1</td><td>0</td></tr>
+ <tr><td>&nbsp;</td><td>x</td><td>x</td><td>0111</td><td>011</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0</td></tr>
+ <tr><td>&nbsp;</td><td>x</td><td>x</td><td>0111</td><td>100</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0</td></tr>
+ <tr><td>JZ</td><td>x</td><td>0</td><td>1000</td><td>010</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0</td></tr>
+ <tr><td>&nbsp;</td><td>x</td><td>1</td><td>1000</td><td>010</td><td>0</td><td>0</td><td>0</td><td>0</td><td>1</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0</td><td>1</td><td>0</td></tr>
+ <tr><td>&nbsp;</td><td>x</td><td>x</td><td>1000</td><td>011</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0</td></tr>
+ <tr><td>&nbsp;</td><td>x</td><td>x</td><td>1000</td><td>100</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0</td></tr>
+ <tr><td>OUT</td><td>x</td><td>x</td><td>1110</td><td>010</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0</td><td>1</td><td>0</td><td>0</td><td>0</td><td>1</td><td>0</td><td>0</td><td>0</td><td>0</td></tr>
+ <tr><td>&nbsp;</td><td>x</td><td>x</td><td>1110</td><td>011</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0</td></tr>
+ <tr><td>&nbsp;</td><td>x</td><td>x</td><td>1110</td><td>100</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0</td></tr>
+ <tr><td>HLT</td><td>x</td><td>x</td><td>1111</td><td>010</td><td>1</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0</td></tr>
+ <tr><td>&nbsp;</td><td>x</td><td>x</td><td>1111</td><td>011</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0</td></tr>
+ <tr><td>&nbsp;</td><td>x</td><td>x</td><td>1111</td><td>100</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0</td></tr>
 </tbody></table>
 </div>
 
@@ -1860,44 +1893,23 @@ https://tableizer.journalistopia.com/tableizer.php
 * Although they appear in the schematic, I decided to not use LEDs for the microclock decoder as they do not provide any additional information compared to the 3 LEDs of the microclock 
 
 ## Programs
-### Assembly compiler
-* Do a java program that turns a txt into another txt in binary
-  * Do it in such a way that you can pass the paramaters javaprogram -i assembly_file_name -o binary_file_name
-  * where i is the input file and o is the output file
+* You can save the programs below as .txt files and this [Ben Eater 8 bit computer assembly compiler in java](https://github.com/skirienkopanea/8bit) will convert them into binary such that you can the input them into the terminals line by line.
 
-### Fibonacci
-
-### Hello world hack
-* Update the output EEPROM with the following code:
-
-```c++
-arduino stuff
-```
-
-* Run the following program
+### Multiplication tables
 
 ```
-LDI 0
-STA 15
-ADD 1
-OUT
-STA 15
-SUB 32
-LDA 15
-JMPC 1
+Program
 ```
-* Just run the program as long as A is smaller or equal than the last frame
 
-* The strategy was to see the 4 digit display as a movie frame and just run a program that increments the frame number each clock cycle. We can then program a unique display for each frame:
-  * Frame 1: `....`
-  * Frame 2: `...H`
-  * Frame 3: `..HE`
-  * Frame 4: `.HEL`
-  * Frame 5: `HELL`
-  * Frame 6: `ELLO`
-  * Frame 7: `LLO.`
-  * ...
-  * Frame x: `RLD.`
-  * Frame x: `LD..`
-  * Frame x: `D...`
-  * Frame x: `....`
+### Sum two "runtime" inputs
+
+```
+Program
+```
+
+### Fibonacci sequence
+
+```
+Program
+```
+
