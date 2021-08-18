@@ -115,7 +115,7 @@ tags: project
   - [Terminology review](#terminology-review)
     - [Instruction set architecture](#instruction-set-architecture)
     - [Memory layout of a stored-program digital computer](#memory-layout-of-a-stored-program-digital-computer)
-    - [CPU vs Control unit](#cpu-vs-control-unit)
+    - [Computer vs CPU vs Control unit](#computer-vs-cpu-vs-control-unit)
   - [Control unit](#control-unit)
     - [Cleaning up control circuitry](#cleaning-up-control-circuitry)
     - [Defining our own assembly language](#defining-our-own-assembly-language)
@@ -125,10 +125,11 @@ tags: project
     - [Control logic](#control-logic)
       - [Building the control logic counter](#building-the-control-logic-counter)
       - [Building the flags register](#building-the-flags-register)
+        - [Schematic](#schematic-9)
       - [Building the fetch cycle](#building-the-fetch-cycle)
       - [Building the instruction decoder](#building-the-instruction-decoder)
       - [Building the reset circuit (resume clock and clear data)](#building-the-reset-circuit-resume-clock-and-clear-data)
-    - [Schematic](#schematic-9)
+    - [Schematic](#schematic-10)
   - [Programs](#programs)
     - [Multiplication tables](#multiplication-tables)
     - [Sum two "runtime" inputs](#sum-two-runtime-inputs)
@@ -144,7 +145,7 @@ Ben Eater is an online educator on computer-related topics from which I'm follow
 * [Specsheet]({{ site.url }}/downloads/8bit/specs.pdf)
 * How to operate (advance the video to show how to do sum two runtime inputs)
 * Show next the fibonacci video
-* Input and troubleshoout (this one wont be linked here): youtube video My Ben Eater 8-bit computer build with very basic runtime input in the world and troubleshooting review. Video script: Start the video saying "hello guys, I'm going to walk you through my Ben Eater 8-bit computer implementation, but if you're just interested to see the basic runtime input I've built you can skip over to the minute shown in the screen...
+* Input and troubleshoout (this one wont be linked here): youtube video My Ben Eater 8-bit computer build Video script: Start the video saying "hello guys, I'm going to walk you through my Ben Eater 8-bit computer implementation, first i'll go over the troubleshouting process, which is quite generic for all builds but if you're just interested to see the my only 2 custom modifications you can skip the video to minute xx:xx where I show you the very basic runtime input protocol I've implemented.
   * My 8-bit build follows Ben Eater's schematics and has the same assembly language but there are a few things I had to change:
     * Like most people I encountered power problems, so adding pull-up and pull-down resistors for floating input pins, a few more decoupling capacitors and adding resistors for all LEDs (which the schematic includes) solved most problem issues. I still have a weird RAM bug, when write enable is active, the first RAM has the output pins high while the second RAM has them all low, maybe they were manufactured differently? Besides that I don't think I have experienced any secondary effects although when I had power issues both RAMs used te get quite hot.
     * Another problem I had was the resistor capacitor or edge detector circuit to generate a high clock pulse for the multiplexed write enable signal for the RAM when in run mode.
@@ -1591,8 +1592,8 @@ Steps:
     * Note that although a "live" input during run mode was not a feature of Ben's build I've decided to do a poorman's "live" input implementation just by adding one extra [switch](#building-the-reset-circuit-resume-clock-and-clear-data) and an Input "protocol" based on the operand of the HLT command (see the footnote at the [instruction set](#instruction-set) section).
 * Although these are formal definitions beyond Ben's project goal, it was a goal of mine to understand computer jargon, hence this slight theory detour.
 
-### CPU vs Control unit
-* Looking at the [von Neumann architecture](#memory-layout-of-a-stored-program-digital-computer) that we have, we can see at a higher level that "CPU" (central processing unit) is composed of the [ALU](#arithmetic-logic-unit-alu) (the module that does all the calculations) and the **Control Unit**, which is responsible for **fetching**, **decoding** and **executing** instructions stored in the program.
+### Computer vs CPU vs Control unit
+* Looking at the [von Neumann architecture](#memory-layout-of-a-stored-program-digital-computer) that we have, we can see at a higher level that the "CPU" (central processing unit) in a computer is composed of the [ALU](#arithmetic-logic-unit-alu) (the module that does all the calculations) and the **Control Unit**, which is responsible for **fetching**, **decoding** and **executing** instructions stored in the program.
   * PC = [program counter](#program-counter-pc)
   * IR = [instruction register](#instruction-register)
   * CC = [control circuitry](#cleaning-up-control-circuitry) (partially called "control word" by Ben)
@@ -1652,8 +1653,8 @@ binary instruction | assembly opcode | has operand | meaning
 `0100`|STA|yes| Store the contents of register A into the address of the operand
 `0101`|LDI|yes| Load immediate value of the operand into register A
 `0110`|JMP|yes| Jump to the memory address of the operand (aka code line)
-`0110`|JPC|yes| Jump to the memory address of the operand if last operation had a 9th bit carry
-`0111`|JPZ|yes| Jump to the memory address of the operand if the last operation resulted in zero
+`0111`|JPC|yes| Jump to the memory address of the operand if last operation had a 9th bit carry
+`1000`|JPZ|yes| Jump to the memory address of the operand if the last operation resulted in zero
 `1110`|OUT|no| Load contents of register A into output register
 `1111`|HLT|yes\\(^{[1]}\\)| Halt the system
 
@@ -1730,7 +1731,7 @@ binary instruction | assembly opcode | has operand | meaning
     [Open tinkercad](https://www.tinkercad.com/things/iX6Tvl59oiP-jump-zero)
     6. Connect the ALU outputs to the inputs of the NOR gates (doesnt matter the order)
     7. Insert the 74LS173 chip and connect power/ground pins
-    8. Connect the carry and the zero flags to an input pin each (MSB) of the flags register. Connect 1k pull-downs to the input pins.
+    8. Connect the carry and the zero flags to an input pin each (MSB) of the flags register. Connect 10k pull-ups to the other input pins.
     9. We want the output of the 173 to always be enable, so connect both M and N (pins 1 and 2) to ground (active low)
     10. Connect the 2 MSB outputs to blue LEDs with resistors in series
         * 10b connect the Carry flag output to address pin A8 and Zero flag output to  address pin A9 of the microcode EEPROMs
@@ -1738,6 +1739,9 @@ binary instruction | assembly opcode | has operand | meaning
     12. Merge pin 9 and 10 (enable) and connect it to the output pin of the nearest hex inverter/NAND gate output available.
         * 12.b: Connect the FI control signal to the inputs of that inverter gate
     13. Connect the clear pin to the nearest/most accesible clear pin of another register
+
+##### Schematic
+![404]({{ site.url }}/images/8bit/alu/schematic.png)
 
 #### Building the fetch cycle
 * The first 2 microinstructions that constitute the fetch cycle are the same for all opcodes.
@@ -1893,7 +1897,7 @@ binary instruction | assembly opcode | has operand | meaning
 * Although they appear in the schematic, I decided to not use LEDs for the microclock decoder as they do not provide any additional information compared to the 3 LEDs of the microclock 
 
 ## Programs
-* You can save the programs below as .txt files and this [Ben Eater 8 bit computer assembly compiler in java](https://github.com/skirienkopanea/8bit) will convert them into binary such that you can the input them into the terminals line by line.
+* The programs below have been compiled to binary with this [assembly compiler](https://github.com/skirienkopanea/8bit).
 
 ### Multiplication tables
 
@@ -1908,8 +1912,30 @@ Program
 ```
 
 ### Fibonacci sequence
+* The strategy is to use 3 memory locations: 1111 for the last value, 1110 for the second last value, and 1101 as a temporary location to jiggle 
+* The code below starts initalizing the last value only (with 1), and it does not initialize the second last value outside of the loop as we would run out of lines so instead we just load A immedieately with 0.
+* The idea is to have A at the end of each loop to contain the second last value and to output it at the beginning of the next loop
+* Right after outputting A we add the 2 last numbers and do start jiggling the 3 memmory locations as defined by the code below.
 
 ```
-Program
+address: contents    # assembly
+---------------------------------
+0000: 0101 0001      # 0.  LDI 1   (part 1 of ressetting the program to start with last number 1 and implicitly second last number 0)
+0001: 0100 1111      # 1.  STA 15  (part 2 of resetting the program)
+0010: 0101 0000      # 2.  LDI 0   (part 3 of resetting the program, storing second last value is skipped before the loop as we run out of memory and it's already available in A register)
+0011: 1110 0000      # 3.  OUT     (should display 0, 1, 2, 3, 5, 8, 13, 21, 34. 55. 89, 144, 233)
+0100: 0010 1111      # 4.  ADD 15   (now we have A += last number)
+0101: 0100 1101      # 5.  STA 13   (store the updated last number in temp location)
+0110: 0001 1111      # 6.  LDA 15   (part 1 of moving previous last number to second last number location)
+0111: 0100 1110      # 7.  STA 14   (part 2 of moving previous last number to second last number location)
+1000: 0001 1101      # 8.  LDA 13   (part 1 of moving the new last number to the proper last number location)
+1001: 0100 1111      # 9.  STA 15   (part 2 of moving the new last number to the proper last number location)
+1010: 0001 1110      # 10. LDA 14   (store A with second last number)
+1011: 0111 0000      # 11. JPC 0    (restart program if overflow)
+1100: 0110 0011      # 12. JMP 3    (jump to output second last number)
+1101: 0000 0000      # 13. 0        (temp value)
+1110: 0000 0000      # 14. 0        (second last number)
+1111: 0000 0001      # 15. 1        (last number)
 ```
 
+* Since we are outputting the second last value, the JPC will makes us skipp 233. Instead move the JPC to after the OUT line and that'll include 233!
