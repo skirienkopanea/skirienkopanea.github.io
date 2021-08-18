@@ -1920,10 +1920,10 @@ Program
 ```
 address: contents    # assembly
 ---------------------------------
-0000: 0101 0001      # 0.  LDI 1   (part 1 of ressetting the program to start with last number 1 and implicitly second last number 0)
-0001: 0100 1111      # 1.  STA 15  (part 2 of resetting the program)
-0010: 0101 0000      # 2.  LDI 0   (part 3 of resetting the program, storing second last value is skipped before the loop as we run out of memory and it's already available in A register)
-0011: 1110 0000      # 3.  OUT     (should display 0, 1, 2, 3, 5, 8, 13, 21, 34. 55. 89, 144, 233)
+0000: 0101 0001      # 0.  LDI 1    (part 1 of ressetting the program to start with last number 1 and implicitly second last number 0)
+0001: 0100 1111      # 1.  STA 15   (part 2 of resetting the program)
+0010: 0101 0000      # 2.  LDI 0    (part 3 of resetting the program, storing second last value is skipped before the loop as we run out of memory and it's already available in A register)
+0011: 1110 0000      # 3.  OUT      (should display 0, 1, 2, 3, 5, 8, 13, 21, 34. 55. 89, 144, 233)
 0100: 0010 1111      # 4.  ADD 15   (now we have A += last number)
 0101: 0100 1101      # 5.  STA 13   (store the updated last number in temp location)
 0110: 0001 1111      # 6.  LDA 15   (part 1 of moving previous last number to second last number location)
