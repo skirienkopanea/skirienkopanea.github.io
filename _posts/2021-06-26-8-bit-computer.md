@@ -130,9 +130,10 @@ tags: project
       - [Building the instruction decoder](#building-the-instruction-decoder)
       - [Building the reset circuit (resume clock and clear data)](#building-the-reset-circuit-resume-clock-and-clear-data)
     - [Schematic](#schematic-10)
+  - [Last minute fixes](#last-minute-fixes)
   - [Programs](#programs)
-    - [Multiplication tables](#multiplication-tables)
-    - [Sum two "runtime" inputs](#sum-two-runtime-inputs)
+    - [Adding two "runtime" inputs](#adding-two-runtime-inputs)
+    - [Multiplication of two integers](#multiplication-of-two-integers)
     - [Fibonacci sequence](#fibonacci-sequence)
 
 ## Introduction
@@ -1896,20 +1897,120 @@ binary instruction | assembly opcode | has operand | meaning
 * As you can see I added the switch, and you may add a pull-up resistor instead of connecting directly to \\(V_{cc}\\). I'm using 330 Ohms. 
 * Although they appear in the schematic, I decided to not use LEDs for the microclock decoder as they do not provide any additional information compared to the 3 LEDs of the microclock 
 
+## Last minute fixes
+* Replaced the RC capacitor from 103 to 102
+* Replaced the monostable pushbutton capacitor from 103 to 104
+
 ## Programs
 * The programs below have been compiled to binary with this [assembly compiler](https://github.com/skirienkopanea/8bit).
 
-### Multiplication tables
+### Adding two "runtime" inputs
+* There is very weird a bug in my build that the memory address register has when using the R/C button. Only with HLTs, for a very short moment of time it keeps the right address but then it gets overwritten with 0.
+  * T moves very fast from T0 to T1, which then makes the memory address register to be overwritten with 0
+  * A workaround is to always use the same "runtime" user input address for the HLT operand, then the problem is not noticable to the end user and it's even better for them so that they don't have to change the address switches.
+  * The program should take care of moving that input to the adequate places.
 
 ```
-Program
+HLT 15
+LDA 15
+STA 14
+
+HLT 15
+LDA 15
+
+ADD 14
+OUT
+JMP 0
+
+. //junk
+.
+.
+.
+.
+.
+.
+
+. // all runtime inputs
 ```
 
-### Sum two "runtime" inputs
+
+
+
+### Multiplication of two integers
+* The strategy is to bring the code below to assembly. See that i used a do while loop with a != 0 condition as it mostly approximates what we can do in assembly (we can't do a normal loop with the condition being evaluated in the beginning since we first need to have an ALU operation to sets the flags in).
+* If b is zero it will still run the loop once and then b becomes 11111111... if it's negative it'll start with a bunch of leading ones as well, taking a long time to bring b back to 0 (less time the bigger the negative number as it's closer to 0 in 2's complement)
+  * Funny enough, it takes 256 decrements to make b 0 again, which means that we would get \\(result = 256 * A = 0 * A\\) (doing the same addition 256 times results in A overflows that cancel each other out)
+  * For negative numbers we get \\(result = a(256-b) = 256a - ab = -ab\\)
+  * Although we do get the desired result, we do iterate (256-b) times
+  * Therefore, althgouh the program supports 0 and negative numbers for the "b" operand it is still advaisable to only use positive integers for b
+
+```java
+Scanner input = new Scanner(System.in);
+
+byte result = 0;
+byte a = (byte) input.nextInt(); //5
+byte b = (byte) input.nextInt(); //3
+
+//int count = 0;
+do {
+    result += a; //5 + 5 + 5
+    b--; //2, 1, 0
+    //count++;
+} while (b != 0);
+
+System.out.println(result);
+//System.out.println(count);
+```
 
 ```
-Program
+LDA 13
+ADD 14
+STA 13	//result += a
+
+LDA 15
+SUB 12
+STA 15	//b--
+
+JPZ 8  	// skip loop
+JMP 0	// loop
+
+LDA 13
+OUT	// output result
+HLT
+
+. //junk
+
+1 # b's decrement
+0 # should be resetted to 0 each time
+7 # a
+3 # b
 ```
+
+* You need to also set address 13 to 0 each time
+
+```
+address: contents    # assembly
+---------------------------------
+0000: 0001 1101      # 0.  LDA 13
+0001: 0010 1110      # 1.  ADD 14
+0010: 0100 1101      # 2.  STA 13
+0011: 0001 1111      # 3.  LDA 15
+0100: 0011 1100      # 4.  SUB 12
+0101: 0100 1111      # 5.  STA 15
+0110: 1000 1000      # 6.  JPZ 8
+0111: 0110 0000      # 7.  JMP 0
+1000: 0001 1101      # 8.  LDA 13
+1001: 1110 0000      # 9.  OUT
+1010: 1111 0000      # 10. HLT
+1011: 0000 0000      # 11. 0
+1100: 0000 0001      # 12. 1
+1101: 0000 0000      # 13. 0
+1110: 0000 0111      # 14. 7
+1111: 0000 0011      # 15. 3
+
+```
+
+* Although the java code worked for negative numbers, negative numbers seemed not to work as expected in this computer, perhaps the zero flag does not behave the way we think with negative numbers.
 
 ### Fibonacci sequence
 * The strategy is to use 3 memory locations: 1111 for the last value, 1110 for the second last value, and 1101 as a temporary location to jiggle 
@@ -1924,18 +2025,18 @@ address: contents    # assembly
 0001: 0100 1111      # 1.  STA 15   (part 2 of resetting the program)
 0010: 0101 0000      # 2.  LDI 0    (part 3 of resetting the program, storing second last value is skipped before the loop as we run out of memory and it's already available in A register)
 0011: 1110 0000      # 3.  OUT      (should display 0, 1, 2, 3, 5, 8, 13, 21, 34. 55. 89, 144, 233)
-0100: 0010 1111      # 4.  ADD 15   (now we have A += last number)
-0101: 0100 1101      # 5.  STA 13   (store the updated last number in temp location)
-0110: 0001 1111      # 6.  LDA 15   (part 1 of moving previous last number to second last number location)
-0111: 0100 1110      # 7.  STA 14   (part 2 of moving previous last number to second last number location)
-1000: 0001 1101      # 8.  LDA 13   (part 1 of moving the new last number to the proper last number location)
-1001: 0100 1111      # 9.  STA 15   (part 2 of moving the new last number to the proper last number location)
-1010: 0001 1110      # 10. LDA 14   (store A with second last number)
-1011: 0111 0000      # 11. JPC 0    (restart program if overflow)
+0100: 0111 0000      # 4.  JPC 0    (restart program if overflow)
+0101: 0010 1111      # 5.  ADD 15   (now we have A += last number)
+0110: 0100 1101      # 6.  STA 13   (store the updated last number in temp location)
+0111: 0001 1111      # 7.  LDA 15   (part 1 of moving previous last number to second last number location)
+1000: 0100 1110      # 8.  STA 14   (part 2 of moving previous last number to second last number location)
+1001: 0001 1101      # 9.  LDA 13   (part 1 of moving the new last number to the proper last number location)
+1010: 0100 1111      # 10. STA 15   (part 2 of moving the new last number to the proper last number location)
+1011: 0001 1110      # 11. LDA 14   (store A with second last number)
 1100: 0110 0011      # 12. JMP 3    (jump to output second last number)
 1101: 0000 0000      # 13. 0        (temp value)
 1110: 0000 0000      # 14. 0        (second last number)
 1111: 0000 0001      # 15. 1        (last number)
 ```
 
-* Since we are outputting the second last value, the JPC will makes us skipp 233. Instead move the JPC to after the OUT line and that'll include 233!
+* Since we are outputting the second last value, if we do the JPC before the output it will makes us skipp 233.
