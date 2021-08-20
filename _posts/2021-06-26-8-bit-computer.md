@@ -1065,7 +1065,7 @@ Open [tinkercad](https://www.tinkercad.com/things/aEBNrUN51YQ-ram-p3)
 Open [tinkercad](https://www.tinkercad.com/things/aEBNrUN51YQ-ram-p3)
 
 #### Schematic
-![404]({{ site.url }}/images/8bit/ram/schematic2.PNG)
+![404]({{ site.url }}/images/8bit/ram/schematic2.png)
 
 ### Building an 8-bit input terminal for the RAM (to manually store a program) and the alternative of inputs from the Bus
 * We'll stick a breadboard under the RAM module and above the instruction register
@@ -1105,7 +1105,7 @@ Open [tinkercad](https://www.tinkercad.com/things/aEBNrUN51YQ-ram-p3)
 Open [tinkercad](https://www.tinkercad.com/things/aEBNrUN51YQ-ram-p3)
 
 #### Schematic
-![404]({{ site.url }}/images/8bit/ram/schematic.PNG)
+![404]({{ site.url }}/images/8bit/ram/schematic.png)
 
 ### Testing the RAM
 * Floating inputs from the bus to the mux B inputs for storing data on the RAM behave randomly and not as expected (float = high)
@@ -1274,7 +1274,7 @@ Open [tinkercad](https://www.tinkercad.com/things/aEBNrUN51YQ-ram-p3)
 [Open tinkercad](https://www.tinkercad.com/things/h4tkgaZXnL6-program-counter)
 
 #### Schematic
-![404]({{ site.url }}/images/8bit/counter/schematic.PNG)
+![404]({{ site.url }}/images/8bit/counter/schematic.png)
 
 ### Testing the program counter
 * Reading test: do the i++ ALU test
@@ -1316,7 +1316,7 @@ Open [tinkercad](https://www.tinkercad.com/things/aEBNrUN51YQ-ram-p3)
  * Red
  * Common cathode
 ![404]({{ site.url }}/images/8bit/output/common.PNG)
-![404]({{ site.url }}/images/8bit/output/leg.PNG)
+![404]({{ site.url }}/images/8bit/output/leg.png)
  * Maximum Forward Voltage: 1.6 V (@ 20 mA)
  * Maximum forward current: 20mA
    * We need a series resistor to limit the current.
@@ -1395,7 +1395,7 @@ Explanation source: [electronics-fun.com]([/](https://electronics-fun.com/7-segm
 * When the EEPROM are erased/brand new, they are erased with all 1's
 * To program the contents of the EEPROM you set \\(\overline{WE}\\) or \\(\overline{CE}\\) low and \\(\overline{OE}\\) high and the I/O pins now behave as input pins
   * We're gonna go with \\(\overline{WE}\\)
-![404]({{ site.url }}/images/8bit/output/write.png)
+![404]({{ site.url }}/images/8bit/output/write.PNG)
   * The datasheet specifies the timing of certaing pulses (when and for how long should paramaters values be inputted to the chip) to trigger a writting
   * We need to keep the write pulse signal between 100 and 1000 nanoseconds
   * When the write enables goes low, it will latch the addres for at least 50 ns (\\(t_{AH}\\))
@@ -1552,9 +1552,9 @@ Steps:
 
 ### Schematic
 #### Output module
-![404]({{ site.url }}/images/8bit/output/schematic.PNG)
+![404]({{ site.url }}/images/8bit/output/schematic.png)
 #### Computer High Level overview so far
-![404]({{ site.url }}/images/8bit/control/schematic1.PNG)
+![404]({{ site.url }}/images/8bit/control/schematic1.png)
 
 ## Terminology review
 ### Instruction set architecture
@@ -1884,7 +1884,7 @@ binary instruction | assembly opcode | has operand | meaning
   * Output register
 
 ### Schematic
-![404]({{ site.url }}/images/8bit/control/schematic2.PNG) 
+![404]({{ site.url }}/images/8bit/control/schematic2.png) 
 * As you can see I added the switch, and you may add a pull-up resistor instead of connecting directly to \\(V_{cc}\\). I'm using 330 Ohms. 
 * Although they appear in the schematic, I decided to not use LEDs for the microclock decoder as they do not provide any additional information compared to the 3 LEDs of the microclock 
 
@@ -2029,5 +2029,3 @@ address: contents    # assembly
 1110: 0000 0000      # 14. 0        (second last number)
 1111: 0000 0001      # 15. 1        (last number)
 ```
-
-* Since we are outputting the second last value, if we do the JPC before the output it will makes us skipp 233.
