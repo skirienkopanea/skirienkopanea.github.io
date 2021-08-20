@@ -8,6 +8,8 @@ tags: project
 {% include math.html %}
 <!--more-->
 
+![404]({{ site.url }}/images/8bit/final.jpg)
+
 # Table of Contents
 - [Table of Contents](#table-of-contents)
   - [Introduction](#introduction)
