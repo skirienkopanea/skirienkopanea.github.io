@@ -23,7 +23,7 @@ tags: project
       - [Pulling resistors](#pulling-resistors)
       - [Power](#power)
       - [LEDs](#leds)
-    - [Datasheets (TODO)](#datasheets-todo)
+    - [Datasheets](#datasheets)
   - [Clock](#clock)
     - [Astable 555 timer](#astable-555-timer)
       - [Schematic](#schematic)
@@ -147,10 +147,24 @@ Ben Eater is an online educator on computer-related topics from which I'm follow
 ### Computer features
 * [Specsheet]({{ site.url }}/downloads/8bit/specs.pdf)
 * How to operate:
-  *  (mostrar video con papel impreso de instruction set, 2+3 assembly code, binary code, input it in the terminal and run it)
-* The computer is "turing complete" because it allows the execution of a program and the computer supports addition, subtraction and conditional jumps, from which any computable problem, given infinite memory, could be computed.      
-  * Show multiplication
-  * Show fibonacci
+  * Set clock to monostable by moving the slideswitch to the right (manual clock pulse)
+    * ![404]({{ site.url }}/images/8bit/tutorial/1_monostable.jpg)
+  * Set mode to programming mode with the slide switch (left = red led on = programming mode)
+    * ![404]({{ site.url }}/images/8bit/tutorial/2_program_mode.jpg)
+  * Use the 4-bit DIP switches to change the address of the RAM
+    * ![404]({{ site.url }}/images/8bit/tutorial/3_address_register.jpg)
+  * Use the 8-bit DIP switches to set the contents of the RAM and press the Input button (I) to save them
+    * ![404]({{ site.url }}/images/8bit/tutorial/4_ram_contents.jpg)
+  * Reset all registers and counters with the R/C button with the "clear" switch on (to the right)
+    * ![404]({{ site.url }}/images/8bit/tutorial/5_reset with clear.jpg)
+  * Set the computer back to run mode (slide switch to right = green led on = run mode), and set the clock to astable by moving the slideswitch to the left and adjust the speed with the potentiometer
+    * ![404]({{ site.url }}/images/8bit/tutorial/6_run_mode_and_astable.jpg)
+* Use this [assembly language](#defining-our-own-assembly-language) for your programs
+* Fibonacci demo:
+<iframe width="100%" height="415" src="https://www.youtube.com/embed/BTJ1xUC6EAw" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+
+* The computer is "turing complete" because it allows the execution of a program and the computer supports addition, subtraction and conditional jumps, from which any computable problem, given infinite memory, could be computed. 
+  * [Multiplication program](#multiplication-of-two-integers) 
 
 ### Power supply
 We will be using a 5V (volt) power source, which Ben has crafted by cutting off the wires of a cellphone charger.
@@ -276,7 +290,27 @@ Sources:
 * [https://www.reddit.com/r/beneater/comments/dskbug/what_i_have_learned_a_master_list_of_what_to_do/](https://www.reddit.com/r/beneater/comments/dskbug/what_i_have_learned_a_master_list_of_what_to_do/)
 * [https://www.reddit.com/r/beneater/comments/ii113p/helpful_tips_and_recommendations_for_ben_eaters/](https://www.reddit.com/r/beneater/comments/ii113p/helpful_tips_and_recommendations_for_ben_eaters/)
 
-### Datasheets (TODO)
+### Datasheets
+* [555 timer]({{ site.url }}/downloads/8bit/555.pdf)
+* [74LS00]({{ site.url }}/downloads/8bit/74LS00.pdf)
+* [74LS02]({{ site.url }}/downloads/8bit/74LS02.pdf)
+* [74LS04]({{ site.url }}/downloads/8bit/74LS04.pdf)
+* [74LS08]({{ site.url }}/downloads/8bit/74LS08.pdf)
+* [74LS32]({{ site.url }}/downloads/8bit/74LS32.pdf)
+* [74LS86]({{ site.url }}/downloads/8bit/74LS86.pdf)
+* [74LS107]({{ site.url }}/downloads/8bit/74LS107.pdf)
+* [74LS138]({{ site.url }}/downloads/8bit/74LS138.pdf)
+* [74LS139]({{ site.url }}/downloads/8bit/74LS139.pdf)
+* [74LS157]({{ site.url }}/downloads/8bit/74LS157.pdf)
+* [74LS161]({{ site.url }}/downloads/8bit/74LS161.pdf)
+* [74LS173]({{ site.url }}/downloads/8bit/74LS173.pdf)
+* [74LS245]({{ site.url }}/downloads/8bit/74LS245.pdf)
+* [74LS273]({{ site.url }}/downloads/8bit/74LS273.pdf)
+* [74LS283]({{ site.url }}/downloads/8bit/74LS283.pdf)
+* [74F189]({{ site.url }}/downloads/8bit/74F189.pdf)
+* [74HC595]({{ site.url }}/downloads/8bit/74HC595.pdf)
+* [AT28C16]({{ site.url }}/downloads/8bit/AT28C16.pdf)
+* [Capacitor codes]({{ site.url }}/downloads/8bit/Capacitor-Codes.pdf)
 
 
 ##  Clock
@@ -1891,6 +1925,8 @@ binary instruction | assembly opcode | has operand | meaning
 ## Last minute fixes
 * Replaced the RC capacitor from 103 to 102
 * Replaced the monostable pushbutton capacitor from 103 to 104
+* Covered the 7-segment display with Babybel cheese red plastic wrappers...
+* Replaced 250 ohm red LED resistors with 1k ohm resistors
 
 ## Programs
 * The programs below have been compiled to binary with this [assembly compiler](https://github.com/skirienkopanea/8bit).
@@ -2010,22 +2046,47 @@ address: contents    # assembly
 * Right after outputting A we add the 2 last numbers and do start jiggling the 3 memmory locations as defined by the code below.
 
 ```
+LDI 1   # part 1 of ressetting the program to start with last number 1 and second last number 0
+STA 15  # part 2 of resseting program
+LDI 0   # part 3 of resseting the program, STA 14 can be skipped as we already have it in A register and it will be overwritten anyway
+
+OUT     # should display second last number (order: 0, 1, 2, 3, 5, 8, 13, 21, 34. 55. 89, 144, 233)
+
+ADD 15  # now we have A += last number
+
+JPC 0   # moved it here for 2 reasons, after the out to not skip the 233 number and after the ADD to let the Carry flag get updated after overflowing (otherwise it will loop to 0 every time after overflowing once)
+
+STA 13  # store the updated last number in temp location
+LDA 15  # part 1 of moving previous last number to second last number location
+STA 14  # part 2 of moving previous last number to second last number location
+LDA 13  # part 1 of moving the new last number to the proper last number location
+STA 15  # part 2 of moving the new last number to the proper last number location
+LDA 14  # store A with second last number
+JMP 3   # jump to output second last number
+
+0    # temp value
+0    # second last number
+1    # last number
+```
+
+```
 address: contents    # assembly
 ---------------------------------
-0000: 0101 0001      # 0.  LDI 1    (part 1 of ressetting the program to start with last number 1 and implicitly second last number 0)
-0001: 0100 1111      # 1.  STA 15   (part 2 of resetting the program)
-0010: 0101 0000      # 2.  LDI 0    (part 3 of resetting the program, storing second last value is skipped before the loop as we run out of memory and it's already available in A register)
-0011: 1110 0000      # 3.  OUT      (should display 0, 1, 2, 3, 5, 8, 13, 21, 34. 55. 89, 144, 233)
-0100: 0111 0000      # 4.  JPC 0    (restart program if overflow)
-0101: 0010 1111      # 5.  ADD 15   (now we have A += last number)
-0110: 0100 1101      # 6.  STA 13   (store the updated last number in temp location)
-0111: 0001 1111      # 7.  LDA 15   (part 1 of moving previous last number to second last number location)
-1000: 0100 1110      # 8.  STA 14   (part 2 of moving previous last number to second last number location)
-1001: 0001 1101      # 9.  LDA 13   (part 1 of moving the new last number to the proper last number location)
-1010: 0100 1111      # 10. STA 15   (part 2 of moving the new last number to the proper last number location)
-1011: 0001 1110      # 11. LDA 14   (store A with second last number)
-1100: 0110 0011      # 12. JMP 3    (jump to output second last number)
-1101: 0000 0000      # 13. 0        (temp value)
-1110: 0000 0000      # 14. 0        (second last number)
-1111: 0000 0001      # 15. 1        (last number)
+0000: 0101 0001      # 0.  LDI 1
+0001: 0100 1111      # 1.  STA 15
+0010: 0101 0000      # 2.  LDI 0
+0011: 1110 0000      # 3.  OUT
+0100: 0010 1111      # 4.  ADD 15
+0101: 0111 0000      # 5.  JPC 0
+0110: 0100 1101      # 6.  STA 13
+0111: 0001 1111      # 7.  LDA 15
+1000: 0100 1110      # 8.  STA 14
+1001: 0001 1101      # 9.  LDA 13
+1010: 0100 1111      # 10. STA 15
+1011: 0001 1110      # 11. LDA 14
+1100: 0110 0011      # 12. JMP 3
+1101: 0000 0000      # 13. 0
+1110: 0000 0000      # 14. 0
+1111: 0000 0001      # 15. 1
+
 ```
