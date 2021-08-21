@@ -133,6 +133,7 @@ tags: project
       - [Building the reset circuit (resume clock and clear data)](#building-the-reset-circuit-resume-clock-and-clear-data)
     - [Schematic](#schematic-10)
   - [Last minute fixes](#last-minute-fixes)
+  - [Potential fixes](#potential-fixes)
   - [Programs](#programs)
     - [Adding two "runtime" inputs](#adding-two-runtime-inputs)
     - [Multiplication of two integers](#multiplication-of-two-integers)
@@ -1926,7 +1927,11 @@ binary instruction | assembly opcode | has operand | meaning
 * Replaced the RC capacitor from 103 to 102
 * Replaced the monostable pushbutton capacitor from 103 to 104
 * Covered the 7-segment display with Babybel cheese red plastic wrappers...
-* Replaced 250 ohm red LED resistors with 1k ohm resistors
+
+## Potential fixes
+* Replace 250 ohm red LED resistors with 1k ohm resistors
+* Add a 1k pull-down resistor to the left leg of the 102 capacitor in the RAM module so it hopefully sinks most of the decharging capacitor current such that whatever goes to the other RAM chips is low enough to avoid a double clock pulse in those chips.
+  * Fixing that double clock pulse would probably fix the memory address register bouncing back to 0 when using HLTs in series and the IR populating the bus ahead of time
 
 ## Programs
 * The programs below have been compiled to binary with this [assembly compiler](https://github.com/skirienkopanea/8bit).
