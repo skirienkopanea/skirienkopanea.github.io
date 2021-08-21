@@ -159,7 +159,7 @@ Ben Eater is an online educator on computer-related topics from which I'm follow
     * ![404]({{ site.url }}/images/8bit/tutorial/5_reset with clear.jpg)
   * Set the computer back to run mode (slide switch to right = green led on = run mode), and set the clock to astable by moving the slideswitch to the left and adjust the speed with the potentiometer
     * ![404]({{ site.url }}/images/8bit/tutorial/6_run_mode_and_astable.jpg)
-* Use this [assembly language](#defining-our-own-assembly-language) for your programs
+* Use this [assembly language](#defining-our-own-assembly-language) for your programs, this [compiler](https://github.com/skirienkopanea/8bit) to turn it into binary and you may as well use this forked repo to [simulate](https://github.com/skirienkopanea/Computer-Simulation) the program execution
 * Fibonacci demo:
 <iframe width="100%" height="415" src="https://www.youtube.com/embed/BTJ1xUC6EAw" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
 
