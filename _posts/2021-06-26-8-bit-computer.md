@@ -1940,32 +1940,28 @@ binary instruction | assembly opcode | has operand | meaning
 * The programs below have been compiled to binary with this [assembly compiler](https://github.com/skirienkopanea/8bit).
 
 ### Adding two "runtime" inputs
-* There is very weird a bug in my build that the memory address register has when using the R/C button. Only with HLTs, for a very short moment of time it keeps the right address but then it gets overwritten with 0.
-  * T moves very fast from T0 to T1, which then makes the memory address register to be overwritten with 0
-  * A workaround is to always use the same "runtime" user input address for the HLT operand, then the problem is not noticable to the end user and it's even better for them so that they don't have to change the address switches.
-  * The program should take care of moving that input to the adequate places.
+* Differentiating HLT 15 as an input prompt unlike just HLT which would mean that the program ended:
 
 ```
-HLT 15
-LDA 15
-STA 14
+address: contents    # assembly
+---------------------------------
+0000: 1111 1111      # 0.  HLT 15
+0001: 0001 1111      # 1.  LDA 15
+0010: 0100 1110      # 2.  STA 14
+0011: 1111 1111      # 3.  HLT 15
+0100: 0001 1111      # 4.  LDA 15
+0101: 0010 1110      # 5.  ADD 14
+0110: 1110 0000      # 6.  OUT
+0111: 0110 0000      # 7.  JMP 0
+1000: 0000 0000      # 8.  0
+1001: 0000 0000      # 9.  0
+1010: 0000 0000      # 10. 0
+1011: 0000 0000      # 11. 0
+1100: 0000 0000      # 12. 0
+1101: 0000 0000      # 13. 0
+1110: 0000 0000      # 14. 0
+1111: 0000 0000      # 15. 0 //inputs
 
-HLT 15
-LDA 15
-
-ADD 14
-OUT
-JMP 0
-
-. //junk
-.
-.
-.
-.
-.
-.
-
-. // all runtime inputs
 ```
 
 ### Incrementing counter
