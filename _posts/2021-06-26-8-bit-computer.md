@@ -1930,7 +1930,7 @@ binary instruction | assembly opcode | has operand | meaning
 
 ## Potential fixes
 * Replace 250 ohm red LED resistors with 1k ohm resistors
-* Add a 1k pull-down resistor to the left leg of the 102 capacitor in the RAM module so it hopefully sinks most of the decharging capacitor current such that whatever goes to the other RAM chips is low enough to avoid a double clock pulse in those chips.
+* Add a 1k pull-down resistor to the left leg of the 102 capacitor in the RAM module to sink the decharging capacitor currentand connect the clock pin of the other RAM chips directly to the system clock signal to avoid a double clock pulse in those chips.
   * Fixing that double clock pulse would probably fix the memory address register bouncing back to 0 when using HLTs in series and the IR populating the bus ahead of time
 
 ## Programs
