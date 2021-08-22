@@ -46,7 +46,7 @@ $$x=1 \lor x=-1 \lor x=i \lor x=-i$$
   * \\(z=a+bi\\)
 
 ### Imaginary unit circle
-![Injective vs surjective]({{ site.url }}/images/imaginary_unit.png)
+![Injective vs surjective]({{ site.url }}/images/complex_numbers/imaginary_unit.png)
 
 * Numbers in the imaginary unit circle have a modulus, distance, r of 1
   * \\(z=\frac{1}{\sqrt{2}}+\frac{1}{\sqrt{2}}i\\)
@@ -67,7 +67,7 @@ $$x=1 \lor x=-1 \lor x=i \lor x=-i$$
 ## Angle
 * Also called \\(\theta\\), argument of z or arg(z)
 * It can be calculated from a and b (x and y coordinates), between \\(-\pi\\) and \\(\pi\\) :
-![argument]({{ site.url }}/images/argument.svg)
+![argument]({{ site.url }}/images/complex_numbers/argument.svg)
 * \\(\tan{\theta}=\frac{y}{x}\\)
 * \\(arg(\frac{1}{z}) = -r\\)
 * \\(arg(-z) = arg(z) + \pi\\)
@@ -76,7 +76,7 @@ $$x=1 \lor x=-1 \lor x=i \lor x=-i$$
 ## Multiplication, Polar form, Euler identity
 * for z * w we are adding the angles (arguments) of the complex numbers
 * The length of the new number is the product of their respectives moduluses
-![Injective vs surjective]({{ site.url }}/images/complex_multiplication.png)
+![Injective vs surjective]({{ site.url }}/images/complex_numbers/complex_multiplication.png)
 * \\(\\|z\cdot w\\|=\\|z\\|\\|w\\|\\)
 * \\(\arg(z+w)=\arg(z)+arg(w)\\)
 * This can be directly expressed in polar form

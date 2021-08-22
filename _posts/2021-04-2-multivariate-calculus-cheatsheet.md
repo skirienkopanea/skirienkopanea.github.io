@@ -29,7 +29,7 @@ To do...
 * i.e. 2sin(x)cos(x)=sin(2x)
 
 ### Unit circle
-![unit_circle]({{ site.url }}/images/unit_circle.svg)
+![unit_circle]({{ site.url }}/images/calclus/unit_circle.svg)
 
 ### Derivates and integrals
 * also properties of derivates and integrals (such as substution and integration by parts)
