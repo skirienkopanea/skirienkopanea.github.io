@@ -133,11 +133,11 @@ tags: project
       - [Building the reset circuit (resume clock and clear data)](#building-the-reset-circuit-resume-clock-and-clear-data)
     - [Schematic](#schematic-10)
   - [Last minute fixes](#last-minute-fixes)
-  - [Potential fixes](#potential-fixes)
   - [Programs](#programs)
     - [Adding two "runtime" inputs](#adding-two-runtime-inputs)
-    - [Multiplication of two integers](#multiplication-of-two-integers)
+    - [Incrementing counter](#incrementing-counter)
     - [Fibonacci sequence](#fibonacci-sequence)
+    - [Multiplication of two integers](#multiplication-of-two-integers)
 
 ## Introduction
 Ben Eater is an online educator on computer-related topics from which I'm following his 8-bit computer project. [https://eater.net/8bit](https://eater.net/8bit). The computer is composed of different modules, which are built on breadboards. The modules are the clock module, registers and ALU (arithmetic and logic unit) module, RAM (random access memory) and program counter module, and output and control logic module.
@@ -1927,11 +1927,14 @@ binary instruction | assembly opcode | has operand | meaning
 * Replaced the RC capacitor from 103 to 102
 * Replaced the monostable pushbutton capacitor from 103 to 104
 * Covered the 7-segment display with Babybel cheese red plastic wrappers...
-
-## Potential fixes
-* Replace 250 ohm red LED resistors with 1k ohm resistors
-* Add a 1k pull-down resistor to the left leg of the 102 capacitor in the RAM module to sink the decharging capacitor currentand connect the clock pin of the other RAM chips directly to the system clock signal to avoid a double clock pulse in those chips.
-  * Fixing that double clock pulse would probably fix the memory address register bouncing back to 0 when using HLTs in series and the IR populating the bus ahead of time
+* Replaced 250 ohm red LED resistors with 1k ohm resistors
+* Add a 1k pull-down resistor to the left leg of the 102 capacitor in the RAM module to sink the decharging capacitor current and connect the clock pin of the other RAM chips directly to the system clock signal to avoid a potential double clock pulse in those chips.
+* Found the bug that made the address register reset to 0. The "clear" signal fro m the R/C pushbutton is very weak and when the address register and ram have a large number of 0's there seems to be too much noise/power difference or something that makes that triggers the clear pin as if it was floating and hence active high.
+  * Solution: disconnect the clear pin of the memory address register from the Reset/Clear signal (we don't need to reset the address anyway as the fetch cycle will take care of loading the 0 address at the start of the program)
+  * To make the "runtime" inputs with HLTs work as expected make sure to hold the R/C button long enough to let the program counter value move to the memory address register, otherwise the micro clock would move to T1 before the address has been updated
+  * I've also removed the A and B register from the clear signal, it's the responsibility of the programer to set those to 0 with code as the clear signal resetted those registers randomly
+    * Also did it for the flags register, the programmer must make a sum/subtraction before relying on the status of the flags register
+* Replaced the 1k resistor in series with the potentiometer with two 10k resistors such that the maximum speed is bug free
 
 ## Programs
 * The programs below have been compiled to binary with this [assembly compiler](https://github.com/skirienkopanea/8bit).
@@ -1965,8 +1968,105 @@ JMP 0
 . // all runtime inputs
 ```
 
+### Incrementing counter
+* Starts counting by 1 up to 255, then by 2 up to 255, then by 3 up to 255...
 
+```
+LDI 0 //start at 0 after overflow
+OUT
 
+ADD 15 //A += i
+JPC 5 //loop while < 256 (CHECK BEFORE OUTPUTTING)
+
+JMP 1 //loop while < 256
+
+LDA 15
+ADD 14
+STA 15 // i is now (i+1)
+JMP 0 // restart with new i
+.
+.
+.
+.
+.
+1 //increase of the increase
+1 //intial increase i
+
+```
+
+```
+address: contents    # assembly
+---------------------------------
+0000: 0101 0000      # 0.  LDI 0
+0001: 1110 0000      # 1.  OUT
+0010: 0010 1111      # 2.  ADD 15
+0011: 0111 0101      # 3.  JPC 5
+0100: 0110 0001      # 4.  JMP 1
+0101: 0001 1111      # 5.  LDA 15
+0110: 0010 1110      # 6.  ADD 14
+0111: 0100 1111      # 7.  STA 15
+1000: 0110 0000      # 8.  JMP 0
+1001: 0000 0000      # 9.  0
+1010: 0000 0000      # 10. 0
+1011: 0000 0000      # 11. 0
+1100: 0000 0000      # 12. 0
+1101: 0000 0000      # 13. 0
+1110: 0000 0001      # 14. 1
+1111: 0000 0001      # 15. 1
+
+```
+
+### Fibonacci sequence
+* The strategy is to use 3 memory locations: 1111 for the last value, 1110 for the second last value, and 1101 as a temporary location to jiggle 
+* The code below starts initalizing the last value only (with 1), and it does not initialize the second last value outside of the loop as we would run out of lines so instead we just load A immedieately with 0.
+* The idea is to have A at the end of each loop to contain the second last value and to output it at the beginning of the next loop
+* Right after outputting A we add the 2 last numbers and do start jiggling the 3 memmory locations as defined by the code below.
+
+```
+LDI 1   # part 1 of ressetting the program to start with last number 1 and second last number 0
+STA 15  # part 2 of resseting program
+LDI 0   # part 3 of resseting the program, STA 14 can be skipped as we already have it in A register and it will be overwritten anyway
+
+OUT     # should display second last number (order: 0, 1, 2, 3, 5, 8, 13, 21, 34. 55. 89, 144, 233)
+
+ADD 15  # now we have A += last number
+
+JPC 0   # moved it here for 2 reasons, after the out to not skip the 233 number and after the ADD to let the Carry flag get updated after overflowing (otherwise it will loop to 0 every time after overflowing once)
+
+STA 13  # store the updated last number in temp location
+LDA 15  # part 1 of moving previous last number to second last number location
+STA 14  # part 2 of moving previous last number to second last number location
+LDA 13  # part 1 of moving the new last number to the proper last number location
+STA 15  # part 2 of moving the new last number to the proper last number location
+LDA 14  # store A with second last number
+JMP 3   # jump to output second last number
+
+0    # temp value
+0    # second last number
+1    # last number
+```
+
+```
+address: contents    # assembly
+---------------------------------
+0000: 0101 0001      # 0.  LDI 1
+0001: 0100 1111      # 1.  STA 15
+0010: 0101 0000      # 2.  LDI 0
+0011: 1110 0000      # 3.  OUT
+0100: 0010 1111      # 4.  ADD 15
+0101: 0111 0000      # 5.  JPC 0
+0110: 0100 1101      # 6.  STA 13
+0111: 0001 1111      # 7.  LDA 15
+1000: 0100 1110      # 8.  STA 14
+1001: 0001 1101      # 9.  LDA 13
+1010: 0100 1111      # 10. STA 15
+1011: 0001 1110      # 11. LDA 14
+1100: 0110 0011      # 12. JMP 3
+1101: 0000 0000      # 13. 0
+1110: 0000 0000      # 14. 0
+1111: 0000 0001      # 15. 1
+
+```
 
 ### Multiplication of two integers
 * The strategy is to bring the code below to assembly. See that i used a do while loop with a != 0 condition as it mostly approximates what we can do in assembly (we can't do a normal loop with the condition being evaluated in the beginning since we first need to have an ALU operation to sets the flags in).
@@ -2039,59 +2139,5 @@ address: contents    # assembly
 1101: 0000 0000      # 13. 0
 1110: 0000 0111      # 14. 7
 1111: 0000 0011      # 15. 3
-
-```
-
-* Although the java code worked for negative numbers, negative numbers seemed not to work as expected in this computer, perhaps the zero flag does not behave the way we think with negative numbers.
-
-### Fibonacci sequence
-* The strategy is to use 3 memory locations: 1111 for the last value, 1110 for the second last value, and 1101 as a temporary location to jiggle 
-* The code below starts initalizing the last value only (with 1), and it does not initialize the second last value outside of the loop as we would run out of lines so instead we just load A immedieately with 0.
-* The idea is to have A at the end of each loop to contain the second last value and to output it at the beginning of the next loop
-* Right after outputting A we add the 2 last numbers and do start jiggling the 3 memmory locations as defined by the code below.
-
-```
-LDI 1   # part 1 of ressetting the program to start with last number 1 and second last number 0
-STA 15  # part 2 of resseting program
-LDI 0   # part 3 of resseting the program, STA 14 can be skipped as we already have it in A register and it will be overwritten anyway
-
-OUT     # should display second last number (order: 0, 1, 2, 3, 5, 8, 13, 21, 34. 55. 89, 144, 233)
-
-ADD 15  # now we have A += last number
-
-JPC 0   # moved it here for 2 reasons, after the out to not skip the 233 number and after the ADD to let the Carry flag get updated after overflowing (otherwise it will loop to 0 every time after overflowing once)
-
-STA 13  # store the updated last number in temp location
-LDA 15  # part 1 of moving previous last number to second last number location
-STA 14  # part 2 of moving previous last number to second last number location
-LDA 13  # part 1 of moving the new last number to the proper last number location
-STA 15  # part 2 of moving the new last number to the proper last number location
-LDA 14  # store A with second last number
-JMP 3   # jump to output second last number
-
-0    # temp value
-0    # second last number
-1    # last number
-```
-
-```
-address: contents    # assembly
----------------------------------
-0000: 0101 0001      # 0.  LDI 1
-0001: 0100 1111      # 1.  STA 15
-0010: 0101 0000      # 2.  LDI 0
-0011: 1110 0000      # 3.  OUT
-0100: 0010 1111      # 4.  ADD 15
-0101: 0111 0000      # 5.  JPC 0
-0110: 0100 1101      # 6.  STA 13
-0111: 0001 1111      # 7.  LDA 15
-1000: 0100 1110      # 8.  STA 14
-1001: 0001 1101      # 9.  LDA 13
-1010: 0100 1111      # 10. STA 15
-1011: 0001 1110      # 11. LDA 14
-1100: 0110 0011      # 12. JMP 3
-1101: 0000 0000      # 13. 0
-1110: 0000 0000      # 14. 0
-1111: 0000 0001      # 15. 1
 
 ```
