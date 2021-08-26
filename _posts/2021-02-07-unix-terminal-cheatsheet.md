@@ -33,7 +33,7 @@ kbd {
 Legend for some commands (do not include the brackets) : [optional field], &lt;mandatory field&gt; #comments.
 The dollar sign indicates that you are not running the command as 'root' user (user that can change "kernel" components i.e. brightness, firewall, hardware stuff...).
 
-Source: [The Missing Semester of Your CS Education](https://missing.csail.mit.edu/2020/course-shell/)
+Source: [The Missing Semester of Your CS Education](https://missing.csail.mit.edu/2020/course-shell/) and [Gousios' Unix Summary](https://gousios.org/courses/bigdata/ds-cmd-line.html)
 
 * Print argument on screen
 ```console
