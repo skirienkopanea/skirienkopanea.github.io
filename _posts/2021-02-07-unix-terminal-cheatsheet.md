@@ -1,10 +1,44 @@
 ---
 layout: post
-title:  "Unix Cheatsheet"
+title:  "Unix: Background and Cheatsheet"
 date:   2021-02-07 12:00:00 +0100
 categories: unix
 tags: cheatsheet
 ---
+<!--more-->
+
+## Background
+* Unix is a multiuser operating system where each user has its own private space on the machine’s harddisk and are identified by an id number.
+* All users have a user name and a password and are required to enter them correctly before using the computer.
+The user with id 0 is the system’s superuser or administrator and its traditional name is root.
+* UNIX processes act on behalf of the initiating user.
+* Multiple users can be running multiple processes at the same time.
+* Users are organised in groups. A group is a set of users that share the same class of permissions.
+* Everything in UNIX is represented by files. Everything can be:
+  * Configuration files. Both user profile and system/server configuration files are plain text files. This allows to easily backup/restore/compare configuration files and remote administration using low-bandwidth text consoles.
+  * Devices. Access is done using regular file I/O operations on filesystem objects (under /dev) that represent the real devices. For example cat file.wav >/dev/sndcard plays an audio file directly to the soundcard or cat file.txt\|lpr prints it to a printer.
+
+### Filesystem
+* The UNIX file system is the same in all Unix versions:
+
+```
+|--bin          Binaries required before mounting /usr
+|--etc          System wide configuration files
+|--home         Users’ home directories
+|--lib          Libraries required by the system
+|--tmp          Temporary files. Everyone has RW access.
+|--usr          Programs
+| |--bin        Programs’ executables
+| |--lib        Programs’ libraries
+| |--local      Programs that are install locally
+| |   |-bin,lib,share
+| |--share Programs’ required files (e.g. docs, icons)
+| |--sbin  System administration programs
+| |--src   Source files for the kernel and programs
+|--var          Temporary space for running programs
+```
+
+## Cheatsheet
 <style>
 :root {
 --theme-body-font-family:Arial,"Helvetica Neue",Helvetica,sans-serif;
@@ -29,11 +63,8 @@ kbd {
     white-space: nowrap;
 }
 </style>
-<!--more-->
 Legend for some commands (do not include the brackets) : [optional field], &lt;mandatory field&gt; #comments.
 The dollar sign indicates that you are not running the command as 'root' user (user that can change "kernel" components i.e. brightness, firewall, hardware stuff...).
-
-Source: [The Missing Semester of Your CS Education](https://missing.csail.mit.edu/2020/course-shell/) and [Gousios' Unix Summary](https://gousios.org/courses/bigdata/ds-cmd-line.html)
 
 * Print argument on screen
 ```console
@@ -235,3 +266,5 @@ $ xdg-open <filepath>
 ```console
 $ touch <filepath>
 ```
+
+Sources: [Gousios' Unix Summary](https://gousios.org/courses/bigdata/ds-cmd-line.html) and [The Missing Semester of Your CS Education](https://missing.csail.mit.edu/2020/course-shell/)
