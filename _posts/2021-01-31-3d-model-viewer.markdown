@@ -2,8 +2,8 @@
 layout: post
 title:  "3D Model Viewer"
 date:   2021-01-31 12:00:00 +0100
-categories: javascript
-tags: nodejs threejs
+categories: web
+tags: javascript project
 ---
 
 <!--more-->

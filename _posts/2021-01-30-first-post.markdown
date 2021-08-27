@@ -2,8 +2,8 @@
 layout: post
 title:  "Markdown Cheatsheet"
 date:   2021-01-30 20:20:20 +0100
-categories: markup
-tags: cheatsheet
+categories: web
+tags: cheatsheet markdown
 ---
 <!--more-->
 
