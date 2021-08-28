@@ -14,7 +14,6 @@ permalink: /cv
 * Java
 * Javascript
 * Python
-* R
 * PHP
 <!--More languages will go here as soon as I publish a github project. Then remove Natural language jitter to fit all in 1 page--> 
 
