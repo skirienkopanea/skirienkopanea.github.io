@@ -12,10 +12,9 @@ permalink: /sc
 | 09:30 | Rest  | Rest   | Rest      | Rest   | Rest    | Rest   | Rest    |
 | 10:00 | Study | Study  | Study     | Study  | Study   | Study  | Study   |
 | 12:00 | Lunch | Lunch  | Lunch     | Lunch  | Lunch   | Lunch  | Lunch   |
-| 13:00 | Study | Study  | Study     | Bus    | Bus     |        |         |
-| 13:45 | ...   | ...    | ...       | BD lab | ML lab  |        |         |
-| 15:00 | Rest  | Rest   | Rest      | ...    | ...     |        |         |
-| 15:30 |       | Kids   |           | ...    | ...     |        |         |
+| 13:00 | Study | Study  | Study     | Study  | Study   |        |         |
+| 15:00 | Rest  | Rest   | Rest      | Rest   | Rest    |        |         |
+| 15:30 |       | Kids   |           |        |         |        |         |
 | 17:00 | Dinner| Dinner | Dinner    | Dinner | Dinner  | Dinner | Dinner  |
 | 19:30 |       | Dutch  |           |        |         |        |         |
 | 21:30 | Chill | Chill  | Chill     | Chill  | Chill   | Chill  | Chill   |
