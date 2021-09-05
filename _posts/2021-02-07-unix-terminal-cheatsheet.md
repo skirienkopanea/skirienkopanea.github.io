@@ -648,3 +648,62 @@ $ touch <filepath>
 ```
 
 Sources: [Gousios' Unix Summary](https://gousios.org/courses/bigdata/ds-cmd-line.html) and [The Missing Semester of Your CS Education](https://missing.csail.mit.edu/2020/course-shell/)
+
+## Pipe vs <
+```bash
+sergio@hp:~/cg$ cat fib.c
+#include <stdio.h>
+
+int main(void) {
+  int x, y, z;
+
+  
+    x = 0;
+    y = 1;
+    do {
+      printf("%d\n",x);
+
+      z = x + y;
+      x = y;
+      y = z;
+    } while (x < 255);
+  
+}
+sergio@hp:~/cg$ ./fib | head -n5 > head.txt # Taks output of ./fib as input for program head, then program output is sent to a file (overwrites it)
+sergio@hp:~/cg$ cat head.txt
+0
+1
+1
+2
+3
+sergio@hp:~/cg$ ./fib <  head -n5 > head.txt # Takes file "head" as input for program ./fib (program fib ignores any input anyway. Note that we no longer run head program). Then output ./fib to head.txt
+sergio@hp:~/cg$ cat head.txt
+0
+1
+1
+2
+3
+5
+8
+13
+21
+34
+55
+89
+144
+233
+sergio@hp:~/cg$ ./fib | head -n6 | tee  head.txt | wc -l # Tee stores input to a file but also keeps it for other uses (it can be passed with pipes to another program)
+6
+sergio@hp:~/cg$ cat head.txt
+0
+1
+1
+2
+3
+5
+sergio@hp:~/cg$ 
+
+
+```
+
+* *I have an empty file named "head" to avoid error message in the last example of wrong command
