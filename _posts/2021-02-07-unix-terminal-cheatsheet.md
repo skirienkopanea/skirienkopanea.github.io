@@ -39,6 +39,7 @@ tags: cheatsheet
   - [Pipe vs <](#pipe-vs-)
   - [Scripts](#scripts)
     - [Download all youtube links from a list to mp3](#download-all-youtube-links-from-a-list-to-mp3)
+    - [Zip all .sh files in directory](#zip-all-sh-files-in-directory)
 
 ## Background
 * Unix is a multiuser operating system where each user has its own private space on the machine’s harddisk and are identified by an id number.
@@ -754,4 +755,13 @@ videos=$(cat list.txt)
 for i in $videos; do
     snap run youtube-dl --extract-audio --audio-format mp3 $i || echo $i >> errors.txt
 done
+```
+
+### Zip all .sh files in directory
+
+```bash
+#!/usr/bin/env bash
+# Takes an output name as first parameter
+# If called in a directory it recursively finds all the .sh files and adds them to a zip
+find -name '*.sh' | zip -r -j -@ $1
 ```
