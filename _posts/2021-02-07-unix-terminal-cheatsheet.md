@@ -7,6 +7,39 @@ tags: cheatsheet
 ---
 <!--more-->
 
+
+
+# Table of Contents
+- [Table of Contents](#table-of-contents)
+  - [Background](#background)
+  - [Filesystem](#filesystem)
+    - [Permissions](#permissions)
+    - [File commands](#file-commands)
+  - [Pipes \|](#pipes-)
+  - [Text file processing commands](#text-file-processing-commands)
+    - [Sorting data](#sorting-data)
+    - [Joining data](#joining-data)
+  - [Process management](#process-management)
+  - [Documentation](#documentation)
+  - [Running a command per input line](#running-a-command-per-input-line)
+    - [Filtering lines with patterns](#filtering-lines-with-patterns)
+    - [Regular expressions](#regular-expressions)
+  - [Task-based tools](#task-based-tools)
+    - [Execute a command on a remote host](#execute-a-command-on-a-remote-host)
+    - [Retrieve contents from URLs](#retrieve-contents-from-urls)
+    - [Querying JSON data](#querying-json-data)
+    - [Syncronizing files across hosts](#syncronizing-files-across-hosts)
+    - [Run a command when a directory changes](#run-a-command-when-a-directory-changes)
+  - [Writing programs](#writing-programs)
+    - [Variables](#variables)
+    - [Conditionals](#conditionals)
+    - [Loops](#loops)
+    - [Command line input](#command-line-input)
+  - [Cheatsheet (commands in no particular order)](#cheatsheet-commands-in-no-particular-order)
+  - [Pipe vs <](#pipe-vs-)
+  - [Scripts](#scripts)
+    - [Download all youtube links from a list to mp3](#download-all-youtube-links-from-a-list-to-mp3)
+
 ## Background
 * Unix is a multiuser operating system where each user has its own private space on the machine’s harddisk and are identified by an id number.
 * All users have a user name and a password and are required to enter them correctly before using the computer.
@@ -707,3 +740,18 @@ sergio@hp:~/cg$
 ```
 
 * *I have an empty file named "head" to avoid error message in the last example of wrong command
+
+## Scripts
+
+### Download all youtube links from a list to mp3
+
+```bash
+#!/usr/bin/env bash
+# requires to have installed youtube-dl and ffmpeg
+
+videos=$(cat list.txt)
+
+for i in $videos; do
+    snap run youtube-dl --extract-audio --audio-format mp3 $i || echo $i >> errors.txt
+done
+```
