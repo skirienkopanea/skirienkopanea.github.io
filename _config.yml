@@ -36,7 +36,6 @@ header_pages:
   - about.markdown
   - downloads.md
   - postindex.md
-  - cv.md
 
 plugins:
   - jekyll-feed
