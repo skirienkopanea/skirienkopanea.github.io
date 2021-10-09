@@ -36,6 +36,9 @@ permalink: /cv
 * English (full working proficency)
 * Dutch (limited working proficency)
 * Catalan (full working proficency)
+* French (basic)
+* Russian (basic)
+* Portuguese (basic)
 
 ## Education
 * Delft University of Technology: BSc Computer Science (2020 - currently enrolled)
