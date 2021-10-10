@@ -11,8 +11,6 @@ In this blog I share some notes and side projects related to my studies, all of 
 
 If you've noticed a mistake, have a suggestion or simply just want to say "hi", do not hesitate to write me an email to [s.kirienkopanea@student.tudelft.nl](mailto:s.kirienkopanea@student.tudelft.nl).
 
-You can also connect with me via [Linkedin](https://www.linkedin.com/in/sergio-kirienko).
-
 This blog has been made with [jekyll][jekyll-organization] and [minima](https://github.com/jekyll/minima).
 
 [jekyll-organization]: https://github.com/jekyll
