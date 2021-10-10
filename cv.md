@@ -66,7 +66,6 @@ permalink: /cv
   * Under 12 - Under 16
 
 ## Social/Links
-* Linkedin: [https://www.linkedin.com/in/sergio-kirienko/](https://www.linkedin.com/in/sergio-kirienko/)
 * Github: [https://github.com/skirienkopanea](https://github.com/skirienkopanea)
 * DeviantArt: [https://www.deviantart.com/kikizana/gallery/all](https://www.deviantart.com/kikizana/gallery/all)
 * Sketchfab: [https://sketchfab.com/kikizana](https://sketchfab.com/kikizana)
