@@ -7,6 +7,40 @@ tags: cheatsheet
 ---
 <!--more-->
 
+
+
+# Table of Contents
+- [Table of Contents](#table-of-contents)
+  - [Background](#background)
+  - [Filesystem](#filesystem)
+    - [Permissions](#permissions)
+    - [File commands](#file-commands)
+  - [Pipes \|](#pipes-)
+  - [Text file processing commands](#text-file-processing-commands)
+    - [Sorting data](#sorting-data)
+    - [Joining data](#joining-data)
+  - [Process management](#process-management)
+  - [Documentation](#documentation)
+  - [Running a command per input line](#running-a-command-per-input-line)
+    - [Filtering lines with patterns](#filtering-lines-with-patterns)
+    - [Regular expressions](#regular-expressions)
+  - [Task-based tools](#task-based-tools)
+    - [Execute a command on a remote host](#execute-a-command-on-a-remote-host)
+    - [Retrieve contents from URLs](#retrieve-contents-from-urls)
+    - [Querying JSON data](#querying-json-data)
+    - [Syncronizing files across hosts](#syncronizing-files-across-hosts)
+    - [Run a command when a directory changes](#run-a-command-when-a-directory-changes)
+  - [Writing programs](#writing-programs)
+    - [Variables](#variables)
+    - [Conditionals](#conditionals)
+    - [Loops](#loops)
+    - [Command line input](#command-line-input)
+  - [Cheatsheet (commands in no particular order)](#cheatsheet-commands-in-no-particular-order)
+  - [Pipe vs <](#pipe-vs-)
+  - [Scripts](#scripts)
+    - [Download all youtube links from a list to mp3](#download-all-youtube-links-from-a-list-to-mp3)
+    - [Zip all .sh files in directory](#zip-all-sh-files-in-directory)
+
 ## Background
 * Unix is a multiuser operating system where each user has its own private space on the machine’s harddisk and are identified by an id number.
 * All users have a user name and a password and are required to enter them correctly before using the computer.
@@ -648,3 +682,86 @@ $ touch <filepath>
 ```
 
 Sources: [Gousios' Unix Summary](https://gousios.org/courses/bigdata/ds-cmd-line.html) and [The Missing Semester of Your CS Education](https://missing.csail.mit.edu/2020/course-shell/)
+
+## Pipe vs <
+```bash
+sergio@hp:~/cg$ cat fib.c
+#include <stdio.h>
+
+int main(void) {
+  int x, y, z;
+
+  
+    x = 0;
+    y = 1;
+    do {
+      printf("%d\n",x);
+
+      z = x + y;
+      x = y;
+      y = z;
+    } while (x < 255);
+  
+}
+sergio@hp:~/cg$ ./fib | head -n5 > head.txt # Taks output of ./fib as input for program head, then program output is sent to a file (overwrites it)
+sergio@hp:~/cg$ cat head.txt
+0
+1
+1
+2
+3
+sergio@hp:~/cg$ ./fib <  head -n5 > head.txt # Takes file "head" as input for program ./fib (program fib ignores any input anyway. Note that we no longer run head program). Then output ./fib to head.txt
+sergio@hp:~/cg$ cat head.txt
+0
+1
+1
+2
+3
+5
+8
+13
+21
+34
+55
+89
+144
+233
+sergio@hp:~/cg$ ./fib | head -n6 | tee  head.txt | wc -l # Tee stores input to a file but also keeps it for other uses (it can be passed with pipes to another program)
+6
+sergio@hp:~/cg$ cat head.txt
+0
+1
+1
+2
+3
+5
+sergio@hp:~/cg$ 
+
+
+```
+
+* *I have an empty file named "head" to avoid error message in the last example of wrong command
+
+## Scripts
+
+### Download all youtube links from a list to mp3
+
+```bash
+#!/usr/bin/env bash
+# requires to have installed youtube-dl and ffmpeg
+
+videos=$(cat list.txt)
+
+for i in $videos; do
+    snap run youtube-dl --extract-audio --audio-format mp3 $i || echo $i >> errors.txt
+done
+```
+
+### Zip all .sh files in directory
+
+```bash
+#!/usr/bin/env bash
+# Takes an output name as first parameter
+# If called in a directory it recursively finds all the .sh files and adds them to a zip
+find -name '*.sh' | zip -r -j -@ $1
+```

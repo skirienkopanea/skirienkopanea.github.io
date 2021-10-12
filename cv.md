@@ -14,30 +14,31 @@ permalink: /cv
 * Java
 * Javascript
 * Python
+* Scala
+* C/C++
+* Bash
 * PHP
 <!--More languages will go here as soon as I publish a github project. Then remove Natural language jitter to fit all in 1 page--> 
 
-### Frameworks
-* Springboot
-* npm
-* Wordpress
 <!--Big data frameworks will go here-->
 
-### Markup/scripting/misc languages, tools...
-* Web: HTML, CSS, SQL, node (javascript), websockets...
-* Networks: Wireshark, SOAP UI, Postman, telnet, tracert...
+### Domains
+* Web development: HTML, CSS, SQL, node (javascript), Wordpress (php), Jekyll (markdown)...
+* Computer networks: Wireshark, SOAP UI, Postman, Springboot (server), telnet, curl...
   * XML, JSON, CSV, XSLT...
-* Desktop GUI: JavaFX
-* Teamwork: Git, Sharepoint, MS Office...
-* Graphics: Inkscape, GIMP, Blender 3D
-* Video: Camtasia studio
-* Misc: \\(\LaTeX\\), Markdown, Matlab
+* Desktop apps: JavaFX, CLI
+* Collaborative work: Git, Sharepoint, MS Office...
+* Computer graphics: Inkscape, GIMP, Blender, OpenGL, Camtasia studio
+* Misc: \\(\LaTeX\\), Matlab, Arduino
 
 ### Natural languages
 * Spanish (native)
 * English (full working proficency)
 * Dutch (limited working proficency)
 * Catalan (full working proficency)
+* French (basic)
+* Russian (basic)
+* Portuguese (basic)
 
 ## Education
 * Delft University of Technology: BSc Computer Science (2020 - currently enrolled)
@@ -57,6 +58,7 @@ permalink: /cv
   * Sunday Hoofdklasse 2015 - 2016
 
 ## Volunteer
+* Thuis in West: Homework tutor (huiswerkbegeleider) (2021 - present)
 * Erasmus Strength: Director (2017 - 2018)
   * Rebranding
   * Organized first [student powerlifting competition in Rotterdam](https://www.youtube.com/watch?v=qGqPqr8v-oY)
@@ -64,7 +66,6 @@ permalink: /cv
   * Under 12 - Under 16
 
 ## Social/Links
-* Linkedin: [https://www.linkedin.com/in/sergio-kirienko/](https://www.linkedin.com/in/sergio-kirienko/)
 * Github: [https://github.com/skirienkopanea](https://github.com/skirienkopanea)
 * DeviantArt: [https://www.deviantart.com/kikizana/gallery/all](https://www.deviantart.com/kikizana/gallery/all)
 * Sketchfab: [https://sketchfab.com/kikizana](https://sketchfab.com/kikizana)

@@ -3,35 +3,23 @@
   
     <div class="wrapper">  
       <div class="footer-col-wrapper">
-        <div class="footer-col footer-col-1">
+        <div class="footer-col footer-col-l">
           <ul class="contact-list">
             {% if site.title -%}
-            <li class="p-name">{{ site.title | escape }}</li>
+            <li><a href="{{ site.url | escape }}">{{ site.title | escape }}</a></li>
             {%- endif %}
-            {% if site.email -%}
-            <li><a class="u-email" href="mailto:{{ site.email }}">{{ site.email }}</a></li>
-            {%- endif %}
+            <li>{{ site.description | escape }}</li>
           </ul>
         </div>
-  
-        <div class="footer-col footer-col-2">
+        <div class="footer-col footer-col-r">
             <ul class="social-media-list">
                 {% if site.github_username -%}
                 <li><a href="https://github.com/{{ site.github_username | escape }}"><svg class="svg-icon"><use xlink:href="/assets/minima-social-icons.svg#github"></use></svg> <span class="username">{{ site.github_username | escape }}</span></a></li>
                 {%- endif %}
-                {% if site.linkedin_username -%}
-                <li><a href="https://www.linkedin.com/in/{{ site.linkedin_username | escape }}"><svg class="svg-icon"><use xlink:href="/assets/minima-social-icons.svg#linkedin"></use></svg> <span class="username">{{ site.linkedin_username | escape }}</span></a></li>
-              </ul>
-                {%- endif %}
-  </div>
-        <div class="footer-col footer-col-3">
-          <ul class="social-media-list">
-          <li>{{ site.description | escape }}</li>
-          <li><a href="/feed.xml"><svg class="svg-icon"><use xlink:href="/assets/minima-social-icons.svg#rss"></use></svg>Subscribe via RSS</a></li>
-          </ul>
+                {% if site.email -%}
+                <li><a href="/feed.xml"><svg class="svg-icon"><use xlink:href="/assets/minima-social-icons.svg#rss"></use></svg>Subscribe via RSS</a></li>
+            {%- endif %}
         </div>
       </div>
-  
     </div>
-  
   </footer>
