@@ -6,7 +6,7 @@
         <div class="footer-col footer-col-l">
           <ul class="contact-list">
             {% if site.title -%}
-            <li class="p-name">{{ site.title | escape }}</li>
+            <li><a href="{{ site.url | escape }}">{{ site.title | escape }}</a></li>
             {%- endif %}
             <li>{{ site.description | escape }}</li>
           </ul>
