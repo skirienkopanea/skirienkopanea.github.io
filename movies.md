@@ -9,3 +9,5 @@ permalink: /movies
 * Big Lebowski
 * Napoleon dynamite
 * Top Gun
+* planet of the apes
+* 2001 oddyssey
