@@ -177,10 +177,10 @@ We will be using a 5V (volt) power source, which Ben has crafted by cutting off 
   * For most reliable results you may want to connect a \\(220\Omega\\) resistor in series with every LED.
 
 ### Breadboards
-![Breadboard]({{ site.url }}/images/8bit/clock/breadboard.PNG)
+![404]({{ site.url }}/images/8bit/clock/breadboard.png)
 * The breadboard is composed of metalical strips that can be linked together with jump wires and electrical components.
 * The A-J holes constitute columns (each) and the numbers constitute rows.
-  * ![Breadboard]({{ site.url }}/images/8bit/clock/bb1.PNG)
+  * ![404]({{ site.url }}/images/8bit/clock/bb1.PNG)
   * A1, B1, C1, D1 and E1 are all connected, and not connected to any other wholes in the breadboard.
   * The individual power buses are not connected to each other (only the column itself).
 * The + - vertical strips are called buses or rails and are used to deliver power.
