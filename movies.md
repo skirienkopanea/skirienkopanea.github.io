@@ -11,3 +11,5 @@ permalink: /movies
 * Top Gun
 * planet of the apes
 * 2001 oddyssey
+* The Shining
+* The dollars triology
