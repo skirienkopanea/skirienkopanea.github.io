@@ -8,7 +8,7 @@ tags: project
 {% include math.html %}
 <!--more-->
 
-![404]({{ site.url }}/images/8bit/final.jpg)
+![404]({{ site.baseurl }}/images/8bit/final.jpg)
 
 # Table of Contents
 - [Table of Contents](#table-of-contents)
@@ -142,24 +142,24 @@ tags: project
 ## Introduction
 Ben Eater is an online educator on computer-related topics from which I'm following his 8-bit computer project. [https://eater.net/8bit](https://eater.net/8bit). The computer is composed of different modules, which are built on breadboards. The modules are the clock module, registers and ALU (arithmetic and logic unit) module, RAM (random access memory) and program counter module, and output and control logic module.
 
-* To refresh circuit analysis basics check [this post]({{ site.url }}/hardware/2021/06/26/8-EE-cheatsheet.html).
-* You can also check my [CSE1400 Computer Organization notes]({{ site.url }}/downloads/CSE1400_(history-logic_circuits-data_representation-isa-assembly-cpu-io-memory-pipelining).pdf)
+* To refresh circuit analysis basics check [this post]({{ site.baseurl }}/electronics/2021/06/25/8-EE-cheatsheet.html).
+* You can also check my [CSE1400 Computer Organization notes]({{ site.baseurl }}/downloads/CSE1400_(history-logic_circuits-data_representation-isa-assembly-cpu-io-memory-pipelining).pdf)
 
 ### Computer features
-* [Specsheet]({{ site.url }}/downloads/8bit/specs.pdf)
+* [Specsheet]({{ site.baseurl }}/downloads/8bit/specs.pdf)
 * How to operate:
   * Set clock to monostable by moving the slideswitch to the right (manual clock pulse)
-    * ![404]({{ site.url }}/images/8bit/tutorial/1_monostable.jpg)
+    * ![404]({{ site.baseurl }}/images/8bit/tutorial/1_monostable.jpg)
   * Set mode to programming mode with the slide switch (left = red led on = programming mode)
-    * ![404]({{ site.url }}/images/8bit/tutorial/2_program_mode.jpg)
+    * ![404]({{ site.baseurl }}/images/8bit/tutorial/2_program_mode.jpg)
   * Use the 4-bit DIP switches to change the address of the RAM
-    * ![404]({{ site.url }}/images/8bit/tutorial/3_address_register.jpg)
+    * ![404]({{ site.baseurl }}/images/8bit/tutorial/3_address_register.jpg)
   * Use the 8-bit DIP switches to set the contents of the RAM and press the Input button (I) to save them
-    * ![404]({{ site.url }}/images/8bit/tutorial/4_ram_contents.jpg)
+    * ![404]({{ site.baseurl }}/images/8bit/tutorial/4_ram_contents.jpg)
   * Reset all registers and counters with the R/C button with the "clear" switch on (to the right)
-    * ![404]({{ site.url }}/images/8bit/tutorial/5_reset with clear.jpg)
+    * ![404]({{ site.baseurl }}/images/8bit/tutorial/5_reset with clear.jpg)
   * Set the computer back to run mode (slide switch to right = green led on = run mode), and set the clock to astable by moving the slideswitch to the left and adjust the speed with the potentiometer
-    * ![404]({{ site.url }}/images/8bit/tutorial/6_run_mode_and_astable.jpg)
+    * ![404]({{ site.baseurl }}/images/8bit/tutorial/6_run_mode_and_astable.jpg)
 * Use this [assembly language](#defining-our-own-assembly-language) for your programs, this [compiler](https://github.com/skirienkopanea/8bit) to turn it into binary and you may as well use this forked repo to [simulate](https://github.com/skirienkopanea/Computer-Simulation) the program execution
 * Fibonacci demo:
 <iframe width="100%" height="415" src="https://www.youtube.com/embed/BTJ1xUC6EAw" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
@@ -177,10 +177,10 @@ We will be using a 5V (volt) power source, which Ben has crafted by cutting off 
   * For most reliable results you may want to connect a \\(220\Omega\\) resistor in series with every LED.
 
 ### Breadboards
-![404]({{ site.url }}/images/8bit/clock/breadboard.png)
+![404]({{ site.baseurl }}/images/8bit/clock/breadboard.png)
 * The breadboard is composed of metalical strips that can be linked together with jump wires and electrical components.
 * The A-J holes constitute columns (each) and the numbers constitute rows.
-  * ![404]({{ site.url }}/images/8bit/clock/bb1.PNG)
+  * ![404]({{ site.baseurl }}/images/8bit/clock/bb1.PNG)
   * A1, B1, C1, D1 and E1 are all connected, and not connected to any other wholes in the breadboard.
   * The individual power buses are not connected to each other (only the column itself).
 * The + - vertical strips are called buses or rails and are used to deliver power.
@@ -190,7 +190,7 @@ We will be using a 5V (volt) power source, which Ben has crafted by cutting off 
 * The middle space of the breadboard is designed to fit the integrated circuits (IC) (chips) that come with dual in-line package (DIP), meaning they come in two columns of pins of which each individual pin is connected to its own row.
 
 #### Sample closed circuit
-![Breadboard]({{ site.url }}/images/8bit/clock/bb2.PNG)
+![Breadboard]({{ site.baseurl }}/images/8bit/clock/bb2.PNG)
 * The long leg is the positive side of the LED and it's called anode, and the shorter leg is for the negative side and it's called cathode.
   * Plugging it backwards wont break the led, but it will block the current flow of the circuit.
 
@@ -270,7 +270,7 @@ Again, if you use a higher resistor, you will have a voltage within the undefine
 #### Power
 * The LS series chips are designed to run with no less than 4.75 volts. That gives you very little wiggle room. You absolutely need to have good power distribution. 
   * Run "main" power rails down both sides of the computer and connect every regular power rail on your computer directly to the main power rails. This will eliminate the daisy-chaining completely and ensure (nearly) optimal power distribution.
-![404]({{ site.url }}/images/8bit/appendix/tip1.PNG)
+![404]({{ site.baseurl }}/images/8bit/appendix/tip1.PNG)
    * Alternatively connect power rails from left side of the Bus breadboards with right side of the Bus breadboards, at least once for each breadboard.
 * The LS series of chips are TTL (transistor-transistor logic), which use quite a bit of power and are noisy when switching. They can cause voltage fluctuations which can make other chips do strange things.
   *  A **decoupling capacitor** sits directly across your power rails and serves to smooth out fluctuations in your power lines.
@@ -292,26 +292,26 @@ Sources:
 * [https://www.reddit.com/r/beneater/comments/ii113p/helpful_tips_and_recommendations_for_ben_eaters/](https://www.reddit.com/r/beneater/comments/ii113p/helpful_tips_and_recommendations_for_ben_eaters/)
 
 ### Datasheets
-* [555 timer]({{ site.url }}/downloads/8bit/555.pdf)
-* [74LS00]({{ site.url }}/downloads/8bit/74LS00.pdf)
-* [74LS02]({{ site.url }}/downloads/8bit/74LS02.pdf)
-* [74LS04]({{ site.url }}/downloads/8bit/74LS04.pdf)
-* [74LS08]({{ site.url }}/downloads/8bit/74LS08.pdf)
-* [74LS32]({{ site.url }}/downloads/8bit/74LS32.pdf)
-* [74LS86]({{ site.url }}/downloads/8bit/74LS86.pdf)
-* [74LS107]({{ site.url }}/downloads/8bit/74LS107.pdf)
-* [74LS138]({{ site.url }}/downloads/8bit/74LS138.pdf)
-* [74LS139]({{ site.url }}/downloads/8bit/74LS139.pdf)
-* [74LS157]({{ site.url }}/downloads/8bit/74LS157.pdf)
-* [74LS161]({{ site.url }}/downloads/8bit/74LS161.pdf)
-* [74LS173]({{ site.url }}/downloads/8bit/74LS173.pdf)
-* [74LS245]({{ site.url }}/downloads/8bit/74LS245.pdf)
-* [74LS273]({{ site.url }}/downloads/8bit/74LS273.pdf)
-* [74LS283]({{ site.url }}/downloads/8bit/74LS283.pdf)
-* [74F189]({{ site.url }}/downloads/8bit/74F189.pdf)
-* [74HC595]({{ site.url }}/downloads/8bit/74HC595.pdf)
-* [AT28C16]({{ site.url }}/downloads/8bit/AT28C16.pdf)
-* [Capacitor codes]({{ site.url }}/downloads/8bit/Capacitor-Codes.pdf)
+* [555 timer]({{ site.baseurl }}/downloads/8bit/555.pdf)
+* [74LS00]({{ site.baseurl }}/downloads/8bit/74LS00.pdf)
+* [74LS02]({{ site.baseurl }}/downloads/8bit/74LS02.pdf)
+* [74LS04]({{ site.baseurl }}/downloads/8bit/74LS04.pdf)
+* [74LS08]({{ site.baseurl }}/downloads/8bit/74LS08.pdf)
+* [74LS32]({{ site.baseurl }}/downloads/8bit/74LS32.pdf)
+* [74LS86]({{ site.baseurl }}/downloads/8bit/74LS86.pdf)
+* [74LS107]({{ site.baseurl }}/downloads/8bit/74LS107.pdf)
+* [74LS138]({{ site.baseurl }}/downloads/8bit/74LS138.pdf)
+* [74LS139]({{ site.baseurl }}/downloads/8bit/74LS139.pdf)
+* [74LS157]({{ site.baseurl }}/downloads/8bit/74LS157.pdf)
+* [74LS161]({{ site.baseurl }}/downloads/8bit/74LS161.pdf)
+* [74LS173]({{ site.baseurl }}/downloads/8bit/74LS173.pdf)
+* [74LS245]({{ site.baseurl }}/downloads/8bit/74LS245.pdf)
+* [74LS273]({{ site.baseurl }}/downloads/8bit/74LS273.pdf)
+* [74LS283]({{ site.baseurl }}/downloads/8bit/74LS283.pdf)
+* [74F189]({{ site.baseurl }}/downloads/8bit/74F189.pdf)
+* [74HC595]({{ site.baseurl }}/downloads/8bit/74HC595.pdf)
+* [AT28C16]({{ site.baseurl }}/downloads/8bit/AT28C16.pdf)
+* [Capacitor codes]({{ site.baseurl }}/downloads/8bit/Capacitor-Codes.pdf)
 
 
 ##  Clock
@@ -345,9 +345,9 @@ Sources:
   * 5 \\(10\mu F\\) capacitors
 * The clock coordinates everything, it sets the timing of everything.
 * We are using the 555 timer IC (integrated circuit (chip) below)
-![404]({{ site.url }}/images/8bit/clock/555.png)
+![404]({{ site.baseurl }}/images/8bit/clock/555.png)
 * Our clock is adjustable-speed (from less than 1Hz to a few hundred Hz).
-![Hertz]({{ site.url }}/images/8bit/clock/1hz.jpg)
+![Hertz]({{ site.baseurl }}/images/8bit/clock/1hz.jpg)
    *  One Hertz (Hz) is defined as one cycle per second
 * The clock can also be put into a manual mode where you push a button to advance each clock cycle. (Useful for debugging)
 * At this point I'm assuming that the goal of the clock module is to provide an output voltage terminal that alternates between high and low voltage with a frequency between 1-100 Herz. Then use one clock cycle as a unit of time to determine operation slots.
@@ -358,7 +358,7 @@ Sources:
   * The operations at the lowest level are called microinstructions (as stated above, they are prepared at low clock pulse but executed at high clock pulse)
 
 ### Astable 555 timer
-![404]({{ site.url }}/images/8bit/clock/intro.PNG)
+![404]({{ site.baseurl }}/images/8bit/clock/intro.PNG)
 * We control the timing with 2 resistors and a capacitor
   * The resistor connected from \\(V_{cc}\\) to pin 7 is of \\(1k\Omega\\)
   * The resistor from pin 7 to pin 6 has \\(100k\Omega\\).
@@ -369,18 +369,18 @@ Sources:
 * It is called astable because it always alternates states
 
 #### Schematic
-![404]({{ site.url }}/images/8bit/clock/555_circuit.PNG)
-  * The [opamps]({{ site.url }}/hardware/2021/06/26/8-EE-cheatsheet.html#op-amp-circuits) (triangles with +-) are in a comparator setting
-![404]({{ site.url }}/images/8bit/clock/opamp105.gif)
+![404]({{ site.baseurl }}/images/8bit/clock/555_circuit.PNG)
+  * The [opamps]({{ site.baseurl }}/electronics/2021/06/25/8-EE-cheatsheet.html#op-amp-circuits) (triangles with +-) are in a comparator setting
+![404]({{ site.baseurl }}/images/8bit/clock/opamp105.gif)
     * The comparator output signal specifies whether the voltage input (\\(v_{in}\\)) is above (\\(v_{out}=1\\)) or below (\\(v_{out}=0\\)) the reference voltage (\\(v_{ref}\\)).
-  * The 3 resistors inside the 555 timer are probably \\(5k\Omega\\) each and they form a [voltage divider circuit]({{ site.url }}/hardware/2021/06/26/8-EE-cheatsheet.html#voltage-divider-circuits)
+  * The 3 resistors inside the 555 timer are probably \\(5k\Omega\\) each and they form a [voltage divider circuit]({{ site.baseurl }}/electronics/2021/06/25/8-EE-cheatsheet.html#voltage-divider-circuits)
     * Therefore with a 5V source the voltage drop of the bottom resistor is \\(5V\cdot\frac{5k\Omega}{15\Omega}\approx 1.67V\\) and the voltage drop of the 2 bottom resistors combined is \\(5V\cdot\frac{10k\Omega}{15\Omega}\approx 3.33V\\) (recall that all voltage values are given in relation to ground).
       * Therefore the reference voltage of the top comparator is 2.33V and the input voltage of the bottom comparator is 1.67V
   * You can also see that the output of the comparators feed the R and S terminals of an SR latch
-![404]({{ site.url }}/images/8bit/clock/sr.PNG)
+![404]({{ site.baseurl }}/images/8bit/clock/sr.PNG)
 
 #### Step response
-* Assume the initial voltage of the [capacitor]({{ site.url}}/hardware/2021/06/26/8-EE-cheatsheet.html#capacitor-c) is 0V and that the circuit has been powered off for a while
+* Assume the initial voltage of the [capacitor]({{ site.baseurl}}/electronics/2021/06/25/8-EE-cheatsheet.html#capacitor-c) is 0V and that the circuit has been powered off for a while
 * The bottom comprator has \\(v_{in} = 1.67V\\) and \\(v_{ref} = 0V\\) as the capacitor had 0 energy stored. Since \\(v_{in} \gt v_{ref} \implies v_{out} = High \implies S = 1\\)
 * The top comprator has \\(v_{in} = 0V\\) and \\(v_{ref} = 3.33V\\). Since \\(v_{in} \lt v_{ref} \implies v_{out} = Low \implies R = 0\\)
   * From the truth table we see that S = 1 and R = 0 yield a high Q.
@@ -409,20 +409,20 @@ Sources:
 
 #### Noise
 * Adding a \\(.01\mu F\\) capacitor from ground to pin 5 is recommended by the 555 timer datasheet as it clears the noise from low to high
-![404]({{ site.url }}/images/8bit/clock/noise.PNG)
+![404]({{ site.baseurl }}/images/8bit/clock/noise.PNG)
 * Our power supply (typically with curled wires) may act "not perfect" (i.e. as an inductor sometimes) and sometimes components (specially transistors) might get more volts than they actually desire at times.
-![404]({{ site.url }}/images/8bit/clock/noise2.PNG)
+![404]({{ site.baseurl }}/images/8bit/clock/noise2.PNG)
   * Adding a \\(.1\mu F\\) capacitor parallel to the power supply (i.e each leg on a + and - hole respectively in the breadboard) may help reduce dangerous voltage jumps.
   * Ideally you'd want to have this capacitor right next to the power pins of the chip but there aint that much space in a breadboard.
 * Low voltage on pin number 4 triggers a SR = 01 that overwrites whatever is going on with the comparators and resets (turns off) the SR latch. Therefore the datasheet recomends to hookup pin 4 directly to 5V power supply
 
 When we add all the noise and manual speed adjustments we end up with the following breadboard:
 
-![404]({{ site.url }}/images/8bit/clock/555_final.PNG)
+![404]({{ site.baseurl }}/images/8bit/clock/555_final.PNG)
 
 #### Tinkercad
 * Tinkercad of the [original schematic]({{ page.url }}#schematic)
-![404]({{ site.url }}/images/8bit/clock/clock1.png)
+![404]({{ site.baseurl }}/images/8bit/clock/clock1.png)
 [Open tinkercad](https://www.tinkercad.com/things/kRi8HItiSbm-555-timer-p1/)
 
 * Tinkercad of the upgraded circuit
@@ -430,33 +430,33 @@ When we add all the noise and manual speed adjustments we end up with the follow
   * \\(.1\mu F\\) capacitor parallel to power supply to control voltage spike noise
   * \\(.01\mu F\\) capacitor from ground to pin 5 to control low to high clock signal noise
   * \\(V_{cc}\\) to pin 4 to avoid unvoluntary clock resets
-![404]({{ site.url }}/images/8bit/clock/clock2.PNG)
+![404]({{ site.baseurl }}/images/8bit/clock/clock2.PNG)
 [Open tinkercad](https://www.tinkercad.com/things/0G7nymUncAr-555-timer-p2)
 
 * Ben replica
   * (Not inteded to implement in real life) Replaced the polarized capacitor with a small capacitor as it takes less space on the breadboard (it still has \\(1\mu F\\)).
   * Shifted (aesthitically only) components to take less space.
   * Placed everything on the breadboard
-![404]({{ site.url }}/images/8bit/clock/clock3.PNG)
+![404]({{ site.baseurl }}/images/8bit/clock/clock3.PNG)
 [Open tinkercad](https://www.tinkercad.com/things/4aTt5fsfbwB-555-timer-p3)
 
 ### Monostable 555 timer
 * We want to be able to manually advance 1 clock cycle
 * Although a simple pushbutton seems to be enough to create cycles
   * In reality the push button mechanics might unvoluntarily create additional clock cycles as the metal bounces additional times, not susceptible to the human eye
-![404]({{ site.url }}/images/8bit/clock/bounce.PNG)
+![404]({{ site.baseurl }}/images/8bit/clock/bounce.PNG)
 * A debouncing circuit deals with this issue
-![404]({{ site.url }}/images/8bit/clock/monostable.PNG)
+![404]({{ site.baseurl }}/images/8bit/clock/monostable.PNG)
    * The duration of the high signal is determined by the capacitance times resitance of the two components on the right.
 * It is called monostable because it only has 1 stable status (low)
 
 #### Schematic
-![404]({{ site.url }}/images/8bit/clock/555_circuit2.PNG)
+![404]({{ site.baseurl }}/images/8bit/clock/555_circuit2.PNG)
 * Like the previous 555 timer circuit, there's a resistor connected to pin 7 (discharge), but here it is also directly connected to pin 6 (threshold) as there is no resitor "b".
 * The capacitor (which determines the duration of the signal together with resistor a (the \\(1M\Omega\\) one), is also connected directly to pin 6 and 7
 * The output lights a LED in series with a \\(220\Omega\\) resistor.
 * Pin 2 is connected to a node that has a \\(1k\Omega\\) resistor directly connected to \\(V_{cc}\\) on the positive terminal and a push button directly connected to ground on the negative terminal
-  * I'ts like a [voltage divider]({{ site.url }}/hardware/2021/06/26/8-EE-cheatsheet.html#voltage-divider-circuits) with \\(R_1\\) being 1k resistor and \\(R_2\\) the switch.
+  * I'ts like a [voltage divider]({{ site.baseurl }}/electronics/2021/06/25/8-EE-cheatsheet.html#voltage-divider-circuits) with \\(R_1\\) being 1k resistor and \\(R_2\\) the switch.
     * \\(v_0=v_s\frac{R_2}{R_1+R_2}\\)
     * When \\(R_2\\) is an open circuit it has infinity resistance, which gives \\(v_0=v_s\frac{\frac{R_2}{R_2}}{\frac{R_1}{R_2}+\frac{R_2}{R_2}}=v_s\frac{1}{\frac{1}{\infty}+1}=v_s\\)
     * When \\(R_2\\) is a short circuit then \\(v_0=v_s\frac{0}{R_1+0}=0\\)
@@ -472,7 +472,7 @@ When we add all the noise and manual speed adjustments we end up with the follow
   * As long as we dont deliberately hold the push button for too long this implementation should deal with the noise from the push button bounces
   * After the capacitor triggers the reset, \\(\overline{Q}\\) becomes high and enables the discharge again, since there is no resistor between discharge and the capacitor it will bleed out it's voltage very quickly, which immideately sets R back to 0.
     * Therefore it's very unlikely to achieve SR = 11 by doing very fast clicks (or rebounds), it should only possible by deliberately holding the button
-![404]({{ site.url }}/images/8bit/clock/monostable2.PNG)
+![404]({{ site.baseurl }}/images/8bit/clock/monostable2.PNG)
 
 #### Noise
 Datasheet recomends:
@@ -481,11 +481,11 @@ Datasheet recomends:
 
 #### Tinkercad
 * Tinkercad of the [original schematic]({{ page.url }}#schematic-1)
-![404]({{ site.url }}/images/8bit/clock/clock4.PNG)
+![404]({{ site.baseurl }}/images/8bit/clock/clock4.PNG)
 [Open tinkercad](https://www.tinkercad.com/things/c5hBciREsFx-555-timer-p5)
 
 * Ben replica (with noise upgrade)
-![404]({{ site.url }}/images/8bit/clock/clock5.PNG)
+![404]({{ site.baseurl }}/images/8bit/clock/clock5.PNG)
 [Open tinkercad](https://www.tinkercad.com/things/cBU2bNvFG8y-555-timer-p6)
 
 ### Bistable 555 timer
@@ -493,14 +493,14 @@ Datasheet recomends:
   * However if we just use a mechanical switch we face the same rebound issue
 * Since the 555 timer has a built-in SR latch, we can we can use it to set/reset the clock style as it also acts as a debouncer (because it latches the last state).
   * We use a switch that is "break before make"
-![404]({{ site.url }}/images/8bit/clock/breakbeforemake.PNG)
+![404]({{ site.baseurl }}/images/8bit/clock/breakbeforemake.PNG)
     * The bouncing is always between the next step and the break, so any bouncing is not harmful as the desired result has been already latched as we'll show below
 
-![404]({{ site.url }}/images/8bit/clock/clock7.PNG)
+![404]({{ site.baseurl }}/images/8bit/clock/clock7.PNG)
 * It is called bistable because both high and low output states are latched
 
 #### Schematic
-![404]({{ site.url }}/images/8bit/clock/clock6.PNG)
+![404]({{ site.baseurl }}/images/8bit/clock/clock6.PNG)
 * We connect the threshold pin to the ground and just use the trigger pin (2) to set S = 1 (via the bottom comparator) and the reset pin (4) to directly (skipping the top comparator) set R = 1
   * Since threshold is always below 3.33, R will always be 0 except when deliberately using the reset pin.
   * Basically we need to send a low signal either to pin 2 (because it is inverted) xor pin 4 (because we want the trigger input of the comparator to be lower than 1.67) to set and reset respectively.
@@ -515,11 +515,11 @@ Datasheet recomends:
 
 #### Tinkercad
 * Tinkercad of the [original schematic]({{ page.url }}#schematic-2)
-![404]({{ site.url }}/images/8bit/clock/clock8.PNG)
+![404]({{ site.baseurl }}/images/8bit/clock/clock8.PNG)
 [Open tinkercad](https://www.tinkercad.com/things/j2aXkFz1LPm-555-timer-p7)
 
 * Ben replica
-![404]({{ site.url }}/images/8bit/clock/clock9.PNG)
+![404]({{ site.baseurl }}/images/8bit/clock/clock9.PNG)
 [Open tinkercad](https://www.tinkercad.com/things/lFTIiefIzFf-555-timer-p8)
   * Sometimes the switch icon might have an off starting image but tinkercad starts by default in the on position, so if things don't seem to match at first glance just click once and the switch image will match the switch value
 
@@ -527,7 +527,7 @@ Datasheet recomends:
 * We want to have one single clock output terminal that can be configured to either be a copy of the astable (automatic) or monostoable (manual) clock signal.
 
 #### Logic circuit
-![404]({{ site.url }}/images/8bit/clock/clock_logic.PNG)
+![404]({{ site.baseurl }}/images/8bit/clock/clock_logic.PNG)
 * HLT stands for halt signal (which can be send by programs) to stop the clock
   * Latches low clock signal when we send a high voltage in HLT
   * Low voltage does not interfere with the regular clock logic (described below)
@@ -555,12 +555,12 @@ Datasheet recomends:
 
 #### Tinkercad
 * Tinkercad of the [logic circuit]({{ page.url }}#logic-circuit) without the HLT inverter and last AND gate.
-![404]({{ site.url }}/images/8bit/clock/clock10.PNG)
+![404]({{ site.baseurl }}/images/8bit/clock/clock10.PNG)
 [Open tinkercad](https://www.tinkercad.com/things/28oIl6FzuZA-555-timer-p9)
 
 * Tinkercad with the HLT inverter and last AND gate.
   * Just plugs the output of the OR gate into an AND gate that for now takes the other input from a jumper cable either to ground (halt) or \\(V_{cc}\\) (not halt).
-![404]({{ site.url }}/images/8bit/clock/clock11.PNG)
+![404]({{ site.baseurl }}/images/8bit/clock/clock11.PNG)
 [Open tinkercad](https://www.tinkercad.com/things/9YBrEzYt1cS-555-timer-p10)
 
 * Simplified aesthetic circuit(with 74HC and \\(220\Omega\\) resistors) has the same logic connections:
@@ -573,11 +573,11 @@ Datasheet recomends:
   * (AND gate out 4, OR gate In 1A) - light blue
   * (OR gate out 1, AND gate in 3A) - purple
 
-![404]({{ site.url }}/images/8bit/clock/clock12.PNG)
+![404]({{ site.baseurl }}/images/8bit/clock/clock12.PNG)
 [Open tinkercad](https://www.tinkercad.com/things/0oDN7oQGoQR-555-timer-p11)
 
 #### Schematic
-![404]({{ site.url }}/images/8bit/clock/schematic.png)
+![404]({{ site.baseurl }}/images/8bit/clock/schematic.png)
 * Note: I ended up inverting the halt input as suggested by the schematic [here]({{ page.url }}#testing-ram-with-registers-and-alu)
 
 ### Testing the clock
@@ -619,7 +619,7 @@ Datasheet recomends:
   * The Bus is basically a network of cables that connect multiple components within a computer.
   * It's a rather simple network, as the Bus serves primarly as a common connection point for multiple components within the computer
   * For the 8 bit Bus we use 8 wires, and 4 snapped (+ -) power rails from 2 breadboards
-![404]({{ site.url }}/images/8bit/register/bus.PNG)
+![404]({{ site.baseurl }}/images/8bit/register/bus.PNG)
 * The way we use the bus is by one module writting data onto the Bus and another module reading data from the Bus
   * Only 1 module can write data on the Bus at a time, otherwise the data carried on the bus is corrupted
 * One of the main things a register does next to storing data is loading data onto the bus so other components can read it from the bus
@@ -627,12 +627,12 @@ Datasheet recomends:
     * When "Enable" is high, the current data stored in the register is written (and overwrites) onto the bus. Then it's visible to all the other modules (but they dont necessarily need to do anything with it)
     * When "Load" is high, the register overwrites it's current value with whatever value appears on the bus.
 * The timing of each Load/Enable operation with the bus is synchronised by the clock signals as Load/Enable is gated with AND clock.
-![404]({{ site.url }}/images/8bit/register/bus2.PNG)
+![404]({{ site.baseurl }}/images/8bit/register/bus2.PNG)
 * Everything connected to the bus can potentially talk between all of them.
 
 ### Connecting multiple outputs together
 * The "Enable" output gates have some sort of transistor network that manages to either have an output that emits current from the pullup network (\\(v_{cc}\\) or an output that sinks current to the pull-down network (ground).
-![404]({{ site.url }}/images/8bit/register/tri1.PNG)
+![404]({{ site.baseurl }}/images/8bit/register/tri1.PNG)
 * The transistors above are NMOS (incomming high voltage closes the circuit)
 * If top is high and bottom is low the output sources current
 * If top is low and bottom is high the output sinsk current
@@ -642,7 +642,7 @@ Datasheet recomends:
   * Instead, the pull-up/pull-down transistor network for the outputs rather than having always closed circuit (either to ground or to \\(v_{cc}\\)), we can have a tri-state logic where we can just disconnect the output and leave an open circuit such that the outputs do not interfere with the Bus (unless enable is turned on, which shall be enabled by at most 1 component)
 
 #### Tri-state logic
-![404]({{ site.url }}/images/8bit/register/tri2.PNG)
+![404]({{ site.baseurl }}/images/8bit/register/tri2.PNG)
 * If IN = 1, then switch is connected to \\(V_{cc}\\)
 * If IN = 0, then switch is connected to ground
 * If and only if enable is on, the output (a copy of IN) is connected to the bus
@@ -657,26 +657,26 @@ Datasheet recomends:
 ### Designing and building a register
 #### SR latch (store 1 bit)
 * We can use an S-R latch with an enable button that specifies when SR can be fed into the SR latch
-![404]({{ site.url }}/images/8bit/register/srlatch.PNG)
+![404]({{ site.baseurl }}/images/8bit/register/srlatch.PNG)
   * When EN is 0, both AND gated output SR = 0, so the SR latch holds the previous state
   * When EN is 1, the SR latch will get whichever values for S and R exist.
   * We can create one single variable called D that feeds S and another branch of the same variable can be inverted and feed R. Therefore if D is 0 we get SR = 01, and if D is 1 we get SR = 10
 
 #### D latch (just use 1 input)
-![404]({{ site.url }}/images/8bit/register/srlatch2.PNG)
+![404]({{ site.baseurl }}/images/8bit/register/srlatch2.PNG)
 * This is called a D-latch because it latches a single bit of data
-![404]({{ site.url }}/images/8bit/register/srlatch3.PNG)
+![404]({{ site.baseurl }}/images/8bit/register/srlatch3.PNG)
 
 #### D flip flop (latch at clock pulse)
 * A D-flip flop would only latch a D value specifically when Enable is ON and when the clock switches from low voltage to high voltage (this prevents any other D changes during the same high clock signal cycle)
-![404]({{ site.url }}/images/8bit/register/dlatch.PNG)
+![404]({{ site.baseurl }}/images/8bit/register/dlatch.PNG)
   * This is technically enabling at each clock pulse
-  * We need an (edge detector) [resistor capacitor (RC) circuit]({{ site.url }}/hardware/2021/06/26/8-EE-cheatsheet.html#time-constant-of-an-rc-capacitor-circuit) to produce a signal with very short high cycles (pulses)
-![404]({{ site.url }}/images/8bit/register/edge.PNG)
+  * We need an (edge detector) [resistor capacitor (RC) circuit]({{ site.baseurl }}/electronics/2021/06/25/8-EE-cheatsheet.html#time-constant-of-an-rc-capacitor-circuit) to produce a signal with very short high cycles (pulses)
+![404]({{ site.baseurl }}/images/8bit/register/edge.PNG)
 * The circuit above is such a circuit, which basically has a voltage as high as the source and behaves as the step response of a conductor-resistor circuit.
-  * Although at \\(t_0\\) (step from 0 to high voltage) the capacitor has 0V and behaves like a wire (\\(I_s\\) current), the voltage we are interested about is of the node connecting to the positive terminal of the resistor, which at \\(t_0\\) looks like \\(R_2\\) from a [voltage divider]({{ site.url }}/hardware/2021/06/26/8-EE-cheatsheet.html#voltage-divider-circuits) where the inductor looks like \\(R_1\\) with \\(0\Omega\\) resistance, and thus \\(V_0=V_s\\) (high)
+  * Although at \\(t_0\\) (step from 0 to high voltage) the capacitor has 0V and behaves like a wire (\\(I_s\\) current), the voltage we are interested about is of the node connecting to the positive terminal of the resistor, which at \\(t_0\\) looks like \\(R_2\\) from a [voltage divider]({{ site.baseurl }}/electronics/2021/06/25/8-EE-cheatsheet.html#voltage-divider-circuits) where the inductor looks like \\(R_1\\) with \\(0\Omega\\) resistance, and thus \\(V_0=V_s\\) (high)
   * The smaller the capacitance of the capacitor, the less it takes for the capacitor to charge, (and decrease it's current), and thus the sooner the voltage drop of the capacitor reaches \\(V_{s}\\) and since it's in series with the source the sooner it decreases the available voltage for all branches connected to \\(V_{s}\\) (KVL)
-    * According to to the [RC constant]({{ site.url }}/hardware/2021/06/26/8-EE-cheatsheet.html#time-constant-of-an-rc-capacitor-circuit): 
+    * According to to the [RC constant]({{ site.baseurl }}/electronics/2021/06/25/8-EE-cheatsheet.html#time-constant-of-an-rc-capacitor-circuit): 
       * T = RC
       * At 1T the voltage drop of fully charged capacitor in a natural response circuit is -37% (it's providing voltage) of the initial voltage of the capacitor. The voltage drop of an empty capacitor in a step response circuit is therefore 63% of the source voltage (the resistor gets 37%)
         * These are already considered significant enough to change a signal from logic high to logic low and viceversa
@@ -687,15 +687,15 @@ Datasheet recomends:
         * At 5T capacitor has 99% of the 3.4V, which when discharged should give another high signal. This explains the double clock pulse that other components experienced when this RC circuit shared the same clock signal, but then we used a diode for the branch of this RC circuit. It may be the case that in practice the RAM is doing double clock pulses, but it does not affect the functionality of the computer.
     * \\(0.1\mu F\cdot 1k\Omega\\ = 0.1\cdot 10^6 F \cdot 10^3 \Omega = 0.1 ms\\)
 
-![404]({{ site.url }}/images/8bit/register/dflipflop.PNG)
-![404]({{ site.url }}/images/8bit/register/dflipflop2.PNG)
+![404]({{ site.baseurl }}/images/8bit/register/dflipflop.PNG)
+![404]({{ site.baseurl }}/images/8bit/register/dflipflop2.PNG)
  
 #### 74LS74 (Two D flip-flops) and a load signal
 * We can put several D flip flops together with some additional logic that write the contents of the bus when "Load" is high
-![404]({{ site.url }}/images/8bit/register/register1.PNG)
+![404]({{ site.baseurl }}/images/8bit/register/register1.PNG)
   * We can see that via the inverterter and the 2 AND gates linked to the load signal, the D bit fed to the D-latch is either the one of the bus when load is high, or the one latched when the load is low
 * We can use 4 74LS74 chip which have 2 d-flip flops each built into it to make an 8-bit register
-![404]({{ site.url }}/images/8bit/register/74.PNG)
+![404]({{ site.baseurl }}/images/8bit/register/74.PNG)
   * GND: ground
   * \\(V_{cc}\\): positive supply terminal
   * CLRn: overwrites Bit n to 0
@@ -703,36 +703,36 @@ Datasheet recomends:
   * Flip flop pins: Dn (bus' n bit), CLKn, Qn, \\(\overline{Qn}\\)
 
 * Tinkercad [implementation of 1 bit register](https://www.tinkercad.com/things/1HDToQEodKD-1-bit-register)
-![404]({{ site.url }}/images/8bit/register/1bitregister.PNG)
+![404]({{ site.baseurl }}/images/8bit/register/1bitregister.PNG)
   * It only allows register changes at clock rise (blue led on) and when load is high
 
 * We still need to add the tri-state buffer to the output of the register to ensure we dont corrupt the bus when we're not using it
-![404]({{ site.url }}/images/8bit/register/tri_output.PNG)
+![404]({{ site.baseurl }}/images/8bit/register/tri_output.PNG)
 
 * Alternatively we can use the 74LS245.
 
 #### 74LS245 (Octal bus transceiver used as tri-state logic gate)
-![404]({{ site.url }}/images/8bit/register/245.PNG)
+![404]({{ site.baseurl }}/images/8bit/register/245.PNG)
 * Useful for sending bus data in both directions
 * Pin 1 is for direction control (whether the register sends data or whether the bus sends data)
   * Because we already use the load variable to determine when to read from the bus we just need to use the feature to send (An pin to Bn pin), so we set pin 1 high.
 * Pin 19 is "enable", which is the tri-state logic "switch" that connects/disconnects us from the bus
 
 #### 74LS173A (4 bit registers)
-![404]({{ site.url }}/images/8bit/register/74LS173A.PNG)
+![404]({{ site.baseurl }}/images/8bit/register/74LS173A.PNG)
 * 4 built-in D flip flops
 * Uses similar logic of having a sequence of flip-flops connected to the bus and written when a load signal (called enable) is high
 * Built-in tri-state output with output control pin
 * Used in this project as building multiple 8 bit registers with just basic logic gates is a cumbersome repetitive process not necessarily in line with the goal of the project.
 
-![404]({{ site.url }}/images/8bit/register/74LS173.png)
+![404]({{ site.baseurl }}/images/8bit/register/74LS173.png)
 
 ### Building an 8-bit register
 * We will be using 2 [74LS173A]({{ page.url }}#74ls173a-4-bit-registers) chips for each 8 bit register
 * It has a built-in tri-state logic gate with the default output set to be disconnected unless the output control is enabled
   * Since we want to be able to see at all times what's the value of the register, we will turn the output cotroll to be always enabled, put a LED in series, and then manually add another tri-state logic gate with the [74LS245]({{ page.url }}#74ls245-octal-bus-transceiver-used-as-tri-state-logic-gate).
 
-![404]({{ site.url }}/images/8bit/register/8bitregister.PNG)
+![404]({{ site.baseurl }}/images/8bit/register/8bitregister.PNG)
 * The 74LS173A requires both M and N to have 0V (grounded) to output the contents of the 4-bit
 * The 74LS173A also has 2 inverted load inputs per pin, so does the enable pin of the 74LS245.
   * Low \\(\overline{\text{ENABLE}}\\): register output is sent to the bus
@@ -745,32 +745,32 @@ Datasheet recomends:
 
 #### Tinkercad
 * Tinkercad [implementation](https://www.tinkercad.com/things/bljhgWwFIZf-8-bit-register).
-![404]({{ site.url }}/images/8bit/register/register4.PNG)
+![404]({{ site.baseurl }}/images/8bit/register/register4.PNG)
   * **Bus to register**: The inputs of the registers (who have not  load pin low (load = 1) in this context) are connected to the outputs of the tri-state logic gate (who has not enable pin high (enable = 0)) that connects to the bus (light blue cables)
-![404]({{ site.url }}/images/8bit/register/bus3.PNG)
+![404]({{ site.baseurl }}/images/8bit/register/bus3.PNG)
   * **Register to Bus**: The outputs of the registers are always connected (M, N, pins to ground so we can see the register contents with the LEDs) to the tri-state logic gate (who has not enable pin low (enable = 1) in this context) such that it can be sent to the bus (green cables)
 
 #### Schematic for Register A (same as B)
-![404]({{ site.url }}/images/8bit/register/schematic.png)
+![404]({{ site.baseurl }}/images/8bit/register/schematic.png)
   * AI = Load
   * AO = Enable
   * \\(A_n\\) = input for the [ALU]({{ page.url }}#arithmetic-logic-unit-alu) A's n input
 
 #### Schematic for Instruction Register
-![404]({{ site.url }}/images/8bit/register/schematic2.png)
+![404]({{ site.baseurl }}/images/8bit/register/schematic2.png)
 
 ### Testing the register with a temporary bus
 * If there's no connection to a bus and you set load high, the 74LS173A chip will default the inputs as high voltage as there's typically a pull-up resistor, therefore all the bits of the register will set to 1 if there's an open circuit with the bus
-![404]({{ site.url }}/images/8bit/register/disconnectedbus.PNG)
+![404]({{ site.baseurl }}/images/8bit/register/disconnectedbus.PNG)
   * This happened because load was high and enable was low (and since there's only this register there's literally no enabled bits in the bus, thus the bus is an open circuit (the input is floating and not grounded as although the Bus LEDs are connected to ground they are a diode, meaning that they are designed such that current only goes in one direction. Since the LEDs are aligned in a way to expect the current to come from the Bus, they are disallowing the situation where there are no current comming from the Bus and an input pin pull-up resistor wants to sink via the Bus leds connected to ground (that is not allowed as the LED blocks the current going that way, it essentially behaves then as an open circuit)))
     * Later we will add a set of 8 \\(10k\Omega\\) resistors connected to the Bus and to ground to default the value of the Bus to 00000000 when there's no party enabling the Bus.
       * Since their resistane is significantly high, they should not sink in much current when the bus is enabled, thus not affecting the normal behavour of the Bus.
 * If we set the load low and the enable high we should be able to move the contents of the register to the bus
-![404]({{ site.url }}/images/8bit/register/loadlowenablehigh.PNG)
+![404]({{ site.baseurl }}/images/8bit/register/loadlowenablehigh.PNG)
 * Try to load a bus with some pins connected to ground such that the received load is a combination of 1s and 0s.
-![404]({{ site.url }}/images/8bit/register/move1.PNG)
+![404]({{ site.baseurl }}/images/8bit/register/move1.PNG)
 * Then connect another register to the bus and transfer the contents (which should appear in the next clock cycle).
-![404]({{ site.url }}/images/8bit/register/move2.PNG)
+![404]({{ site.baseurl }}/images/8bit/register/move2.PNG)
 
 * **My testing experience:**
   * The register outputs and Bus LEDs without resistors, although allowed by the LS chips, seemed to sink too much current due to their low resistance (and that next they are connected to ground), and I wasn't able to send 8 ON bits from one register to the other until I removed the bits from the outputs and added a series \\(220\Omega\\) resistor to each LED in the Bus.
@@ -781,7 +781,7 @@ Datasheet recomends:
 * Also it will only connect the 4 least significant bits (yellow) to the Bus, as the other 4 will connect to into the instruction decoder (next chapters)
   * So you should connect A1-A4 (4 most significant bits) of the buffer to ground
   * Make sure to connect to use the clock signal, which is the left leg of the RC capacitor of the RAM input module, and not the pull-down resistor.
-![404]({{ site.url }}/images/8bit/register/ir.PNG)
+![404]({{ site.baseurl }}/images/8bit/register/ir.PNG)
 
 ## Arithmetic Logic Unit (ALU)
 ### Adding numbers
@@ -791,20 +791,20 @@ Datasheet recomends:
   * carry \\(C_n\\) also known as "carry in"
   * carry \\(C_{n+1}\\), also known as "carry out" for \\(A_{n+1} + B_{n+1}\\) (and implicitly \\(+ C_{n+1}\\))
 
-![404]({{ site.url }}/images/8bit/alu/full-adder-circuit.png)
+![404]({{ site.baseurl }}/images/8bit/alu/full-adder-circuit.png)
 * You can replicate the same circuit k times to have a k-bit full adder (and use the last carry out bit to eventually display the most significant bit to not overlfow the result)
   * The carry out of the adder \\(n\\) is the carry in of the adder \\(n+1\\)
 
 ### 4-bit adder (74LS283)
-![404]({{ site.url }}/images/8bit/alu/4bitadder.PNG)
+![404]({{ site.baseurl }}/images/8bit/alu/4bitadder.PNG)
 * The 74LS283 chip implements the same logic as above.
-![404]({{ site.url }}/images/8bit/alu/74LS283.PNG)
+![404]({{ site.baseurl }}/images/8bit/alu/74LS283.PNG)
   * C0 is the carry in
   * C4 is the carry out, which we can use to cascade another 74LS283 4-bit adder
 
 ### Negative numbers
 * There are multiple ways to represent binary negative numbers
-![404]({{ site.url }}/images/8bit/alu/negatives.png)
+![404]({{ site.baseurl }}/images/8bit/alu/negatives.png)
   * **Sign and magnitud**: uses the most significant bit (MSB) as a sign bit, when such bit is 0 the number is positive, when the MSB is 1 the number is the same \\(\cdot -1\\)
   * **1's complement**: Flips zeros and 1s (XOR all 1's) to make the negative version
   * **2's complement**: To make the negative version you XOR all 1's  and then XOR the least significant bit (LSB) with 1 (so 1 C's negative + 1)
@@ -826,12 +826,12 @@ Datasheet recomends:
   * A-B (\\(SU\\))
     * SU symbolizes "subtraction"
 
-![404]({{ site.url }}/images/8bit/alu/design.PNG)
+![404]({{ site.baseurl }}/images/8bit/alu/design.PNG)
 * AI/BI stands for load bus to A/B (load *A/B input* from Bus)
 * AO/BO stands for enable A/B onto the Bus (enable *A/B output* to Bus)
 
 * Just like with the registers, we don't want to connect (and sink current) to the Bus at all times. We therefore also use tri-state logic gates to output to the bus (high, low or disconnect (aka not interact))
-![404]({{ site.url }}/images/8bit/alu/design2.PNG)
+![404]({{ site.baseurl }}/images/8bit/alu/design2.PNG)
 * The XORs gates for B outputs can be triggered with a unique signal that XORs B with all 1's such that B is inverted, then to subract A-B we only need to do A + inverted B + 1 (2's complement sum = subtraction)
   * It'd be cumbersome to implement another full adder just to sum 1.
   * Instead we can use the carry in bit of the least significant 4-bits adder and connect it together with the signal to XOR all 1's such that the adder already takes care of finishing the negation in 2's complement of B by summing 1 each time we decide to XOR all B's outputs
@@ -895,11 +895,11 @@ Datasheet recomends:
   11. Optional: hookup LEDs to the tristate buffer inputs of the ALU
 
 #### Tinkercad
-![404]({{ site.url }}/images/8bit/alu/tinker.PNG)
+![404]({{ site.baseurl }}/images/8bit/alu/tinker.PNG)
 Open [tinkercad](https://www.tinkercad.com/things/4PaTMquHAzK-8-bit-alu-sum-and-subtract).
 
 #### Schematic
-![404]({{ site.url }}/images/8bit/alu/schematic.png)
+![404]({{ site.baseurl }}/images/8bit/alu/schematic.png)
 * The flags register portion of the schematic is described later on as part of the CPU control logic.
 
 ### Testing the ALU
@@ -920,7 +920,7 @@ Open [tinkercad](https://www.tinkercad.com/things/4PaTMquHAzK-8-bit-alu-sum-and-
   * A-- cannot be tested since only the sign of B can be changed with the SU signal
 * Then you can also utilize the random D-latch starting values to generate test cases from those random boot register values with almost no setup costs.
 
-![404]({{ site.url }}/images/8bit/alu/test.PNG)
+![404]({{ site.baseurl }}/images/8bit/alu/test.PNG)
 
 ## Random Access Memory (RAM)
 * Components in the kit (including the program counter)
@@ -952,32 +952,32 @@ Open [tinkercad](https://www.tinkercad.com/things/4PaTMquHAzK-8-bit-alu-sum-and-
   * SR 10 = 1
   * SR 11 = illegal state
   * If not enable the two AND gates always yield SR 00 (keep value)
-![404]({{ site.url }}/images/8bit/register/srlatch.PNG)
+![404]({{ site.baseurl }}/images/8bit/register/srlatch.PNG)
 * A D-latch replaces the SR signals with a single data signal (D) which has 2 branches, the one that keeps the same signal goes to S gate, the inverted one goes to R. On top of that we can keep the enable signal with the same logic as before.
-![404]({{ site.url }}/images/8bit/register/srlatch3.PNG)
+![404]({{ site.baseurl }}/images/8bit/register/srlatch3.PNG)
   * This logic means that now we can still do SR 00 (low enable), SR 01 and SR 10 as before but not the illegal state SR 11 (which is a good thing to avoid that scenario as it serves no purposes and it's impredictible).
 * A D flip flop is an upgraed D-latch that only sets/resets a bit at a clock pulse (useful feature for better synchronization and less noise bugs)
-![404]({{ site.url }}/images/8bit/register/dflipflop.PNG)
+![404]({{ site.baseurl }}/images/8bit/register/dflipflop.PNG)
 * We can group several flip flops together to make a register
-![404]({{ site.url }}/images/8bit/register/register1.PNG)
+![404]({{ site.baseurl }}/images/8bit/register/register1.PNG)
   * \\(D_n\\) = Input for bit n (usually connected to the Bus)
   * \\(\text{LOAD}\\) = write onto the register signal (a separate "enable" signal independent from the clock signal, as the latter is already given explicitly by the arrow in the bottom left corner of the D flip flop box symbol)
   * To finalyze the register we need an output signal that generally allows the register to output each of its bits to the Bus, to do so we use tri-state gates as we want all other outputs of the components not loading the bus to be disconnected from the Bus to avoid conflicts (we dont want a high signal from B overloading a low signal from A nor a low signal B sinking a high signal from A)
-  ![404]({{ site.url }}/images/8bit/register/tri2.PNG)
+  ![404]({{ site.baseurl }}/images/8bit/register/tri2.PNG)
     * In this context "IN" would be Q of a D flip flop of a register.
 * A one bit register can be summarized with the symbol below
-![404]({{ site.url }}/images/8bit/ram/1bitregister.PNG)
+![404]({{ site.baseurl }}/images/8bit/ram/1bitregister.PNG)
 * An 8 bit register:
-![404]({{ site.url }}/images/8bit/ram/8bitregister.PNG)
+![404]({{ site.baseurl }}/images/8bit/ram/8bitregister.PNG)
 * A 16 byte ram would essentially be sixteen 8-bit registers packed into 1 chip
-![404]({{ site.url }}/images/8bit/ram/ram.PNG)
+![404]({{ site.baseurl }}/images/8bit/ram/ram.PNG)
    * With 16 write/enable (y-axis) and 8 (8 bits = 1 byte) data signals (x-axis)
    * Each of those 16 registers (row), can be given a binary address and together with a decoder we can provide the high voltage signal to the specific register only.
      * The decoder logic is great because in the context of chips, we can have a decoder inside and limit the amount of external pins needed for the users to specify an address.
 
 #### DRAM vs SRAM
 * Each of the bit cells that make up our RAM can be stored in a simpler circuit than a flip flop with just a transistor and a capacitor
-![404]({{ site.url }}/images/8bit/ram/cell.PNG)
+![404]({{ site.baseurl }}/images/8bit/ram/cell.PNG)
   * When the capacitor is charged and the address is enabled (word line) the bit voltage is high
   * When the address is enabled and the capacitor is not charged it behaves like a piece of wire with 0 voltage drop, and since it's connected to ground the bit voltage is low
   * Drawback: Overtime the capacitor discharges and can only store bits for a few seconds. It also has destructive read as each time we read the content of the bit we are sinking the voltage of the capacitor, so it must be recharged immedeately after reading
@@ -1010,11 +1010,11 @@ Open [tinkercad](https://www.tinkercad.com/things/4PaTMquHAzK-8-bit-alu-sum-and-
 
 ### Address decoder
 * With a decoder the total number of address selection pins required is \\(log_2(\text{total address count}\\)), i.e. (the 16th address, starting at 1st address = 0000, would be 1111)
-![404]({{ site.url }}/images/8bit/ram/decoder1.PNG)
-![404]({{ site.url }}/images/8bit/ram/decoder2.PNG)
+![404]({{ site.baseurl }}/images/8bit/ram/decoder1.PNG)
+![404]({{ site.baseurl }}/images/8bit/ram/decoder2.PNG)
 * Do not confuse a decoder with a multiplexer. The multpilexer has \\(n\\) selection inputs with at most \\(2^n\\) data inputs for which then the multiplexer outputs just 1 of the data inputs (looks like a decoder with a final OR gate to just have 1 output line) (or simply said, the multiplexer is a "selector", out of many *data* inputs, you only output one of 'em (based on *selector* input pin(s)))
-![404]({{ site.url }}/images/8bit/ram/mux.PNG)
-![404]({{ site.url }}/images/8bit/ram/mux2.PNG)
+![404]({{ site.baseurl }}/images/8bit/ram/mux.PNG)
+![404]({{ site.baseurl }}/images/8bit/ram/mux2.PNG)
 * The decoder on the other hand only has selection inputs, i.e. n, and at and at most (and generally close to) \\(2^n\\) outputs.
 * The decoder is like if a multiplexer had all selection inputs to be high and the last XOR get gets removed and replaced by each of the incoming signals into separate output pins, of which all but one will be low.
 * To build a decoder follow these 3 steps
@@ -1022,12 +1022,12 @@ Open [tinkercad](https://www.tinkercad.com/things/4PaTMquHAzK-8-bit-alu-sum-and-
   2. Build the output AND gates based on binary order:
      * Smallest address has all inverted pins (0s), biggest address has all non-inverted pins (1s)
   3. Fill the gap and map the inverted and non-inverted pins with the relevant AND gates
-![404]({{ site.url }}/images/8bit/ram/decoder3.PNG)
+![404]({{ site.baseurl }}/images/8bit/ram/decoder3.PNG)
 * The additional variable of the AND gates is reserved to the ENABLE signal (not shown in the picture) such that to enable a memory address we just need to provide the address signals and the enable signal
 * To build a multiplexer you follow the same steps but on each AND gate you add a unique data input and then you XOR all the AND gates into one output signal
 
 ### 74LS189 (16 4-word address RAM)
-![404]({{ site.url }}/images/8bit/ram/74LS189.PNG)
+![404]({{ site.baseurl }}/images/8bit/ram/74LS189.PNG)
 * 64 bit random access memory
 * This static RAM holds 16 4-bit words
 * There are 4  An pins to address one of the 16 words (it includes an address decoder)
@@ -1043,7 +1043,7 @@ Open [tinkercad](https://www.tinkercad.com/things/4PaTMquHAzK-8-bit-alu-sum-and-
     * \\(\overline{CS}\\) high = disconnect output to Bus
   * I'm assuming that the inputs don't need a tri-state buffer and can be connected all the time to the Bus since they don't sink that much current anyway as input pins usually have around ten mega ohms of resistance.
     * This part is covered [here]({{ page.url }}#building-an-8-bit-input-terminal-for-the-ram-to-manually-store-a-program-and-the-alternative-of-inputs-from-the-bus)
-![404]({{ site.url }}/images/8bit/ram/74LS189_2.PNG)
+![404]({{ site.baseurl }}/images/8bit/ram/74LS189_2.PNG)
 * The chip that came in the kit did not have "LS" family explcitily written and it seemed to get pretty hot during some tests with floating pins. Therefore make sure to not leave floating pins and those that are high should and be connected to \\(V_{cc}\\) should be with a \\(1k\Omega\\) pull-up resistor.
 
 ### Building the RAM
@@ -1059,7 +1059,7 @@ Open [tinkercad](https://www.tinkercad.com/things/4PaTMquHAzK-8-bit-alu-sum-and-
 9. Connect both \\(\overline{WE}\\) pins together and a jumper wire to use it as temporary signal
 
 #### Tinkercad
-![404]({{ site.url }}/images/8bit/ram/tinker1.PNG)
+![404]({{ site.baseurl }}/images/8bit/ram/tinker1.PNG)
 Open [tinkercad](https://www.tinkercad.com/things/aEBNrUN51YQ-ram-p3)
 
 ### Building the memory address register (and a "programming mode" version)
@@ -1073,9 +1073,9 @@ Open [tinkercad](https://www.tinkercad.com/things/aEBNrUN51YQ-ram-p3)
       * Just reading the contents of a RAM address by just relying on the Bus to get the address is pin feed is problematic too as in that same clock pulse the Bus is supposed to hold the RAM address then whoever outputed that to the Bus must disable its outputs and to allow the RAM at the address specified by the Bus to output its contents. Thus getting the address and outputting the contents to the Bus just right as the other module disables its Bus output looks very complicated to implement in a reliable way, therefore we use the address register to store which ever address we need to use.
 * We use a 4-bit DIP switch as the "programming mode" alternative to feed the address pins of the RAM (via the multiplexer)
 * The multiplexer logic to select between 1 bit of register address (run mode or "A") and 1 bit of manual address (programming mode or "B") can be described by the logic circuit below.
-![404]({{ site.url }}/images/8bit/ram/mux3.PNG)
+![404]({{ site.baseurl }}/images/8bit/ram/mux3.PNG)
    * The 74LS157 does that for us, and it has four 2-data/1-selection pins multiplexers
-   ![404]({{ site.url }}/images/8bit/ram/74LS157.PNG)
+   ![404]({{ site.baseurl }}/images/8bit/ram/74LS157.PNG)
      * The strobe pin is just an additional (inverted) control input to all AND gates, we just hook it up to ground to make the chip behave as the previosly shown multiplexer logic circuit.
 * Implementation steps:
   1. Insert the DIP switch, the 74LS157 multiplexer (mux) and the 74LS173 register.
@@ -1096,11 +1096,11 @@ Open [tinkercad](https://www.tinkercad.com/things/aEBNrUN51YQ-ram-p3)
   12. Connect the outputs of the 74LS157 to the RAM address pins
 
 #### Tinkercad
-![404]({{ site.url }}/images/8bit/ram/tinker2.PNG)
+![404]({{ site.baseurl }}/images/8bit/ram/tinker2.PNG)
 Open [tinkercad](https://www.tinkercad.com/things/aEBNrUN51YQ-ram-p3)
 
 #### Schematic
-![404]({{ site.url }}/images/8bit/ram/schematic2.png)
+![404]({{ site.baseurl }}/images/8bit/ram/schematic2.png)
 
 ### Building an 8-bit input terminal for the RAM (to manually store a program) and the alternative of inputs from the Bus
 * We'll stick a breadboard under the RAM module and above the instruction register
@@ -1136,11 +1136,11 @@ Open [tinkercad](https://www.tinkercad.com/things/aEBNrUN51YQ-ram-p3)
            3. Connect the other leg of the capacitor to the CLOCK signal 
 
 #### Tinkercad
-![404]({{ site.url }}/images/8bit/ram/tinker3.PNG)
+![404]({{ site.baseurl }}/images/8bit/ram/tinker3.PNG)
 Open [tinkercad](https://www.tinkercad.com/things/aEBNrUN51YQ-ram-p3)
 
 #### Schematic
-![404]({{ site.url }}/images/8bit/ram/schematic.png)
+![404]({{ site.baseurl }}/images/8bit/ram/schematic.png)
 
 ### Testing the RAM
 * Floating inputs from the bus to the mux B inputs for storing data on the RAM behave randomly and not as expected (float = high)
@@ -1154,7 +1154,7 @@ Open [tinkercad](https://www.tinkercad.com/things/aEBNrUN51YQ-ram-p3)
   * We'll provide the final version of the control signal names, which will later be used to develop our own machine code.
 
 ### Architecture
-![404]({{ site.url }}/images/8bit/counter/arch.PNG)
+![404]({{ site.baseurl }}/images/8bit/counter/arch.PNG)
 * Disclaimer: The program counter, output & display, and the instruction decoder have not been implemented yet
 
 ### Control signals
@@ -1203,7 +1203,7 @@ Open [tinkercad](https://www.tinkercad.com/things/aEBNrUN51YQ-ram-p3)
   * The problem of the RAM writting things at random times on programming mode without pressing the button is because Ben's default schematic leaves the input floating when the button is unpushed, hoping that the active low pin will recognise the floating input as high, but since power is not reliable is better not to have it as a floating input and use a pull-up resistor instead, a 1k should do the trick.
   * In hindishgt, the issues seemed to be power bugs
 
-![404]({{ site.url }}/images/8bit/ram/clock.PNG)
+![404]({{ site.baseurl }}/images/8bit/ram/clock.PNG)
 [Open tinkercad](https://www.tinkercad.com/things/lQOtIEjyHny-555-timer-p12)
 * This doesnt fix the problem when inserting manual data to the RAM and having a register listening to the Bus, which regardless receiving not clock pulse, writes some garbage (so always disconnect registers from the Bus when writting manual input into the RAM)
   * Apparently got fixed after replacing jumperwires with hookup wires and moving the Bus leds and pull-down resistors to the bottom of the computer
@@ -1241,17 +1241,17 @@ Open [tinkercad](https://www.tinkercad.com/things/aEBNrUN51YQ-ram-p3)
 * It's an upgraded version of a [SR flip-flop]({{ page.url }}#sr-latch-store-1-bit)
 * Enable signal replaced by a clock edge circuit (clock signal + capacitor + resitor circuit), hence "flip-flop"
 * Furthermore, the outputs are fed back into the AND gates such that it produces the following truth table
-![404]({{ site.url }}/images/8bit/counter/jk.jpg)
+![404]({{ site.baseurl }}/images/8bit/counter/jk.jpg)
 * Not only gets rid of the unpredictable (and hence illegal) 11 state, but also makes it an interesting feature, to output the opposite value it previously had (toggle)
 
 #### JK flip-flop racing
 * It happens that in a regular JK flip-flop, the clock pulse is actually long enough such that if we set JK to 11 (toggle), the outputs will toggle continously during the whole duration of the pulse, which may not necesarily be consistently long and hence sometimes having an odd number of toggles and other times an even number of toggles, leaving us with an impredictable result after all
-![404]({{ site.url }}/images/8bit/counter/racing.PNG)
+![404]({{ site.baseurl }}/images/8bit/counter/racing.PNG)
 
 ### Master-slave JK flip-flop
 * Gets rid of the racing problem
 * Trying to get a very short clock pulse such that there's not enough time for the output to race back into the AND gate with a now low clock signal is almost impossible to do with reliably with breadboards, instead we use 2 JK flip-flops together in the following way:
-![404]({{ site.url }}/images/8bit/counter/master.PNG)
+![404]({{ site.baseurl }}/images/8bit/counter/master.PNG)
 * We no longer need a pulse signal, just the clock signal.
 * We can identify some sort of 2 SR latches inside the circuit
   * The first (left) SR latch will not be high unless the clock is high, whereas the second one (right) would be active while the first SR latch is not, as it uses an inverted clock signal.
@@ -1261,7 +1261,7 @@ Open [tinkercad](https://www.tinkercad.com/things/aEBNrUN51YQ-ram-p3)
 
 ### 74LS76
 * IC implementation of 2 indepedent master-slave JK flip-flops
-![404]({{ site.url }}/images/8bit/counter/74LS76.PNG)
+![404]({{ site.baseurl }}/images/8bit/counter/74LS76.PNG)
   * PR and CLR bypasses the clock signal and it forces either a 1 or a 0.
   * The buble before the clock signal indicates that the masterslave indeeds is triggered at the falling edge of the clock
 
@@ -1275,14 +1275,14 @@ Open [tinkercad](https://www.tinkercad.com/things/aEBNrUN51YQ-ram-p3)
   * This means it will be \\(2^{-(n+1)}\\) as fast as the clock pulse
 * By connecting more master-slaves in this fashion we can create a simple binary counter.
   * Example of a counter with the 74LS76
-  ![404]({{ site.url }}/images/8bit/counter/counter1.PNG)
+  ![404]({{ site.baseurl }}/images/8bit/counter/counter1.PNG)
 
 ### 74LS161
 * This IC is a synchronous (uses the clock) 4-bit binary counter implemented in a similar way as the counter we described earlier, but with some other features:
   * The clock pin is inverted such that now the counter is triggered at the rising edge of the clock like in all other modules pulse logic.
   * It comes with data pins that allows us to easily load a value in the next clock pulse
   * It comes with an enable input that can let continue or freeze the counter
-![404]({{ site.url }}/images/8bit/counter/74LS161.PNG)
+![404]({{ site.baseurl }}/images/8bit/counter/74LS161.PNG)
   * Ripple carry out is to cascade more counters into larger bit counters and clear is to set it to 0
 
 ### Building the program counter
@@ -1305,11 +1305,11 @@ Open [tinkercad](https://www.tinkercad.com/things/aEBNrUN51YQ-ram-p3)
 13. Set the clear pin of the counter to high as that one is active low
 
 #### Tinkercad
-![404]({{ site.url }}/images/8bit/counter/tinker.PNG)
+![404]({{ site.baseurl }}/images/8bit/counter/tinker.PNG)
 [Open tinkercad](https://www.tinkercad.com/things/h4tkgaZXnL6-program-counter)
 
 #### Schematic
-![404]({{ site.url }}/images/8bit/counter/schematic.png)
+![404]({{ site.baseurl }}/images/8bit/counter/schematic.png)
 
 ### Testing the program counter
 * Reading test: do the i++ ALU test
@@ -1347,11 +1347,11 @@ Open [tinkercad](https://www.tinkercad.com/things/aEBNrUN51YQ-ram-p3)
 * The output reigser is similar to any other register, but we want it to have a (7-segment) decimal display.
 
 ### LTS547R (Jameco 7-segment LED display)
-![404]({{ site.url }}/images/8bit/output/LTS547R.jpg)
+![404]({{ site.baseurl }}/images/8bit/output/LTS547R.jpg)
  * Red
  * Common cathode
-![404]({{ site.url }}/images/8bit/output/common.PNG)
-![404]({{ site.url }}/images/8bit/output/leg.png)
+![404]({{ site.baseurl }}/images/8bit/output/common.PNG)
+![404]({{ site.baseurl }}/images/8bit/output/leg.png)
  * Maximum Forward Voltage: 1.6 V (@ 20 mA)
  * Maximum forward current: 20mA
    * We need a series resistor to limit the current.
@@ -1363,43 +1363,43 @@ Open [tinkercad](https://www.tinkercad.com/things/aEBNrUN51YQ-ram-p3)
      * Less than half the maximum current, it should light it up enough.
 
 ### 7-segment hex decoder
-![404]({{ site.url }}/images/8bit/output/pins.jpg)
+![404]({{ site.baseurl }}/images/8bit/output/pins.jpg)
 * Below a common cathode representation for 4 bits
   * A common annode would just be "off"  (20 amps to ground) instead of "on" (20 amps from \\(V_{cc}\\))
 
 | Binary | Digit | Display | a (7) | b (6) | c (4)  | d (2) | e (1)  | f (9) | g (10) |
 | -- | ----- | -- | -- | -- | -- | -- | -- | -- | -- |
-| 0000 | 0     | ![404]({{ site.url }}/images/8bit/output/0.png) | on | on | on | on | on | on |    |
-| 0001 | 1     | ![404]({{ site.url }}/images/8bit/output/1.png) |    | on | on |    |    |    |    |
-| 0010 | 2     | ![404]({{ site.url }}/images/8bit/output/2.png) | on | on |    | on | on |    | on |
-| 0011 | 3     | ![404]({{ site.url }}/images/8bit/output/3.png) | on | on | on | on |    |    | on |
-| 0100 | 4     | ![404]({{ site.url }}/images/8bit/output/4.png) |    | on | on |    |    | on | on |
-| 0101 | 5     | ![404]({{ site.url }}/images/8bit/output/5.png) | on |    | on | on |    | on | on |
-| 0110 | 6     | ![404]({{ site.url }}/images/8bit/output/6.png) | on |    | on | on | on | on | on |
-| 0111 | 7     | ![404]({{ site.url }}/images/8bit/output/7.png) | on | on | on |    |    |    |    |
-| 1000 | 8     | ![404]({{ site.url }}/images/8bit/output/8.png) | on | on | on | on | on | on | on |
-| 1001 | 9     | ![404]({{ site.url }}/images/8bit/output/9.png) | on | on | on | on |    | on | on |
-| 1010 | A     | ![404]({{ site.url }}/images/8bit/output/A.png) | on | on | on |    | on | on | on |
-| 1011 | B     | ![404]({{ site.url }}/images/8bit/output/B.png) |    |    | on | on | on | on | on |
-| 1100 | C     | ![404]({{ site.url }}/images/8bit/output/C.png) | on |    |    | on | on | on |    |
-| 1101 | D     | ![404]({{ site.url }}/images/8bit/output/D.png) |    | on | on | on | on |    | on |
-| 1110 | E     | ![404]({{ site.url }}/images/8bit/output/E.png) | on |    |    | on | on | on | on |
-| 1111 | F     | ![404]({{ site.url }}/images/8bit/output/F.png) | on |    |    |    | on | on | on |
+| 0000 | 0     | ![404]({{ site.baseurl }}/images/8bit/output/0.png) | on | on | on | on | on | on |    |
+| 0001 | 1     | ![404]({{ site.baseurl }}/images/8bit/output/1.png) |    | on | on |    |    |    |    |
+| 0010 | 2     | ![404]({{ site.baseurl }}/images/8bit/output/2.png) | on | on |    | on | on |    | on |
+| 0011 | 3     | ![404]({{ site.baseurl }}/images/8bit/output/3.png) | on | on | on | on |    |    | on |
+| 0100 | 4     | ![404]({{ site.baseurl }}/images/8bit/output/4.png) |    | on | on |    |    | on | on |
+| 0101 | 5     | ![404]({{ site.baseurl }}/images/8bit/output/5.png) | on |    | on | on |    | on | on |
+| 0110 | 6     | ![404]({{ site.baseurl }}/images/8bit/output/6.png) | on |    | on | on | on | on | on |
+| 0111 | 7     | ![404]({{ site.baseurl }}/images/8bit/output/7.png) | on | on | on |    |    |    |    |
+| 1000 | 8     | ![404]({{ site.baseurl }}/images/8bit/output/8.png) | on | on | on | on | on | on | on |
+| 1001 | 9     | ![404]({{ site.baseurl }}/images/8bit/output/9.png) | on | on | on | on |    | on | on |
+| 1010 | A     | ![404]({{ site.baseurl }}/images/8bit/output/A.png) | on | on | on |    | on | on | on |
+| 1011 | B     | ![404]({{ site.baseurl }}/images/8bit/output/B.png) |    |    | on | on | on | on | on |
+| 1100 | C     | ![404]({{ site.baseurl }}/images/8bit/output/C.png) | on |    |    | on | on | on |    |
+| 1101 | D     | ![404]({{ site.baseurl }}/images/8bit/output/D.png) |    | on | on | on | on |    | on |
+| 1110 | E     | ![404]({{ site.baseurl }}/images/8bit/output/E.png) | on |    |    | on | on | on | on |
+| 1111 | F     | ![404]({{ site.baseurl }}/images/8bit/output/F.png) | on |    |    |    | on | on | on |
 
 #### Karnaugh maps
 * We could implement a decoder logic circuit with the same style as described in the [address decoder]({{ page.url }}#address-decoder) section (which made sense since we were using all 16 addresses from those 4 bit combinations). Or we could just focus on one segment at a time and simplify it's truth table with a karnaugh map (a technique to simplify boolean expressions), since we just want to use 16 "addresses" (7 segment display representation) out of the \\(2^7=128\\) possible representations.
   * If we name the 4 bit inputs A, B, C and D, you'll see that sometimes instead of writting \\(\overline{A}\overline{B}\overline{C}\overline{D}\\) and \\(ABCD\\) we will just write the decimal version of 0000 and 1111 respectively i.e. \\(\overline{A}B\overline{C}D\\) is 5 
 * Karnaugh map for segment "a"
-  * ![404]({{ site.url }}/images/8bit/output/ka.png)
+  * ![404]({{ site.baseurl }}/images/8bit/output/ka.png)
   * The truth table can be expressed as a single boolean expression by "ORing" each row with "a" equal to 1. So "a" will be true/high/on If we have 0,2,3,5,6,7,8,9,10,12,14, or 15
   * The karnaugh map simplifies this expression from 12 terms to 6!
-    * ![404]({{ site.url }}/images/8bit/output/map.png) 
+    * ![404]({{ site.baseurl }}/images/8bit/output/map.png) 
     * \\(a=A\overline{B}\overline{C} + \overline{A}BD + A \overline{D} + \overline{A}C + BC + \overline{B}\ \overline{D}\\)
       * a = red + dark green + light green + dark blue + yellow + light blue
 * Now we can make a logic circuit out of the expression
-  * ![404]({{ site.url }}/images/8bit/output/la.png)
+  * ![404]({{ site.baseurl }}/images/8bit/output/la.png)
 * Repeat the process for the remaining segments and then you can combine the circuits to complete the decoder
-  * ![404]({{ site.url }}/images/8bit/output/lc.png)
+  * ![404]({{ site.baseurl }}/images/8bit/output/lc.png)
 
 Explanation source: [electronics-fun.com]([/](https://electronics-fun.com/7-segment-hex-decoder/))
 
@@ -1408,7 +1408,7 @@ Explanation source: [electronics-fun.com]([/](https://electronics-fun.com/7-segm
   * In runtime this memory is "read only" as it is intended just for lookups, and it saves us the hurdle of creating complex decoders
 
 ### EEPROM
-![404]({{ site.url }}/images/8bit/output/eeprom.PNG)
+![404]({{ site.baseurl }}/images/8bit/output/eeprom.PNG)
 * ROM stands for read only memory
   * It's contents are manufactured and cannot be changed
 * PROM stands for programmable read only memory
@@ -1430,7 +1430,7 @@ Explanation source: [electronics-fun.com]([/](https://electronics-fun.com/7-segm
 * When the EEPROM are erased/brand new, they are erased with all 1's
 * To program the contents of the EEPROM you set \\(\overline{WE}\\) or \\(\overline{CE}\\) low and \\(\overline{OE}\\) high and the I/O pins now behave as input pins
   * We're gonna go with \\(\overline{WE}\\)
-![404]({{ site.url }}/images/8bit/output/write.PNG)
+![404]({{ site.baseurl }}/images/8bit/output/write.PNG)
   * The datasheet specifies the timing of certaing pulses (when and for how long should paramaters values be inputted to the chip) to trigger a writting
   * We need to keep the write pulse signal between 100 and 1000 nanoseconds
   * When the write enables goes low, it will latch the addres for at least 50 ns (\\(t_{AH}\\))
@@ -1444,27 +1444,27 @@ Explanation source: [electronics-fun.com]([/](https://electronics-fun.com/7-segm
     * We shouldn't worry about \\(\overline{WE}\\) double clock pulses either because the reason it happened was from the capacitor discharging in the direction from where it got charged, that affected other modules connected to the clock signal before. However, in this scenario there is no other module connected to the same signal feeding the capacitor, and the only component connected to the capacitor is on the side that won't receive the discharging signal.
     * We have to achieve an RC circuit with T between 100 and 1000 ns
       * A capacitor in the nano farad get's us in the nano seconds range, together a resistor between 100 and 1k Ohm should do the trick.
-      * Check this useful [table for capacitor values]({{ site.url }}/downloads/8bit/Capacitor-Codes.pdf)
+      * Check this useful [table for capacitor values]({{ site.baseurl }}/downloads/8bit/Capacitor-Codes.pdf)
       * This "edge" detector circuit has to actually be negative. Stable high and then a sharp decrease to low that bounces back to high. It can be achieved in 2 ways:
       #### Positive RC edge detector circuit
         * Using a smiliar RC logic we used for the RAM (and we can borrow ahead from the kit either a NAND gate or a hex inverter to invert the signal like for the RAM), see the circuit below with the left 1 Mega ohm resistor * 100nF  (104 capacitor) = 0.1s pulse resistor circuit:
-        ![404]({{ site.url }}/images/8bit/output/buttonedge1.PNG)
+        ![404]({{ site.baseurl }}/images/8bit/output/buttonedge1.PNG)
           * The circuit is stable low because the capacitor gets charged quickly via the RC resistor (A) (and becomes open circuit) and the input draws (or rather, sinks) the current from the pull-down resistor on the right (B).
           * When the button is pressed the capacitor decharges fast to ground via the pushbutton (the input remains low)
           * Upon release the capacitor starts to get charged again via the RC resistor (A) connected to VCC, while it's charging (up to a thertain threshold) the input briefly becomes high. The charge time is the pulse time, until the capacitor becomes open circuit again and the input is stable low.
           * It's very hard to test long pulses with a LED since as the RC resistor increases (to check for a pulse visible to the human eye) the brightness decreases, you can see the tinkercad simulation below (which is slower than in real life) and the oscilloscope results:
-          ![404]({{ site.url }}/images/8bit/output/tinker1.PNG)
+          ![404]({{ site.baseurl }}/images/8bit/output/tinker1.PNG)
           [Open tinkercad](https://www.tinkercad.com/things/hPJn0fUh2Rh-postive-edge)
           * Note that we still need to invert the output (i.e. with a NAND, NOR or inverter chip)
           * Note that generally the pull-down resistor has a much higher value than the RC resistor (the pull-down resistor has high resistance to keep power consumption low, the RC resistor has low resistance to keep the pulse short)
         #### Negative RC edge detector circuit
         * Alternatively, instead of using an inverter gate, we could just turn the pull-down resistor into a pull-up resistor (then this one becomes the RC resistor for the charge time)
-        ![404]({{ site.url }}/images/8bit/output/buttonedge2.PNG)
+        ![404]({{ site.baseurl }}/images/8bit/output/buttonedge2.PNG)
            * The circuit is stable high as the capacitor charges via resistor A, immedieately becomes an open circuit, and resistor B feeds the input with high logic value.
            * When the pushbutton is pressed, the capacitor will quickly decharge to ground, and subsequently for that time the circuit has low input. While still pressing, the capacitor eventually gets charged by resistor B, and when that happens the capacitor becomes an open circuit and the pull-up resistor feeds the input again. (high) That time is the negative pulse time, therefore resistor B is the RC resistor.
            * After release, the capacitor decharges via the input (keeps it high)
            * You don't want to have RA as a pull-down resistor because then the current comming from resistor B will very unlikely diverge any to the capacitor, making the whole pushbutton useless and the state always high.
-           ![404]({{ site.url }}/images/8bit/output/tinker2.PNG)
+           ![404]({{ site.baseurl }}/images/8bit/output/tinker2.PNG)
            [Open tinkercad](https://www.tinkercad.com/things/61QtdBhkgSe-negative-edge)
 
 ### Breadboard circuit to program/debug the EEPROM
@@ -1490,17 +1490,17 @@ With a breaboard and jumperwires:
   * You need to have \\(\overline{OE}\\) high, otherwise it would not let you save (it'll just output the contents of the EEPROM at the selected address)
 
 #### Tinkercad
-![404]({{ site.url }}/images/8bit/output/eeprom2.PNG)
+![404]({{ site.baseurl }}/images/8bit/output/eeprom2.PNG)
 [Open tinkercad](https://www.tinkercad.com/things/1NAGZ3Yxxzh-eeprom-programmer)
 
-* Alternatively, check how to build an [Arduino EEPROM programmer]({{ site.url }}/arduino/2021/08/03/eeprom.html) 
+* Alternatively, check how to build an [Arduino EEPROM programmer]({{ site.baseurl }}/arduino/2021/08/03/eeprom.html) 
 
 ### 8-bit decimal display
 * We'll use the EEPROM as a binary to decimal decoder for 1 byte to 3 decimal digits and a minus sign (4 LED displays) 
   * EEPROM "look up table": we'll use the outputs of a decoded binary counter and a 2's C signal as the MSB bits of the EEPROM address, which has another 8 bits of inputs (namely an 8 bit binary number) for which we can program the following outputs:
-![404]({{ site.url }}/images/8bit/output/lookup.PNG)
+![404]({{ site.baseurl }}/images/8bit/output/lookup.PNG)
   * Example for 123:
-![404]({{ site.url }}/images/8bit/output/123.PNG)
+![404]({{ site.baseurl }}/images/8bit/output/123.PNG)
 * All 4 LED displays will get virtually the same address signal (i.e. the binary number stored at the output register), but only the 8 LSB address bits are the same.
 * The remaining 3 MSB address bits will be used to decode the unit's place, the tenth's place, the hundreadth's place and the negative sign.
 * We will tie each common cathode/anode of the LED to a uniquely decoded pin out of a 2-bit binary counter made from JK flip-flops, each LED is on average "on" only a fourth of the time.
@@ -1543,7 +1543,7 @@ Steps:
    * A9 = Q1
    * A10 = 2's Complement signal
 8. Use Q2 and Q1 also to control which LED display to light up by making them inputs of the 74LS139 [decoder](#address-decoder) and connecting the cathodes to each decoded output:
-![404]({{ site.url }}/images/8bit/output/74LS139.PNG)
+![404]({{ site.baseurl }}/images/8bit/output/74LS139.PNG)
    * Connect power/ground pins
    * Connect counter Q1 to A, counter Q2 to B
    * Connect Y0 with units LED cathode, Y1 with tens, Y2 with hundreads, Y3 with minus sign
@@ -1559,12 +1559,12 @@ Steps:
 * After debugging, you should speed up the clock speed by changing the rc values. Replace the \\(2\mu F\\) with a 10nf (103)
 
 #### "Tinkercad"
-![404]({{ site.url }}/images/8bit/output/tinker5.PNG)
+![404]({{ site.baseurl }}/images/8bit/output/tinker5.PNG)
 * Ben is using a 74LS76 as the dual JK flip-flop but the kit comes with the 74LS107, which is functionally the same, **but has a different pinout**:
-![404]({{ site.url }}/images/8bit/output/74LS107.PNG)
+![404]({{ site.baseurl }}/images/8bit/output/74LS107.PNG)
 (74LS107 pinout)
 * We can cover the output LEDs with a transparent red plastic to improve its readability
-![404]({{ site.url }}/images/8bit/output/red.jpg)
+![404]({{ site.baseurl }}/images/8bit/output/red.jpg)
 
 ### Output register
 * It doesn't need to drive the Bus, it only needs to read from the Bus, therefore the tri-state buffer gate wont be needed
@@ -1575,7 +1575,7 @@ Steps:
     * Potential problem: you may get random voltage spikes on your control lines
     * Potential solution: Replace the '273 with two '173s (like the other registers) and (completely doing away with the AND gate). You could also use an 8-bit register chip that has an input enable.
 * 74LS273 pinout:
-![404]({{ site.url }}/images/8bit/output/74LS273.PNG)
+![404]({{ site.baseurl }}/images/8bit/output/74LS273.PNG)
   * Connect power/ground pins
   * Connect outputs of the register to EEPROM address inputs A0-A7
   * Use a jumperwire signal for MR (master reset), connect it high
@@ -1587,9 +1587,9 @@ Steps:
 
 ### Schematic
 #### Output module
-![404]({{ site.url }}/images/8bit/output/schematic.png)
+![404]({{ site.baseurl }}/images/8bit/output/schematic.png)
 #### Computer High Level overview so far
-![404]({{ site.url }}/images/8bit/control/schematic1.png)
+![404]({{ site.baseurl }}/images/8bit/control/schematic1.png)
 
 ## Terminology review
 ### Instruction set architecture
@@ -1609,7 +1609,7 @@ Steps:
 
 ### Memory layout of a stored-program digital computer
 * Below a review of the von Neumann architecture that we'll use to establish some terminology (especially CPU terminology) and see how our computer compares to this established framework of "stored-program digital computer"
-![404]({{ site.url }}/images/8bit/control/vn.PNG)
+![404]({{ site.baseurl }}/images/8bit/control/vn.PNG)
 * the von Neumann architecture describes a design architecture for an electronic digital computer with these components:
   * A processing unit (CPU) that contains an arithmetic logic unit and processor registers (A, B and flag registers)
   * A control unit that contains an instruction register and program counter
@@ -1625,7 +1625,7 @@ Steps:
   * IR = [instruction register](#instruction-register)
   * CC = [control circuitry](#cleaning-up-control-circuitry) (partially called "control word" by Ben)
 * Taking von Neumann terminology into account, this is what the architecture and terminology of our 8 bit computer looks like:
-![404]({{ site.url }}/images/8bit/control/arch.PNG)
+![404]({{ site.baseurl }}/images/8bit/control/arch.PNG)
   * "CPU" would consist of the red and blue bordered areas, with the read one being the control unit and the blue one the ALU.
   * The RAM is the memory that contains the program and variables, but as described in the [memory layout](#memory-layout) section, we could define address 1111 and a halt/unhalt mechanism to integrate "live" user inputs by explicitly storing them in the last RAM address.
 * What it's left to do is the control circuitry and integrating the components of the control unit:
@@ -1642,7 +1642,7 @@ Steps:
 * *I burned one hex inverter so I decided to use un-used inputs of other NAND and hex inverter chips used in other modules*
 * Replacing the jumperwires with long wires should look like this:
 
-![404]({{ site.url }}/images/8bit/control/clean.PNG)
+![404]({{ site.baseurl }}/images/8bit/control/clean.PNG)
 
 ### Defining our own assembly language
 #### Example
@@ -1661,7 +1661,7 @@ Steps:
 * Then we load the contents of the ALU into the output register
 
 #### Instruction format
-![404]({{ site.url }}/images/8bit/control/layout.PNG)
+![404]({{ site.baseurl }}/images/8bit/control/layout.PNG)
 * All of our instructions would have the following layout in memory: `[4-bit instruction (known to humans as opcode)] (4-bit operand)` with [] defining mandatory and () defining optional.
   * This already tells us that we have a maximum of 16 opcodes
 * The optional operand may not be used (whatever is on the 4 LSB is ignored) because the address/register is implicitly known or because it does not regard any storage, such as halting the clock.
@@ -1724,13 +1724,13 @@ binary instruction | assembly opcode | has operand | meaning
      * We already inverted the global clock twice for the RAM RC circuit. Just use the first inversion also for the micro instruction clock.
   3. Use the 74LS138, which is a 3-8 line decoder, because we want to convert the 3 bit input of the micro clock into 8 separate signals, of which we will use just 6 (5 to light up LEDs that help us debug), and the 6th bit (bit Q5 if we start counting at Q0) will be used to reset the micro clock (since T5, T6 and T7 will never be used) (recall that the decoder has all H except 1 L)
       * so basically we have 5 T's for each opcode for which we can program a microcode instruction (a set of high and low control signals)!
-   ![404]({{ site.url }}/images/8bit/control/74LS138.PNG)  
+   ![404]({{ site.baseurl }}/images/8bit/control/74LS138.PNG)  
       * Hookup ground and power
       * \\(E_1\\) and \\(E_2\\) are active low while \\(E_3\\) is active high, connect the first 2 to ground and the third one to \\(V_{cc}\\)
       * Hookup the inputs to the micro code clock outputs (both chips are big endian (LSB pins start on the left))
       * Connect clear of the micro clock to the 6th output bit (Q5) of the decoder
 
-![404]({{ site.url }}/images/8bit/control/tinker1.PNG)  
+![404]({{ site.baseurl }}/images/8bit/control/tinker1.PNG)  
 
 #### Building the flags register
 * To make the computer turing complete we need a conditional signal that triggers an instruction based on a previous state state of the CPU (i.e. the last ALU operation was equal to zero) such as "JZ" (jump zero), which jumps only if the last operation was zero.
@@ -1747,14 +1747,14 @@ binary instruction | assembly opcode | has operand | meaning
 * JZ implementation
   * Use NOR gates which are feed with the ALU output, which should be equal to 1 only if all inputs are 0.
   * the 74LS02 NOR gate has for 2-input NOR gates, we can feed 4 pairs of the 8-bit ALU output into the chip and then AND them together with the 74LS08
-![404]({{ site.url }}/images/8bit/control/jz.PNG) 
+![404]({{ site.baseurl }}/images/8bit/control/jz.PNG) 
   * Steps:
     1. Insert the 74LS02 and 74LS08 next to each other
     2. Hookup power/ground pins
     3. Hookup the outputs of the 2 NOR gates in the bottom to the inputs of the first AND gate in the bottom
     4. Hookup the outputs of the 2 NOR gates in the top to the inputs of the first AND gate in the top
     5. Connect the outputs of the 2 AND gates to the output of the third AND gate (also on the top)
-    ![404]({{ site.url }}/images/8bit/control/jz2.PNG)
+    ![404]({{ site.baseurl }}/images/8bit/control/jz2.PNG)
     [Open tinkercad](https://www.tinkercad.com/things/iX6Tvl59oiP-jump-zero)
     6. Connect the ALU outputs to the inputs of the NOR gates (doesnt matter the order)
     7. Insert the 74LS173 chip and connect power/ground pins
@@ -1768,7 +1768,7 @@ binary instruction | assembly opcode | has operand | meaning
     13. Connect the clear pin to the nearest/most accesible clear pin of another register
 
 ##### Schematic
-![404]({{ site.url }}/images/8bit/alu/schematic.png)
+![404]({{ site.baseurl }}/images/8bit/alu/schematic.png)
 
 #### Building the fetch cycle
 * The first 2 microinstructions that constitute the fetch cycle are the same for all opcodes.
@@ -1779,7 +1779,7 @@ binary instruction | assembly opcode | has operand | meaning
 * The lookup table below summarizes what we expect the EEPROM to output for each control signal based on the [instruction opcode](#instruction-set) (and micro-clock step value)
   * The Left/Right EEPROM address pin is just to divide the 16 bit control word into the 8 MSB outputs and the 8 LSB outputs, but the lookup table skips this and just shows the full 16 bit control word regardless of the Left/Right EEPROM setting.
   * Note that for most instructions the lookup table output will be the same regardless of the flags input and only for the conditional jumps the flags inputs will matter.
-* [Repo with the EEPROM code](https://github.com/skirienkopanea/eeprom-programmer/blob/master/microcode-eeprom-with-flags/microcode-eeprom-with-flags.ino) to [program (store) the table below with arduino]({{ site.url }}/arduino/2021/08/03/eeprom.html)
+* [Repo with the EEPROM code](https://github.com/skirienkopanea/eeprom-programmer/blob/master/microcode-eeprom-with-flags/microcode-eeprom-with-flags.ino) to [program (store) the table below with arduino]({{ site.baseurl }}/arduino/2021/08/03/eeprom.html)
 
 <div style="overflow-x:auto">
 <table class="tableizer-table">
@@ -1878,7 +1878,7 @@ binary instruction | assembly opcode | has operand | meaning
 
 * NAND gate based circuit and truth table for resetting both register data and micro clock
 
-![404]({{ site.url }}/images/8bit/control/reset.PNG)  
+![404]({{ site.baseurl }}/images/8bit/control/reset.PNG)  
 
 | Push button Reset | \\(\overline{T5}\\) | Active high resets | Active low resets | Micro clock reset |
 | ----------------- | ---------------------- | ------------------ | ----------------- | ----------------- |
@@ -1892,7 +1892,7 @@ binary instruction | assembly opcode | has operand | meaning
 
 * With just a three terminal switch we can use it as a variable to determine whether the reset button clears the registers or not
 
-![404]({{ site.url }}/images/8bit/control/switch.PNG)  
+![404]({{ site.baseurl }}/images/8bit/control/switch.PNG)  
 
 | switch common                   | Push button Reset | \\(\overline{T5}\\) | Active high resets | Active low resets | Micro clock reset |
 | ------------------------------- | ----------------- | ---------------------- | ------------------ | ----------------- | ----------------- |
@@ -1905,7 +1905,7 @@ binary instruction | assembly opcode | has operand | meaning
 | to \\(\\overline{button}\\) | Pressed           | 0                      | 1                  | 0                 | 0                 |
 | to \\(\\overline{button}\\) | Pressed           | 1                      | 1                  | 0                 | 0                 |
 
-![404]({{ site.url }}/images/8bit/control/tinker2.PNG)  
+![404]({{ site.baseurl }}/images/8bit/control/tinker2.PNG)  
 [Open tinkercad](https://www.tinkercad.com/things/kqEvTjJLNn1-clear-reset-circuit)
 
 * Now connect the micro clock reset signal to the clear pin of the micro clock
@@ -1919,7 +1919,7 @@ binary instruction | assembly opcode | has operand | meaning
   * Output register
 
 ### Schematic
-![404]({{ site.url }}/images/8bit/control/schematic2.png) 
+![404]({{ site.baseurl }}/images/8bit/control/schematic2.png) 
 * As you can see I added the switch, and you may add a pull-up resistor instead of connecting directly to \\(V_{cc}\\). I'm using 330 Ohms. 
 * Although they appear in the schematic, I decided to not use LEDs for the microclock decoder as they do not provide any additional information compared to the 3 LEDs of the microclock 
 

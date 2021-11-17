@@ -120,4 +120,4 @@ To add a table, use three or more hyphens (---) to create each column’s header
 You can use pipes | To have a 2 column block of text
 
 [math-index]: /math
-[math-meme]:{{ site.url }}/images/first_post/cs_is_math.png
+[math-meme]:{{ site.baseurl }}/images/first_post/cs_is_math.png

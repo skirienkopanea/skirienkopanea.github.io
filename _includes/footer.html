@@ -6,7 +6,7 @@
         <div class="footer-col footer-col-l">
           <ul class="contact-list">
             {% if site.title -%}
-            <li><a href="{{ site.url | escape }}">{{ site.title | escape }}</a></li>
+            <li><a href="{{ site.baseurl | escape }}">{{ site.title | escape }}</a></li>
             {%- endif %}
             <li>{{ site.description | escape }}</li>
           </ul>
@@ -17,7 +17,7 @@
                 <li><a href="https://github.com/{{ site.github_username | escape }}"><svg class="svg-icon"><use xlink:href="/assets/minima-social-icons.svg#github"></use></svg> <span class="username">{{ site.github_username | escape }}</span></a></li>
                 {%- endif %}
                 {% if site.email -%}
-                <li><a href="/feed.xml"><svg class="svg-icon"><use xlink:href="/assets/minima-social-icons.svg#rss"></use></svg>Subscribe via RSS</a></li>
+                <li><a href="{{ site.baseurl }}/feed.xml"><svg class="svg-icon"><use xlink:href="/assets/minima-social-icons.svg#rss"></use></svg>RSS feed</a></li>
             {%- endif %}
         </div>
       </div>

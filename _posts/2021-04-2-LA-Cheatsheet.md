@@ -178,7 +178,7 @@ $$A=\begin{bmatrix} 0 & 0 \\ 0 & 1\end{bmatrix}$$
 
 Hint from the Book of Proof (Richard Hammack):
 
-![Injective vs surjective]({{ site.url }}/images/la/injective_vs_surjective_richard_hammack_book_of_proof.png)
+![Injective vs surjective]({{ site.baseurl }}/images/la/injective_vs_surjective_richard_hammack_book_of_proof.png)
 
 ### Composition of 2 transformations
 
@@ -490,7 +490,7 @@ $$C^k =r^k\begin{bmatrix} \cos(k\phi) & -\sin(k\phi) \\ \sin(k\phi) & \cos(k\phi
 
 ## Orthogonal Projections
 * The basis from set {\\(u_1,u_2...\\)} must be orthogonal
-![Injective vs surjective]({{ site.url }}/images/la/projection.png)
+![Injective vs surjective]({{ site.baseurl }}/images/la/projection.png)
 
 $$y_{span}=\hat{y}=proj_L\ y = \frac{y\bullet u_1}{u_1\bullet u_1}u_1+\dots+\frac{y\bullet u_n}{u_n\bullet u_n}u_n$$
 
