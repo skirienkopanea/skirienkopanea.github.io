@@ -58,7 +58,7 @@ permalink: /cv
   * Sunday Hoofdklasse 2015 - 2016
 
 ## Volunteer
-* Thuis in West: Homework tutor (huiswerkbegeleider) (2021 - present)
+* Thuis in West: Homework tutor (huiswerkbegeleider) (2021)
 * Erasmus Strength: Director (2017 - 2018)
   * Rebranding
   * Organized first [student powerlifting competition in Rotterdam](https://www.youtube.com/watch?v=qGqPqr8v-oY)
