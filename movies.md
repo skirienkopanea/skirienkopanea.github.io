@@ -16,3 +16,4 @@ permalink: /movies.html
 * 2001 oddyssey
 * The Shining
 * The dollars triology
+* American Psycho
