@@ -14,39 +14,31 @@ permalink: /cv.html
 * Java
 * Javascript
 * Python
-* Scala
-* C/C++
+* C++
 * Bash
 * PHP
-<!--More languages will go here as soon as I publish a github project. Then remove Natural language jitter to fit all in 1 page--> 
-
-<!--Big data frameworks will go here-->
 
 ### Domains
-* Web development: HTML, CSS, SQL, node (javascript), Wordpress (php), Jekyll (markdown)...
-* Computer networks: Wireshark, SOAP UI, Postman, Springboot (server), telnet, curl...
-  * XML, JSON, CSV, XSLT...
-* Desktop apps: JavaFX, CLI
-* Collaborative work: Git, Sharepoint, MS Office...
-* Computer graphics: Inkscape, GIMP, Blender, OpenGL, Camtasia studio
-* Misc: \\(\LaTeX\\), Matlab, Arduino
+* Web development: HTML, CSS, SQL, javascript, php, node, Springboot, Wordpress, Jekyll
+* Computer networks: Wireshark, Postman
+* Desktop apps: JavaFX GUI, Command Line Interface
+* Collaborative work: Git, Sharepoint, OneDrive, MS Office (Excel, Word, Powerpoint...)
+* Computer graphics: Inkscape, GIMP, Blender, Camtasia studio
+* Misc: \\(\LaTeX\\), Matlab, Arduino, Markdown
 
 ### Natural languages
-* Spanish (native)
-* English (full working proficency)
-* Dutch (limited working proficency)
-* Catalan (full working proficency)
-* French (basic)
-* Russian (basic)
-* Portuguese (basic)
+* Spanish
+* English
+* Dutch
+* Catalan
 
 ## Education
-* Delft University of Technology: BSc Computer Science (2020 - currently enrolled)
 * Erasmus University Rotterdam: MSc Business Information Management (2017 - 2018)
   * Thesis: Case study for the implementation of virtual teams
-* Erasmus University Roterdam: BSc International Business Administration (2014 - 2017)
+* 2014-2017 Business Administration at Erasmus Univeristy
   * Minor: e-Marketing
   * Thesis: Effects of supply chain integration on business performance
+* 2020-2023 Computer Science Bachelor at TU Delft (incomplete)
 
 ## Work experience
 * FRISS \| fraud, risk & compliance: Consultant (2019 - 2020)
