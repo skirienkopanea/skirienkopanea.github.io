@@ -1,15 +1,18 @@
 ---
 layout: page
-title: Films
-permalink: /movies
+title: Movies
+permalink: /movies.html
 ---
 
-## Movies I'd watch again
+## To watch
+* Freaks (1932)
+
+## Watch again worth it
 * Office Space
 * Big Lebowski
 * Napoleon dynamite
 * Top Gun
-* planet of the apes
+* Planet of the apes
 * 2001 oddyssey
 * The Shining
 * The dollars triology

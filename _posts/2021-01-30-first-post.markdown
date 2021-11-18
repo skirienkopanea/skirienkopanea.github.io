@@ -9,20 +9,16 @@ tags: cheatsheet markdown
 
 {% include math.html %}
 
-This is my first jekyll post, which can be found in the `_posts` directory. Such directory is available on the server side only. However, the default setup of this blog allows anonymous clients to navigate through the index of the blog static files. Just have a look at the [math index][math-index]. Math is a category and misc a subcategory of math. Is this a miscellaneous math post? You'll see at the end.
-
-Edit: apparantly index browsing is only available when I run the blog locally.
-
 Jekyll requires blog post files to be named according to the following format:
 
 `YEAR-MONTH-DAY-title.MARKUP`
 
-Jeykll blog posts use YAML syntax, where a linebreak is achieved by keeping an empty line between two paragraphs. Adding further empty lines will not increase the space between paragraphs, it is therefore non-space sensitive after 1 line break. With regular spaces this is what                       happens (nothing as you can see). I have around 20 space characters in between "what" and "happens" on the original post ".markdown" file.
+Jeykll blog posts use markdown syntax, where a linebreak is achieved by keeping an empty line between two paragraphs (two line breaks). Word's shift enter line break doesnt exist. Adding further empty lines will not increase the space between paragraphs, it is therefore non-space sensitive after 1 line break. With regular spaces it's also space insensitive after the first one.
 
 Jekyll also offers powerful support for code snippets.
 
 Javascript:
-{% highlight javascript %}
+```javascript
 const hotline = new Audio("sounds/elevator.mp3");
 document.addEventListener("keydown", toggleRotation);
 function toggleRotation(e) {
@@ -32,10 +28,10 @@ function toggleRotation(e) {
     hotline.play();
   }
 }
-{% endhighlight %}
+```
 
 Same code but in ruby (see the different formatting, I doubt it would compile...):
-{% highlight ruby %}
+```ruby
 const hotline = new Audio("sounds/elevator.mp3");
 document.addEventListener("keydown", toggleRotation);
 function toggleRotation(e) {
@@ -45,7 +41,7 @@ function toggleRotation(e) {
     hotline.play();
   }
 }
-{% endhighlight %}
+```
 
 ----
 

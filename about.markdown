@@ -1,7 +1,7 @@
 ---
 layout: page
 title: About
-permalink: /about
+permalink: /about.html
 ---
 
 <img src="https://avatars.githubusercontent.com/u/75941968?s=460&u=85c31eb8f6627921076c63b88c848ea074fb40ff&v=4" width="40%" style="float: left;
