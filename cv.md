@@ -84,12 +84,12 @@ s.kirienkopanea@student.tudelft.nl
   * 2016-2017 Technology Management Course Assistant
 
 ### Education
+* Delft University of Technology
+  * 2020-2022 Computer Science courses
 * Erasmus University Rotterdam
   * 2017-2018 Master Business Information Management
   * 2016-2017 Minor e-Marketing
   * 2014-2017 Bachelor International Business Administration
-* Delft University of Technology
-  * 2020-incomplete Bachelor Computer Science and Engineering
 
 ### Volunteer/Amateur
 * Fitness
