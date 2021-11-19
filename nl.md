@@ -4,6 +4,13 @@ title: Dingen die ik leuk vind van Nederland
 permalink: /nl.html
 ---
 
+<script>
+window.onload = function() {
+  document.getElementsByTagName("header")[0].remove();
+  document.getElementsByTagName("footer")[0].remove();
+};
+</script>
+
 * Fietscultuur
 * Amateur (voetbal) sportverenigingen
 * Het woord "gezellig"

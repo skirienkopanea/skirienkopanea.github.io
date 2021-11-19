@@ -4,10 +4,17 @@ title: Movies
 permalink: /movies.html
 ---
 
-## To watch
+<script>
+window.onload = function() {
+  document.getElementsByTagName("header")[0].remove();
+  document.getElementsByTagName("footer")[0].remove();
+};
+</script>
+
+## Movies to watch
 * Freaks (1932)
 
-## Watch again worth it
+## Moves worth watching again
 * Office Space
 * Big Lebowski
 * Napoleon dynamite

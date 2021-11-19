@@ -1,71 +1,105 @@
 ---
 layout: page
-title: CV
+title: CV Sergio Kirienko
 permalink: /cv.html
 ---
 {% include math.html %}
+<script>
+window.onload = function() {
+  document.getElementsByTagName("header")[0].remove();
+  document.getElementsByTagName("footer")[0].remove();
+};
+</script>
+<style>
+  #container.grid {
+    display: grid;
+    grid-template-rows: repeat(1, 100%); 
+    grid-template-columns: repeat(2, 50%);
+    column-gap: 0%;
+    overflow-y:auto;
+}
+@media print {
+body {
+  font-size: 90%
+}
+ .noprint {
+  visibility: collapse;
+  padding:0;
+  height: 0;
+  }
+}
+</style>
+s.kirienkopanea@student.tudelft.nl
+<div id ="container" class="grid">
+<div id ="skills" markdown="1">
 
-## Sergio Kirienko
-* Email: s.kirienkopanea@student.tudelft.nl
-* Location: Remote/The Netherlands.
+### Skills
+* [Coding](https://github.com/skirienkopanea)
+  * [Java](https://github.com/skirienkopanea?tab=repositories&q=&type=&language=java&sort=)
+  * [Javascript](https://github.com/skirienkopanea?tab=repositories&q=&type=&language=javascript&sort=)
+  * [Python](https://github.com/skirienkopanea?tab=repositories&q=&type=&language=python&sort=)
+  * [C++](https://github.com/skirienkopanea?tab=repositories&q=&type=&language=c%2B%2B&sort=)
+  * [Shell](https://github.com/skirienkopanea?tab=repositories&q=&type=&language=shell&sort=)
+  * [PHP](https://github.com/skirienkopanea?tab=repositories&q=&type=&language=php&sort=)
+* Web development
+  * HTML
+  * CSS
+  * SQL
+  * Markdown
+  * node
+  * Springboot
+  * Wordpress
+  * Jekyll
+* Computer networks
+  * Wireshark
+  * Postman
+* Desktop apps
+  * JavaFX GUIs
+  * Command Line Interfaces
+* Collaborative work
+  * Git
+  * Sharepoint
+  * MS Office
+* Computer graphics
+  * [GIMP](https://www.deviantart.com/kikizana/gallery/all)
+  * [Inkscape](https://www.deviantart.com/kikizana/gallery/all)
+  * [Blender](https://sketchfab.com/kikizana)
+  * [Camtasia studio](https://www.youtube.com/watch?v=MCrnVbdiCiY&list=PLu9178uSLpErc_yzs6lJT0JmlLvPxcCFF&index=2)
+* Math
+  * \\(\LaTeX\\)
+  * Matlab
+</div>
+<div markdown="1" id ="exp">
 
-## Skills
-### Programming languages
-* Java
-* Javascript
-* Python
-* C++
-* Bash
-* PHP
-
-### Domains
-* Web development: HTML, CSS, SQL, javascript, php, node, Springboot, Wordpress, Jekyll
-* Computer networks: Wireshark, Postman
-* Desktop apps: JavaFX GUI, Command Line Interface
-* Collaborative work: Git, Sharepoint, OneDrive, MS Office (Excel, Word, Powerpoint...)
-* Computer graphics: Inkscape, GIMP, Blender, Camtasia studio
-* Misc: \\(\LaTeX\\), Matlab, Arduino, Markdown
-
-### Natural languages
+### Languages
 * Spanish
 * English
 * Dutch
 * Catalan
 
-## Education
-* Erasmus University Rotterdam: MSc Business Information Management (2017 - 2018)
-  * Thesis: Case study for the implementation of virtual teams
-* 2014-2017 Business Administration at Erasmus Univeristy
-  * Minor: e-Marketing
-  * Thesis: Effects of supply chain integration on business performance
-* 2020-2023 Computer Science Bachelor at TU Delft (incomplete)
+### Work
+* FRISS \| fraud, risk & compliance
+  * 2019-2020 Consultant
+* Erasmus University Rotterdam & TU Delft
+  * 2016-2017 Technology Management Course Assistant
 
-## Work experience
-* FRISS \| fraud, risk & compliance: Consultant (2019 - 2020)
-  * Consulting, support, implementation, pre-sales
-* Erasmus University Rotterdam: Teacher Assistant for "Technology Management" (2017)
-  * Course taught by Delft University of Technology and Rotterdam School of Management
-* RKSV Leonidas: Football player (2014-2016)
-  * Sunday Topklasse 2014 - 2015
-  * Sunday Hoofdklasse 2015 - 2016
+### Education
+* Erasmus University Rotterdam
+  * 2017-2018 Master Business Information Management
+  * 2016-2017 Minor e-Marketing
+  * 2014-2017 Bachelor International Business Administration
+* Delft University of Technology
+  * 2020-incomplete Bachelor Computer Science and Engineering
 
-## Volunteer
-* Thuis in West: Homework tutor (huiswerkbegeleider) (2021)
-* Erasmus Strength: Director (2017 - 2018)
-  * Rebranding
-  * Organized first [student powerlifting competition in Rotterdam](https://www.youtube.com/watch?v=qGqPqr8v-oY)
-* CVV Zwervers: Goalkeeper coach (2015 - 2016)
-  * Under 12 - Under 16
-
-## Social/Links
-* Github: [https://github.com/skirienkopanea](https://github.com/skirienkopanea)
-* DeviantArt: [https://www.deviantart.com/kikizana/gallery/all](https://www.deviantart.com/kikizana/gallery/all)
-* Sketchfab: [https://sketchfab.com/kikizana](https://sketchfab.com/kikizana)
-* Youtube: [https://www.youtube.com/channel/UCh_TqOMHKvp7xoKM7u6shNA](https://www.youtube.com/channel/UCh_TqOMHKvp7xoKM7u6shNA)
-* Transfermarkt: [https://www.transfermarkt.com/sergio-kirienko-panea/profil/spieler/331596](https://www.transfermarkt.com/sergio-kirienko-panea/profil/spieler/331596)
-
+### Volunteer/Amateur
+* Fitness
+  * 2017-2018 [Erasmus Strength Director](https://www.youtube.com/watch?v=boLnISrRtAw&list=PLu9178uSLpEoCDF3r7z2b5bzyCepBp7hM) 
+* Football
+  * 2015-2016 CVV Zwervers Goalkeeper coach youth
+  * 2014-2016 [RKSV Leonidas player](https://www.youtube.com/watch?v=lcSo9AJS05E&list=PLu9178uSLpEphAcNFjq2djyVdHYbV3md_) (Topklasse and Hoofdklasse)
+</div>
+</div>
 <div class="noprint">
 <a onclick="window.print();" href="#print">Print this page</a>
 </div>
-
 [//]: # Download my [1-page-CV-Sergio.pdf]("todo")
