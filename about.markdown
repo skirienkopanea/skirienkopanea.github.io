@@ -7,7 +7,7 @@ permalink: /about.html
 <img src="https://avatars.githubusercontent.com/u/75941968?s=460&u=85c31eb8f6627921076c63b88c848ea074fb40ff&v=4" width="40%" style="float: left;
  padding: 0 2% 0 0;"> 
 
-In this blog I share some notes and side projects related to the Computer Science & Engineering bachelor at TU Delft.
+In this blog I share some notes and side projects related to some Computer Science & Engineering bachelor courses from TU Delft.
 You can also download files from the [Downloads]({{ site.baseurl }}/downloads) page.
 
 My posts and files may contain mistakes and some content might be (partially) copied directly from the book/slides, credits are implicitly given to all of the authors that contributed to the respective course (CSE####).

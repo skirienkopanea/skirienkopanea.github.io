@@ -14,7 +14,7 @@ window.onload = function() {
 ## Movies to watch
 * Freaks (1932)
 
-## Moves worth watching again
+## Movies worth watching again
 * Office Space
 * Big Lebowski
 * Napoleon dynamite
@@ -24,3 +24,6 @@ window.onload = function() {
 * The Shining
 * The dollars triology
 * American Psycho
+* Jurassic Park
+* Django unchained
+* Clockwork orange 
