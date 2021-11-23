@@ -14,7 +14,7 @@ window.onload = function() {
 ## Movies to watch
 * Freaks (1932)
 
-## Movies worth watching again
+## Movies/shows worth watching again
 * Office Space
 * Big Lebowski
 * Napoleon dynamite
@@ -26,4 +26,6 @@ window.onload = function() {
 * American Psycho
 * Jurassic Park
 * Django unchained
-* Clockwork orange 
+* Clockwork orange
+* The Simpsons (good seasons)
+* The Ren and Stimpy Show
