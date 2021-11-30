@@ -15,9 +15,9 @@ window.onload = function() {
 * Freaks (1932)
 
 ## Movies/shows worth watching again
+* Dr. Strangelove
 * Office Space
 * Big Lebowski
-* Napoleon dynamite
 * Top Gun
 * Planet of the apes
 * 2001 oddyssey
