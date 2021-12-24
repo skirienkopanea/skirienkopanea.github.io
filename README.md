@@ -1,7 +1,7 @@
 # skirienkopanea.github.io
 My personal blog made with Jekyll
 
-[Link](https://skirienkopanea.github.io/)
+[Link](https://sergio.kpan.nl:4000/blog/)
 
 ## Backlog
 * Download sqt pictures and host them here
