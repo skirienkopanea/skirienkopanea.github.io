@@ -8,7 +8,7 @@ permalink: /about.html
  padding: 0 2% 0 0;"> 
 
 In this blog I share some notes and side projects related to some Computer Science & Engineering bachelor courses from TU Delft.
-You can also download files from the [Downloads]({{ site.baseurl }}/downloads) page.
+You can also download files from the [Downloads]({{ site.baseurl }}/downloads.html) page.
 
 My posts and files may contain mistakes and some content might be (partially) copied directly from the book/slides, credits are implicitly given to all of the authors that contributed to the respective course (CSE####).
 
