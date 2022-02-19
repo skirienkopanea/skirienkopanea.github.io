@@ -61,10 +61,18 @@ permalink: /downloads.html
   * [jbstatistics youtube channel for (CSE1210)](https://www.youtube.com/user/jbstatistics)
 
 <br>
-To do: At least upload the slides and/or book pdf of all courses I'm not taking
 
 ## Y2Q1
-* Computer graphics
+* Computer graphic course contents:
+  * Introduction to Objects and Images (from a biological/physics point of view)
+  * An introduction to C++
+  * Transformations and Homogeneous Coordinates
+  * Projective geometry
+  * An introduction to 3D APIs
+  * Materials and shading
+  * Shadows
+  * Whitted-Style Ray Tracing
+  * Acceleration Structures
 * CSE2510 Machine Learning
   * [CSE2510_ml_lectures_and_labs][CSE2510_ml_lectures_and_labs]
 * CSE2520 Big Data Processing
@@ -72,30 +80,76 @@ To do: At least upload the slides and/or book pdf of all courses I'm not taking
   * [CSE2520_Big_Data_Processing_Labs][CSE2520_Big_Data_Processing_Labs]
 
 ## Y2Q2
-* Algorithm Design
+* Algorithm Design course contents:
+  * graph algorithms
+  * greedy algorithms
+  * divide and conquer
+  * dynamic programming
+  * network flow algorithms
+  * prove the correctness of these algorithms
+  * determine the running time of algorithms both analytically as well as experimentally
+  * implement algorithms efficiently
+  * provide well-argued advice about which problems can be solved best using which algorithms
 * Software Engineering methods
-* Data mining
+  * The course covers both high-level software project management, and low-level software design techniques needed to create evolvable and maintainable systems
+  * design patterns
+  * requirements engineering
+  * UML modeling
+  * software architecture
+  * user interface design
+  * software analytics.
+* Data mining course content:
+  * PageRank algorithm
+  * frequent item-set mining
+  * unsupervised algorithms for big data: BFR and CURE
+  * basics of social-network graph mining
+  * Singular-Value Decomposition and CUR decomposition
+  * Critically evaluate, motivate and apply data mining algorithms to real-world challenges
+  * large scale machine learning algorithms
+  * algorithms for the retrieval of similar items
+  * collaborative filtering algorithms
+  * Explain the relevance and impact of data mining in our lives
+  * explain relevance and context of application areas of data mining
+  * explain basic concepts of the privacy/ethical aspects of data mining
+  * explain and apply visual data mining principles 
 
 ## Y2Q3
-* Automata, Language and Computability
-* Concepts of programming languages
-* Computational intelligence
+* Automata, Language and Computability contents:
+  * parse and construct automata and languages
+  * prove a problem to be computable
+  * manipulate and construct grammars for context-free languages
+  * describe the differences between different types of automata and grammars and their limitations, specifically that there are problems that are algorithmically unsolvable
+  * prove languages to be non-regular using the pumping lemma.
+  * describe the classes P, NP, and NPC and explain why P = NP? is an open problem.
+  * verify a proof that shows that a problem is NPC.
+* Concepts of programming languages contents:
+  * Syntax and interpretation: programs as data, abstract vs. concrete syntax, interpretation
+  * Functional programming: higher-order functions, lexical scope, function closures, currying and partial application, functions over data (especially map, fold, and filter).
+  * Mutation and memory: implementing loops and recursion, tail calls, heap memory allocation and reuse.
+  * Lazy evaluation and infinite streams: lazy vs. eager evaluation, thunks, streams, memoization.
+  * Types: a type as a set of values together with a set of operations, primitive types, compound types, type safety and errors caused by inconsistent use of values, association of types to names, type checking, type inference.
+  * Objects and encapsulation: privacy and visibility of class members, interfaces revealing only method signatures, inheritance, subtyping. 
+* Computational intelligence contents:
+  * Neural networks
+  * Evolutionary Systems
+  * Swarm intelligence
+  * Reinforcement learning 
 
 ## Y2Q4
 * Software Project
+  * problem analysis, feasibility study, research, and risk analysis
+  * requirements engineering
+  * specifications and quality requirements
+  * implementation
+  * testing and validation
+  * delivery of a working product, including necessary documentation
 
 <br>
 
-## Y3Q1-2
-* Game development minor
-
-## Y3Q3
-* Human Computer Interaction
-* Simulation
-* Logic-based AI
-
-## Y3Q4
-* Research Project
+## Y3Q
+* Q1-Q2: Non-CS minor
+* Q3: Electives
+* Q4: Research Project
 
 ## Misc
 * CV
