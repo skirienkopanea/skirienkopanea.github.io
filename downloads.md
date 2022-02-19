@@ -150,10 +150,7 @@ permalink: /downloads.html
 * Q1-Q2: Non-CS minor
 * Q3: Electives
 * Q4: Research Project
-
-## Misc
-* CV
-* [How to read a research paper]({{ site.baseurl }}/downloads/how-to-read-a-paper.pdf)
+  * [How to read a research paper]({{ site.baseurl }}/downloads/how-to-read-a-paper.pdf)
 
 [//]: # Links (this is a comment)
 [CSE1300]:{{ site.baseurl }}/downloads/CSE1300_(propositional_logic-predicate_logic-arguments-sets-proofs).pdf
