@@ -29,7 +29,7 @@ body {
   }
 }
 </style>
-s.kirienkopanea@student.tudelft.nl
+kirienkosergio@gmail.com
 <div id ="container" class="grid">
 <div id ="skills" markdown="1">
 
