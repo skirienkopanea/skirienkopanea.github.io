@@ -9,7 +9,7 @@ tags: javascript project
 <!--more-->
 
 <div class="cannot-use-iframe-directly-must-place-it-within-div">
-    <iframe title="A 3D model" width="100%" height="480" src="https://sergio.kpan.nl:4001" allowfullscreen=true></iframe>
+    <iframe title="A 3D model" width="100%" height="480" src="http://hereinmygarage.herokuapp.com/" allowfullscreen=true></iframe>
 </div>
 
 You can find the source code at [skirienkopanea/3d](https://github.com/skirienkopanea/3d).
