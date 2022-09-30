@@ -3,8 +3,8 @@ layout: page
 title: Downloads
 permalink: /downloads.html
 ---
-
-## Y1Q1
+## Computer Science & Engineering
+### Y1Q1
 * CSE1300 Reasoning and Logic
   * [CSE1300_(propositional_logic-predicate_logic-arguments-sets-proofs).pdf][CSE1300]
   * [Book of proof (for CSE1300)](https://www.people.vcu.edu/~rhammack/BookOfProof/)
@@ -17,7 +17,7 @@ permalink: /downloads.html
   * [CSE1400_(history-logic_circuits-data_representation-isa-assembly-cpu-io-memory-pipelining).pdf][CSE1400]
   * [Ben Eater (for CSE1400)](https://eater.net/)
 
-## Y1Q2
+### Y1Q2
 * CSE1200 Calculus
   * [CSE1200_(wiskundeB-calculus).pdf][CSE1200_summary]
   * [Multivariate calculus \| Khan Academy (for CSE1200)](https://www.khanacademy.org/math/multivariable-calculus)
@@ -31,7 +31,7 @@ permalink: /downloads.html
   * [CSE1500_web(http-html-js-nodejs-css-ejs-cookies-sessions-authentication-security).pdf][CSE1500_web]
   * [WebSocket app: Ludo for 2 (lu2) (for CSE1500)](https://github.com/skirienkopanea/lu2)
 
-## Y1Q3
+### Y1Q3
 * CSE1205 Linear Algebra
   * [CSE1205_Linear_algebra.pdf][CSE1205] 
   * [Gilbert Strang lectures on Linear Algebra (MIT) (for CSE1205)](https://www.youtube.com/playlist?list=PL49CF3715CB9EF31D)
@@ -45,7 +45,7 @@ permalink: /downloads.html
   * [Relational algebra video (for CSE1505)](https://www.youtube.com/watch?v=tii7xcFilOA)
   * [SQL to relational algebra tool (for CSE1505)](https://dbis-uibk.github.io/relax/calc/local/uibk/local/0)
 
-## Y1Q4
+### Y1Q4
 * CSE110 Software Quality and Testing
   * [CSE1110_Software_Quality_and_Testing_Book](https://sttp.site)
   * [CSE1110_sqt_labs][CSE1110_sqt_labs]
@@ -62,7 +62,7 @@ permalink: /downloads.html
 
 <br>
 
-## Y2Q1
+### Y2Q1
 * Computer graphic course contents:
   * Introduction to Objects and Images (from a biological/physics point of view)
   * An introduction to C++
@@ -79,7 +79,7 @@ permalink: /downloads.html
   * [CSE2520_Big_Data_Processing][CSE2520_Big_Data_Processing]
   * [CSE2520_Big_Data_Processing_Labs][CSE2520_Big_Data_Processing_Labs]
 
-## Y2Q2
+### Y2Q2
 * Algorithm Design course contents:
   * graph algorithms
   * greedy algorithms
@@ -113,7 +113,7 @@ permalink: /downloads.html
   * explain basic concepts of the privacy/ethical aspects of data mining
   * explain and apply visual data mining principles 
 
-## Y2Q3
+### Y2Q3
 * Automata, Language and Computability contents:
   * parse and construct automata and languages
   * prove a problem to be computable
@@ -135,7 +135,7 @@ permalink: /downloads.html
   * Swarm intelligence
   * Reinforcement learning 
 
-## Y2Q4
+### Y2Q4
 * Software Project
   * problem analysis, feasibility study, research, and risk analysis
   * requirements engineering
@@ -146,7 +146,7 @@ permalink: /downloads.html
 
 <br>
 
-## Y3Q
+### Y3Q
 * Q1-Q2: Non-CS minor
 * Q3: Electives
 * Q4: Research Project
